@@ -1,0 +1,364 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+function splitName(fullName: string) {
+  const parts = fullName.trim().split(/\s+/);
+
+  return {
+    firstName: parts[0] || "EGA",
+    lastName: parts.slice(1).join(" ") || "Student",
+  };
+}
+
+function normalizePhone(value: unknown) {
+  let phone = String(value || "").replace(/\D/g, "");
+
+  if (phone.startsWith("251") && phone.length === 12) {
+    phone = "0" + phone.slice(3);
+  }
+
+  if (/^0[79]\d{8}$/.test(phone)) {
+    return phone;
+  }
+
+  return "";
+}
+
+async function readJsonSafely(response: Response) {
+  const text = await response.text();
+
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return {
+      status: "failed",
+      message: text || "Chapa returned an unreadable response.",
+    };
+  }
+}
+
+Deno.serve(async (request) => {
+  if (request.method === "OPTIONS") {
+    return new Response("ok", {
+      headers: corsHeaders,
+    });
+  }
+
+  if (request.method !== "POST") {
+    return jsonResponse({
+      success: false,
+      message: "Method not allowed.",
+    });
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const serviceRoleKey = Deno.env.get(
+      "SUPABASE_SERVICE_ROLE_KEY"
+    );
+    const chapaSecretKey = Deno.env.get(
+      "CHAPA_SECRET_KEY"
+    );
+
+    if (!supabaseUrl) {
+      console.error("SUPABASE_URL is missing");
+
+      return jsonResponse({
+        success: false,
+        message: "SUPABASE_URL is missing.",
+      });
+    }
+
+    if (!serviceRoleKey) {
+      console.error("SUPABASE_SERVICE_ROLE_KEY is missing");
+
+      return jsonResponse({
+        success: false,
+        message:
+          "SUPABASE_SERVICE_ROLE_KEY is missing.",
+      });
+    }
+
+    if (!chapaSecretKey) {
+      console.error("CHAPA_SECRET_KEY is missing");
+
+      return jsonResponse({
+        success: false,
+        message: "CHAPA_SECRET_KEY is missing.",
+      });
+    }
+
+    let body: Record<string, unknown>;
+
+    try {
+      body = await request.json();
+    } catch {
+      return jsonResponse({
+        success: false,
+        message: "Invalid request body.",
+      });
+    }
+
+    const studentId = String(
+      body.student_id || ""
+    ).trim();
+
+    if (!studentId) {
+      return jsonResponse({
+        success: false,
+        message: "Student ID is required.",
+      });
+    }
+
+    const supabase = createClient(
+      supabaseUrl,
+      serviceRoleKey
+    );
+
+    const { data: student, error: studentError } =
+      await supabase
+        .from("students")
+        .select(
+          [
+            "id",
+            "student_id",
+            "name",
+            "email",
+            "phone",
+            "fee",
+            "paid_amount",
+            "remaining_amount",
+            "payment_status",
+          ].join(",")
+        )
+        .eq("student_id", studentId)
+        .maybeSingle();
+
+    if (studentError) {
+      console.error(
+        "Student lookup failed:",
+        studentError
+      );
+
+      return jsonResponse({
+        success: false,
+        message:
+          "Student lookup failed: " +
+          studentError.message,
+      });
+    }
+
+    if (!student) {
+      return jsonResponse({
+        success: false,
+        message: "Student was not found.",
+      });
+    }
+
+    if (
+      String(student.payment_status || "")
+        .toLowerCase() === "paid"
+    ) {
+      return jsonResponse({
+        success: false,
+        message:
+          "This student is already marked Paid.",
+      });
+    }
+
+    const fee = Number(student.fee || 0);
+    const paidAmount = Number(
+      student.paid_amount || 0
+    );
+
+    let remainingAmount = Number(
+      student.remaining_amount
+    );
+
+    if (
+      !Number.isFinite(remainingAmount) ||
+      remainingAmount <= 0
+    ) {
+      remainingAmount = Math.max(
+        fee - paidAmount,
+        0
+      );
+    }
+
+    if (
+      !Number.isFinite(remainingAmount) ||
+      remainingAmount <= 0
+    ) {
+      return jsonResponse({
+        success: false,
+        message:
+          "The remaining payment amount is missing or invalid.",
+      });
+    }
+
+    const txRef =
+      `EGA-${student.student_id}-${Date.now()}`
+        .replace(/[^a-zA-Z0-9_-]/g, "-")
+        .slice(0, 100);
+
+    const { firstName, lastName } = splitName(
+      student.name || "EGA Student"
+    );
+
+    const phoneNumber = normalizePhone(
+      student.phone
+    );
+
+    const returnUrl =
+      "https://y-nu-two-xrtlu2ccm2.vercel.app/payments" +
+      `?tx_ref=${encodeURIComponent(txRef)}` +
+      `&student_id=${encodeURIComponent(
+        student.student_id
+      )}`;
+
+    const chapaPayload: Record<string, unknown> = {
+      amount: remainingAmount.toFixed(2),
+      currency: "ETB",
+      email:
+        student.email ||
+        `student-${student.student_id}@example.com`,
+      first_name: firstName,
+      last_name: lastName,
+      tx_ref: txRef,
+      return_url: returnUrl,
+      customization: {
+        title: "EGA Technologies",
+        description:
+          `Course payment for ${student.student_id}`,
+      },
+      meta: {
+        student_id: student.student_id,
+        course: "Full Web Development",
+      },
+    };
+
+    if (phoneNumber) {
+      chapaPayload.phone_number = phoneNumber;
+    }
+
+    console.log(
+      "Initializing Chapa payment:",
+      JSON.stringify({
+        student_id: student.student_id,
+        amount: remainingAmount.toFixed(2),
+        currency: "ETB",
+        phone_number:
+          phoneNumber || "not supplied",
+        tx_ref: txRef,
+        return_url: returnUrl,
+      })
+    );
+
+    const chapaResponse = await fetch(
+      "https://api.chapa.co/v1/transaction/initialize",
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            `Bearer ${chapaSecretKey}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(chapaPayload),
+      }
+    );
+
+    const chapaResult = await readJsonSafely(
+      chapaResponse
+    );
+
+    console.log(
+      "Chapa response status:",
+      chapaResponse.status
+    );
+
+    console.log(
+      "Chapa response body:",
+      JSON.stringify(chapaResult)
+    );
+
+    if (
+      !chapaResponse.ok ||
+      chapaResult?.status !== "success" ||
+      !chapaResult?.data?.checkout_url
+    ) {
+      const chapaMessage =
+        chapaResult?.message ||
+        chapaResult?.data?.message ||
+        chapaResult?.error ||
+        `Chapa initialization failed with HTTP ${chapaResponse.status}.`;
+
+      return jsonResponse({
+        success: false,
+        message:
+          typeof chapaMessage === "string"
+            ? chapaMessage
+            : JSON.stringify(chapaMessage),
+        chapa_status: chapaResponse.status,
+        chapa: chapaResult,
+      });
+    }
+
+    const { error: updateError } =
+      await supabase
+        .from("students")
+        .update({
+          payment_method: "Chapa",
+          payment_reference: txRef,
+          remaining_amount: remainingAmount,
+        })
+        .eq("id", student.id);
+
+    if (updateError) {
+      console.error(
+        "Could not save transaction reference:",
+        updateError
+      );
+    }
+
+    return jsonResponse({
+      success: true,
+      message:
+        "Payment initialized successfully.",
+      checkout_url:
+        chapaResult.data.checkout_url,
+      tx_ref: txRef,
+      amount: remainingAmount,
+      currency: "ETB",
+    });
+  } catch (error) {
+    console.error(
+      "Unexpected initialization error:",
+      error
+    );
+
+    return jsonResponse({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Unexpected server error.",
+    });
+  }
+});
