@@ -109,6 +109,13 @@ export default function AdminDashboard() {
         </Pressable>
       </Link>
 
+
+      <Link href="/admin-payment-requests" asChild>
+        <Pressable style={styles.linkButton}>
+          <Text style={styles.linkText}>💳 Payment Requests</Text>
+        </Pressable>
+      </Link>
+
       <Link href="/fee-settings" asChild>
         <Pressable style={styles.linkButton}>
           <Text style={styles.linkText}>⚙️ Fee Settings</Text>
