@@ -42,3 +42,6 @@ example
 /ios
 /android
 .vercel
+
+# Supabase CLI temporary files
+supabase/.temp/
