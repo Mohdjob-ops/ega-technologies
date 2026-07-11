@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Linking,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -26,6 +27,18 @@ type Student = {
   paid_amount?: number | string;
   remaining_amount?: number | string;
   paid_at?: string;
+};
+
+type Transaction = {
+  id?: string | number;
+  student_id?: string;
+  student_name?: string;
+  amount?: number | string;
+  payment_method?: string;
+  payment_reference?: string;
+  status?: string;
+  note?: string;
+  created_at?: string;
 };
 
 type ChapaReturnParams = {
@@ -54,17 +67,40 @@ function formatMoney(value: unknown) {
   return amount.toLocaleString();
 }
 
+function formatDate(value?: string) {
+  if (!value) {
+    return "Not available";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Not available";
+  }
+
+  return date.toLocaleString();
+}
+
 export default function PaymentsScreen() {
   const params = useLocalSearchParams<ChapaReturnParams>();
 
   const [searchValue, setSearchValue] = useState("");
   const [student, setStudent] = useState<Student | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [fee, setFee] = useState("Contact EGA");
   const [startDate, setStartDate] = useState("Coming Soon");
   const [message, setMessage] = useState("");
   const [searching, setSearching] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<"chapa" | "paypal" | "bank" | "cash">("chapa");
+  const [manualReference, setManualReference] = useState("");
+  const [manualNote, setManualNote] = useState("");
+  const [submittingManual, setSubmittingManual] =
+    useState(false);
+  const [manualDebug, setManualDebug] = useState("");
 
   const processedReturnRef = useRef("");
 
@@ -95,6 +131,47 @@ export default function PaymentsScreen() {
         "Settings loading error:",
         error instanceof Error ? error.message : error
       );
+    }
+  }
+
+  async function loadPaymentHistory(studentId: string) {
+    if (!studentId) {
+      setTransactions([]);
+      return;
+    }
+
+    setHistoryLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .eq("student_id", studentId)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.log("Payment history error:", error.message);
+        setTransactions([]);
+        return;
+      }
+
+      const paymentTransactions = ((data || []) as Transaction[]).filter(
+        (transaction) =>
+          Number(transaction.amount || 0) > 0 ||
+          String(transaction.payment_method || "")
+            .toLowerCase()
+            .includes("chapa")
+      );
+
+      setTransactions(paymentTransactions);
+    } catch (error) {
+      console.log(
+        "Payment history loading error:",
+        error instanceof Error ? error.message : error
+      );
+      setTransactions([]);
+    } finally {
+      setHistoryLoading(false);
     }
   }
 
@@ -139,12 +216,14 @@ export default function PaymentsScreen() {
 
       if (error) {
         setStudent(null);
+        setTransactions([]);
         setMessage("❌ Supabase error: " + error.message);
         return null;
       }
 
       if (!data || data.length === 0) {
         setStudent(null);
+        setTransactions([]);
         setMessage("❌ Student payment record was not found");
         return null;
       }
@@ -156,6 +235,10 @@ export default function PaymentsScreen() {
         foundStudent.student_id || cleanValue
       );
 
+      if (foundStudent.student_id) {
+        await loadPaymentHistory(foundStudent.student_id);
+      }
+
       if (showMessage) {
         setMessage("✅ Payment record found");
       }
@@ -163,6 +246,7 @@ export default function PaymentsScreen() {
       return foundStudent;
     } catch (error) {
       setStudent(null);
+      setTransactions([]);
       setMessage(
         "❌ Search error: " +
           (error instanceof Error
@@ -178,6 +262,7 @@ export default function PaymentsScreen() {
 
   async function searchPayment() {
     setStudent(null);
+    setTransactions([]);
     await findStudent(searchValue);
   }
 
@@ -280,6 +365,227 @@ export default function PaymentsScreen() {
     }
   }
 
+  function selectPaymentMethod(
+    method: "chapa" | "paypal" | "bank" | "cash"
+  ) {
+    setSelectedPaymentMethod(method);
+
+    if (method === "chapa") {
+      setMessage(
+        "✅ Chapa selected. Press Continue with Chapa to open secure checkout."
+      );
+      return;
+    }
+
+    if (method === "paypal") {
+      setMessage(
+        "ℹ️ PayPal will be available after the EGA PayPal Business account is connected."
+      );
+      return;
+    }
+
+    if (method === "bank") {
+      setMessage(
+        "🏦 Bank transfer selected. Send the payment to the EGA bank account, keep your receipt, and contact the administrator for verification."
+      );
+      return;
+    }
+
+    setMessage(
+      "💵 Cash payment selected. Visit the EGA office and give your Student ID to the administrator."
+    );
+  }
+
+  async function continueSelectedPayment() {
+    console.log("[Manual Payment] Button clicked", {
+      selectedPaymentMethod,
+      studentId: student?.student_id,
+      studentName: student?.name,
+      reference: manualReference,
+      note: manualNote,
+    });
+
+    setManualDebug("1️⃣ Submit button clicked");
+    setMessage("🔄 Processing manual payment request...");
+
+    if (!student?.student_id) {
+      console.log("[Manual Payment] Missing student ID");
+      setManualDebug("❌ Stopped: Student ID is missing");
+      setMessage("⚠️ Search for your student record first");
+      return;
+    }
+
+    setManualDebug(
+      `2️⃣ Student found: ${student.student_id}`
+    );
+
+    if (selectedPaymentMethod === "chapa") {
+      console.log("[Manual Payment] Starting Chapa");
+      setManualDebug("➡️ Starting Chapa payment");
+      await startChapaPayment();
+      return;
+    }
+
+    if (selectedPaymentMethod === "paypal") {
+      console.log("[Manual Payment] PayPal not active");
+      setManualDebug("ℹ️ PayPal is not active yet");
+      setMessage(
+        "ℹ️ PayPal is not active yet. Please use Chapa while PayPal setup is being completed."
+      );
+      return;
+    }
+
+    const remainingAmount = Number(
+      student.remaining_amount ??
+        student.fee ??
+        0
+    );
+
+    console.log(
+      "[Manual Payment] Remaining amount:",
+      remainingAmount
+    );
+
+    setManualDebug(
+      `3️⃣ Remaining amount: ${remainingAmount} ETB`
+    );
+
+    if (
+      !Number.isFinite(remainingAmount) ||
+      remainingAmount <= 0
+    ) {
+      console.log(
+        "[Manual Payment] Invalid remaining amount"
+      );
+      setManualDebug(
+        "❌ Stopped: Remaining amount is invalid"
+      );
+      setMessage(
+        "⚠️ No valid remaining payment amount was found"
+      );
+      return;
+    }
+
+    if (
+      selectedPaymentMethod === "bank" &&
+      !manualReference.trim()
+    ) {
+      console.log(
+        "[Manual Payment] Bank reference is empty"
+      );
+      setManualDebug(
+        "❌ Stopped: Bank reference is empty"
+      );
+      setMessage(
+        "⚠️ Enter the bank transaction reference first"
+      );
+      return;
+    }
+
+    const paymentMethod =
+      selectedPaymentMethod === "bank"
+        ? "Bank Transfer"
+        : "Cash / Office";
+
+    const payload = {
+      student_id: student.student_id,
+      student_name: student.name || "",
+      amount: remainingAmount,
+      payment_method: paymentMethod,
+      payment_reference:
+        selectedPaymentMethod === "bank"
+          ? manualReference.trim()
+          : null,
+      note: manualNote.trim() || null,
+      status: "Pending",
+    };
+
+    console.log(
+      "[Manual Payment] Insert payload:",
+      payload
+    );
+
+    setSubmittingManual(true);
+    setManualDebug(
+      "4️⃣ Sending request to Supabase..."
+    );
+
+    setMessage(
+      selectedPaymentMethod === "bank"
+        ? "🔄 Submitting bank transfer for administrator review..."
+        : "🔄 Sending cash payment notification to the administrator..."
+    );
+
+    try {
+      const { error } = await supabase
+        .from("payment_requests")
+        .insert(payload);
+
+      console.log(
+        "[Manual Payment] Supabase insert completed",
+        { error }
+      );
+
+      if (error) {
+        console.error(
+          "[Manual Payment] Supabase error:",
+          error
+        );
+
+        setManualDebug(
+          `❌ Supabase error: ${error.message}`
+        );
+
+        setMessage(
+          "❌ Manual payment submission error: " +
+            error.message
+        );
+        return;
+      }
+
+      console.log(
+        "[Manual Payment] Insert successful"
+      );
+
+      setManualDebug(
+        "✅ Success: Payment request saved in Supabase"
+      );
+
+      setManualReference("");
+      setManualNote("");
+
+      setMessage(
+        selectedPaymentMethod === "bank"
+          ? "✅ Bank transfer submitted. An administrator must verify it before your account becomes paid."
+          : "✅ Cash payment notification submitted. Pay at the EGA office and give the administrator your Student ID."
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unknown error";
+
+      console.error(
+        "[Manual Payment] Exception:",
+        error
+      );
+
+      setManualDebug(
+        `❌ Submission exception: ${errorMessage}`
+      );
+
+      setMessage(
+        "❌ Submission error: " + errorMessage
+      );
+    } finally {
+      console.log(
+        "[Manual Payment] Submission finished"
+      );
+
+      setSubmittingManual(false);
+    }
+  }
+
   async function verifyChapaPayment(
     txReference?: string,
     studentId?: string
@@ -345,6 +651,8 @@ export default function PaymentsScreen() {
         await findStudent(selectedStudentId, false);
       }
 
+      await loadPaymentHistory(selectedStudentId);
+
       const verifiedAmount = formatMoney(
         data.payment?.amount || 0
       );
@@ -365,6 +673,24 @@ export default function PaymentsScreen() {
     } finally {
       setVerifying(false);
     }
+  }
+
+  function printReceipt() {
+    if (Platform.OS !== "web") {
+      setMessage(
+        "ℹ️ Receipt printing is currently available on the web version"
+      );
+      return;
+    }
+
+    const webWindow = (globalThis as any).window;
+
+    if (webWindow?.print) {
+      webWindow.print();
+      return;
+    }
+
+    setMessage("❌ Printing is not supported in this browser");
   }
 
   function statusStyle(status?: string) {
@@ -447,13 +773,40 @@ export default function PaymentsScreen() {
     params.student_id,
   ]);
 
-  const busy = searching || initializing || verifying;
+  const busy =
+    searching ||
+    historyLoading ||
+    initializing ||
+    verifying ||
+    submittingManual;
 
   const normalizedPaymentStatus = String(
     student?.payment_status || ""
   ).toLowerCase();
 
   const isPaid = normalizedPaymentStatus === "paid";
+
+  const latestTransaction = transactions[0];
+
+  const receiptAmount =
+    latestTransaction?.amount ??
+    student?.paid_amount ??
+    0;
+
+  const receiptMethod =
+    latestTransaction?.payment_method ||
+    student?.payment_method ||
+    "Chapa";
+
+  const receiptReference =
+    latestTransaction?.payment_reference ||
+    student?.payment_reference ||
+    latestTransaction?.note ||
+    "Not provided";
+
+  const receiptDate =
+    latestTransaction?.created_at ||
+    student?.paid_at;
 
   return (
     <ScrollView
@@ -474,7 +827,7 @@ export default function PaymentsScreen() {
         <Text style={styles.title}>💳 Payments</Text>
 
         <Text style={styles.subtitle}>
-          Check your status and pay securely with Chapa
+          Check your balance, choose a payment method, and view your transactions
         </Text>
       </View>
 
@@ -589,32 +942,283 @@ export default function PaymentsScreen() {
             </Text>
 
             <Text style={styles.text}>
-              Paid Date:{" "}
-              {student.paid_at
-                ? new Date(
-                    student.paid_at
-                  ).toLocaleString()
-                : "Not paid yet"}
+              Paid Date: {formatDate(student.paid_at)}
             </Text>
 
             {!isPaid && (
-              <>
+              <View style={styles.paymentMethodsBox}>
+                <Text style={styles.paymentMethodsTitle}>
+                  Choose Payment Method
+                </Text>
+
+                <Text style={styles.helperText}>
+                  Select the method you want to use for your
+                  remaining payment.
+                </Text>
+
+                <View style={styles.paymentMethodGrid}>
+                  <Pressable
+                    style={[
+                      styles.paymentMethodButton,
+                      styles.chapaMethodButton,
+                      selectedPaymentMethod === "chapa" &&
+                        styles.selectedMethodButton,
+                    ]}
+                    onPress={() =>
+                      selectPaymentMethod("chapa")
+                    }
+                    disabled={busy}
+                  >
+                    <Text style={styles.paymentMethodEmoji}>
+                      💳
+                    </Text>
+                    <Text style={styles.paymentMethodText}>
+                      Chapa
+                    </Text>
+                    <Text style={styles.paymentMethodSmall}>
+                      Active
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={[
+                      styles.paymentMethodButton,
+                      styles.paypalMethodButton,
+                      selectedPaymentMethod === "paypal" &&
+                        styles.selectedMethodButton,
+                    ]}
+                    onPress={() =>
+                      selectPaymentMethod("paypal")
+                    }
+                    disabled={busy}
+                  >
+                    <Text style={styles.paymentMethodEmoji}>
+                      🌐
+                    </Text>
+                    <Text style={styles.paymentMethodText}>
+                      PayPal
+                    </Text>
+                    <Text style={styles.paymentMethodSmall}>
+                      Coming Soon
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={[
+                      styles.paymentMethodButton,
+                      styles.bankMethodButton,
+                      selectedPaymentMethod === "bank" &&
+                        styles.selectedMethodButton,
+                    ]}
+                    onPress={() =>
+                      selectPaymentMethod("bank")
+                    }
+                    disabled={busy}
+                  >
+                    <Text style={styles.paymentMethodEmoji}>
+                      🏦
+                    </Text>
+                    <Text style={styles.paymentMethodText}>
+                      Bank Transfer
+                    </Text>
+                    <Text style={styles.paymentMethodSmall}>
+                      Manual approval
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={[
+                      styles.paymentMethodButton,
+                      styles.cashMethodButton,
+                      selectedPaymentMethod === "cash" &&
+                        styles.selectedMethodButton,
+                    ]}
+                    onPress={() =>
+                      selectPaymentMethod("cash")
+                    }
+                    disabled={busy}
+                  >
+                    <Text style={styles.paymentMethodEmoji}>
+                      💵
+                    </Text>
+                    <Text style={styles.paymentMethodText}>
+                      Cash / Office
+                    </Text>
+                    <Text style={styles.paymentMethodSmall}>
+                      Manual approval
+                    </Text>
+                  </Pressable>
+                </View>
+
+                <View style={styles.selectedMethodInfo}>
+                  <Text style={styles.selectedMethodTitle}>
+                    Selected:{" "}
+                    {selectedPaymentMethod === "chapa"
+                      ? "Chapa"
+                      : selectedPaymentMethod === "paypal"
+                        ? "PayPal"
+                        : selectedPaymentMethod === "bank"
+                          ? "Bank Transfer"
+                          : "Cash / Office"}
+                  </Text>
+
+                  <Text style={styles.selectedMethodDescription}>
+                    {selectedPaymentMethod === "chapa"
+                      ? "You will be redirected to the secure Chapa checkout page."
+                      : selectedPaymentMethod === "paypal"
+                        ? "PayPal checkout will become available after the business account is connected."
+                        : selectedPaymentMethod === "bank"
+                          ? "Transfer the remaining balance, then submit the bank reference below for administrator verification."
+                          : "Visit the EGA office, pay in cash, and give the administrator your Student ID."}
+                  </Text>
+                </View>
+
+                {selectedPaymentMethod === "bank" && (
+                  <View style={styles.manualForm}>
+                    <Text style={styles.manualFormTitle}>
+                      Bank Transfer Details
+                    </Text>
+
+                    <Text style={styles.manualLabel}>
+                      Amount to transfer
+                    </Text>
+
+                    <View style={styles.amountDueBox}>
+                      <Text style={styles.amountDueText}>
+                        {formatMoney(
+                          student.remaining_amount ??
+                            student.fee ??
+                            0
+                        )}{" "}
+                        ETB
+                      </Text>
+                    </View>
+
+                    <Text style={styles.manualLabel}>
+                      Bank transaction reference *
+                    </Text>
+
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Example: CBE123456789"
+                      value={manualReference}
+                      onChangeText={setManualReference}
+                      autoCapitalize="characters"
+                      autoCorrect={false}
+                      editable={!busy}
+                    />
+
+                    <Text style={styles.manualLabel}>
+                      Optional note
+                    </Text>
+
+                    <TextInput
+                      style={[
+                        styles.input,
+                        styles.noteInput,
+                      ]}
+                      placeholder="Add bank name or payment information"
+                      value={manualNote}
+                      onChangeText={setManualNote}
+                      multiline
+                      editable={!busy}
+                    />
+
+                    <Text style={styles.manualWarning}>
+                      Your account will remain Pending until an
+                      administrator verifies the bank payment.
+                    </Text>
+                  </View>
+                )}
+
+                {selectedPaymentMethod === "cash" && (
+                  <View style={styles.manualForm}>
+                    <Text style={styles.manualFormTitle}>
+                      Cash / Office Payment
+                    </Text>
+
+                    <Text style={styles.manualInstruction}>
+                      Visit the EGA office and bring:
+                    </Text>
+
+                    <Text style={styles.manualInstruction}>
+                      • Student ID:{" "}
+                      {student.student_id || "Not available"}
+                    </Text>
+
+                    <Text style={styles.manualInstruction}>
+                      • Phone: {student.phone || "Not available"}
+                    </Text>
+
+                    <Text style={styles.manualInstruction}>
+                      • Remaining balance:{" "}
+                      {formatMoney(
+                        student.remaining_amount ??
+                          student.fee ??
+                          0
+                      )}{" "}
+                      ETB
+                    </Text>
+
+                    <Text style={styles.manualLabel}>
+                      Optional message to administrator
+                    </Text>
+
+                    <TextInput
+                      style={[
+                        styles.input,
+                        styles.noteInput,
+                      ]}
+                      placeholder="Example: I plan to visit tomorrow"
+                      value={manualNote}
+                      onChangeText={setManualNote}
+                      multiline
+                      editable={!busy}
+                    />
+
+                    <Text style={styles.manualWarning}>
+                      Submitting this notification does not mark
+                      your account as paid.
+                    </Text>
+                  </View>
+                )}
+
                 <Pressable
                   style={[
-                    styles.chapaButton,
+                    selectedPaymentMethod === "chapa"
+                      ? styles.chapaButton
+                      : styles.continueButton,
                     busy && styles.disabledButton,
                   ]}
-                  onPress={startChapaPayment}
+                  onPress={continueSelectedPayment}
                   disabled={busy}
                 >
-                  {initializing ? (
+                  {(initializing &&
+                    selectedPaymentMethod === "chapa") ||
+                  (submittingManual &&
+                    (selectedPaymentMethod === "bank" ||
+                      selectedPaymentMethod === "cash")) ? (
                     <ActivityIndicator color="#ffffff" />
                   ) : (
                     <Text style={styles.buttonText}>
-                      Pay Securely with Chapa
+                      {selectedPaymentMethod === "chapa"
+                        ? "Continue with Chapa"
+                        : selectedPaymentMethod === "paypal"
+                          ? "PayPal Coming Soon"
+                          : selectedPaymentMethod === "bank"
+                            ? "Submit Bank Transfer"
+                            : "Notify Cash Payment"}
                     </Text>
                   )}
                 </Pressable>
+
+                {!!manualDebug && (
+                  <View style={styles.manualDebugBox}>
+                    <Text style={styles.manualDebugText}>
+                      {manualDebug}
+                    </Text>
+                  </View>
+                )}
 
                 {!!student.payment_reference && (
                   <Pressable
@@ -634,24 +1238,179 @@ export default function PaymentsScreen() {
                     )}
                   </Pressable>
                 )}
-              </>
+              </View>
             )}
 
             {isPaid && (
-              <Pressable
-                style={styles.portalButton}
-                onPress={() =>
-                  router.push("/learner-portal")
-                }
-              >
-                <Text style={styles.buttonText}>
-                  Open Learner Portal
-                </Text>
-              </Pressable>
+              <>
+                <View style={styles.completedBanner}>
+                  <Text style={styles.completedTitle}>
+                    ✅ Payment Completed
+                  </Text>
+
+                  <Text style={styles.completedText}>
+                    Your payment has been verified and your
+                    learner access is ready.
+                  </Text>
+                </View>
+
+                <Pressable
+                  style={styles.portalButton}
+                  onPress={() =>
+                    router.push("/learner-portal")
+                  }
+                >
+                  <Text style={styles.buttonText}>
+                    Open Learner Portal
+                  </Text>
+                </Pressable>
+              </>
             )}
           </View>
         )}
       </View>
+
+      {student && isPaid && (
+        <View style={styles.receiptCard}>
+          <Text style={styles.receiptBrand}>
+            EGA TECHNOLOGIES
+          </Text>
+
+          <Text style={styles.receiptTitle}>
+            PAYMENT RECEIPT
+          </Text>
+
+          <View style={styles.receiptDivider} />
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Student</Text>
+            <Text style={styles.receiptValue}>
+              {student.name || "Not added"}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>
+              Student ID
+            </Text>
+            <Text style={styles.receiptValue}>
+              {student.student_id || "N/A"}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Course</Text>
+            <Text style={styles.receiptValue}>
+              {student.course || "Full Web Development"}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>
+              Amount Paid
+            </Text>
+            <Text style={styles.receiptValue}>
+              {formatMoney(receiptAmount)} ETB
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Method</Text>
+            <Text style={styles.receiptValue}>
+              {receiptMethod}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>
+              Reference
+            </Text>
+            <Text style={styles.receiptValue}>
+              {receiptReference}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Date</Text>
+            <Text style={styles.receiptValue}>
+              {formatDate(receiptDate)}
+            </Text>
+          </View>
+
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Status</Text>
+            <Text style={styles.receiptPaid}>PAID</Text>
+          </View>
+
+          <View style={styles.receiptDivider} />
+
+          <Text style={styles.receiptThankYou}>
+            Thank you for choosing EGA Technologies.
+          </Text>
+
+          <Pressable
+            style={styles.printButton}
+            onPress={printReceipt}
+          >
+            <Text style={styles.buttonText}>
+              🖨️ Print / Download Receipt
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
+      {student && (
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            Payment History
+          </Text>
+
+          {historyLoading ? (
+            <ActivityIndicator color="#1e3a8a" />
+          ) : transactions.length === 0 ? (
+            <Text style={styles.helperText}>
+              No completed payment transactions were found.
+            </Text>
+          ) : (
+            transactions.map((transaction, index) => (
+              <View
+                key={String(
+                  transaction.id ||
+                    `${transaction.created_at}-${index}`
+                )}
+                style={styles.historyItem}
+              >
+                <View style={styles.historyTopRow}>
+                  <Text style={styles.historyAmount}>
+                    {formatMoney(transaction.amount)} ETB
+                  </Text>
+
+                  <Text style={styles.historyStatus}>
+                    {transaction.status || "Paid"}
+                  </Text>
+                </View>
+
+                <Text style={styles.historyText}>
+                  Date: {formatDate(transaction.created_at)}
+                </Text>
+
+                <Text style={styles.historyText}>
+                  Method:{" "}
+                  {transaction.payment_method || "Chapa"}
+                </Text>
+
+                <Text style={styles.historyText}>
+                  Reference:{" "}
+                  {transaction.payment_reference ||
+                    transaction.note ||
+                    student.payment_reference ||
+                    "Not provided"}
+                </Text>
+              </View>
+            ))
+          )}
+        </View>
+      )}
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Course Fee</Text>
@@ -837,8 +1596,159 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  paymentMethodsBox: {
+    marginTop: 18,
+    borderTopWidth: 1,
+    borderTopColor: "#cbd5e1",
+    paddingTop: 18,
+  },
+  paymentMethodsTitle: {
+    color: "#1e3a8a",
+    fontSize: 21,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  paymentMethodGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+    marginTop: 6,
+  },
+  paymentMethodButton: {
+    width: "48%",
+    minWidth: 140,
+    paddingVertical: 18,
+    paddingHorizontal: 10,
+    borderRadius: 14,
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "transparent",
+  },
+  selectedMethodButton: {
+    borderColor: "#1e3a8a",
+    transform: [{ scale: 1.02 }],
+  },
+  chapaMethodButton: {
+    backgroundColor: "#dcfce7",
+  },
+  paypalMethodButton: {
+    backgroundColor: "#dbeafe",
+  },
+  bankMethodButton: {
+    backgroundColor: "#fef3c7",
+  },
+  cashMethodButton: {
+    backgroundColor: "#f3e8ff",
+  },
+  paymentMethodEmoji: {
+    fontSize: 29,
+    marginBottom: 7,
+  },
+  paymentMethodText: {
+    color: "#0f172a",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  paymentMethodSmall: {
+    color: "#64748b",
+    fontSize: 12,
+    marginTop: 5,
+    textAlign: "center",
+  },
+  selectedMethodInfo: {
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 12,
+    padding: 15,
+    marginTop: 16,
+  },
+  selectedMethodTitle: {
+    color: "#1e3a8a",
+    fontWeight: "bold",
+    fontSize: 17,
+    marginBottom: 7,
+  },
+  selectedMethodDescription: {
+    color: "#475569",
+    lineHeight: 22,
+  },
+  manualForm: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 14,
+    padding: 16,
+    marginTop: 16,
+  },
+  manualFormTitle: {
+    color: "#1e3a8a",
+    fontSize: 19,
+    fontWeight: "bold",
+    marginBottom: 14,
+  },
+  manualLabel: {
+    color: "#334155",
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: 7,
+  },
+  noteInput: {
+    minHeight: 90,
+    textAlignVertical: "top",
+  },
+  amountDueBox: {
+    backgroundColor: "#ecfdf5",
+    borderWidth: 1,
+    borderColor: "#86efac",
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 15,
+  },
+  amountDueText: {
+    color: "#166534",
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  manualInstruction: {
+    color: "#475569",
+    fontSize: 16,
+    lineHeight: 25,
+    marginBottom: 6,
+  },
+  manualWarning: {
+    color: "#9a3412",
+    backgroundColor: "#ffedd5",
+    borderRadius: 10,
+    padding: 12,
+    fontWeight: "600",
+    lineHeight: 21,
+  },
+  manualDebugBox: {
+    backgroundColor: "#e0f2fe",
+    borderWidth: 1,
+    borderColor: "#38bdf8",
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 12,
+  },
+  manualDebugText: {
+    color: "#075985",
+    fontWeight: "bold",
+    textAlign: "center",
+    lineHeight: 21,
+  },
   chapaButton: {
     backgroundColor: "#16a34a",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  continueButton: {
+    backgroundColor: "#1e3a8a",
     padding: 15,
     borderRadius: 12,
     alignItems: "center",
@@ -878,5 +1788,122 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     borderTopWidth: 1,
     borderTopColor: "#cbd5e1",
+  },
+  completedBanner: {
+    backgroundColor: "#dcfce7",
+    borderWidth: 1,
+    borderColor: "#86efac",
+    borderRadius: 14,
+    padding: 18,
+    marginTop: 16,
+    alignItems: "center",
+  },
+  completedTitle: {
+    color: "#166534",
+    fontWeight: "bold",
+    fontSize: 22,
+    textAlign: "center",
+  },
+  completedText: {
+    color: "#166534",
+    marginTop: 8,
+    textAlign: "center",
+    lineHeight: 22,
+  },
+  receiptCard: {
+    backgroundColor: "#ffffff",
+    margin: 15,
+    padding: 24,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: "#1e3a8a",
+  },
+  receiptBrand: {
+    color: "#1e3a8a",
+    fontWeight: "bold",
+    fontSize: 24,
+    textAlign: "center",
+  },
+  receiptTitle: {
+    color: "#475569",
+    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 6,
+  },
+  receiptDivider: {
+    height: 1,
+    backgroundColor: "#cbd5e1",
+    marginVertical: 18,
+  },
+  receiptRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 15,
+    marginBottom: 14,
+  },
+  receiptLabel: {
+    color: "#64748b",
+    fontWeight: "bold",
+    flex: 1,
+  },
+  receiptValue: {
+    color: "#0f172a",
+    fontWeight: "600",
+    flex: 2,
+    textAlign: "right",
+  },
+  receiptPaid: {
+    color: "#16a34a",
+    fontWeight: "bold",
+    flex: 2,
+    textAlign: "right",
+  },
+  receiptThankYou: {
+    color: "#475569",
+    textAlign: "center",
+    fontWeight: "600",
+    lineHeight: 22,
+  },
+  printButton: {
+    backgroundColor: "#0f766e",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 18,
+  },
+  historyItem: {
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 12,
+    backgroundColor: "#f8fafc",
+  },
+  historyTopRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+    marginBottom: 10,
+  },
+  historyAmount: {
+    color: "#166534",
+    fontWeight: "bold",
+    fontSize: 19,
+  },
+  historyStatus: {
+    color: "#166534",
+    backgroundColor: "#dcfce7",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    fontWeight: "bold",
+    overflow: "hidden",
+  },
+  historyText: {
+    color: "#475569",
+    marginTop: 5,
+    lineHeight: 21,
   },
 });

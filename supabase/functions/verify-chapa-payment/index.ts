@@ -7,14 +7,30 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-function jsonResponse(body: unknown, status = 200) {
+function jsonResponse(body: unknown) {
   return new Response(JSON.stringify(body), {
-    status,
+    status: 200,
     headers: {
       ...corsHeaders,
       "Content-Type": "application/json",
     },
   });
+}
+
+function cleanText(value: unknown) {
+  return String(value ?? "").trim();
+}
+
+function lowerText(value: unknown) {
+  return cleanText(value).toLowerCase();
+}
+
+function toNumber(value: unknown) {
+  const numberValue = Number(value);
+
+  return Number.isFinite(numberValue)
+    ? numberValue
+    : 0;
 }
 
 async function readJsonSafely(response: Response) {
@@ -34,20 +50,35 @@ async function readJsonSafely(response: Response) {
   }
 }
 
-function cleanText(value: unknown) {
-  return String(value ?? "").trim();
-}
+function getTransaction(
+  chapaData: unknown,
+  expectedTxRef: string
+) {
+  if (Array.isArray(chapaData)) {
+    const matchedTransaction = chapaData.find(
+      (item) => {
+        const itemReference = cleanText(
+          item?.tx_ref ||
+          item?.trx_ref ||
+          item?.reference ||
+          item?.merchant_reference
+        );
 
-function normalizeStatus(value: unknown) {
-  return cleanText(value).toLowerCase();
-}
+        return itemReference === expectedTxRef;
+      }
+    );
 
-function toNumber(value: unknown) {
-  const numberValue = Number(value);
+    return matchedTransaction || chapaData[0] || {};
+  }
 
-  return Number.isFinite(numberValue)
-    ? numberValue
-    : 0;
+  if (
+    chapaData &&
+    typeof chapaData === "object"
+  ) {
+    return chapaData;
+  }
+
+  return {};
 }
 
 Deno.serve(async (request) => {
@@ -57,14 +88,6 @@ Deno.serve(async (request) => {
     });
   }
 
-  /*
-   * Return HTTP 200 for handled payment results.
-   *
-   * This allows the Expo app to read and display the real
-   * Chapa verification message instead of only receiving:
-   *
-   * "Edge Function returned a non-2xx status code"
-   */
   if (request.method !== "POST") {
     return jsonResponse({
       success: false,
@@ -83,37 +106,16 @@ Deno.serve(async (request) => {
     const chapaSecretKey =
       Deno.env.get("CHAPA_SECRET_KEY");
 
-    if (!supabaseUrl) {
-      console.error("SUPABASE_URL is missing");
-
-      return jsonResponse({
-        success: false,
-        verified: false,
-        message: "SUPABASE_URL is missing.",
-      });
-    }
-
-    if (!serviceRoleKey) {
-      console.error(
-        "SUPABASE_SERVICE_ROLE_KEY is missing"
-      );
-
+    if (
+      !supabaseUrl ||
+      !serviceRoleKey ||
+      !chapaSecretKey
+    ) {
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          "SUPABASE_SERVICE_ROLE_KEY is missing.",
-      });
-    }
-
-    if (!chapaSecretKey) {
-      console.error("CHAPA_SECRET_KEY is missing");
-
-      return jsonResponse({
-        success: false,
-        verified: false,
-        message:
-          "CHAPA_SECRET_KEY is not configured.",
+          "Required server environment variables are missing.",
       });
     }
 
@@ -137,20 +139,12 @@ Deno.serve(async (request) => {
       body.tx_ref || body.trx_ref
     );
 
-    if (!studentId) {
-      return jsonResponse({
-        success: false,
-        verified: false,
-        message: "Student ID is required.",
-      });
-    }
-
-    if (!txRef) {
+    if (!studentId || !txRef) {
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          "Chapa transaction reference is required.",
+          "Student ID and transaction reference are required.",
       });
     }
 
@@ -182,11 +176,6 @@ Deno.serve(async (request) => {
       .maybeSingle();
 
     if (studentError) {
-      console.error(
-        "Student lookup failed:",
-        studentError
-      );
-
       return jsonResponse({
         success: false,
         verified: false,
@@ -213,33 +202,22 @@ Deno.serve(async (request) => {
         success: false,
         verified: false,
         message:
-          "No Chapa transaction was initialized for this student.",
+          "No Chapa payment was initialized for this student.",
       });
     }
 
     if (storedReference !== txRef) {
-      console.error(
-        "Transaction reference mismatch:",
-        JSON.stringify({
-          student_id: student.student_id,
-          stored_reference: storedReference,
-          received_reference: txRef,
-        })
-      );
-
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          "This Chapa transaction reference does not belong to this student.",
+          "This transaction reference does not belong to this student.",
       });
     }
 
-    /*
-     * Idempotency:
-     * If this exact transaction was already processed,
-     * return success without adding the payment again.
-     */
+    const transactionNote =
+      `Chapa verified payment: ${txRef}`;
+
     const {
       data: existingTransaction,
       error: existingTransactionError,
@@ -247,22 +225,19 @@ Deno.serve(async (request) => {
       .from("transactions")
       .select("id, amount")
       .eq("student_id", student.student_id)
-      .eq(
-        "note",
-        `Chapa verified payment: ${txRef}`
-      )
+      .eq("note", transactionNote)
       .maybeSingle();
 
     if (existingTransactionError) {
       console.error(
         "Existing transaction lookup failed:",
-        existingTransactionError
+        existingTransactionError.message
       );
     }
 
     if (
       existingTransaction &&
-      normalizeStatus(student.payment_status) ===
+      lowerText(student.payment_status) ===
         "paid"
     ) {
       return jsonResponse({
@@ -284,21 +259,9 @@ Deno.serve(async (request) => {
       });
     }
 
-    const verifyUrl =
-      "https://api.chapa.co/v1/transaction/verify/" +
-      encodeURIComponent(txRef);
-
-    console.log(
-      "Verifying Chapa transaction:",
-      JSON.stringify({
-        student_id: student.student_id,
-        tx_ref: txRef,
-        verify_url: verifyUrl,
-      })
-    );
-
     const chapaResponse = await fetch(
-      verifyUrl,
+      "https://api.chapa.co/v1/transaction/verify/" +
+        encodeURIComponent(txRef),
       {
         method: "GET",
         headers: {
@@ -323,54 +286,36 @@ Deno.serve(async (request) => {
     );
 
     if (!chapaResponse.ok) {
-      const message =
-        cleanText(chapaResult?.message) ||
-        cleanText(chapaResult?.error) ||
-        `Chapa verification failed with HTTP ${chapaResponse.status}.`;
-
       return jsonResponse({
         success: false,
         verified: false,
-        message,
-        chapa_status: chapaResponse.status,
+        message:
+          cleanText(chapaResult?.message) ||
+          cleanText(chapaResult?.error) ||
+          `Chapa verification failed with HTTP ${chapaResponse.status}.`,
         chapa: chapaResult,
       });
     }
 
-    const transaction =
-      chapaResult?.data || {};
+    const transaction = getTransaction(
+      chapaResult?.data,
+      txRef
+    );
 
-    const topLevelStatus =
-      normalizeStatus(chapaResult?.status);
+    const topLevelStatus = lowerText(
+      chapaResult?.status
+    );
 
-    const paymentStatus =
-      normalizeStatus(
-        transaction?.status ||
-          chapaResult?.status
-      );
-
-    const currency =
-      cleanText(
-        transaction?.currency || "ETB"
-      ).toUpperCase();
-
-    const verifiedTxRef =
-      cleanText(
-        transaction?.tx_ref ||
-          transaction?.trx_ref ||
-          transaction?.reference ||
-          transaction?.merchant_reference ||
-          txRef
-      );
-
-    const verifiedAmount =
-      toNumber(transaction?.amount);
+    const transactionStatus = lowerText(
+      transaction?.status ||
+      chapaResult?.status
+    );
 
     const successfulStatuses = [
       "success",
       "successful",
-      "completed",
       "paid",
+      "completed",
     ];
 
     const isTopLevelSuccessful =
@@ -378,21 +323,21 @@ Deno.serve(async (request) => {
         topLevelStatus
       );
 
-    const isPaymentSuccessful =
+    const isTransactionSuccessful =
       successfulStatuses.includes(
-        paymentStatus
+        transactionStatus
       );
 
     if (
       !isTopLevelSuccessful ||
-      !isPaymentSuccessful
+      !isTransactionSuccessful
     ) {
       return jsonResponse({
         success: false,
         verified: false,
         message:
           `Payment status is ${
-            paymentStatus ||
+            transactionStatus ||
             topLevelStatus ||
             "unknown"
           }.`,
@@ -400,18 +345,17 @@ Deno.serve(async (request) => {
       });
     }
 
-    if (
-      verifiedTxRef &&
-      verifiedTxRef !== txRef
-    ) {
-      console.error(
-        "Chapa returned a different reference:",
-        JSON.stringify({
-          expected: txRef,
-          received: verifiedTxRef,
-        })
-      );
+    const returnedTxRef = cleanText(
+      transaction?.tx_ref ||
+      transaction?.trx_ref ||
+      transaction?.reference ||
+      transaction?.merchant_reference
+    );
 
+    if (
+      returnedTxRef &&
+      returnedTxRef !== txRef
+    ) {
       return jsonResponse({
         success: false,
         verified: false,
@@ -421,22 +365,25 @@ Deno.serve(async (request) => {
       });
     }
 
+    const currency = cleanText(
+      transaction?.currency || "ETB"
+    ).toUpperCase();
+
     if (currency !== "ETB") {
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          `Unexpected payment currency: ${
-            currency || "unknown"
-          }.`,
+          `Unexpected payment currency: ${currency}.`,
         chapa: chapaResult,
       });
     }
 
-    if (
-      !Number.isFinite(verifiedAmount) ||
-      verifiedAmount <= 0
-    ) {
+    const verifiedAmount = toNumber(
+      transaction?.amount
+    );
+
+    if (verifiedAmount <= 0) {
       return jsonResponse({
         success: false,
         verified: false,
@@ -448,36 +395,27 @@ Deno.serve(async (request) => {
 
     const fee = toNumber(student.fee);
 
-    const currentPaidAmount =
-      toNumber(student.paid_amount);
+    const currentPaidAmount = toNumber(
+      student.paid_amount
+    );
 
-    const currentRemainingAmount =
-      toNumber(student.remaining_amount) > 0
-        ? toNumber(student.remaining_amount)
+    const storedRemainingAmount = toNumber(
+      student.remaining_amount
+    );
+
+    const expectedAmount =
+      storedRemainingAmount > 0
+        ? storedRemainingAmount
         : Math.max(
             fee - currentPaidAmount,
             0
           );
 
-    /*
-     * The initialized checkout charged the current
-     * remaining balance. Never accept more than expected.
-     */
-    const expectedAmount =
-      currentRemainingAmount > 0
-        ? currentRemainingAmount
-        : fee;
-
-    const difference = Math.abs(
-      verifiedAmount - expectedAmount
-    );
-
-    /*
-     * Small tolerance protects against decimal formatting.
-     */
     if (
       expectedAmount > 0 &&
-      difference > 0.01
+      Math.abs(
+        verifiedAmount - expectedAmount
+      ) > 0.01
     ) {
       return jsonResponse({
         success: false,
@@ -490,16 +428,22 @@ Deno.serve(async (request) => {
       });
     }
 
-    const newPaidAmount = Math.min(
-      currentPaidAmount + verifiedAmount,
+    const newPaidAmount =
       fee > 0
-        ? fee
-        : currentPaidAmount + verifiedAmount
-    );
+        ? Math.min(
+            currentPaidAmount +
+              verifiedAmount,
+            fee
+          )
+        : currentPaidAmount +
+          verifiedAmount;
 
     const newRemainingAmount =
       fee > 0
-        ? Math.max(fee - newPaidAmount, 0)
+        ? Math.max(
+            fee - newPaidAmount,
+            0
+          )
         : 0;
 
     const newPaymentStatus =
@@ -507,22 +451,20 @@ Deno.serve(async (request) => {
         ? "Paid"
         : "Partial";
 
-    const paidAt =
-      cleanText(transaction?.updated_at) ||
-      cleanText(transaction?.created_at) ||
-      new Date().toISOString();
-
     const paymentMethod =
-      cleanText(transaction?.method) ||
       cleanText(
-        transaction?.payment_method
-      ) ||
-      "Chapa";
+        transaction?.method ||
+        transaction?.payment_method ||
+        transaction?.channel
+      ) || "Chapa";
 
-    /*
-     * Insert the transaction first.
-     * The note and transaction lookup prevent duplicates.
-     */
+    const paidAt =
+      cleanText(
+        transaction?.updated_at ||
+        transaction?.created_at ||
+        transaction?.paid_at
+      ) || new Date().toISOString();
+
     if (!existingTransaction) {
       const {
         error: transactionInsertError,
@@ -534,16 +476,10 @@ Deno.serve(async (request) => {
             student.name || "Unknown",
           amount: verifiedAmount,
           payment_method: paymentMethod,
-          note:
-            `Chapa verified payment: ${txRef}`,
+          note: transactionNote,
         });
 
       if (transactionInsertError) {
-        console.error(
-          "Transaction insert failed:",
-          transactionInsertError
-        );
-
         return jsonResponse({
           success: false,
           verified: true,
@@ -573,11 +509,6 @@ Deno.serve(async (request) => {
       .single();
 
     if (updateError) {
-      console.error(
-        "Student payment update failed:",
-        updateError
-      );
-
       return jsonResponse({
         success: false,
         verified: true,
@@ -588,16 +519,18 @@ Deno.serve(async (request) => {
     }
 
     console.log(
-      "Chapa payment verified successfully:",
+      "Payment verified and student updated:",
       JSON.stringify({
         student_id: student.student_id,
         tx_ref: txRef,
-        verified_amount: verifiedAmount,
-        paid_amount: newPaidAmount,
-        remaining_amount:
-          newRemainingAmount,
+        verified_amount:
+          verifiedAmount,
         payment_status:
           newPaymentStatus,
+        paid_amount:
+          newPaidAmount,
+        remaining_amount:
+          newRemainingAmount,
       })
     );
 
@@ -612,7 +545,7 @@ Deno.serve(async (request) => {
         amount: verifiedAmount,
         currency,
         method: paymentMethod,
-        status: paymentStatus,
+        status: transactionStatus,
       },
     });
   } catch (error) {
