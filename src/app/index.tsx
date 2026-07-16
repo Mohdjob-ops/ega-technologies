@@ -5,10 +5,17 @@ import { supabase } from "../lib/supabase";
 
 export default function HomeScreen() {
   useEffect(() => {
+    const getRecoveryData = () => {
+      if (typeof window === "undefined") return "";
+      return `${window.location.search}${window.location.hash}`;
+    };
+
+    const isRecoveryLink = () => getRecoveryData().includes("type=recovery");
+
     const routeIfRecoveryLink = () => {
       if (typeof window === "undefined") return;
 
-      const recoveryData = `${window.location.search}${window.location.hash}`;
+      const recoveryData = getRecoveryData();
 
       if (
         recoveryData.includes("error_code=otp_expired") ||
@@ -19,7 +26,7 @@ export default function HomeScreen() {
       }
 
       if (recoveryData.includes("type=recovery")) {
-        router.replace("/reset-password");
+        router.replace(`/reset-password${window.location.search}${window.location.hash}`);
         return;
       }
 
@@ -37,7 +44,12 @@ export default function HomeScreen() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "PASSWORD_RECOVERY") {
-        router.replace("/reset-password");
+        router.replace(`/reset-password${window.location.search}${window.location.hash}`);
+        return;
+      }
+
+      if (isRecoveryLink()) {
+        router.replace(`/reset-password${window.location.search}${window.location.hash}`);
         return;
       }
 

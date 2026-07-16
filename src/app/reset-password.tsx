@@ -22,16 +22,60 @@ export default function ResetPassword() {
   useEffect(() => {
     let active = true;
 
+    async function openRecoverySessionFromUrl() {
+      if (typeof window === "undefined") return false;
+
+      const query = new URLSearchParams(window.location.search);
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+
+      if (
+        query.get("error_code") === "otp_expired" ||
+        query.get("error") ||
+        hash.get("error")
+      ) {
+        setMessage("This reset link expired. Send a fresh password recovery email and open the newest link.");
+        return false;
+      }
+
+      const code = query.get("code");
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+          setMessage("Could not open reset session: " + error.message);
+          return false;
+        }
+        return true;
+      }
+
+      const accessToken = hash.get("access_token");
+      const refreshToken = hash.get("refresh_token");
+      if (accessToken && refreshToken) {
+        const { error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (error) {
+          setMessage("Could not open reset session: " + error.message);
+          return false;
+        }
+        return true;
+      }
+
+      return false;
+    }
+
     async function checkRecoverySession() {
+      const recoveredFromUrl = await openRecoverySessionFromUrl();
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
       if (!active) return;
 
-      setHasRecoverySession(Boolean(session));
+      setHasRecoverySession(Boolean(session) || recoveredFromUrl);
       setMessage(
-        session
+        session || recoveredFromUrl
           ? "Enter a new admin password."
           : "Open the latest password recovery email link again."
       );

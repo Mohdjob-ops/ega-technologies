@@ -110,7 +110,12 @@ export default function AdminDashboard() {
     });
 
     if (error || !data.user) {
-      setAdminMessage(`❌ ${error?.message || "Admin login failed."}`);
+      const message =
+        error?.message === "Invalid login credentials"
+          ? "Invalid Supabase Auth email or password. The UID row only works after this email/password signs in successfully."
+          : error?.message || "Admin login failed.";
+
+      setAdminMessage(`❌ ${message}`);
       setLoggingIn(false);
       return;
     }

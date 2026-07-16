@@ -59,11 +59,27 @@ revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to authenticated;
 
 -- Seed the known admin email by copying its real Auth UID into admin_users.
--- This works after the Supabase Auth user for this email already exists.
+-- If the Auth user was recreated, move the existing email row to the new UID.
+with admin_auth_user as (
+  select id, lower(email) as email
+  from auth.users
+  where lower(email) = 'jobtarget45@gmail.com'
+),
+updated_existing_email as (
+  update public.admin_users au
+  set
+    user_id = a.id,
+    email = a.email,
+    active = true,
+    updated_at = now()
+  from admin_auth_user a
+  where lower(au.email) = a.email
+  returning au.user_id
+)
 insert into public.admin_users (user_id, email, active)
-select id, lower(email), true
-from auth.users
-where lower(email) = 'jobtarget45@gmail.com'
+select id, email, true
+from admin_auth_user
+where not exists (select 1 from updated_existing_email)
 on conflict (user_id) do update
 set
   email = excluded.email,
