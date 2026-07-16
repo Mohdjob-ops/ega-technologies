@@ -273,33 +273,25 @@ export default function RegisterPage() {
     };
 
     const adminEmailData = {
+      ...emailData,
       email: cleanEmail,
       to_email: "i.gennex2026@gmail.com",
       name: cleanName,
       from_name: cleanName,
-      student_name: cleanName,
-      student_email: cleanEmail,
       phone: cleanPhone,
-      student_phone: cleanPhone,
       course: COURSE_NAME,
       fee: formatFee(fee),
-      start_date: startDate,
-      ...emailData,
     };
 
     const studentEmailData = {
+      ...emailData,
       email: cleanEmail,
       to_email: cleanEmail,
       name: cleanName,
       from_name: cleanName,
-      student_name: cleanName,
-      student_email: cleanEmail,
       phone: cleanPhone,
-      student_phone: cleanPhone,
       course: COURSE_NAME,
       fee: formatFee(fee),
-      start_date: startDate,
-      ...emailData,
     };
 
     console.log("ADMIN TEMPLATE:", ADMIN_TEMPLATE_ID);

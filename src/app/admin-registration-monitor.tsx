@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { verifyAdminSession, verifyAdminUser } from "../lib/adminAuth";
 import { supabase } from "../lib/supabase";
 
 type RegistrationAttempt = {
@@ -83,34 +84,13 @@ export default function AdminRegistrationMonitor() {
   useEffect(() => {
     let active = true;
 
-    async function verifyAdminUser(userId: string) {
-      const { data, error } = await supabase
-        .from("admin_users")
-        .select("user_id, active")
-        .eq("user_id", userId)
-        .eq("active", true)
-        .maybeSingle();
-
-      if (!active) return;
-
-      setIsAdmin(Boolean(data && !error));
-      setCheckingAccess(false);
-    }
-
     async function checkSession() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const admin = await verifyAdminSession();
 
       if (!active) return;
 
-      if (!session?.user) {
-        setIsAdmin(false);
-        setCheckingAccess(false);
-        return;
-      }
-
-      await verifyAdminUser(session.user.id);
+      setIsAdmin(admin.isAdmin);
+      setCheckingAccess(false);
     }
 
     checkSession();
@@ -127,7 +107,12 @@ export default function AdminRegistrationMonitor() {
       }
 
       setCheckingAccess(true);
-      await verifyAdminUser(session.user.id);
+      const admin = await verifyAdminUser(session.user.id);
+
+      if (!active) return;
+
+      setIsAdmin(admin.isAdmin);
+      setCheckingAccess(false);
     });
 
     return () => {

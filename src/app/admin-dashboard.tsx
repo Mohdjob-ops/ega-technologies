@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { verifyAdminUser } from "../lib/adminAuth";
 import { supabase } from "../lib/supabase";
 
 export default function AdminDashboard() {
@@ -59,22 +60,6 @@ export default function AdminDashboard() {
     };
   }, []);
 
-  async function verifyAdminRole(userId: string) {
-    const { data, error } = await supabase
-      .from("admin_users")
-      .select("user_id, email, active")
-      .eq("user_id", userId)
-      .eq("active", true)
-      .maybeSingle();
-
-    if (error) {
-      console.log("Admin role verification error:", error.message);
-      return false;
-    }
-
-    return Boolean(data);
-  }
-
   async function checkExistingSession() {
     setCheckingSession(true);
 
@@ -93,11 +78,11 @@ export default function AdminDashboard() {
   }
 
   async function openAdminSession(userId: string) {
-    const isAdmin = await verifyAdminRole(userId);
+    const admin = await verifyAdminUser(userId);
 
-    if (!isAdmin) {
+    if (!admin.isAdmin) {
       await supabase.auth.signOut();
-      setAdminMessage("❌ This account is not authorized as an administrator.");
+      setAdminMessage(`❌ ${admin.error || "This account is not authorized as an administrator."}`);
       setAdminLoggedIn(false);
       setCheckingSession(false);
       return;
@@ -130,11 +115,14 @@ export default function AdminDashboard() {
       return;
     }
 
-    const isAdmin = await verifyAdminRole(data.user.id);
+    const admin = await verifyAdminUser(
+      data.user.id,
+      data.user.email || cleanEmail
+    );
 
-    if (!isAdmin) {
+    if (!admin.isAdmin) {
       await supabase.auth.signOut();
-      setAdminMessage("❌ This account does not have an active admin role.");
+      setAdminMessage(`❌ ${admin.error || "This account does not have an active admin role."}`);
       setLoggingIn(false);
       return;
     }

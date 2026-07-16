@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { verifyAdminSession } from "../lib/adminAuth";
 import { supabase } from "../lib/supabase";
 
 const ADMIN_PASSWORD = "EGAADMIN2026";
@@ -16,6 +17,7 @@ export default function FeeSettings() {
   const [adminPassword, setAdminPassword] = useState("");
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [adminMessage, setAdminMessage] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
 
   const [fee, setFee] = useState("3000");
   const [startDate, setStartDate] = useState("Coming Soon");
@@ -26,13 +28,26 @@ export default function FeeSettings() {
     loadSettings();
   }, []);
 
-  function checkAdminPassword() {
-    if (adminPassword === ADMIN_PASSWORD) {
-      setAdminLoggedIn(true);
-      setAdminMessage("");
-    } else {
+  async function checkAdminPassword() {
+    if (adminPassword !== ADMIN_PASSWORD) {
       setAdminMessage("❌ Wrong admin password");
+      return;
     }
+
+    const admin = await verifyAdminSession();
+
+    if (!admin.isAdmin) {
+      setAdminLoggedIn(false);
+      setAdminEmail("");
+      setAdminMessage(
+        `❌ ${admin.error || "Sign in with an authorized admin account first."}`
+      );
+      return;
+    }
+
+    setAdminEmail(admin.email);
+    setAdminLoggedIn(true);
+    setAdminMessage("");
   }
 
   async function loadSettings() {
@@ -134,6 +149,9 @@ export default function FeeSettings() {
         <Text style={styles.subtitle}>
           Change course fee and starting date globally
         </Text>
+        <Text style={styles.sessionText}>
+          Signed in as {adminEmail || "authorized admin"}
+        </Text>
       </View>
 
       <View style={styles.card}>
@@ -188,6 +206,13 @@ const styles = StyleSheet.create({
   icon: { fontSize: 44, marginBottom: 10 },
   title: { fontSize: 34, fontWeight: "bold", color: "white" },
   subtitle: { fontSize: 16, color: "#dbe7ff", marginTop: 8, textAlign: "center" },
+  sessionText: {
+    color: "#bbf7d0",
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 8,
+    textAlign: "center",
+  },
   card: { backgroundColor: "white", margin: 18, padding: 18, borderRadius: 16 },
   label: {
     fontSize: 17,

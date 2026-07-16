@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { verifyAdminSession, verifyAdminUser } from "../lib/adminAuth";
 import { supabase } from "../lib/supabase";
 
 export default function AdminStudents() {
@@ -26,34 +27,11 @@ export default function AdminStudents() {
     let active = true;
 
     async function verifyExistingSession() {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
+      const admin = await verifyAdminSession();
 
       if (!active) return;
 
-      if (error || !session) {
-        setIsAdmin(false);
-        setAdminEmail("");
-        setCheckingAccess(false);
-        return;
-      }
-
-      await verifyAdminUser(session.user.id, session.user.email || "");
-    }
-
-    async function verifyAdminUser(userId: string, email: string) {
-      const { data, error } = await supabase
-        .from("admin_users")
-        .select("user_id, email, active")
-        .eq("user_id", userId)
-        .eq("active", true)
-        .maybeSingle();
-
-      if (!active) return;
-
-      if (error || !data) {
+      if (!admin.isAdmin) {
         setIsAdmin(false);
         setAdminEmail("");
         setCheckingAccess(false);
@@ -61,7 +39,7 @@ export default function AdminStudents() {
       }
 
       setIsAdmin(true);
-      setAdminEmail(email || data.email || "");
+      setAdminEmail(admin.email);
       setCheckingAccess(false);
     }
 
@@ -81,10 +59,16 @@ export default function AdminStudents() {
       }
 
       setCheckingAccess(true);
-      await verifyAdminUser(
+      const admin = await verifyAdminUser(
         session.user.id,
         session.user.email || ""
       );
+
+      if (!active) return;
+
+      setIsAdmin(admin.isAdmin);
+      setAdminEmail(admin.isAdmin ? admin.email : "");
+      setCheckingAccess(false);
     });
 
     return () => {
@@ -748,4 +732,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-

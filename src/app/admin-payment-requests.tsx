@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import emailjs from "@emailjs/browser";
+import { verifyAdminSession } from "../lib/adminAuth";
 import { supabase } from "../lib/supabase";
 
 const ADMIN_PASSWORD = "EGAADMIN2026";
@@ -42,6 +43,7 @@ export default function AdminPaymentRequests() {
   const [adminPassword, setAdminPassword] = useState("");
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [adminMessage, setAdminMessage] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
 
   const [requests, setRequests] = useState<PaymentRequest[]>([]);
   const [filter, setFilter] = useState<FilterStatus>("Pending");
@@ -93,10 +95,24 @@ export default function AdminPaymentRequests() {
     }
 
     setLoading(true);
+
+    const admin = await verifyAdminSession();
+
+    if (!admin.isAdmin) {
+      setAdminMessage(
+        `❌ ${admin.error || "Sign in with an authorized admin account first."}`
+      );
+      setAdminEmail("");
+      setAdminLoggedIn(false);
+      setLoading(false);
+      return;
+    }
+
     const success = await loadRequests(adminPassword, false);
     setLoading(false);
 
     if (success) {
+      setAdminEmail(admin.email);
       setAdminLoggedIn(true);
     }
   }
@@ -359,6 +375,9 @@ export default function AdminPaymentRequests() {
       <Text style={styles.subtitle}>
         Approve or reject Bank Transfer and Cash / Office requests.
       </Text>
+      <Text style={styles.sessionText}>
+        Signed in as {adminEmail || "authorized admin"}
+      </Text>
 
       <View style={styles.summaryRow}>
         <View style={styles.summaryCard}>
@@ -555,8 +574,15 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: "center",
     color: "#475569",
-    marginBottom: 22,
+    marginBottom: 10,
     lineHeight: 25,
+  },
+  sessionText: {
+    color: "#0f766e",
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 18,
+    textAlign: "center",
   },
   input: {
     backgroundColor: "#ffffff",
