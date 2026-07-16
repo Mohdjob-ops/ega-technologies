@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -10,31 +10,120 @@ import {
 } from "react-native";
 import { supabase } from "../lib/supabase";
 
-const ADMIN_PASSWORD = "EGAADMIN2026";
-
 export default function AdminStudents() {
-  const [adminPassword, setAdminPassword] = useState("");
-  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
-  const [adminMessage, setAdminMessage] = useState("");
+  const [checkingAccess, setCheckingAccess] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
 
   const [students, setStudents] = useState<any[]>([]);
   const [message, setMessage] = useState("");
-  const [partialAmounts, setPartialAmounts] = useState<any>({});
+  const [searchText, setSearchText] = useState("");
+  const [partialAmounts, setPartialAmounts] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
-    if (adminLoggedIn) {
+    let active = true;
+
+    async function verifyExistingSession() {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (!active) return;
+
+      if (error || !session) {
+        setIsAdmin(false);
+        setAdminEmail("");
+        setCheckingAccess(false);
+        return;
+      }
+
+      await verifyAdminUser(session.user.id, session.user.email || "");
+    }
+
+    async function verifyAdminUser(userId: string, email: string) {
+      const { data, error } = await supabase
+        .from("admin_users")
+        .select("user_id, email, active")
+        .eq("user_id", userId)
+        .eq("active", true)
+        .maybeSingle();
+
+      if (!active) return;
+
+      if (error || !data) {
+        setIsAdmin(false);
+        setAdminEmail("");
+        setCheckingAccess(false);
+        return;
+      }
+
+      setIsAdmin(true);
+      setAdminEmail(email || data.email || "");
+      setCheckingAccess(false);
+    }
+
+    verifyExistingSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!active) return;
+
+      if (!session) {
+        setIsAdmin(false);
+        setAdminEmail("");
+        setStudents([]);
+        setCheckingAccess(false);
+        return;
+      }
+
+      setCheckingAccess(true);
+      await verifyAdminUser(
+        session.user.id,
+        session.user.email || ""
+      );
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
       loadStudents();
     }
-  }, [adminLoggedIn]);
+  }, [isAdmin]);
 
-  function checkAdminPassword() {
-    if (adminPassword === ADMIN_PASSWORD) {
-      setAdminLoggedIn(true);
-      setAdminMessage("");
-    } else {
-      setAdminMessage("❌ Wrong admin password");
+  const filteredStudents = useMemo(() => {
+    const search = searchText.trim().toLowerCase();
+
+    if (!search) {
+      return students;
     }
-  }
+
+    return students.filter((student) => {
+      const searchableText = [
+        student.name,
+        student.student_id,
+        student.email,
+        student.phone,
+        student.course,
+        student.payment_status,
+        student.payment_method,
+        student.payment_reference,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(search);
+    });
+  }, [students, searchText]);
 
   async function loadStudents() {
     setMessage("Loading students...");
@@ -43,7 +132,7 @@ export default function AdminStudents() {
       .from("students")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(20);
+      .limit(50);
 
     if (error) {
       setMessage("❌ Error loading students: " + error.message);
@@ -56,9 +145,20 @@ export default function AdminStudents() {
 
   async function markFullPaid(student: any) {
     const fee = Number(student.fee || 0);
-    const remainingBeforePayment = Number(
-      student.remaining_amount ?? fee
-    );
+    const oldPaid = Number(student.paid_amount || 0);
+    const remainingBeforePayment = Math.max(fee - oldPaid, 0);
+
+    if (fee <= 0) {
+      setMessage("⚠️ This student has no valid course fee.");
+      return;
+    }
+
+    if (remainingBeforePayment <= 0) {
+      setMessage("ℹ️ This student is already fully paid.");
+      return;
+    }
+
+    setMessage("Updating full payment...");
 
     const { error } = await supabase
       .from("students")
@@ -83,7 +183,7 @@ export default function AdminStudents() {
         student_name: student.name,
         amount: remainingBeforePayment,
         payment_method: "Full Payment",
-        note: "Marked full paid by admin",
+        note: "Remaining balance marked full paid by admin",
       });
 
     if (transactionError) {
@@ -102,6 +202,8 @@ export default function AdminStudents() {
   async function markPending(student: any) {
     const fee = Number(student.fee || 0);
 
+    setMessage("Updating payment status...");
+
     const { error } = await supabase
       .from("students")
       .update({
@@ -119,32 +221,56 @@ export default function AdminStudents() {
       return;
     }
 
+    setPartialAmounts((current) => ({
+      ...current,
+      [student.id]: "",
+    }));
+
     setMessage("✅ Marked pending: " + student.name);
     await loadStudents();
   }
 
   async function addPartialPayment(student: any) {
-    const amount = Number(partialAmounts[student.id] || 0);
+    const enteredAmount = Number(partialAmounts[student.id] || 0);
     const fee = Number(student.fee || 0);
     const oldPaid = Number(student.paid_amount || 0);
+    const currentRemaining = Math.max(fee - oldPaid, 0);
 
-    if (!amount || amount <= 0) {
-      setMessage("⚠️ Enter valid partial payment amount");
+    if (!Number.isFinite(enteredAmount) || enteredAmount <= 0) {
+      setMessage("⚠️ Enter a valid partial payment amount.");
       return;
     }
 
-    const newPaid = Math.min(oldPaid + amount, fee);
+    if (fee <= 0) {
+      setMessage("⚠️ This student has no valid course fee.");
+      return;
+    }
+
+    if (currentRemaining <= 0) {
+      setMessage("ℹ️ This student is already fully paid.");
+      return;
+    }
+
+    const appliedAmount = Math.min(
+      enteredAmount,
+      currentRemaining
+    );
+
+    const newPaid = oldPaid + appliedAmount;
     const remaining = Math.max(fee - newPaid, 0);
-    const status =
-      remaining === 0 ? "Paid" : "Partial Payment";
-    const method =
-      remaining === 0 ? "Full Payment" : "Partial Payment";
+    const fullyPaid = remaining === 0;
+
+    setMessage("Adding payment...");
 
     const { error } = await supabase
       .from("students")
       .update({
-        payment_status: status,
-        payment_method: method,
+        payment_status: fullyPaid
+          ? "Paid"
+          : "Partial Payment",
+        payment_method: fullyPaid
+          ? "Full Payment"
+          : "Partial Payment",
         paid_amount: newPaid,
         remaining_amount: remaining,
         paid_at: new Date().toISOString(),
@@ -152,7 +278,9 @@ export default function AdminStudents() {
       .eq("student_id", student.student_id);
 
     if (error) {
-      setMessage("❌ Error adding partial payment: " + error.message);
+      setMessage(
+        "❌ Error adding partial payment: " + error.message
+      );
       return;
     }
 
@@ -161,9 +289,13 @@ export default function AdminStudents() {
       .insert({
         student_id: student.student_id,
         student_name: student.name,
-        amount,
-        payment_method: "Partial Payment",
-        note: "Partial payment added by admin",
+        amount: appliedAmount,
+        payment_method: fullyPaid
+          ? "Full Payment"
+          : "Partial Payment",
+        note: fullyPaid
+          ? "Final balance payment added by admin"
+          : "Partial payment added by admin",
       });
 
     if (transactionError) {
@@ -175,55 +307,75 @@ export default function AdminStudents() {
       return;
     }
 
-    setPartialAmounts({
-      ...partialAmounts,
+    setPartialAmounts((current) => ({
+      ...current,
       [student.id]: "",
-    });
+    }));
 
-    setMessage("✅ Partial payment added: " + student.name);
+    if (enteredAmount > currentRemaining) {
+      setMessage(
+        `✅ ${money(appliedAmount)} applied. ` +
+          `${student.name} is now fully paid.`
+      );
+    } else {
+      setMessage(
+        "✅ Payment added successfully: " + student.name
+      );
+    }
+
     await loadStudents();
+  }
+
+  async function logoutAdmin() {
+    setMessage("Signing out...");
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      setMessage("❌ Logout failed: " + error.message);
+      return;
+    }
+
+    setStudents([]);
+    setAdminEmail("");
+    setIsAdmin(false);
+    setMessage("");
   }
 
   function money(value: any) {
     return `${Number(value || 0).toLocaleString()} ETB`;
   }
 
-  if (!adminLoggedIn) {
+  if (checkingAccess) {
+    return (
+      <View style={styles.centerScreen}>
+        <Text style={styles.title}>🔐 Checking Admin Access</Text>
+        <Text style={styles.subtitle}>
+          Verifying your secure Supabase session...
+        </Text>
+      </View>
+    );
+  }
+
+  if (!isAdmin) {
     return (
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.title}>🔐 Admin Login</Text>
+        <Text style={styles.title}>🔐 Admin Access Required</Text>
 
         <Text style={styles.subtitle}>
-          Only EGA admin can access student payments.
+          Log in from the Admin Dashboard using your approved
+          Supabase administrator account.
         </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter admin password"
-          secureTextEntry
-          value={adminPassword}
-          onChangeText={setAdminPassword}
-          onSubmitEditing={checkAdminPassword}
-        />
-
-        <TouchableOpacity
-          style={styles.paidButton}
-          onPress={checkAdminPassword}
+        <Link
+          href="/admin-dashboard"
+          style={styles.dashboardLoginLink}
         >
-          <Text style={styles.buttonText}>
-            Login as Admin
-          </Text>
-        </TouchableOpacity>
-
-        {adminMessage ? (
-          <Text style={styles.message}>
-            {adminMessage}
-          </Text>
-        ) : null}
+          Go to Admin Dashboard Login
+        </Link>
 
         <Link href="/" style={styles.backButton}>
           ← Back to Home
@@ -245,32 +397,65 @@ export default function AdminStudents() {
         ← Back to Admin Dashboard
       </Link>
 
-      <Text style={styles.title}>📋 Student List</Text>
+      <Text style={styles.title}>📋 Admin Students</Text>
 
       <Text style={styles.subtitle}>
-        Latest 20 students with payment controls
+        Secure payment management for the latest 50 students
       </Text>
 
-      <TouchableOpacity
-        style={styles.refreshButton}
-        onPress={loadStudents}
-      >
-        <Text style={styles.buttonText}>
-          🔄 Refresh Students
+      <View style={styles.adminSessionBox}>
+        <Text style={styles.adminSessionTitle}>
+          ✅ Secure Admin Session
         </Text>
-      </TouchableOpacity>
+
+        <Text style={styles.adminSessionText}>
+          {adminEmail || "Approved administrator"}
+        </Text>
+      </View>
+
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search name, Student ID, phone or email"
+        value={searchText}
+        onChangeText={setSearchText}
+        autoCapitalize="none"
+      />
+
+      <View style={styles.topButtons}>
+        <TouchableOpacity
+          style={styles.refreshButton}
+          onPress={loadStudents}
+        >
+          <Text style={styles.buttonText}>
+            🔄 Refresh Students
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={logoutAdmin}
+        >
+          <Text style={styles.buttonText}>
+            🚪 Secure Logout
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       {message ? (
         <Text style={styles.message}>{message}</Text>
       ) : null}
 
-      {students.length === 0 && !message ? (
+      <Text style={styles.resultCount}>
+        Showing {filteredStudents.length} of {students.length} students
+      </Text>
+
+      {filteredStudents.length === 0 && !message ? (
         <Text style={styles.emptyText}>
-          No students found.
+          No matching students found.
         </Text>
       ) : null}
 
-      {students.map((student) => (
+      {filteredStudents.map((student) => (
         <View key={student.id} style={styles.card}>
           <Text style={styles.name}>
             {student.name || "No name"}
@@ -303,13 +488,11 @@ export default function AdminStudents() {
             </Text>
 
             <Text style={styles.pending}>
-              Remaining:{" "}
-              {money(student.remaining_amount)}
+              Remaining: {money(student.remaining_amount)}
             </Text>
 
             <Text style={styles.text}>
-              Status:{" "}
-              {student.payment_status || "Pending"}
+              Status: {student.payment_status || "Pending"}
             </Text>
 
             <Text style={styles.text}>
@@ -325,23 +508,23 @@ export default function AdminStudents() {
             <Text style={styles.text}>
               Paid Date:{" "}
               {student.paid_at
-                ? new Date(
-                    student.paid_at
-                  ).toLocaleString()
+                ? new Date(student.paid_at).toLocaleString()
                 : "Not paid yet"}
             </Text>
           </View>
 
           <TextInput
             style={styles.input}
-            placeholder="Enter partial amount"
+            placeholder={`Enter payment up to ${money(
+              student.remaining_amount
+            )}`}
             keyboardType="numeric"
             value={partialAmounts[student.id] || ""}
             onChangeText={(value) =>
-              setPartialAmounts({
-                ...partialAmounts,
+              setPartialAmounts((current) => ({
+                ...current,
                 [student.id]: value,
-              })
+              }))
             }
           />
 
@@ -368,7 +551,7 @@ export default function AdminStudents() {
             onPress={() => markPending(student)}
           >
             <Text style={styles.buttonText}>
-              ⏳ Mark Pending
+              ⏳ Reset as Pending
             </Text>
           </TouchableOpacity>
         </View>
@@ -382,9 +565,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#eaf2ff",
   },
+  centerScreen: {
+    flex: 1,
+    backgroundColor: "#eaf2ff",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
   content: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 50,
+    width: "100%",
+    maxWidth: 900,
+    alignSelf: "center",
   },
   backButton: {
     color: "#003366",
@@ -393,24 +586,74 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 15,
   },
+  dashboardLoginLink: {
+    backgroundColor: "#1e3a8a",
+    color: "#ffffff",
+    padding: 16,
+    borderRadius: 12,
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
   title: {
     fontSize: 34,
     fontWeight: "bold",
     color: "#003366",
     textAlign: "center",
-    marginBottom: 6,
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 18,
     color: "#334155",
     textAlign: "center",
     marginBottom: 20,
+    lineHeight: 27,
+  },
+  adminSessionBox: {
+    backgroundColor: "#dcfce7",
+    borderWidth: 1,
+    borderColor: "#86efac",
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 15,
+  },
+  adminSessionTitle: {
+    color: "#166534",
+    fontSize: 17,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  adminSessionText: {
+    color: "#166534",
+    fontSize: 15,
+    textAlign: "center",
+    marginTop: 4,
+  },
+  searchInput: {
+    backgroundColor: "#ffffff",
+    borderWidth: 2,
+    borderColor: "#93c5fd",
+    padding: 15,
+    borderRadius: 12,
+    fontSize: 18,
+    marginBottom: 12,
+  },
+  topButtons: {
+    marginBottom: 10,
   },
   message: {
     fontSize: 18,
     textAlign: "center",
     color: "#003366",
     fontWeight: "bold",
+    marginVertical: 14,
+  },
+  resultCount: {
+    color: "#475569",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 15,
   },
   emptyText: {
@@ -424,6 +667,8 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 16,
     marginBottom: 18,
+    borderWidth: 1,
+    borderColor: "#dbeafe",
   },
   name: {
     fontSize: 24,
@@ -468,7 +713,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     alignItems: "center",
-    marginBottom: 18,
+    marginBottom: 10,
+  },
+  logoutButton: {
+    backgroundColor: "#475569",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
   },
   partialButton: {
     backgroundColor: "#2563eb",
@@ -496,3 +748,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+

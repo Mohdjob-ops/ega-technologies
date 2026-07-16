@@ -1,7 +1,56 @@
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { ScrollView, Text, View, StyleSheet, Pressable } from "react-native";
+import { supabase } from "../lib/supabase";
 
 export default function HomeScreen() {
+  useEffect(() => {
+    const routeIfRecoveryLink = () => {
+      if (typeof window === "undefined") return;
+
+      const recoveryData = `${window.location.search}${window.location.hash}`;
+
+      if (
+        recoveryData.includes("error_code=otp_expired") ||
+        recoveryData.includes("error=access_denied")
+      ) {
+        router.replace("/admin-dashboard?adminError=expired_link");
+        return;
+      }
+
+      if (recoveryData.includes("type=recovery")) {
+        router.replace("/reset-password");
+        return;
+      }
+
+      if (
+        recoveryData.includes("access_token=") &&
+        recoveryData.includes("type=magiclink")
+      ) {
+        router.replace("/admin-dashboard");
+      }
+    };
+
+    routeIfRecoveryLink();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        router.replace("/reset-password");
+        return;
+      }
+
+      if (event === "SIGNED_IN" && session?.user) {
+        router.replace("/admin-dashboard");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <ScrollView style={styles.page}>
       <View style={styles.hero}>

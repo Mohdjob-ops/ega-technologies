@@ -15,6 +15,9 @@ const SERVICE_ID = "service_kkkr0xj";
 const ADMIN_TEMPLATE_ID = "template_w01c7ku";
 const STUDENT_TEMPLATE_ID = "template_9se77eg";
 const PUBLIC_KEY = "eGuNf2PLEmedxzflY";
+const COURSE_NAME = "Full Web Development";
+const MAX_STUDENT_ID_ATTEMPTS = 8;
+const ATTEMPT_SOURCE = "vercel-registration-page";
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
@@ -50,7 +53,7 @@ export default function RegisterPage() {
   }
 
   function generateStudentId() {
-    const random = Math.floor(1000 + Math.random() * 9000);
+    const random = Math.floor(100000 + Math.random() * 900000);
     return `EGA-2026-${random}`;
   }
 
@@ -64,24 +67,112 @@ export default function RegisterPage() {
   }
 
   function formatFee(value: string) {
-    return Number(value).toLocaleString() + " Birr";
+    return Number(value || 0).toLocaleString() + " Birr";
+  }
+
+  function normalizePhone(value: string) {
+    return value.replace(/\D/g, "");
+  }
+
+  function isValidEmail(value: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function isDuplicateStudentIdError(error: any) {
+    const message = String(error?.message || "").toLowerCase();
+
+    return error?.code === "23505" && message.includes("student_id");
+  }
+
+  async function logRegistrationAttempt(
+    status: string,
+    statusMessage: string,
+    studentId = ""
+  ) {
+    const { error } = await supabase.rpc("log_registration_attempt", {
+      p_full_name: fullName.trim(),
+      p_phone: normalizePhone(phone),
+      p_email: email.trim().toLowerCase(),
+      p_course: COURSE_NAME,
+      p_status: status,
+      p_status_message: statusMessage,
+      p_student_id: studentId || null,
+      p_source: ATTEMPT_SOURCE,
+    });
+
+    if (error) {
+      console.log("Registration attempt log error:", error.message);
+    }
+  }
+
+  async function stopWithMessage(status: string, statusMessage: string) {
+    setMessage(statusMessage);
+    await logRegistrationAttempt(status, statusMessage);
+  }
+
+  async function insertStudentWithUniqueId(studentPayload: any) {
+    let lastError: any = null;
+
+    for (let attempt = 0; attempt < MAX_STUDENT_ID_ATTEMPTS; attempt += 1) {
+      const studentId = generateStudentId();
+      const { error } = await supabase.from("students").insert({
+        ...studentPayload,
+        student_id: studentId,
+      });
+
+      if (!error) {
+        return { studentId, error: null };
+      }
+
+      lastError = error;
+
+      if (!isDuplicateStudentIdError(error)) {
+        break;
+      }
+    }
+
+    return { studentId: "", error: lastError };
   }
 
   async function handleRegister() {
     if (loading) return;
 
     if (!fullName.trim() || !phone.trim() || !email.trim()) {
-      setMessage("⚠️ Please fill all fields");
+      await stopWithMessage("validation_failed", "⚠️ Please fill all fields");
+      return;
+    }
+
+    const cleanName = formatName(fullName);
+    const cleanPhone = normalizePhone(phone);
+    const cleanEmail = email.trim().toLowerCase();
+    const courseFee = Number(fee || 0);
+
+    if (cleanName.split(" ").length < 2) {
+      await stopWithMessage("validation_failed", "⚠️ Please enter your full name");
+      return;
+    }
+
+    if (cleanPhone.length < 9) {
+      await stopWithMessage("validation_failed", "⚠️ Please enter a valid phone number");
+      return;
+    }
+
+    if (!isValidEmail(cleanEmail)) {
+      await stopWithMessage("validation_failed", "⚠️ Please enter a valid email address");
+      return;
+    }
+
+    if (!Number.isFinite(courseFee) || courseFee <= 0) {
+      await stopWithMessage(
+        "validation_failed",
+        "⚠️ Course fee is not ready. Please try again."
+      );
       return;
     }
 
     setLoading(true);
     setMessage("Registering...");
-
-    const studentId = generateStudentId();
-    const cleanName = formatName(fullName);
-    const cleanPhone = phone.trim();
-    const cleanEmail = email.trim().toLowerCase();
+    await logRegistrationAttempt("submitted", "Registration form submitted");
 
     const { data: existingStudent, error: checkError } = await supabase
       .from("students")
@@ -92,7 +183,9 @@ export default function RegisterPage() {
 
     if (checkError) {
       setLoading(false);
-      setMessage("❌ Duplicate check error: " + checkError.message);
+      const statusMessage = "❌ Duplicate check error: " + checkError.message;
+      setMessage(statusMessage);
+      await logRegistrationAttempt("duplicate_check_error", statusMessage);
       return;
     }
 
@@ -100,28 +193,39 @@ export default function RegisterPage() {
       setLoading(false);
 
       if (existingStudent.phone === cleanPhone) {
-        setMessage(
-          `❌ This phone number is already registered.\n\nStudent: ${existingStudent.name}\nStudent ID: ${existingStudent.student_id}\n\nPlease login to Learner Portal instead.`
+        const statusMessage =
+          `❌ This phone number is already registered.\n\nStudent: ${existingStudent.name}\nStudent ID: ${existingStudent.student_id}\n\nPlease login to Learner Portal instead.`;
+        setMessage(statusMessage);
+        await logRegistrationAttempt(
+          "duplicate_phone",
+          statusMessage,
+          existingStudent.student_id
         );
         return;
       }
 
       if (String(existingStudent.email).toLowerCase() === cleanEmail) {
-        setMessage(
-          `❌ This email address is already registered.\n\nStudent: ${existingStudent.name}\nStudent ID: ${existingStudent.student_id}\n\nPlease login to Learner Portal instead.`
+        const statusMessage =
+          `❌ This email address is already registered.\n\nStudent: ${existingStudent.name}\nStudent ID: ${existingStudent.student_id}\n\nPlease login to Learner Portal instead.`;
+        setMessage(statusMessage);
+        await logRegistrationAttempt(
+          "duplicate_email",
+          statusMessage,
+          existingStudent.student_id
         );
         return;
       }
     }
 
-    const { error } = await supabase.from("students").insert({
-      student_id: studentId,
+    const { studentId, error } = await insertStudentWithUniqueId({
       name: cleanName,
       phone: cleanPhone,
       email: cleanEmail,
       language: "English",
-      course: "Full Web Development",
-      fee: Number(fee),
+      course: COURSE_NAME,
+      fee: courseFee,
+      paid_amount: 0,
+      remaining_amount: courseFee,
       payment_status: "Pending",
       payment_method: "Not Selected",
       payment_reference: "Not Provided",
@@ -130,7 +234,9 @@ export default function RegisterPage() {
 
     if (error) {
       setLoading(false);
-      setMessage("❌ Supabase error: " + error.message);
+      const statusMessage = "❌ Registration error: " + error.message;
+      setMessage(statusMessage);
+      await logRegistrationAttempt("registration_error", statusMessage);
       return;
     }
 
@@ -139,15 +245,17 @@ export default function RegisterPage() {
       student_name: cleanName,
       phone: cleanPhone,
       email: cleanEmail,
-      course: "Full Web Development",
-      amount: Number(fee),
+      course: COURSE_NAME,
+      amount: courseFee,
       status: "Pending",
       type: "Registration Fee",
     });
 
     if (transactionError) {
       setLoading(false);
-      setMessage("❌ Transaction error: " + transactionError.message);
+      const statusMessage = "❌ Transaction error: " + transactionError.message;
+      setMessage(statusMessage);
+      await logRegistrationAttempt("transaction_error", statusMessage, studentId);
       return;
     }
 
@@ -157,7 +265,7 @@ export default function RegisterPage() {
       student_email: cleanEmail,
       student_phone: cleanPhone,
       student_id: studentId,
-      student_course: "Full Web Development",
+      student_course: COURSE_NAME,
       course_fee: formatFee(fee),
       fee_text: formatFee(fee),
       start_date: startDate,
@@ -173,7 +281,7 @@ export default function RegisterPage() {
       student_email: cleanEmail,
       phone: cleanPhone,
       student_phone: cleanPhone,
-      course: "Full Web Development",
+      course: COURSE_NAME,
       fee: formatFee(fee),
       start_date: startDate,
       ...emailData,
@@ -188,7 +296,7 @@ export default function RegisterPage() {
       student_email: cleanEmail,
       phone: cleanPhone,
       student_phone: cleanPhone,
-      course: "Full Web Development",
+      course: COURSE_NAME,
       fee: formatFee(fee),
       start_date: startDate,
       ...emailData,
@@ -206,9 +314,10 @@ export default function RegisterPage() {
     const studentEmailOk = emailResults[1].status === "fulfilled";
 
     if (adminEmailOk && studentEmailOk) {
-      setMessage(
-        `✅ Registration Successful — Admin and student emails sent for ${cleanName}\n\nStudent ID: ${studentId}\nPhone: ${cleanPhone}\n\nUse this Student ID and Phone to login to Learner Portal.`
-      );
+      const statusMessage =
+        `✅ Registration Successful — Admin and student emails sent for ${cleanName}\n\nStudent ID: ${studentId}\nPhone: ${cleanPhone}\n\nUse this Student ID and Phone to login to Learner Portal.`;
+      setMessage(statusMessage);
+      await logRegistrationAttempt("success", statusMessage, studentId);
     } else {
       const errors = emailResults
         .map((result, index) => {
@@ -220,7 +329,9 @@ export default function RegisterPage() {
         .filter(Boolean)
         .join(" | ");
 
-      setMessage("✅ Registered, but email issue: " + errors);
+      const statusMessage = "✅ Registered, but email issue: " + errors;
+      setMessage(statusMessage);
+      await logRegistrationAttempt("email_error", statusMessage, studentId);
     }
 
     setFullName("");
