@@ -7,7 +7,7 @@ Use this before handing the project to a buyer.
 - [x] Open terminal in `/Users/mohdelmi/Desktop/Ega-project/EGA/EGA2026`.
 - [x] Run `npm install`.
 - [x] Run `npm run build`.
-- [ ] Run `npx expo start --web --clear`.
+- [x] Run `npx expo start --web --clear`.
 - [x] Confirm the home page opens.
 - [ ] Confirm registration can submit.
 - [ ] Confirm learner portal can find a student.
