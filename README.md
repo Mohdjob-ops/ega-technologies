@@ -49,6 +49,27 @@ To learn more about developing your project with Expo, look at the following res
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
+## Production web deployment
+
+This project exports a single-page web application to `dist` and includes Vercel routing rules so Expo Router pages continue to work after a browser refresh.
+
+Before deployment, run:
+
+```bash
+npm install
+npm run check:deploy
+```
+
+For Vercel, import the repository and keep the committed settings:
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Install command: `npm install`
+
+After deployment, add the production domain and password-reset callback URL to the Supabase Auth URL allowlist. Then verify registration, learner lookup, administrator access, payment review, EmailJS delivery, Chapa initialization/verification, and refreshed deep links such as `/admin-dashboard`.
+
+The Supabase publishable key and EmailJS public key used by the browser are not server secrets. Chapa and Supabase service-role credentials must remain only in Supabase Edge Function secrets and must never be added to this repository or Vercel client environment variables.
+
 ## Join the community
 
 Join our community of developers creating universal apps.

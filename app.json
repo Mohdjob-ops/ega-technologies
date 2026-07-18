@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "EGA Technologies",
+    "slug": "ega-college-app",
+    "version": "1.0.0",
+    "description": "EGA Technologies learning platform for web development courses, learner progress, payments, quizzes, and certificates.",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "egatechnologies",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "root": "src/app"
+        }
+      ]
+    ],
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "EGA Technologies",
+      "shortName": "EGA",
+      "description": "Learn web development with EGA Technologies.",
+      "lang": "en",
+      "display": "standalone",
+      "themeColor": "#244394",
+      "backgroundColor": "#eef4ff"
+    }
+  }
+}

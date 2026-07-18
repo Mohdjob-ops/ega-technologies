@@ -50,7 +50,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "build": "expo export --platform web"
+    "typecheck": "tsc --noEmit",
+    "build": "expo export --platform web",
+    "check:deploy": "npm run typecheck && npm run lint && npm run build"
   },
   "private": true
 }
