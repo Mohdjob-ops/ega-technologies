@@ -14,7 +14,9 @@
         {
           "root": "src/app"
         }
-      ]
+      ],
+      "expo-splash-screen",
+      "expo-web-browser"
     ],
     "web": {
       "output": "single",
