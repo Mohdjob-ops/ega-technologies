@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="EGA AI Developer Course Lesson 6: Prompt and Context Engineering Recommendations"
+  />
+
+  <title>
+    Lesson 6: Prompt and Context Engineering Recommendations | EGA
+  </title>
+
+  <style>
+    :root {
+      --primary: #123b69;
+      --secondary: #1f6f8b;
+      --accent: #f4b942;
+      --success: #18794e;
+      --danger: #b42318;
+      --light: #f4f8fc;
+      --white: #ffffff;
+      --dark: #17202a;
+      --muted: #5b6573;
+      --border: #d6e1ea;
+      --code: #101820;
+      --shadow: 0 8px 24px rgba(18, 59, 105, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      line-height: 1.7;
+      color: var(--dark);
+      background: var(--light);
+    }
+
+    header {
+      padding: 34px 20px;
+      color: var(--white);
+      text-align: center;
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+    }
+
+    .logo {
+      width: min(320px, 82vw);
+      height: auto;
+      margin: 0 auto 18px;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.18));
+    }
+
+    .motto {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      max-width: 950px;
+      margin: 0 auto 12px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.2;
+    }
+
+    header p {
+      max-width: 850px;
+      margin: 8px auto;
+      font-size: 1.06rem;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    }
+
+    nav a {
+      padding: 8px 11px;
+      border-radius: 8px;
+      color: var(--primary);
+      font-size: 0.91rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: var(--white);
+      background: var(--primary);
+    }
+
+    main {
+      width: min(1100px, 92%);
+      margin: 30px auto;
+    }
+
+    section {
+      margin-bottom: 28px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin-top: 0;
+      padding-bottom: 9px;
+      color: var(--primary);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    h3 {
+      color: var(--secondary);
+    }
+
+    h4 {
+      color: var(--primary);
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul li,
+    ol li {
+      margin-bottom: 9px;
+    }
+
+    .lesson-info {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .info-card,
+    .recommendation-card,
+    .example-card,
+    .activity-card,
+    .question {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfdff;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--primary);
+    }
+
+    .recommendation-grid,
+    .example-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .recommendation-card {
+      border-top: 5px solid var(--secondary);
+    }
+
+    .number {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 10px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--primary);
+      font-weight: bold;
+    }
+
+    .important,
+    .warning,
+    .success {
+      margin: 18px 0;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .important {
+      border-left: 6px solid var(--accent);
+      background: #fff8e7;
+    }
+
+    .warning {
+      border-left: 6px solid var(--danger);
+      background: #fff2f0;
+    }
+
+    .success {
+      border-left: 6px solid var(--success);
+      background: #eefaf4;
+    }
+
+    .somali {
+      border-left: 7px solid var(--success);
+    }
+
+    .gal {
+      border-left: 7px solid var(--accent);
+    }
+
+    .bad {
+      border-top: 5px solid var(--danger);
+    }
+
+    .good {
+      border-top: 5px solid var(--success);
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .label-bad {
+      background: var(--danger);
+    }
+
+    .label-good {
+      background: var(--success);
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 18px;
+      border-radius: 10px;
+      background: var(--code);
+      color: #f8f8f2;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family:
+        "Courier New",
+        monospace;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family:
+        "Courier New",
+        monospace;
+    }
+
+    .browser-output {
+      margin-top: 10px;
+      padding: 16px;
+      border: 2px dashed var(--secondary);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 16px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--white);
+      background: var(--primary);
+    }
+
+    tr:nth-child(even) {
+      background: #f5f9fc;
+    }
+
+    .steps {
+      counter-reset: lesson-step;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      position: relative;
+      margin-bottom: 14px;
+      padding: 16px 16px 16px 66px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+
+    .steps li::before {
+      counter-increment: lesson-step;
+      content: counter(lesson-step);
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--primary);
+      font-weight: bold;
+    }
+
+    .question {
+      margin-bottom: 16px;
+    }
+
+    .question p {
+      margin-top: 0;
+      font-weight: bold;
+    }
+
+    .question label {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .question label:hover {
+      background: #edf5fa;
+    }
+
+    details {
+      margin: 12px 0;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+
+    summary {
+      color: var(--primary);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .answer {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .remember {
+      color: var(--white);
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+    }
+
+    .remember h2,
+    .remember h3 {
+      color: var(--white);
+    }
+
+    footer {
+      padding: 30px 20px;
+      color: var(--white);
+      text-align: center;
+      background: #0c2947;
+    }
+
+    footer p {
+      margin: 6px 0;
+    }
+
+    footer a {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    @media (max-width: 650px) {
+      section {
+        padding: 20px;
+      }
+
+      nav {
+        position: static;
+      }
+
+      th,
+      td {
+        min-width: 155px;
+      }
+    }
+  </style>
+
+<style id="ega-official-logo-style">
+  .ega-official-logo {
+    width: 190px;
+    height: 190px;
+    display: block;
+    margin: 20px auto;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 5px solid #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  @media (max-width: 600px) {
+    .ega-official-logo {
+      width: 150px;
+      height: 150px;
+    }
+  }
+</style>
+
+</head>
+
+<body>
+  <header id="top">
+    <img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy official logo"
+            class="ega-official-logo"
+        >
+
+    <p class="motto">
+      KNOWLEDGE • INTEGRITY • OPPORTUNITY
+    </p>
+
+    <h1>
+      Lesson 6: Prompt and Context Engineering Recommendations
+    </h1>
+
+    <p>
+      Learn how to write focused prompts, provide useful context,
+      plan before prompting, and guide AI tools effectively.
+    </p>
+
+    <p>
+      Baro sida loo qoro prompt cad, loo bixiyo context muhiim ah,
+      loo qorsheeyo hawsha, loona hago qalabka AI.
+    </p>
+  </header>
+
+  <nav aria-label="Lesson navigation">
+    <a href="#overview">Overview</a>
+    <a href="#english">English Technical</a>
+    <a href="#somali">Somali Farsamo</a>
+    <a href="#comparison">Examples</a>
+    <a href="#gal-english">GAL English</a>
+    <a href="#gal-somali">GAL Somali</a>
+    <a href="#html-tags">HTML Tags</a>
+    <a href="#practice">Practice</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#remember">Remember</a>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <h2>Lesson Overview</h2>
+
+      <div class="lesson-info">
+        <article class="info-card">
+          <strong>Course</strong>
+          AI Tools for Developers
+        </article>
+
+        <article class="info-card">
+          <strong>Lesson</strong>
+          Lesson 6
+        </article>
+
+        <article class="info-card">
+          <strong>Topic</strong>
+          Prompt and Context Engineering
+        </article>
+
+        <article class="info-card">
+          <strong>Level</strong>
+          Beginner
+        </article>
+      </div>
+
+      <h3>Learning Objectives</h3>
+
+      <p>
+        By the end of this lesson, you should be able to:
+      </p>
+
+      <ul>
+        <li>
+          Write prompts that are clear, concise, and precise.
+        </li>
+
+        <li>
+          Separate useful context from unnecessary information.
+        </li>
+
+        <li>
+          Think and plan before sending a prompt.
+        </li>
+
+        <li>
+          Warn the AI about known difficulties and common mistakes.
+        </li>
+
+        <li>
+          Tell an AI agent which tools or features it should use.
+        </li>
+
+        <li>
+          Understand that the developer remains responsible
+          for directing and reviewing the AI.
+        </li>
+      </ul>
+
+      <div class="important">
+        <strong>Main principle:</strong>
+        AI does not remove the developer from the process.
+        The developer defines the goal, supplies the right context,
+        sets the limits, and checks the result.
+      </div>
+    </section>
+
+    <section id="english">
+      <h2>English Technical Section</h2>
+
+      <p>
+        Prompt engineering is the practice of writing instructions
+        that clearly describe what an AI system should do.
+      </p>
+
+      <p>
+        Context engineering is the practice of supplying the
+        information, files, rules, examples, and constraints that
+        the AI needs to perform the task correctly.
+      </p>
+
+      <p>
+        A strong result normally requires both:
+      </p>
+
+      <ul>
+        <li>A clear instruction.</li>
+        <li>Relevant supporting information.</li>
+      </ul>
+
+      <div class="recommendation-grid">
+        <article class="recommendation-card">
+          <div class="number">1</div>
+
+          <h3>Be Concise and Precise</h3>
+
+          <p>
+            A prompt should contain enough detail to define the task,
+            but it should not be filled with unrelated explanations.
+          </p>
+
+          <p>
+            Concise does not mean incomplete. It means that every
+            sentence should help the AI understand the goal.
+          </p>
+
+          <h4>A precise prompt usually identifies:</h4>
+
+          <ul>
+            <li>The exact task.</li>
+            <li>The part of the project involved.</li>
+            <li>Important limits.</li>
+            <li>The expected output.</li>
+            <li>How success should be checked.</li>
+          </ul>
+
+          <div class="warning">
+            Very long prompts can still be unclear when they contain
+            repeated ideas, unnecessary history, or unrelated details.
+          </div>
+        </article>
+
+        <article class="recommendation-card">
+          <div class="number">2</div>
+
+          <h3>Avoid Unnecessary Context</h3>
+
+          <p>
+            Context is useful only when it helps the AI complete
+            the current task.
+          </p>
+
+          <p>
+            Do not attach or reference a file simply because you
+            suspect that it might be related. Include files that you
+            know contain relevant code, settings, requirements,
+            or examples.
+          </p>
+
+          <h4>Useful context may include:</h4>
+
+          <ul>
+            <li>The file where the problem occurs.</li>
+            <li>A related configuration file.</li>
+            <li>The exact error message.</li>
+            <li>A required design or business rule.</li>
+            <li>An example of the expected result.</li>
+          </ul>
+
+          <h4>Unnecessary context may include:</h4>
+
+          <ul>
+            <li>Unrelated project files.</li>
+            <li>Old instructions that no longer apply.</li>
+            <li>Long documentation pages unrelated to the task.</li>
+            <li>Personal stories that do not affect the solution.</li>
+          </ul>
+        </article>
+
+        <article class="recommendation-card">
+          <div class="number">3</div>
+
+          <h3>Think, Plan, Then Prompt</h3>
+
+          <p>
+            Before sending a request to an AI tool, pause and identify
+            what you actually want to achieve.
+          </p>
+
+          <p>
+            For a larger task, prepare a small plan first. This
+            reduces repeated clarification and prevents the AI from
+            making broad changes too early.
+          </p>
+
+          <ol class="steps">
+            <li>
+              Define the problem.
+            </li>
+
+            <li>
+              Identify the files or systems involved.
+            </li>
+
+            <li>
+              Decide what must not change.
+            </li>
+
+            <li>
+              Describe the desired final result.
+            </li>
+
+            <li>
+              Write and review the prompt.
+            </li>
+          </ol>
+
+          <p>
+            Planning mode is especially useful for tasks that involve
+            several files, complex logic, unfamiliar code, or
+            important data.
+          </p>
+        </article>
+
+        <article class="recommendation-card">
+          <div class="number">4</div>
+
+          <h3>Do Not Hide Known Challenges</h3>
+
+          <p>
+            Do not deliberately withhold information just to see
+            whether the AI can discover the problem by itself.
+          </p>
+
+          <p>
+            When you already know about a dangerous area, common
+            mistake, previous failure, or special requirement,
+            include that information in the original prompt.
+          </p>
+
+          <h4>For example:</h4>
+
+          <pre><code>The registration form previously created duplicate student records.
+
+Keep the existing duplicate-checking logic.
+Do not remove or bypass it when adding the new language field.</code></pre>
+
+          <p>
+            This gives the AI a better chance of completing the task
+            without reintroducing an old problem.
+          </p>
+        </article>
+
+        <article class="recommendation-card">
+          <div class="number">5</div>
+
+          <h3>Name the Tools the AI Should Use</h3>
+
+          <p>
+            AI coding agents may have access to several tools and
+            features. These can include terminal commands, search,
+            web access, testing tools, project search, connected
+            servers, skills, or specialized subagents.
+          </p>
+
+          <p>
+            When a specific tool is necessary, mention it directly.
+            Do not assume the agent will automatically choose it.
+          </p>
+
+          <h4>Example:</h4>
+
+          <pre><code>Use the terminal to run the existing test command after the change.
+
+Do not install new packages.
+
+If a test fails, report the exact error before editing another file.</code></pre>
+
+          <p>
+            This instruction tells the agent which tool to use,
+            what not to do, and how to respond if a problem appears.
+          </p>
+        </article>
+
+        <article class="recommendation-card">
+          <div class="number">6</div>
+
+          <h3>You Remain in Control</h3>
+
+          <p>
+            The AI may suggest code, edit files, run commands,
+            analyze errors, or review changes. However, the developer
+            remains responsible for the direction of the work.
+          </p>
+
+          <p>
+            You should decide:
+          </p>
+
+          <ul>
+            <li>What the AI is allowed to change.</li>
+            <li>Which files it may inspect.</li>
+            <li>Which tools it should use.</li>
+            <li>How the result should be tested.</li>
+            <li>Whether the final output is acceptable.</li>
+          </ul>
+
+          <div class="success">
+            The AI is an assistant. The developer is the decision-maker.
+          </div>
+        </article>
+      </div>
+
+      <h3>Recommended Prompt Structure</h3>
+
+      <p>
+        A practical developer prompt can use the following structure:
+      </p>
+
+      <pre><code>Task:
+Describe exactly what should be done.
+
+Relevant context:
+List the files, error message, or rules that matter.
+
+Constraints:
+State what must not be changed.
+
+Tools:
+Name any tool, command, or feature that should be used.
+
+Verification:
+Explain how the result should be checked.
+
+Output:
+State what the AI should return after completing the work.</code></pre>
+
+      <h3>Complete Example</h3>
+
+      <pre><code>Task:
+Add a required preferred-language field to the student registration page.
+
+Relevant context:
+The page is in src/app/register.tsx.
+The students table already has a language column.
+The choices must be English and Somali.
+
+Constraints:
+Keep the existing duplicate-student check.
+Do not change payment logic.
+Do not edit unrelated files.
+Keep the existing page design.
+
+Tools:
+Search the project for the existing registration insert function.
+Run the existing type-check command after editing.
+
+Verification:
+Confirm that registration cannot be submitted without selecting a language.
+Confirm that the selected language is saved.
+
+Output:
+Return the complete replacement register.tsx file and list the checks performed.</code></pre>
+
+      <p>
+        This prompt is detailed, but every part supports the task.
+        It does not include unrelated background information.
+      </p>
+    </section>
+
+    <section id="somali" class="somali">
+      <h2>Qaybta Farsamada ee Af-Soomaaliga</h2>
+
+      <p>
+        Prompt engineering waa habka loo qoro amar ama codsi cad
+        oo AI-ga u sheegaya waxa la rabo inuu qabto.
+      </p>
+
+      <p>
+        Context engineering waa habka AI-ga loo siiyo macluumaadka,
+        faylasha, xeerarka, tusaalooyinka, iyo xuduudaha muhiimka u ah
+        hawsha.
+      </p>
+
+      <h3>1. Prompt-ka Ka Dhig Mid Kooban oo Sax ah</h3>
+
+      <p>
+        Prompt-ku waa inuu si cad u qeexaa hawsha. Waa inuu leeyahay
+        faahfaahinta muhiimka ah, laakiin waa inuusan ku buuxsamin
+        hadal aan hawsha waxba ka tarayn.
+      </p>
+
+      <p>
+        Kooban macnaheedu ma aha in xog muhiim ah laga tago.
+        Macnaheedu waa in jumlad kasta ay leedahay sabab ay prompt-ka
+        ugu jirto.
+      </p>
+
+      <h3>2. Ha Bixin Context Aan Loo Baahnayn</h3>
+
+      <p>
+        Context badan mar walba ma fiicna. Context-ka wanaagsan waa
+        xogta si toos ah uga caawinaysa AI-ga hawsha hadda taagan.
+      </p>
+
+      <p>
+        Ha ku darin fayl aad keliya u malaynayso inuu muhiim yahay.
+        Ku dar faylasha aad ogtahay inay hayaan code-ka, setting-ka,
+        qaladka, ama xeerka la xiriira hawsha.
+      </p>
+
+      <h4>Context muhiim ah waxaa ka mid noqon kara:</h4>
+
+      <ul>
+        <li>Faylka qaladku ka jiro.</li>
+        <li>Qoraalka error-ka oo dhammeystiran.</li>
+        <li>Xeer ganacsi oo aan la beddeli karin.</li>
+        <li>Tusaale muujinaya natiijada la rabo.</li>
+        <li>Configuration si toos ah hawsha ula xiriira.</li>
+      </ul>
+
+      <h3>3. Fikir, Qorshee, Kadib Prompt Qor</h3>
+
+      <p>
+        Ha bilaabin prompt-ka adigoon si cad u garanayn waxa aad
+        rabto. Marka hore faham dhibaatada, kadib samee qorshe yar,
+        ugu dambaynna qor prompt-ka.
+      </p>
+
+      <ol class="steps">
+        <li>
+          Caddee dhibaatada.
+        </li>
+
+        <li>
+          Ogaaw faylasha ama nidaamka ay khusayso.
+        </li>
+
+        <li>
+          Sheeg waxa aan la beddeli karin.
+        </li>
+
+        <li>
+          Qeex natiijada ugu dambaysa.
+        </li>
+
+        <li>
+          Dib u akhri prompt-ka ka hor intaadan dirin.
+        </li>
+      </ol>
+
+      <h3>4. Ha Ka Qarin AI-ga Dhibaatada Aad Hore u Ogtahay</h3>
+
+      <p>
+        Haddii aad ogtahay meel adag, khalad hore u dhacay, ama
+        dhibaatada caanka ah, AI-ga u sheeg bilowga.
+      </p>
+
+      <p>
+        Ujeeddadu ma aha in AI-ga la imtixaamo. Ujeeddadu waa in
+        hawsha si sax ah loo dhammeeyo.
+      </p>
+
+      <pre><code>Foomkani hore ayuu u samayn jiray student isku mid ah laba jeer.
+
+Ha ka saarin duplicate-checking logic-ka.
+Markaad field-ka cusub ku darto, hubi in ilaalintaas ay sii shaqaynayso.</code></pre>
+
+      <h3>5. Si Cad U Sheeg Tool-ka La Isticmaalayo</h3>
+
+      <p>
+        Coding agent-ku wuxuu heli karaa tools kala duwan sida
+        terminal, search, tests, web, skills, ama adeegyo kale.
+      </p>
+
+      <p>
+        Haddii tool gaar ah loo baahan yahay, magaca tool-ka ku qor
+        prompt-ka. Ha sugin in AI-gu si otomaatig ah u doorto.
+      </p>
+
+      <pre><code>Isticmaal terminal-ka si aad u orodsiiso test-ka jira.
+
+Ha rakibin package cusub.
+
+Haddii test-ku fashilmo, marka hore ii sheeg error-ka saxda ah.</code></pre>
+
+      <h3>6. Adiga Ayaa Maamula AI-ga</h3>
+
+      <p>
+        AI-gu wuu soo jeedin karaa code, wax buu beddeli karaa,
+        commands ayuu orodsiin karaa, ama errors ayuu baari karaa.
+        Laakiin developer-ka ayaa masuul ka ah jihada hawsha.
+      </p>
+
+      <p>
+        Adiga ayaa go'aaminaya:
+      </p>
+
+      <ul>
+        <li>Waxa AI-ga loo oggol yahay inuu beddelo.</li>
+        <li>Faylasha uu arki karo.</li>
+        <li>Tools-ka uu isticmaali karo.</li>
+        <li>Sida natiijada loo tijaabinayo.</li>
+        <li>In shaqada la aqbalayo iyo in kale.</li>
+      </ul>
+
+      <div class="important">
+        <strong>Fikradda ugu muhiimsan:</strong>
+        AI-gu waa kaaliye. Adiga ayaa hagaya, xaddidaya,
+        hubinaya, oo leh go'aanka ugu dambeeya.
+      </div>
+    </section>
+
+    <section id="comparison">
+      <h2>Weak and Improved Prompt Examples</h2>
+
+      <div class="example-grid">
+        <article class="example-card bad">
+          <span class="label label-bad">
+            Weak Prompt
+          </span>
+
+          <h3>Example 1</h3>
+
+          <pre><code>Fix my page.</code></pre>
+
+          <p>
+            This prompt does not identify the page, the problem,
+            the expected behavior, or the limits.
+          </p>
+        </article>
+
+        <article class="example-card good">
+          <span class="label label-good">
+            Improved Prompt
+          </span>
+
+          <h3>Example 1</h3>
+
+          <pre><code>Inspect src/app/index.tsx.
+
+The Register button does not open the registration route.
+
+Find the cause and fix only that navigation problem.
+Do not redesign the page.
+Return the complete replacement index.tsx file.</code></pre>
+        </article>
+
+        <article class="example-card bad">
+          <span class="label label-bad">
+            Weak Prompt
+          </span>
+
+          <h3>Example 2</h3>
+
+          <pre><code>Look at all my files and improve everything.</code></pre>
+
+          <p>
+            This request has no clear boundary and may cause many
+            unwanted changes.
+          </p>
+        </article>
+
+        <article class="example-card good">
+          <span class="label label-good">
+            Improved Prompt
+          </span>
+
+          <h3>Example 2</h3>
+
+          <pre><code>Review only the registration form validation.
+
+Check that name, email, phone, and preferred language are required.
+
+Do not change the page design or database structure.
+List any validation problem before editing.</code></pre>
+        </article>
+
+        <article class="example-card bad">
+          <span class="label label-bad">
+            Weak Prompt
+          </span>
+
+          <h3>Example 3</h3>
+
+          <pre><code>Add a feature. You should know what I mean.</code></pre>
+
+          <p>
+            The AI cannot reliably infer the intended feature,
+            location, rules, or output.
+          </p>
+        </article>
+
+        <article class="example-card good">
+          <span class="label label-good">
+            Improved Prompt
+          </span>
+
+          <h3>Example 3</h3>
+
+          <pre><code>Add a Back to Home button to the bottom of the learner portal.
+
+Use Expo Router.
+The button should open "/".
+Keep all existing learner data and login logic unchanged.</code></pre>
+        </article>
+      </div>
+
+      <h3>Prompt Quality Checklist</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>
+                Did I clearly state the task?
+              </td>
+
+              <td>
+                The AI needs a specific objective.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I include only relevant context?
+              </td>
+
+              <td>
+                Unrelated information may distract the AI.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I name the correct files?
+              </td>
+
+              <td>
+                This reduces unnecessary project-wide searching.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I state what must not change?
+              </td>
+
+              <td>
+                Clear limits protect working features.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I mention known risks?
+              </td>
+
+              <td>
+                The AI can avoid repeating known mistakes.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I name required tools?
+              </td>
+
+              <td>
+                The AI should not have to guess which tool to use.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I define verification?
+              </td>
+
+              <td>
+                Testing helps confirm that the result works.
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Did I define the output format?
+              </td>
+
+              <td>
+                The AI can return code, a plan, a report,
+                or another requested format correctly.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="gal-english" class="gal">
+      <h2>GAL — English Analogy</h2>
+
+      <h3>Giving Directions to a Driver</h3>
+
+      <p>
+        Imagine that you hire a driver to take a package to a
+        particular building.
+      </p>
+
+      <p>
+        A weak instruction would be:
+      </p>
+
+      <pre><code>Take this somewhere downtown.</code></pre>
+
+      <p>
+        The driver does not know the exact building, route,
+        deadline, contact person, or delivery rules.
+      </p>
+
+      <p>
+        A stronger instruction would be:
+      </p>
+
+      <pre><code>Deliver this package to the blue office building on Main Street.
+
+Use the front entrance.
+Ask for Fatima at reception.
+Do not leave the package outside.
+Call me if the office is closed.</code></pre>
+
+      <p>
+        This instruction gives the goal, relevant context,
+        restrictions, and a response plan for a possible problem.
+      </p>
+
+      <div class="important">
+        Prompt engineering works the same way. The AI performs better
+        when the destination, limits, known risks, and expected result
+        are clearly explained.
+      </div>
+    </section>
+
+    <section id="gal-somali" class="gal somali">
+      <h2>GAL — Tusaalaha Af-Soomaaliga</h2>
+
+      <h3>Darawal Loo Dhiibayo Alaab</h3>
+
+      <p>
+        Ka fikir inaad darawal siisay alaab uu geeyo meel gaar ah.
+      </p>
+
+      <p>
+        Amar aan fiicnayn wuxuu noqon karaa:
+      </p>
+
+      <pre><code>Alaabtan meel magaalada dhexdeeda ah gee.</code></pre>
+
+      <p>
+        Darawalku ma garanayo dhismaha, waddada, qofka qaadanaya,
+        waqtiga, ama waxa uu samaynayo haddii meesha la xiro.
+      </p>
+
+      <p>
+        Amar cad wuxuu noqon karaa:
+      </p>
+
+      <pre><code>Alaabtan gee dhismaha buluugga ah ee Main Street.
+
+Ka gal albaabka hore.
+Reception-ka ka weydii Fatima.
+Alaabta bannaanka ha uga tegin.
+Haddii xafiisku xiran yahay, i soo wac.</code></pre>
+
+      <p>
+        Amarkani wuxuu leeyahay ujeeddo cad, context muhiim ah,
+        xuduud, iyo waxa la samaynayo haddii dhibaato timaaddo.
+      </p>
+
+      <div class="success">
+        Sida darawalka loo hago ayaa AI-gana loo hagaa.
+        Prompt cad wuxuu yareeyaa qaladka iyo shaqada dib loogu noqdo.
+      </div>
+    </section>
+
+    <section id="html-tags">
+      <h2>HTML Elements Used in This Lesson</h2>
+
+      <p>
+        This lesson uses semantic HTML elements to organize
+        recommendations, examples, tables, activities, and answers.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Opening Tag</th>
+              <th>Closing Tag</th>
+              <th>Common Attributes</th>
+              <th>Browser Purpose</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Header</td>
+              <td><code>&lt;header&gt;</code></td>
+              <td><code>&lt;/header&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Displays the lesson introduction and title.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Navigation</td>
+              <td><code>&lt;nav&gt;</code></td>
+              <td><code>&lt;/nav&gt;</code></td>
+              <td>
+                <code>aria-label</code>,
+                <code>class</code>
+              </td>
+              <td>
+                Contains links to lesson sections.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Section</td>
+              <td><code>&lt;section&gt;</code></td>
+              <td><code>&lt;/section&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Groups related lesson content.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Article</td>
+              <td><code>&lt;article&gt;</code></td>
+              <td><code>&lt;/article&gt;</code></td>
+              <td><code>class</code>, <code>id</code></td>
+              <td>
+                Creates a self-contained recommendation or example.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Ordered List</td>
+              <td><code>&lt;ol&gt;</code></td>
+              <td><code>&lt;/ol&gt;</code></td>
+              <td><code>class</code>, <code>start</code></td>
+              <td>
+                Displays steps in a numbered order.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Preformatted Text</td>
+              <td><code>&lt;pre&gt;</code></td>
+              <td><code>&lt;/pre&gt;</code></td>
+              <td><code>class</code></td>
+              <td>
+                Preserves spacing and line breaks in prompt examples.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Code</td>
+              <td><code>&lt;code&gt;</code></td>
+              <td><code>&lt;/code&gt;</code></td>
+              <td><code>class</code></td>
+              <td>
+                Identifies code, commands, or technical text.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Details</td>
+              <td><code>&lt;details&gt;</code></td>
+              <td><code>&lt;/details&gt;</code></td>
+              <td><code>open</code>, <code>class</code></td>
+              <td>
+                Creates expandable content.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Summary</td>
+              <td><code>&lt;summary&gt;</code></td>
+              <td><code>&lt;/summary&gt;</code></td>
+              <td><code>class</code></td>
+              <td>
+                Creates the clickable heading for details content.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Footer</td>
+              <td><code>&lt;footer&gt;</code></td>
+              <td><code>&lt;/footer&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Displays information at the bottom of the page.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Example: Ordered List</h3>
+
+      <pre><code>&lt;ol&gt;
+  &lt;li&gt;Think about the problem.&lt;/li&gt;
+  &lt;li&gt;Make a plan.&lt;/li&gt;
+  &lt;li&gt;Write the prompt.&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+      <div class="browser-output">
+        <h4>Browser Output</h4>
+
+        <ol>
+          <li>Think about the problem.</li>
+          <li>Make a plan.</li>
+          <li>Write the prompt.</li>
+        </ol>
+      </div>
+
+      <h3>Example: Details and Summary</h3>
+
+      <pre><code>&lt;details&gt;
+  &lt;summary&gt;Show the improved prompt&lt;/summary&gt;
+
+  &lt;p&gt;
+    Fix only the Register button navigation.
+  &lt;/p&gt;
+&lt;/details&gt;</code></pre>
+
+      <div class="browser-output">
+        <h4>Browser Output</h4>
+
+        <details>
+          <summary>Show the improved prompt</summary>
+
+          <p>
+            Fix only the Register button navigation.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section id="practice">
+      <h2>Practical Activity</h2>
+
+      <h3>Activity 1: Remove Unnecessary Context</h3>
+
+      <div class="activity-card">
+        <p>
+          Read the prompt below:
+        </p>
+
+        <pre><code>I started learning computers many years ago.
+My favorite color is blue.
+Yesterday I spoke to my friend.
+My project has many files.
+Please fix the Register button in src/app/index.tsx.
+It should open /register.
+Do not redesign the page.</code></pre>
+
+        <p>
+          Which sentences are important to the task?
+        </p>
+
+        <details>
+          <summary>Show suggested answer</summary>
+
+          <p class="answer">
+            Keep only the information about the file, the button,
+            the correct route, and the design restriction.
+          </p>
+
+          <pre><code>Fix the Register button in src/app/index.tsx.
+
+It should open /register.
+Do not redesign the page.</code></pre>
+        </details>
+      </div>
+
+      <h3>Activity 2: Improve a Weak Prompt</h3>
+
+      <div class="activity-card">
+        <p>
+          Weak prompt:
+        </p>
+
+        <pre><code>Make registration better.</code></pre>
+
+        <p>
+          Rewrite it by adding:
+        </p>
+
+        <ul>
+          <li>The exact task.</li>
+          <li>The relevant file.</li>
+          <li>What must not change.</li>
+          <li>How the result should be checked.</li>
+        </ul>
+
+        <details>
+          <summary>Show one possible answer</summary>
+
+          <pre><code>Add a required preferred-language field to src/app/register.tsx.
+
+The choices must be English and Somali.
+
+Keep the existing student ID generation and duplicate-checking logic.
+Do not change payment-related code.
+
+Verify that the form cannot submit without a language selection.
+Return the complete replacement register.tsx file.</code></pre>
+        </details>
+      </div>
+
+      <h3>Activity 3: Identify the Missing Information</h3>
+
+      <div class="activity-card">
+        <p>
+          Prompt:
+        </p>
+
+        <pre><code>Run the tests after fixing the page.</code></pre>
+
+        <p>
+          What may still be missing?
+        </p>
+
+        <details>
+          <summary>Show suggested answer</summary>
+
+          <ul>
+            <li>The page or file that needs fixing.</li>
+            <li>The exact problem.</li>
+            <li>The test command.</li>
+            <li>The expected behavior.</li>
+            <li>What to do if a test fails.</li>
+          </ul>
+        </details>
+      </div>
+
+      <h3>Activity 4: Think, Plan, Prompt</h3>
+
+      <div class="activity-card">
+        <p>
+          Before asking an AI agent to add a new certificate page,
+          complete this planning form:
+        </p>
+
+        <ol>
+          <li>
+            What should the certificate page display?
+          </li>
+
+          <li>
+            Which student conditions unlock the certificate?
+          </li>
+
+          <li>
+            Which files are likely involved?
+          </li>
+
+          <li>
+            What existing logic must remain unchanged?
+          </li>
+
+          <li>
+            How will you verify that the page works?
+          </li>
+        </ol>
+
+        <div class="important">
+          Do not send the prompt until these questions have clear answers.
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Multiple-Choice Quiz</h2>
+
+      <div class="question">
+        <p>
+          1. What is the main goal of prompt engineering?
+        </p>
+
+        <label>
+          <input type="radio" name="q1" />
+          A. To make every prompt extremely long
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          B. To give the AI clear and useful instructions
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          C. To hide the task from the AI
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          D. To avoid checking the result
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          2. What is useful context?
+        </p>
+
+        <label>
+          <input type="radio" name="q2" />
+          A. Any available information
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          B. Information that directly helps with the task
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          C. Personal stories unrelated to the project
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          D. Every file in the computer
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          3. What should you do before writing a prompt for
+          a complex task?
+        </p>
+
+        <label>
+          <input type="radio" name="q3" />
+          A. Think about the problem and make a plan
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          B. Ask the AI to change everything
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          C. Hide all known information
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          D. Delete the project
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          4. If you know about a common mistake, what should you do?
+        </p>
+
+        <label>
+          <input type="radio" name="q4" />
+          A. Hide it and test whether the AI fails
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          B. Include it in the prompt with guidance
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          C. Mention it only after the project breaks
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          D. Ignore it completely
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          5. Why should you name a required tool in the prompt?
+        </p>
+
+        <label>
+          <input type="radio" name="q5" />
+          A. So the AI does not have to guess which tool to use
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          B. So the prompt becomes confusing
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          C. Because tools never affect the task
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          D. To prevent all testing
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          6. Which prompt is more precise?
+        </p>
+
+        <label>
+          <input type="radio" name="q6" />
+          A. Fix everything
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          B. Improve my app somehow
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          C. Fix only the Register button navigation in index.tsx
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          D. Do whatever you think
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          7. Who controls the direction of AI-assisted development?
+        </p>
+
+        <label>
+          <input type="radio" name="q7" />
+          A. The responsible developer
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          B. Nobody
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          C. The keyboard
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          D. The browser window
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          8. What should a verification instruction explain?
+        </p>
+
+        <label>
+          <input type="radio" name="q8" />
+          A. How to confirm that the result works
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          B. How to avoid all tests
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          C. How to add unrelated files
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          D. How to make the prompt longer
+        </label>
+      </div>
+
+      <details>
+        <summary>Open Answer Key</summary>
+
+        <ol>
+          <li>
+            <strong>B</strong> — Give the AI clear instructions.
+          </li>
+
+          <li>
+            <strong>B</strong> — Information directly supporting the task.
+          </li>
+
+          <li>
+            <strong>A</strong> — Think and plan first.
+          </li>
+
+          <li>
+            <strong>B</strong> — Include the known problem and guidance.
+          </li>
+
+          <li>
+            <strong>A</strong> — Avoid making the AI guess.
+          </li>
+
+          <li>
+            <strong>C</strong> — It identifies the exact file and task.
+          </li>
+
+          <li>
+            <strong>A</strong> — The responsible developer remains in control.
+          </li>
+
+          <li>
+            <strong>A</strong> — Explain how to confirm the result works.
+          </li>
+        </ol>
+      </details>
+    </section>
+
+    <section id="remember" class="remember">
+      <h2>Remember</h2>
+
+      <ul>
+        <li>
+          A good prompt is clear, focused, and specific.
+        </li>
+
+        <li>
+          Include enough detail to define the task, but remove
+          information that does not help.
+        </li>
+
+        <li>
+          Provide files and documentation only when they are relevant.
+        </li>
+
+        <li>
+          Think first, make a plan, and then write the prompt.
+        </li>
+
+        <li>
+          Tell the AI about known risks, previous failures,
+          and common mistakes.
+        </li>
+
+        <li>
+          Name the tools, commands, or features that should be used.
+        </li>
+
+        <li>
+          State what must not change.
+        </li>
+
+        <li>
+          Explain how the final work should be verified.
+        </li>
+
+        <li>
+          The AI assists, but the developer remains responsible.
+        </li>
+      </ul>
+
+      <h3>Somali Remember</h3>
+
+      <ul>
+        <li>
+          Prompt wanaagsan waa mid cad, kooban, oo sax ah.
+        </li>
+
+        <li>
+          Ku dar context-ka muhiimka ah oo keliya.
+        </li>
+
+        <li>
+          Marka hore fikir, kadib qorshee, ugu dambayn prompt qor.
+        </li>
+
+        <li>
+          AI-ga u sheeg khataraha iyo khaladaadka aad hore u ogtahay.
+        </li>
+
+        <li>
+          Si cad u sheeg tool-ka ama command-ka la isticmaalayo.
+        </li>
+
+        <li>
+          Sheeg waxa aan la beddeli karin.
+        </li>
+
+        <li>
+          Sheeg sida natiijada loo hubinayo.
+        </li>
+
+        <li>
+          AI-gu waa kaaliye; developer-ka ayaa maamula.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <strong>Elmi Guray Academy</strong>
+    </p>
+
+    <p>
+      AI Tools for Developers — Lesson 6
+    </p>
+
+    <p>
+      Knowledge • Integrity • Opportunity
+    </p>
+
+    <p>
+      Aqoon • Daacadnimo • Fursad
+    </p>
+
+    <p>
+      <a href="#top">
+        Back to Top
+      </a>
+    </p>
+  </footer>
+</body>
+</html>

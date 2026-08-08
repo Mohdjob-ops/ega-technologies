@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="EGA AI Developer Course Lesson 7: Learning with a Community"
+  />
+
+  <title>
+    Lesson 7: Learning with a Community | EGA
+  </title>
+
+  <style>
+    :root {
+      --primary: #123b69;
+      --secondary: #1f6f8b;
+      --accent: #f4b942;
+      --success: #18794e;
+      --danger: #b42318;
+      --light: #f4f8fc;
+      --white: #ffffff;
+      --dark: #17202a;
+      --muted: #5b6573;
+      --border: #d6e1ea;
+      --code: #101820;
+      --shadow: 0 8px 24px rgba(18, 59, 105, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      line-height: 1.7;
+      color: var(--dark);
+      background: var(--light);
+    }
+
+    header {
+      padding: 34px 20px;
+      color: var(--white);
+      text-align: center;
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+    }
+
+    .logo {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--accent);
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--primary);
+      font-size: 26px;
+      font-weight: bold;
+      box-shadow: var(--shadow);
+    }
+
+    .motto {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      max-width: 950px;
+      margin: 0 auto 12px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.2;
+    }
+
+    header p {
+      max-width: 850px;
+      margin: 8px auto;
+      font-size: 1.06rem;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    }
+
+    nav a {
+      padding: 8px 11px;
+      border-radius: 8px;
+      color: var(--primary);
+      font-size: 0.91rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: var(--white);
+      background: var(--primary);
+    }
+
+    main {
+      width: min(1100px, 92%);
+      margin: 30px auto;
+    }
+
+    section {
+      margin-bottom: 28px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin-top: 0;
+      padding-bottom: 9px;
+      color: var(--primary);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    h3 {
+      color: var(--secondary);
+    }
+
+    h4 {
+      color: var(--primary);
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul li,
+    ol li {
+      margin-bottom: 9px;
+    }
+
+    .lesson-info {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .info-card,
+    .benefit-card,
+    .rule-card,
+    .example-card,
+    .activity-card,
+    .question {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfdff;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--primary);
+    }
+
+    .benefit-grid,
+    .rule-grid,
+    .example-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(245px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .benefit-card {
+      border-top: 5px solid var(--secondary);
+    }
+
+    .rule-card {
+      border-top: 5px solid var(--success);
+    }
+
+    .number {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 10px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--primary);
+      font-weight: bold;
+    }
+
+    .important,
+    .warning,
+    .success {
+      margin: 18px 0;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .important {
+      border-left: 6px solid var(--accent);
+      background: #fff8e7;
+    }
+
+    .warning {
+      border-left: 6px solid var(--danger);
+      background: #fff2f0;
+    }
+
+    .success {
+      border-left: 6px solid var(--success);
+      background: #eefaf4;
+    }
+
+    .somali {
+      border-left: 7px solid var(--success);
+    }
+
+    .gal {
+      border-left: 7px solid var(--accent);
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 18px;
+      border-radius: 10px;
+      background: var(--code);
+      color: #f8f8f2;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family:
+        "Courier New",
+        monospace;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family:
+        "Courier New",
+        monospace;
+    }
+
+    .browser-output {
+      margin-top: 10px;
+      padding: 16px;
+      border: 2px dashed var(--secondary);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 16px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--white);
+      background: var(--primary);
+    }
+
+    tr:nth-child(even) {
+      background: #f5f9fc;
+    }
+
+    .community-message {
+      padding: 22px;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      background:
+        linear-gradient(
+          135deg,
+          #fffaf0,
+          #f4f8fc
+        );
+    }
+
+    .community-button {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 20px;
+      border-radius: 9px;
+      color: var(--white);
+      background: var(--primary);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .community-button:hover,
+    .community-button:focus {
+      background: var(--secondary);
+    }
+
+    .question {
+      margin-bottom: 16px;
+    }
+
+    .question p {
+      margin-top: 0;
+      font-weight: bold;
+    }
+
+    .question label {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .question label:hover {
+      background: #edf5fa;
+    }
+
+    details {
+      margin: 12px 0;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+
+    summary {
+      color: var(--primary);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .answer {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .remember {
+      color: var(--white);
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+    }
+
+    .remember h2,
+    .remember h3 {
+      color: var(--white);
+    }
+
+    footer {
+      padding: 30px 20px;
+      color: var(--white);
+      text-align: center;
+      background: #0c2947;
+    }
+
+    footer p {
+      margin: 6px 0;
+    }
+
+    footer a {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    @media (max-width: 650px) {
+      section {
+        padding: 20px;
+      }
+
+      nav {
+        position: static;
+      }
+
+      th,
+      td {
+        min-width: 155px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header id="top">
+    <div class="logo" aria-label="EGA logo">
+      EGA
+    </div>
+
+    <p class="motto">
+      KNOWLEDGE • INTEGRITY • OPPORTUNITY
+    </p>
+
+    <h1>
+      Lesson 7: Learning with a Community
+    </h1>
+
+    <p>
+      Learn why study partners, respectful discussion,
+      shared progress, and mutual support can improve
+      your learning journey.
+    </p>
+
+    <p>
+      Baro sababta saaxiibbada waxbarashada, wada-hadalka
+      wanaagsan, wadaagista horumarka, iyo is-caawintu
+      ay muhiim ugu yihiin waxbarashada.
+    </p>
+  </header>
+
+  <nav aria-label="Lesson navigation">
+    <a href="#overview">Overview</a>
+    <a href="#english">English Technical</a>
+    <a href="#somali">Somali Farsamo</a>
+    <a href="#community">EGA Community</a>
+    <a href="#gal-english">GAL English</a>
+    <a href="#gal-somali">GAL Somali</a>
+    <a href="#html-tags">HTML Tags</a>
+    <a href="#practice">Practice</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#remember">Remember</a>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <h2>Lesson Overview</h2>
+
+      <div class="lesson-info">
+        <article class="info-card">
+          <strong>Course</strong>
+          AI Tools for Developers
+        </article>
+
+        <article class="info-card">
+          <strong>Lesson</strong>
+          Lesson 7
+        </article>
+
+        <article class="info-card">
+          <strong>Topic</strong>
+          Learning with a Community
+        </article>
+
+        <article class="info-card">
+          <strong>Level</strong>
+          Beginner
+        </article>
+      </div>
+
+      <h3>Learning Objectives</h3>
+
+      <p>
+        By the end of this lesson, you should be able to:
+      </p>
+
+      <ul>
+        <li>
+          Explain why learning with other people can be helpful.
+        </li>
+
+        <li>
+          Identify useful activities inside a learning community.
+        </li>
+
+        <li>
+          Ask technical questions clearly and respectfully.
+        </li>
+
+        <li>
+          Support other learners without completing all their work.
+        </li>
+
+        <li>
+          Share progress, ideas, and achievements responsibly.
+        </li>
+
+        <li>
+          Follow good online-community behavior.
+        </li>
+      </ul>
+
+      <div class="important">
+        <strong>Main principle:</strong>
+        You can study independently, but you do not have to solve
+        every problem alone. A respectful learning community can
+        provide encouragement, explanations, feedback, and new ideas.
+      </div>
+    </section>
+
+    <section id="english">
+      <h2>English Technical Section</h2>
+
+      <p>
+        Learning software development can sometimes feel difficult.
+        A learner may encounter errors, unfamiliar terminology,
+        confusing instructions, or a problem that takes a long time
+        to understand.
+      </p>
+
+      <p>
+        A learning community gives students a place to communicate
+        with people who have similar goals. Members can ask questions,
+        discuss lessons, exchange ideas, celebrate achievements,
+        and encourage one another.
+      </p>
+
+      <div class="benefit-grid">
+        <article class="benefit-card">
+          <div class="number">1</div>
+
+          <h3>Ask Questions</h3>
+
+          <p>
+            A community can help when you are stuck, but your
+            question should contain enough information for others
+            to understand the problem.
+          </p>
+
+          <h4>A useful technical question may include:</h4>
+
+          <ul>
+            <li>What you are trying to do.</li>
+            <li>What you expected to happen.</li>
+            <li>What actually happened.</li>
+            <li>The exact error message.</li>
+            <li>The relevant code or screenshot.</li>
+            <li>What you have already tried.</li>
+          </ul>
+        </article>
+
+        <article class="benefit-card">
+          <div class="number">2</div>
+
+          <h3>Learn from Other Questions</h3>
+
+          <p>
+            You can learn even when you are not the person asking
+            the question. Reading another learner's problem and
+            solution may teach you how to avoid the same mistake.
+          </p>
+
+          <p>
+            Community discussions can also introduce different
+            ways to solve the same programming problem.
+          </p>
+        </article>
+
+        <article class="benefit-card">
+          <div class="number">3</div>
+
+          <h3>Share Your Progress</h3>
+
+          <p>
+            Sharing a completed lesson, small project, certificate,
+            or difficult problem you solved can strengthen your
+            motivation.
+          </p>
+
+          <p>
+            Progress does not need to be perfect or dramatic.
+            Completing one lesson or fixing one error is still
+            meaningful progress.
+          </p>
+        </article>
+
+        <article class="benefit-card">
+          <div class="number">4</div>
+
+          <h3>Help Other Learners</h3>
+
+          <p>
+            Explaining a concept to another person can improve
+            your own understanding.
+          </p>
+
+          <p>
+            Good help guides the learner toward the answer.
+            It does not simply complete every assignment for them.
+          </p>
+        </article>
+
+        <article class="benefit-card">
+          <div class="number">5</div>
+
+          <h3>Receive Feedback</h3>
+
+          <p>
+            Other learners may notice unclear code, design problems,
+            missing instructions, or mistakes that you did not see.
+          </p>
+
+          <p>
+            Feedback should be specific, respectful, and focused
+            on improving the work rather than criticizing the person.
+          </p>
+        </article>
+
+        <article class="benefit-card">
+          <div class="number">6</div>
+
+          <h3>Stay Motivated</h3>
+
+          <p>
+            Seeing others learn and make progress can remind you
+            that difficulty is a normal part of development.
+          </p>
+
+          <p>
+            A supportive community can encourage you to continue
+            when a lesson or project feels challenging.
+          </p>
+        </article>
+      </div>
+
+      <h3>How to Ask a Good Community Question</h3>
+
+      <p>
+        Avoid questions that contain no useful detail.
+      </p>
+
+      <pre><code>My code does not work. Help me.</code></pre>
+
+      <p>
+        A clearer question would be:
+      </p>
+
+      <pre><code>I am trying to open the registration page from the Home screen.
+
+Expected result:
+Tapping the Register button should open /register.
+
+Actual result:
+Nothing happens when I tap the button.
+
+File:
+src/app/index.tsx
+
+What I tried:
+I restarted Expo and refreshed the browser.
+
+Please help me identify the navigation problem.</code></pre>
+
+      <p>
+        The second question makes it easier for another learner
+        or instructor to understand the problem.
+      </p>
+
+      <h3>How to Give Helpful Feedback</h3>
+
+      <p>
+        Weak feedback:
+      </p>
+
+      <pre><code>Your code is bad.</code></pre>
+
+      <p>
+        Better feedback:
+      </p>
+
+      <pre><code>The form works, but the labels are difficult to read on a small screen.
+
+Consider increasing the label size and adding more space
+between the fields.</code></pre>
+
+      <div class="success">
+        Good feedback explains the issue and suggests a possible
+        improvement without disrespecting the learner.
+      </div>
+    </section>
+
+    <section id="somali" class="somali">
+      <h2>Qaybta Farsamada ee Af-Soomaaliga</h2>
+
+      <p>
+        Barashada software development-ka mararka qaarkood way
+        adkaan kartaa. Ardaygu wuxuu la kulmi karaa errors,
+        erayo cusub, amarro aan si fudud loo fahmin, ama dhibaato
+        waqti dheer qaadata.
+      </p>
+
+      <p>
+        Bulshada waxbarashadu waxay isku xirtaa dad leh hadafyo
+        isku dhow. Ardaydu way isweydiin karaan su'aalo, way
+        wadaagi karaan fikrado, way isku caawin karaan, waxayna
+        dhiirrigelin karaan horumarka midba midka kale.
+      </p>
+
+      <h3>1. Su'aalo Weydii</h3>
+
+      <p>
+        Marka aad dhibaato la kulanto, waxaad bulshada ka codsan
+        kartaa caawimo. Laakiin su'aashaadu waa inay leedahay
+        macluumaad ku filan.
+      </p>
+
+      <h4>Su'aal farsamo oo wanaagsan waxay sheegaysaa:</h4>
+
+      <ul>
+        <li>Waxa aad rabtay inaad samayso.</li>
+        <li>Waxa aad filaysay inuu dhaco.</li>
+        <li>Waxa dhab ahaan dhacay.</li>
+        <li>Error-ka saxda ah.</li>
+        <li>Code-ka ama screenshot-ka muhiimka ah.</li>
+        <li>Waxa aad hore u tijaabisay.</li>
+      </ul>
+
+      <h3>2. Su'aalaha Dadka Kale Wax Ka Baro</h3>
+
+      <p>
+        Xitaa haddii adigu aadan su'aasha weydiin, waxaad wax badan
+        ka baran kartaa jawaabaha dadka kale la siiyo.
+      </p>
+
+      <p>
+        Dhibaatada qof kale maanta haysata waxay noqon kartaa
+        dhibaato aad adigu berri la kulanto.
+      </p>
+
+      <h3>3. Horumarkaaga La Wadaag</h3>
+
+      <p>
+        Waxaad la wadaagi kartaa bulshada cashar aad dhammaysay,
+        mashruuc yar, certificate, ama error aad xallisay.
+      </p>
+
+      <p>
+        Horumarku ma aha inuu mar walba noqdo mashruuc weyn.
+        Hal cashar oo aad dhammaysay ama hal qalad oo aad saxday
+        waa horumar muhiim ah.
+      </p>
+
+      <h3>4. Ardayda Kale Caawi</h3>
+
+      <p>
+        Marka aad fikrad qof kale u sharaxdo, fahamkaaga ayaa
+        sii xoogaysan kara.
+      </p>
+
+      <p>
+        Caawinta wanaagsan waxay qofka tusaysaa jidka uu xalka
+        ku gaari karo. Ma aha in shaqadiisa oo dhan loo qabto.
+      </p>
+
+      <h3>5. Feedback Qaado oo Bixi</h3>
+
+      <p>
+        Dadka kale waxay arki karaan khalad, design aan caddayn,
+        ama meel la hagaajin karo oo aadan adigu arkin.
+      </p>
+
+      <p>
+        Feedback-gu waa inuu noqdaa mid gaar ah, xushmad leh,
+        oo shaqada hagaajinaya.
+      </p>
+
+      <h3>6. Dhiirrigelinta Ilaali</h3>
+
+      <p>
+        Marka aad aragto arday kale oo la kulmay dhibaato laakiin
+        ugu dambayn xalliyay, waxaad fahmaysaa in dhibku qayb ka
+        yahay waxbarashada.
+      </p>
+
+      <div class="important">
+        <strong>Fikradda muhiimka ah:</strong>
+        Waxaad keligaaga wax ku baran kartaa, laakiin khasab ma aha
+        inaad dhibaato kasta kaligaa xalliso.
+      </div>
+    </section>
+
+    <section id="community">
+      <h2>Join the EGA Learning Community</h2>
+
+      <div class="community-message">
+        <h3>Welcome to Elmi Guray Academy</h3>
+
+        <p>
+          EGA students are encouraged to participate in the
+          official EGA learning community when access is provided.
+        </p>
+
+        <p>
+          The community can be used for:
+        </p>
+
+        <ul>
+          <li>Course announcements.</li>
+          <li>Lesson discussions.</li>
+          <li>Technical questions.</li>
+          <li>Student progress updates.</li>
+          <li>Project sharing.</li>
+          <li>Encouragement and respectful collaboration.</li>
+        </ul>
+
+        <p>
+          Joining and participating should remain optional.
+          A student can continue learning even when they do not
+          participate in every discussion.
+        </p>
+
+        <a
+          class="community-button"
+          href="#community-rules"
+        >
+          Read Community Rules
+        </a>
+      </div>
+
+      <h3 id="community-rules">
+        EGA Community Rules
+      </h3>
+
+      <div class="rule-grid">
+        <article class="rule-card">
+          <h4>Be Respectful</h4>
+
+          <p>
+            Speak politely and respect learners from different
+            backgrounds and skill levels.
+          </p>
+        </article>
+
+        <article class="rule-card">
+          <h4>Stay on Topic</h4>
+
+          <p>
+            Keep course channels focused on learning, programming,
+            projects, and important EGA announcements.
+          </p>
+        </article>
+
+        <article class="rule-card">
+          <h4>Protect Private Information</h4>
+
+          <p>
+            Do not publicly share passwords, private keys,
+            payment details, personal documents, or confidential
+            student information.
+          </p>
+        </article>
+
+        <article class="rule-card">
+          <h4>Do Not Copy Assignments</h4>
+
+          <p>
+            Help learners understand the work, but do not submit
+            another person's project as your own.
+          </p>
+        </article>
+
+        <article class="rule-card">
+          <h4>No Spam</h4>
+
+          <p>
+            Do not repeatedly send advertisements, unrelated links,
+            or the same message many times.
+          </p>
+        </article>
+
+        <article class="rule-card">
+          <h4>Use Clear Questions</h4>
+
+          <p>
+            Include the error, relevant file, expected result,
+            and what you already tried.
+          </p>
+        </article>
+      </div>
+
+      <div class="warning">
+        Never share passwords, API secret keys, banking information,
+        identity documents, or private student records in a public
+        learning group.
+      </div>
+    </section>
+
+    <section id="gal-english" class="gal">
+      <h2>GAL — English Analogy</h2>
+
+      <h3>A Group of Travelers</h3>
+
+      <p>
+        Imagine several people traveling toward the same city.
+        Each traveler carries their own bag and walks with their
+        own feet, but they can still help one another.
+      </p>
+
+      <p>
+        One traveler may know the correct road. Another may have
+        water. Another may notice danger. Another may encourage
+        the group when the journey becomes difficult.
+      </p>
+
+      <p>
+        The community does not carry every student to the
+        destination. Each student must continue walking and
+        practicing.
+      </p>
+
+      <div class="important">
+        A learning community supports the journey, but the learner
+        must still complete the learning work.
+      </div>
+    </section>
+
+    <section id="gal-somali" class="gal somali">
+      <h2>GAL — Tusaalaha Af-Soomaaliga</h2>
+
+      <h3>Koox Safar Wada Gashay</h3>
+
+      <p>
+        Ka fikir koox dad ah oo magaalo isku mid ah u socda.
+        Qof kastaa boorsadiisa ayuu wataa, lugihiisana ayuu ku
+        socdaa, laakiin way iscaawin karaan.
+      </p>
+
+      <p>
+        Qof ayaa garan kara jidka saxda ah. Qof kale ayaa biyo
+        haya. Qof kale ayaa khatar arki kara. Qof kalena wuxuu
+        dhiirrigelin karaa kooxda marka safarku adkaado.
+      </p>
+
+      <p>
+        Bulshadu ardayga uma qabanayso dhammaan waxbarashada.
+        Arday kasta waa inuu sii wadaa ku-celcelinta iyo shaqada.
+      </p>
+
+      <div class="success">
+        Bulshada waxbarashadu waxay kaa caawisaa safarka,
+        laakiin adiga ayaa qaadaya tallaabooyinka waxbarashada.
+      </div>
+    </section>
+
+    <section id="html-tags">
+      <h2>HTML Elements Used in This Lesson</h2>
+
+      <p>
+        This webpage uses semantic HTML elements to organize
+        the lesson, community information, examples, and quiz.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Opening Tag</th>
+              <th>Closing Tag</th>
+              <th>Common Attributes</th>
+              <th>Browser Purpose</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Header</td>
+              <td><code>&lt;header&gt;</code></td>
+              <td><code>&lt;/header&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Displays the logo, title, and lesson introduction.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Navigation</td>
+              <td><code>&lt;nav&gt;</code></td>
+              <td><code>&lt;/nav&gt;</code></td>
+              <td>
+                <code>aria-label</code>,
+                <code>class</code>
+              </td>
+              <td>
+                Contains links to the main lesson sections.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Main</td>
+              <td><code>&lt;main&gt;</code></td>
+              <td><code>&lt;/main&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Contains the main content of the page.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Section</td>
+              <td><code>&lt;section&gt;</code></td>
+              <td><code>&lt;/section&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Groups related lesson content.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Article</td>
+              <td><code>&lt;article&gt;</code></td>
+              <td><code>&lt;/article&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Creates a self-contained card or topic.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Anchor</td>
+              <td><code>&lt;a&gt;</code></td>
+              <td><code>&lt;/a&gt;</code></td>
+              <td>
+                <code>href</code>,
+                <code>class</code>,
+                <code>target</code>
+              </td>
+              <td>
+                Creates a clickable link.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Details</td>
+              <td><code>&lt;details&gt;</code></td>
+              <td><code>&lt;/details&gt;</code></td>
+              <td><code>open</code>, <code>class</code></td>
+              <td>
+                Creates content that can be opened or closed.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Summary</td>
+              <td><code>&lt;summary&gt;</code></td>
+              <td><code>&lt;/summary&gt;</code></td>
+              <td><code>class</code></td>
+              <td>
+                Creates the clickable title of a details element.
+              </td>
+            </tr>
+
+            <tr>
+              <td>Footer</td>
+              <td><code>&lt;footer&gt;</code></td>
+              <td><code>&lt;/footer&gt;</code></td>
+              <td><code>id</code>, <code>class</code></td>
+              <td>
+                Displays information at the bottom of the page.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Example: Anchor Element</h3>
+
+      <pre><code>&lt;a href="#community"&gt;
+  Open Community Section
+&lt;/a&gt;</code></pre>
+
+      <div class="browser-output">
+        <h4>Browser Output</h4>
+
+        <a href="#community">
+          Open Community Section
+        </a>
+      </div>
+
+      <h3>Example: Article Element</h3>
+
+      <pre><code>&lt;article&gt;
+  &lt;h3&gt;Ask Questions&lt;/h3&gt;
+
+  &lt;p&gt;
+    Include the exact error message.
+  &lt;/p&gt;
+&lt;/article&gt;</code></pre>
+
+      <div class="browser-output">
+        <h4>Browser Output</h4>
+
+        <article>
+          <h3>Ask Questions</h3>
+
+          <p>
+            Include the exact error message.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="practice">
+      <h2>Practical Activity</h2>
+
+      <h3>Activity 1: Improve the Question</h3>
+
+      <div class="activity-card">
+        <p>
+          Weak community question:
+        </p>
+
+        <pre><code>My page is broken. What should I do?</code></pre>
+
+        <p>
+          Rewrite the question by adding:
+        </p>
+
+        <ul>
+          <li>The page or file.</li>
+          <li>The expected result.</li>
+          <li>The actual result.</li>
+          <li>The error message.</li>
+          <li>What has already been tried.</li>
+        </ul>
+
+        <details>
+          <summary>Show one possible answer</summary>
+
+          <pre><code>I am working in src/app/register.tsx.
+
+Expected result:
+The registration form should save the student.
+
+Actual result:
+The page shows "Registration failed."
+
+Error:
+duplicate key value violates unique constraint.
+
+What I tried:
+I refreshed the page and entered a different phone number.
+
+Which field may already exist in the database?</code></pre>
+        </details>
+      </div>
+
+      <h3>Activity 2: Choose Respectful Feedback</h3>
+
+      <div class="activity-card">
+        <p>
+          Which response is more helpful?
+        </p>
+
+        <ol>
+          <li>
+            Your project looks terrible.
+          </li>
+
+          <li>
+            The project works, but the text is difficult to read
+            because the background and text colors are too similar.
+          </li>
+        </ol>
+
+        <details>
+          <summary>Show answer</summary>
+
+          <p class="answer">
+            Response 2 is more helpful.
+          </p>
+
+          <p>
+            It identifies a specific problem without insulting
+            the learner.
+          </p>
+        </details>
+      </div>
+
+      <h3>Activity 3: Protect Private Information</h3>
+
+      <div class="activity-card">
+        <p>
+          Which information should never be posted publicly?
+        </p>
+
+        <ul>
+          <li>A general HTML example.</li>
+          <li>A secret API key.</li>
+          <li>A lesson title.</li>
+          <li>A public project screenshot without private data.</li>
+        </ul>
+
+        <details>
+          <summary>Show answer</summary>
+
+          <p class="answer">
+            A secret API key must never be posted publicly.
+          </p>
+        </details>
+      </div>
+
+      <h3>Activity 4: Write a Progress Message</h3>
+
+      <div class="activity-card">
+        <p>
+          Write a short community message explaining:
+        </p>
+
+        <ul>
+          <li>Which lesson you completed.</li>
+          <li>One new idea you learned.</li>
+          <li>One challenge you faced.</li>
+          <li>Your next learning goal.</li>
+        </ul>
+
+        <details>
+          <summary>Show example</summary>
+
+          <pre><code>I completed Lesson 7 today.
+
+I learned how to ask clearer technical questions.
+My challenge was explaining the difference between the expected
+result and the actual result.
+
+My next goal is to complete the next lesson and practice
+sharing one useful code example.</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Multiple-Choice Quiz</h2>
+
+      <div class="question">
+        <p>
+          1. What is one benefit of a learning community?
+        </p>
+
+        <label>
+          <input type="radio" name="q1" />
+          A. It removes the need to practice
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          B. It allows learners to exchange ideas and support
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          C. It guarantees that every answer is correct
+        </label>
+
+        <label>
+          <input type="radio" name="q1" />
+          D. It completes every assignment automatically
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          2. What should a good technical question include?
+        </p>
+
+        <label>
+          <input type="radio" name="q2" />
+          A. Only the words "It does not work"
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          B. The expected result, actual result, and relevant details
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          C. A private password
+        </label>
+
+        <label>
+          <input type="radio" name="q2" />
+          D. Unrelated personal information
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          3. Which is an example of respectful feedback?
+        </p>
+
+        <label>
+          <input type="radio" name="q3" />
+          A. Your work is useless
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          B. The button works, but its text may be too small
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          C. You should stop learning
+        </label>
+
+        <label>
+          <input type="radio" name="q3" />
+          D. Everything is bad
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          4. What should never be shared in a public group?
+        </p>
+
+        <label>
+          <input type="radio" name="q4" />
+          A. A lesson title
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          B. A public HTML example
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          C. A secret API key
+        </label>
+
+        <label>
+          <input type="radio" name="q4" />
+          D. A general learning question
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          5. How should you help another learner?
+        </p>
+
+        <label>
+          <input type="radio" name="q5" />
+          A. Guide them toward understanding
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          B. Submit all their assignments for them
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          C. Make fun of their mistakes
+        </label>
+
+        <label>
+          <input type="radio" name="q5" />
+          D. Ignore their question completely
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          6. Why can sharing progress be useful?
+        </p>
+
+        <label>
+          <input type="radio" name="q6" />
+          A. It can strengthen motivation
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          B. It proves that learning is always easy
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          C. It replaces practice
+        </label>
+
+        <label>
+          <input type="radio" name="q6" />
+          D. It removes all errors
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          7. Is joining every community discussion required?
+        </p>
+
+        <label>
+          <input type="radio" name="q7" />
+          A. Yes, every student must post every day
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          B. No, participation can be optional
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          C. Only instructors can participate
+        </label>
+
+        <label>
+          <input type="radio" name="q7" />
+          D. Communities are only for experts
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          8. Who remains responsible for completing the learning work?
+        </p>
+
+        <label>
+          <input type="radio" name="q8" />
+          A. The learner
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          B. Other community members
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          C. The internet connection
+        </label>
+
+        <label>
+          <input type="radio" name="q8" />
+          D. The group administrator
+        </label>
+      </div>
+
+      <details>
+        <summary>Open Answer Key</summary>
+
+        <ol>
+          <li>
+            <strong>B</strong> — Learners can exchange ideas
+            and support.
+          </li>
+
+          <li>
+            <strong>B</strong> — Include the expected result,
+            actual result, and relevant details.
+          </li>
+
+          <li>
+            <strong>B</strong> — It gives specific and respectful
+            feedback.
+          </li>
+
+          <li>
+            <strong>C</strong> — Never share a secret API key.
+          </li>
+
+          <li>
+            <strong>A</strong> — Guide the learner toward
+            understanding.
+          </li>
+
+          <li>
+            <strong>A</strong> — Sharing progress can improve
+            motivation.
+          </li>
+
+          <li>
+            <strong>B</strong> — Participation may be optional.
+          </li>
+
+          <li>
+            <strong>A</strong> — The learner remains responsible.
+          </li>
+        </ol>
+      </details>
+    </section>
+
+    <section id="remember" class="remember">
+      <h2>Remember</h2>
+
+      <ul>
+        <li>
+          Learning with other people can provide encouragement,
+          explanations, feedback, and new ideas.
+        </li>
+
+        <li>
+          A good technical question explains the goal, expected
+          result, actual result, error, and previous attempts.
+        </li>
+
+        <li>
+          Respect learners at every skill level.
+        </li>
+
+        <li>
+          Helpful feedback identifies a specific problem and
+          suggests an improvement.
+        </li>
+
+        <li>
+          Never share passwords, secret keys, payment data,
+          or private student information.
+        </li>
+
+        <li>
+          Help others understand instead of completing all
+          their work.
+        </li>
+
+        <li>
+          Sharing small achievements can improve motivation.
+        </li>
+
+        <li>
+          The community supports learning, but each learner
+          must continue practicing.
+        </li>
+      </ul>
+
+      <h3>Somali Remember</h3>
+
+      <ul>
+        <li>
+          Bulshada waxbarashadu waxay bixisaa caawimo,
+          fikrado, feedback, iyo dhiirrigelin.
+        </li>
+
+        <li>
+          Su'aal wanaagsan waxay sheegaysaa waxa la rabay,
+          waxa dhacay, error-ka, iyo waxa la tijaabiyay.
+        </li>
+
+        <li>
+          Xushmee arday kasta heerka uu joogo.
+        </li>
+
+        <li>
+          Feedback wanaagsan wuxuu tilmaamaa dhibaatada
+          iyo sida loo hagaajin karo.
+        </li>
+
+        <li>
+          Ha wadaagin password, secret key, xog lacag,
+          ama xog arday oo gaar ah.
+        </li>
+
+        <li>
+          Dadka kale fahamka ka caawi; shaqadooda oo dhan
+          ha u qaban.
+        </li>
+
+        <li>
+          Horumarka yar la wadaagistiisu waxay kordhin kartaa
+          dhiirrigelinta.
+        </li>
+
+        <li>
+          Bulshadu way ku caawinaysaa, laakiin adiga ayaa
+          ku celcelinaya oo wax baranaya.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <strong>Elmi Guray Academy</strong>
+    </p>
+
+    <p>
+      AI Tools for Developers — Lesson 7
+    </p>
+
+    <p>
+      Knowledge • Integrity • Opportunity
+    </p>
+
+    <p>
+      Aqoon • Daacadnimo • Fursad
+    </p>
+
+    <p>
+      <a href="#top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">
+        Back to Top
+      </a>
+    </p>
+  </footer>
+</body>
+</html>

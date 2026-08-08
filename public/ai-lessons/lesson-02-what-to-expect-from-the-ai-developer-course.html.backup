@@ -1,0 +1,143 @@
+python3 - <<'PY'
+from pathlib import Path
+import re
+import shutil
+
+LESSONS_DIR = Path("public/ai-lessons")
+PUBLIC_LOGO = Path("public/ega-logo.png")
+ASSET_LOGO = Path("assets/images/ega-logo.png")
+
+if not LESSONS_DIR.exists():
+    raise SystemExit("❌ public/ai-lessons folder not found.")
+
+# Make sure the official logo is available to every HTML lesson.
+if not PUBLIC_LOGO.exists():
+    if ASSET_LOGO.exists():
+        shutil.copy2(ASSET_LOGO, PUBLIC_LOGO)
+        print("✅ Official logo copied to public/ega-logo.png")
+    else:
+        raise SystemExit(
+            "❌ ega-logo.png not found.\n"
+            "Expected either:\n"
+            "assets/images/ega-logo.png\n"
+            "or\n"
+            "public/ega-logo.png"
+        )
+
+circle_css = """
+<style id="ega-official-logo-style">
+  .ega-official-logo {
+    width: 190px;
+    height: 190px;
+    display: block;
+    margin: 20px auto;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 5px solid #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  @media (max-width: 600px) {
+    .ega-official-logo {
+      width: 150px;
+      height: 150px;
+    }
+  }
+</style>
+"""
+
+files = sorted(LESSONS_DIR.glob("lesson-*.html"))
+
+if not files:
+    raise SystemExit("❌ No lesson HTML files found.")
+
+updated = 0
+
+for file in files:
+    html = file.read_text(encoding="utf-8")
+
+    # Backup each lesson before changing it.
+    backup = file.with_suffix(file.suffix + ".backup")
+    shutil.copy2(file, backup)
+
+    # Remove older logo-specific style added by this script.
+    html = re.sub(
+        r'<style id="ega-official-logo-style">.*?</style>\s*',
+        '',
+        html,
+        flags=re.DOTALL
+    )
+
+    # Add the circular official-logo style before </head>.
+    if "</head>" in html:
+        html = html.replace(
+            "</head>",
+            circle_css + "\n</head>",
+            1
+        )
+    else:
+        print(f"⚠️ Skipped {file.name}: </head> not found")
+        continue
+
+    # Replace old circular text logo such as:
+    # <div class="logo">EGA</div>
+    html = re.sub(
+        r'<div[^>]*class=["\'][^"\']*\blogo\b[^"\']*["\'][^>]*>\s*EGA\s*</div>',
+        '''<img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy official logo"
+            class="ega-official-logo"
+        >''',
+        html,
+        count=1,
+        flags=re.DOTALL | re.IGNORECASE
+    )
+
+    # Replace the first existing EGA logo image in each lesson.
+    logo_img_pattern = re.compile(
+        r'<img\b(?=[^>]*(?:ega-logo\.png|Elmi Guray Academy logo))[^>]*>',
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
+    official_img = '''<img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy official logo"
+            class="ega-official-logo"
+        >'''
+
+    if logo_img_pattern.search(html):
+        html = logo_img_pattern.sub(
+            official_img,
+            html,
+            count=1
+        )
+    else:
+        # If lesson has no logo at all, add it immediately inside <header>.
+        html = re.sub(
+            r'(<header\b[^>]*>)',
+            r'''\\1
+
+        <img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy official logo"
+            class="ega-official-logo"
+        >''',
+            html,
+            count=1,
+            flags=re.IGNORECASE
+        )
+
+    file.write_text(html, encoding="utf-8")
+    updated += 1
+    print(f"✅ {file.name}")
+
+print()
+print(f"✅ {updated} lesson file(s) updated.")
+print("✅ Official EGA logo applied.")
+print("✅ Every lesson logo is now circular cropped.")
+print("✅ Original lesson files backed up as .html.backup")
+print()
+print("NEXT: refresh Lesson 2 in the browser.")
+PY

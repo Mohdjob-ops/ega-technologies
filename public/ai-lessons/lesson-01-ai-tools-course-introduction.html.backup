@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Permanent lesson-creation standard for Elmi Guray Academy HTML and AI developer courses."
+    >
+
+    <title>
+        EGA Permanent HTML Lesson Template
+    </title>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            Elmi Guray Academy
+        </h1>
+
+        <h2>
+            Permanent HTML Lesson-Creation Standard
+        </h2>
+
+        <p>
+            Created by
+            <strong>Mohammed Elmi Issak</strong>
+        </p>
+
+        <p>
+            Founder &amp; President,
+            Elmi Guray Academy
+        </p>
+
+        <nav>
+            <a href="#original-content">
+                Original Content
+            </a>
+
+            <span> | </span>
+
+            <a href="#html-requirements">
+                HTML Requirements
+            </a>
+
+            <span> | </span>
+
+            <a href="#lesson-structure">
+                Lesson Structure
+            </a>
+
+            <span> | </span>
+
+            <a href="#language-standard">
+                Language Standard
+            </a>
+        </nav>
+
+    </header>
+
+    <hr>
+
+    <main>
+
+        <section id="original-content">
+
+            <h2>
+                Original EGA Content Policy
+            </h2>
+
+            <p>
+                Every Elmi Guray Academy lesson must be an
+                <strong>original EGA lesson</strong>.
+            </p>
+
+            <p>
+                Lessons must not copy, closely rewrite, or closely imitate
+                material from another instructor, course, book, website,
+                video, or educational platform.
+            </p>
+
+            <p>
+                Any transcript or lesson text supplied to EGA should only
+                be used to identify the general topic that needs to be
+                taught.
+            </p>
+
+            <p>
+                The original wording, sentence structure, examples,
+                activities, explanations, and lesson organization must not
+                be copied.
+            </p>
+
+            <p>
+                Every lesson must be newly written and presented as an
+                official Elmi Guray Academy course created by:
+            </p>
+
+            <address>
+                <strong>Mohammed Elmi Issak</strong><br>
+                Founder &amp; President<br>
+                Elmi Guray Academy
+            </address>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Information That Must Not Appear
+            </h2>
+
+            <ul>
+                <li>
+                    Do not mention another course platform.
+                </li>
+
+                <li>
+                    Do not mention another instructor.
+                </li>
+
+                <li>
+                    Do not present another instructor's introduction
+                    as EGA content.
+                </li>
+
+                <li>
+                    Do not copy another instructor's examples.
+                </li>
+
+                <li>
+                    Do not retain another instructor's name.
+                </li>
+
+                <li>
+                    Do not claim that copied material was created by EGA.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="html-requirements">
+
+            <h2>
+                Complete HTML Document Requirement
+            </h2>
+
+            <p>
+                Every lesson must be supplied as one complete,
+                standalone HTML document.
+            </p>
+
+            <p>
+                The document must begin with:
+            </p>
+
+            <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
+
+            <p>
+                The document must include the complete HTML structure:
+            </p>
+
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+
+    &lt;meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    &gt;
+
+    &lt;title&gt;Lesson Title&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+    Lesson content goes here.
+
+&lt;/body&gt;
+
+&lt;/html&gt;</code></pre>
+
+            <p>
+                Students must be able to save the lesson as an HTML file
+                and open it directly in a browser.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                GFFDO Requirement
+            </h2>
+
+            <p>
+                EGA code updates must follow the
+                <strong>GFFDO</strong> method.
+            </p>
+
+            <p>
+                GFFDO means:
+            </p>
+
+            <blockquote>
+                <strong>Give Full File, Delete Old.</strong>
+            </blockquote>
+
+            <p>
+                When updating a lesson file:
+            </p>
+
+            <ol>
+                <li>
+                    Provide the complete replacement file.
+                </li>
+
+                <li>
+                    Do not provide only small replacement lines.
+                </li>
+
+                <li>
+                    The old file content should be deleted.
+                </li>
+
+                <li>
+                    The complete new file should be pasted.
+                </li>
+
+                <li>
+                    The file should then be saved and tested.
+                </li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                File Name Requirement
+            </h2>
+
+            <p>
+                Every lesson must include a clear filename.
+            </p>
+
+            <p>
+                Example:
+            </p>
+
+            <pre><code>lesson-01-ai-tools-course-introduction.html</code></pre>
+
+            <p>
+                File names should:
+            </p>
+
+            <ul>
+                <li>
+                    Use lowercase letters.
+                </li>
+
+                <li>
+                    Use hyphens between words.
+                </li>
+
+                <li>
+                    End with <strong>.html</strong>.
+                </li>
+
+                <li>
+                    Describe the lesson topic clearly.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                HTML Learning Requirement
+            </h2>
+
+            <p>
+                The lesson content must be written as a real HTML webpage.
+            </p>
+
+            <p>
+                Students should learn two subjects at the same time:
+            </p>
+
+            <ol>
+                <li>
+                    The main lesson topic.
+                </li>
+
+                <li>
+                    The HTML format used to present the lesson.
+                </li>
+            </ol>
+
+            <p>
+                For example, an AI lesson should teach the AI topic while
+                also showing students how headings, paragraphs, links,
+                images, lists, forms, and semantic elements work.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Required HTML Elements
+            </h2>
+
+            <p>
+                Lessons should use appropriate HTML elements throughout
+                the page.
+            </p>
+
+            <table border="1">
+
+                <thead>
+
+                    <tr>
+                        <th>HTML Element</th>
+                        <th>Purpose</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <code>&lt;header&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains the lesson introduction and title.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;nav&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains navigation links.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;main&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains the main lesson content.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;section&gt;</code>
+                        </td>
+
+                        <td>
+                            Groups related lesson content.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;article&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains independent learning content when
+                            appropriate.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;footer&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains academy information and lesson
+                            closing content.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;h1&gt;</code> to
+                            <code>&lt;h6&gt;</code>
+                        </td>
+
+                        <td>
+                            Organize page titles and section headings.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;p&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates paragraphs.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;strong&gt;</code>
+                        </td>
+
+                        <td>
+                            Marks important text.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;em&gt;</code>
+                        </td>
+
+                        <td>
+                            Adds emphasis to text.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;a&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates a clickable link.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;img&gt;</code>
+                        </td>
+
+                        <td>
+                            Displays an image.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;ul&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates an unordered list.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;ol&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates an ordered list.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;li&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates a list item.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;table&gt;</code>
+                        </td>
+
+                        <td>
+                            Presents information in rows and columns.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;form&gt;</code>
+                        </td>
+
+                        <td>
+                            Contains interactive form controls.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;fieldset&gt;</code>
+                        </td>
+
+                        <td>
+                            Groups related form questions.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;legend&gt;</code>
+                        </td>
+
+                        <td>
+                            Gives a title to a fieldset.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;label&gt;</code>
+                        </td>
+
+                        <td>
+                            Describes an input control.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;input&gt;</code>
+                        </td>
+
+                        <td>
+                            Collects user information or answers.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;button&gt;</code>
+                        </td>
+
+                        <td>
+                            Creates a clickable button.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;pre&gt;</code>
+                        </td>
+
+                        <td>
+                            Preserves code spacing and line breaks.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <code>&lt;code&gt;</code>
+                        </td>
+
+                        <td>
+                            Identifies programming code.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                HTML Element Explanation Standard
+            </h2>
+
+            <p>
+                Every newly introduced HTML element should be explained.
+            </p>
+
+            <p>
+                The explanation should include:
+            </p>
+
+            <ul>
+                <li>
+                    What the element does.
+                </li>
+
+                <li>
+                    Its opening tag.
+                </li>
+
+                <li>
+                    Its closing tag, when required.
+                </li>
+
+                <li>
+                    Important attributes.
+                </li>
+
+                <li>
+                    A practical example.
+                </li>
+
+                <li>
+                    The expected browser output.
+                </li>
+
+                <li>
+                    When the element should be used.
+                </li>
+            </ul>
+
+            <h3>
+                Example: Anchor Element
+            </h3>
+
+            <p>
+                The <code>&lt;a&gt;</code> element creates a clickable
+                link.
+            </p>
+
+            <pre><code>&lt;a href="https://example.com"&gt;
+    Visit Example
+&lt;/a&gt;</code></pre>
+
+            <ul>
+                <li>
+                    <code>&lt;a&gt;</code> is the opening tag.
+                </li>
+
+                <li>
+                    <strong>Visit Example</strong> is the link text.
+                </li>
+
+                <li>
+                    <code>&lt;/a&gt;</code> is the closing tag.
+                </li>
+
+                <li>
+                    The <code>href</code> attribute contains the
+                    destination.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Image Requirement
+            </h2>
+
+            <p>
+                Lessons may include the official Elmi Guray Academy logo.
+            </p>
+
+            <pre><code>&lt;img
+    src="ega-logo.png"
+    alt="Elmi Guray Academy logo"
+    width="180"
+&gt;</code></pre>
+
+            <p>
+                The image explanation must identify:
+            </p>
+
+            <ul>
+                <li>
+                    The <code>src</code> attribute.
+                </li>
+
+                <li>
+                    The <code>alt</code> attribute.
+                </li>
+
+                <li>
+                    The image filename.
+                </li>
+
+                <li>
+                    The correct folder location.
+                </li>
+
+                <li>
+                    The fact that <code>&lt;img&gt;</code> does not use
+                    a closing tag.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="lesson-structure">
+
+            <h2>
+                Required Lesson Structure
+            </h2>
+
+            <p>
+                Every EGA lesson must contain the following major parts.
+            </p>
+
+            <ol>
+
+                <li>
+                    <strong>Technical Explanation — English</strong>
+                </li>
+
+                <li>
+                    <strong>Technical Explanation — Somali</strong>
+                </li>
+
+                <li>
+                    <strong>
+                        GAL — General Analogy Learning — English
+                    </strong>
+                </li>
+
+                <li>
+                    <strong>GAL — Somali</strong>
+                </li>
+
+                <li>
+                    <strong>Practical HTML Examples</strong>
+                </li>
+
+                <li>
+                    <strong>Browser Output Examples</strong>
+                </li>
+
+                <li>
+                    <strong>Important Rules</strong>
+                </li>
+
+                <li>
+                    <strong>Common Beginner Mistakes</strong>
+                </li>
+
+                <li>
+                    <strong>Multiple-Choice Practice Activity</strong>
+                </li>
+
+                <li>
+                    <strong>Answer Key</strong>
+                </li>
+
+                <li>
+                    <strong>Remember Summary</strong>
+                </li>
+
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Technical Explanation — English
+            </h2>
+
+            <p>
+                The English technical section must explain the lesson
+                topic clearly and professionally.
+            </p>
+
+            <p>
+                It should:
+            </p>
+
+            <ul>
+                <li>
+                    Introduce the topic.
+                </li>
+
+                <li>
+                    Explain important terms.
+                </li>
+
+                <li>
+                    Use short and understandable paragraphs.
+                </li>
+
+                <li>
+                    Include practical examples.
+                </li>
+
+                <li>
+                    Explain the HTML used in the lesson.
+                </li>
+
+                <li>
+                    Progress from simple ideas to more advanced ideas.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Farsamo — Somali
+            </h2>
+
+            <p>
+                The Somali section must teach the same subject clearly
+                for Somali-speaking students.
+            </p>
+
+            <p>
+                The Somali explanation should not be a confusing
+                word-for-word translation.
+            </p>
+
+            <p>
+                It should use clear Somali explanations while preserving
+                important technical terms such as:
+            </p>
+
+            <ul>
+                <li>HTML</li>
+                <li>AI</li>
+                <li>Developer</li>
+                <li>Element</li>
+                <li>Tag</li>
+                <li>Attribute</li>
+                <li>Browser</li>
+                <li>Link</li>
+                <li>Image</li>
+                <li>Code</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                GAL — General Analogy Learning
+            </h2>
+
+            <p>
+                Every lesson must include an everyday analogy that helps
+                beginners understand the technical idea.
+            </p>
+
+            <p>
+                The analogy should be included in:
+            </p>
+
+            <ul>
+                <li>English</li>
+                <li>Somali</li>
+            </ul>
+
+            <p>
+                Suitable analogy topics may include:
+            </p>
+
+            <ul>
+                <li>A school</li>
+                <li>A house</li>
+                <li>A road system</li>
+                <li>A toolbox</li>
+                <li>A library</li>
+                <li>A restaurant</li>
+                <li>A textbook</li>
+                <li>A carpenter</li>
+                <li>A teacher and student</li>
+            </ul>
+
+            <p>
+                The analogy must directly connect to the lesson concept.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Practical HTML Examples
+            </h2>
+
+            <p>
+                Code examples must appear inside
+                <code>&lt;pre&gt;</code> and
+                <code>&lt;code&gt;</code>.
+            </p>
+
+            <p>
+                HTML characters must be escaped so that students can see
+                the code instead of the browser interpreting it.
+            </p>
+
+            <pre><code>&amp;lt;h1&amp;gt;Elmi Guray Academy&amp;lt;/h1&amp;gt;</code></pre>
+
+            <p>
+                In the browser, the escaped code will appear as:
+            </p>
+
+            <pre><code>&lt;h1&gt;Elmi Guray Academy&lt;/h1&gt;</code></pre>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Browser Output Examples
+            </h2>
+
+            <p>
+                When useful, the lesson should show both:
+            </p>
+
+            <ol>
+                <li>The HTML source code.</li>
+                <li>The result produced by the browser.</li>
+            </ol>
+
+            <h3>
+                HTML Code
+            </h3>
+
+            <pre><code>&lt;p&gt;
+    Welcome to Elmi Guray Academy.
+&lt;/p&gt;</code></pre>
+
+            <h3>
+                Browser Output
+            </h3>
+
+            <p>
+                Welcome to Elmi Guray Academy.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Important Rules
+            </h2>
+
+            <p>
+                Every lesson must include rules students should remember.
+            </p>
+
+            <ul>
+                <li>
+                    Write valid HTML.
+                </li>
+
+                <li>
+                    Use opening and closing tags correctly.
+                </li>
+
+                <li>
+                    Save the file with the correct extension.
+                </li>
+
+                <li>
+                    Use lowercase filenames.
+                </li>
+
+                <li>
+                    Check image and link paths carefully.
+                </li>
+
+                <li>
+                    Open the file in a browser and test it.
+                </li>
+
+                <li>
+                    Read and understand code before copying it.
+                </li>
+
+                <li>
+                    Never share passwords or secret keys.
+                </li>
+
+                <li>
+                    Use AI to support learning, not to avoid learning.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Common Beginner Mistakes
+            </h2>
+
+            <ul>
+                <li>
+                    Forgetting a closing tag.
+                </li>
+
+                <li>
+                    Misspelling an HTML tag.
+                </li>
+
+                <li>
+                    Using the wrong image filename.
+                </li>
+
+                <li>
+                    Using uppercase letters when the actual filename is
+                    lowercase.
+                </li>
+
+                <li>
+                    Saving the file as
+                    <code>.txt</code> instead of
+                    <code>.html</code>.
+                </li>
+
+                <li>
+                    Placing code outside the
+                    <code>&lt;body&gt;</code>.
+                </li>
+
+                <li>
+                    Using heading tags only to make text large.
+                </li>
+
+                <li>
+                    Copying AI-generated code without testing it.
+                </li>
+
+                <li>
+                    Depending on AI without understanding the result.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Multiple-Choice Practice Activity
+            </h2>
+
+            <p>
+                Practical activities should normally use multiple-choice
+                questions.
+            </p>
+
+            <form>
+
+                <fieldset>
+
+                    <legend>
+                        1. What does GFFDO mean?
+                    </legend>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question1"
+                            value="a"
+                        >
+                        Give Fast File, Delete Output
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question1"
+                            value="b"
+                        >
+                        Give Full File, Delete Old
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question1"
+                            value="c"
+                        >
+                        Generate Final Folder, Download Online
+                    </label>
+
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+
+                    <legend>
+                        2. Which element displays an image?
+                    </legend>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question2"
+                            value="a"
+                        >
+                        &lt;a&gt;
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question2"
+                            value="b"
+                        >
+                        &lt;p&gt;
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question2"
+                            value="c"
+                        >
+                        &lt;img&gt;
+                    </label>
+
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+
+                    <legend>
+                        3. Which element creates a link?
+                    </legend>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question3"
+                            value="a"
+                        >
+                        &lt;a&gt;
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question3"
+                            value="b"
+                        >
+                        &lt;img&gt;
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question3"
+                            value="c"
+                        >
+                        &lt;table&gt;
+                    </label>
+
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+
+                    <legend>
+                        4. How should transcripts from another course be
+                        used?
+                    </legend>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question4"
+                            value="a"
+                        >
+                        Copy the original wording
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question4"
+                            value="b"
+                        >
+                        Use only the general topic and create an original
+                        EGA lesson
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="question4"
+                            value="c"
+                        >
+                        Keep the original instructor's name
+                    </label>
+
+                </fieldset>
+
+                <br>
+
+                <button type="submit">
+                    Submit Answers
+                </button>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Answer Key
+            </h2>
+
+            <ol>
+                <li>
+                    B — Give Full File, Delete Old.
+                </li>
+
+                <li>
+                    C — <code>&lt;img&gt;</code>.
+                </li>
+
+                <li>
+                    A — <code>&lt;a&gt;</code>.
+                </li>
+
+                <li>
+                    B — Use only the general topic and create an original
+                    EGA lesson.
+                </li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section id="language-standard">
+
+            <h2>
+                Lesson Language Standard
+            </h2>
+
+            <p>
+                Every lesson must be:
+            </p>
+
+            <ul>
+                <li>Professional</li>
+                <li>Beginner-friendly</li>
+                <li>Original</li>
+                <li>Clear</li>
+                <li>Progressive</li>
+                <li>Suitable for self-study</li>
+                <li>Suitable for classroom teaching</li>
+                <li>Easy to open in a browser</li>
+            </ul>
+
+            <p>
+                Sentences should be clear and not unnecessarily
+                complicated.
+            </p>
+
+            <p>
+                Technical vocabulary should be introduced gradually and
+                explained before students are expected to use it.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Permanent EGA Lesson Identity
+            </h2>
+
+            <p>
+                Every lesson should be presented as part of:
+            </p>
+
+            <article>
+
+                <h3>
+                    Elmi Guray Academy
+                </h3>
+
+                <p>
+                    Created by
+                    <strong>Mohammed Elmi Issak</strong>
+                </p>
+
+                <p>
+                    Founder &amp; President
+                </p>
+
+                <p>
+                    Knowledge • Integrity • Opportunity
+                </p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Remember
+            </h2>
+
+            <p>
+                <strong>
+                    Every EGA lesson must be original.<br>
+                    Use transcripts only to identify the topic.<br>
+                    Do not copy another instructor's wording.<br>
+                    Present lessons as official EGA content.<br>
+                    Give one complete standalone HTML file.<br>
+                    Follow GFFDO: Give Full File, Delete Old.<br>
+                    Include English, Somali, and GAL sections.<br>
+                    Teach the topic and HTML at the same time.<br>
+                    Include practical examples and browser output.<br>
+                    Use multiple-choice activities.<br>
+                    Include an answer key and Remember summary.
+                </strong>
+            </p>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            <strong>Elmi Guray Academy</strong>
+        </p>
+
+        <p>
+            Created by Mohammed Elmi Issak
+        </p>
+
+        <p>
+            Founder &amp; President
+        </p>
+
+        <p>
+            Knowledge • Integrity • Opportunity
+        </p>
+
+        <p>
+            <a href="#original-content">
+                Return to the beginning
+            </a>
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
