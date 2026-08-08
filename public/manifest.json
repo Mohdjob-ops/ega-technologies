@@ -1,8 +1,17 @@
 {
-  "name": "EGA Global",
+  "name": "Elmi Guray Academy",
   "short_name": "EGA",
+  "description": "Learn technology with Elmi Guray Academy.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0b5fa5"
+  "theme_color": "#173f7a",
+  "icons": [
+    {
+      "src": "/ega-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

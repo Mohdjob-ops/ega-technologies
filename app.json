@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "EGA Technologies",
+    "name": "Elmi Guray Academy",
     "slug": "ega-college-app",
     "version": "1.0.0",
-    "description": "EGA Technologies learning platform for web development courses, learner progress, payments, quizzes, and certificates.",
+    "description": "Elmi Guray Academy learning platform for technology education, courses, learner progress, payments, quizzes, and certificates.",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "egatechnologies",
@@ -20,10 +20,10 @@
     ],
     "web": {
       "output": "single",
-      "favicon": "./assets/images/favicon.png",
-      "name": "EGA Technologies",
+      "favicon": "./assets/images/ega-logo.png",
+      "name": "Elmi Guray Academy",
       "shortName": "EGA",
-      "description": "Learn web development with EGA Technologies.",
+      "description": "Learn technology with Elmi Guray Academy.",
       "lang": "en",
       "display": "standalone",
       "themeColor": "#244394",
