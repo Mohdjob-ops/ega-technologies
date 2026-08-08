@@ -1,0 +1,8 @@
+{
+  "name": "EGA Global",
+  "short_name": "EGA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b5fa5"
+}
