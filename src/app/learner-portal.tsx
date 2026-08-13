@@ -39,15 +39,39 @@ const aiLessons = [
     title: "Lesson 7: Learning with a Community",
     path: "/ai-lessons/lesson-07-learning-with-a-community.html",
   },
+  {
+    title: "Lesson 8: Introduction to GitHub Copilot",
+    path: "/ai-lessons/lesson-08-github-copilot-for-ai-developers.html",
+  },
+  {
+    title: "Lesson 9: GitHub Copilot Core Features",
+    path: "/ai-lessons/lesson-09-understanding-github-copilot-access-and-setup.html",
+  },
 ];
 
 export default function LearnerPortal() {
-  const [studentId, setStudentId] = useState("");
-  const [phone, setPhone] = useState("");
+  const [studentId, setStudentId] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("ega_student_id") || "";
+    }
+    return "";
+  });
+  const [phone, setPhone] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("ega_student_phone") || "";
+    }
+    return "";
+  });
   const [student, setStudent] = useState<any>(null);
   const [quizResults, setQuizResults] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editPhone, setEditPhone] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [profileMessage, setProfileMessage] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
 
   function cleanPhone(value: string) {
     return value.replace(/\D/g, "");
@@ -65,6 +89,18 @@ export default function LearnerPortal() {
       setMessage("⚠️ Please enter Student ID and Phone Number");
       setLoading(false);
       return;
+    }
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        "ega_student_id",
+        studentId.trim()
+      );
+
+      sessionStorage.setItem(
+        "ega_student_phone",
+        phone.trim()
+      );
     }
 
     const { data, error } = await supabase
@@ -115,6 +151,69 @@ export default function LearnerPortal() {
     setLoading(false);
   }
 
+  function beginEditProfile() {
+    if (!student) return;
+
+    setEditPhone(student.phone || "");
+    setEditEmail(student.email || "");
+    setProfileMessage("");
+    setEditingProfile(true);
+  }
+
+  function cancelEditProfile() {
+    setEditPhone("");
+    setEditEmail("");
+    setProfileMessage("");
+    setEditingProfile(false);
+  }
+
+  async function saveProfile() {
+    if (student == null || savingProfile) return;
+
+    const newPhone = cleanPhone(editPhone);
+    const newEmail = editEmail.trim().toLowerCase();
+
+    if (newPhone.length < 9) {
+      setProfileMessage("❌ Enter a valid phone number.");
+      return;
+    }
+
+    if (newEmail.indexOf("@") < 1 || newEmail.indexOf(".") < 0) {
+      setProfileMessage("❌ Enter a valid email address.");
+      return;
+    }
+
+    setSavingProfile(true);
+    setProfileMessage("Saving...");
+
+    const { data, error } = await supabase
+      .from("students")
+      .update({ phone: newPhone, email: newEmail })
+      .eq("student_id", student.student_id)
+      .select("*")
+      .single();
+
+    if (error) {
+      setProfileMessage(
+        error.code === "23505"
+          ? "❌ Phone or email already belongs to another student."
+          : "❌ Update failed: " + error.message
+      );
+      setSavingProfile(false);
+      return;
+    }
+
+    setStudent(data);
+    setPhone(newPhone);
+    setEditingProfile(false);
+    setProfileMessage("✅ Profile updated successfully.");
+    setSavingProfile(false);
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("ega_student_phone", newPhone);
+    }
+  }
+
   function logout() {
     setStudent(null);
     setQuizResults([]);
@@ -134,19 +233,94 @@ export default function LearnerPortal() {
 
   const isPaid = student?.payment_status === "Paid";
 
-  const htmlPassed = quizResults.some(
-    (q) => q.quiz_name === "HTML Quiz" && q.passed === true
+  /*
+   * quizResults is already ordered newest → oldest.
+   * Keep ONLY the newest attempt for each quiz.
+   */
+  const latestQuizResults = quizResults.filter(
+    (result, index, array) =>
+      index ===
+      array.findIndex(
+        (item) =>
+          String(item.quiz_name || "").trim().toLowerCase() ===
+          String(result.quiz_name || "").trim().toLowerCase()
+      )
   );
 
-  const cssPassed = quizResults.some(
-    (q) => q.quiz_name === "CSS Quiz" && q.passed === true
+  function findLatestQuiz(names: string[]) {
+    const normalizedNames = names.map((name) => name.toLowerCase());
+
+    return latestQuizResults.find((q) =>
+      normalizedNames.includes(
+        String(q.quiz_name || "").trim().toLowerCase()
+      )
+    );
+  }
+
+  function quizPassed(
+    latestResult: any,
+    studentScore: any,
+    certificateStatus?: any,
+    completed?: any
+  ) {
+    if (latestResult) {
+      const percentage = Number(
+        latestResult.percentage ?? latestResult.score ?? 0
+      );
+
+      return latestResult.passed === true || percentage >= 70;
+    }
+
+    const savedScore = Number(studentScore ?? 0);
+
+    return (
+      savedScore >= 70 ||
+      certificateStatus === "Ready" ||
+      completed === true
+    );
+  }
+
+  const latestHtmlQuiz = findLatestQuiz([
+    "HTML Quiz",
+    "HTML Fundamentals Quiz",
+  ]);
+
+  const latestCssQuiz = findLatestQuiz([
+    "CSS Quiz",
+    "CSS Fundamentals Quiz",
+  ]);
+
+  const latestJsQuiz = findLatestQuiz([
+    "JavaScript Quiz",
+    "Javascript Quiz",
+    "JavaScript Fundamentals Quiz",
+  ]);
+
+  const htmlPassed = quizPassed(
+    latestHtmlQuiz,
+    student?.html_quiz_score ?? student?.html_score,
+    student?.html_certificate_status,
+    student?.html_completed
   );
 
-  const jsPassed = quizResults.some(
-    (q) => q.quiz_name === "JavaScript Quiz" && q.passed === true
+  const cssPassed = quizPassed(
+    latestCssQuiz,
+    student?.css_quiz_score ?? student?.css_score,
+    student?.css_certificate_status,
+    student?.css_completed
   );
 
-  const fullProgramPassed = htmlPassed && cssPassed && jsPassed;
+  const jsPassed = quizPassed(
+    latestJsQuiz,
+    student?.js_quiz_score ?? student?.js_score,
+    student?.js_certificate_status,
+    student?.js_completed
+  );
+
+  const fullProgramPassed =
+    htmlPassed &&
+    cssPassed &&
+    jsPassed;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -199,9 +373,7 @@ export default function LearnerPortal() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Student Information</Text>
 
-            <Text style={styles.text}>
-              Name: {student.name}
-            </Text>
+            <Text style={styles.text}>Name: {student.name}</Text>
 
             <Text style={styles.text}>
               Student ID: {student.student_id}
@@ -222,6 +394,23 @@ export default function LearnerPortal() {
             <Text style={styles.text}>
               Language: {student.language || "Not Selected"}
             </Text>
+            {!editingProfile ? (
+              <TouchableOpacity style={styles.startButton} onPress={beginEditProfile}>
+                <Text style={styles.buttonText}>✏️ Edit Profile</Text>
+              </TouchableOpacity>
+            ) : (
+              <>
+                <TextInput style={styles.input} value={editPhone} onChangeText={setEditPhone} placeholder="Phone Number" keyboardType="phone-pad" />
+                <TextInput style={styles.input} value={editEmail} onChangeText={setEditEmail} placeholder="Email Address" autoCapitalize="none" />
+                <TouchableOpacity style={styles.startButton} onPress={saveProfile} disabled={savingProfile}>
+                  <Text style={styles.buttonText}>{savingProfile ? "Saving..." : "💾 Save Profile Changes"}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.logoutButton} onPress={cancelEditProfile}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {profileMessage ? <Text style={styles.message}>{profileMessage}</Text> : null}
           </View>
 
           <View style={styles.card}>
@@ -255,29 +444,7 @@ export default function LearnerPortal() {
                   ✅ Payment confirmed. Lessons and quizzes are unlocked.
                 </Text>
 
-                <Link href="/html-lecture" asChild>
-                  <TouchableOpacity style={styles.startButton}>
-                    <Text style={styles.buttonText}>
-                      Start HTML Course
-                    </Text>
-                  </TouchableOpacity>
-                </Link>
 
-                <Link href="/css-lecture" asChild>
-                  <TouchableOpacity style={styles.startButton}>
-                    <Text style={styles.buttonText}>
-                      Start CSS Course
-                    </Text>
-                  </TouchableOpacity>
-                </Link>
-
-                <Link href="/javascript-lecture" asChild>
-                  <TouchableOpacity style={styles.startButton}>
-                    <Text style={styles.buttonText}>
-                      Start JavaScript Course
-                    </Text>
-                  </TouchableOpacity>
-                </Link>
               </View>
             ) : (
               <View style={styles.warningBox}>
@@ -291,13 +458,13 @@ export default function LearnerPortal() {
 
           <View style={styles.card}>
             <Text style={styles.cardTitle}>
-              🤖 AI Developer Course
+              🤖 1. AI Developer Course — START HERE
             </Text>
 
             {isPaid ? (
               <>
                 <Text style={styles.sectionDescription}>
-                  Select an AI lesson below.
+                  Start here. Complete the AI lessons in order. / Halkan ka bilow. Casharrada AI-ga u baro sida ay u kala horreeyaan.
                 </Text>
 
                 {aiLessons.map((lesson) => (
@@ -323,26 +490,78 @@ export default function LearnerPortal() {
 
           <View style={styles.card}>
             <Text style={styles.cardTitle}>
-              📊 Quiz Results
+              🌐 Web Development — After AI
             </Text>
 
-            {quizResults.length === 0 ? (
+            <Text style={styles.sectionDescription}>
+              Continue here after completing the AI lessons.
+              {"\n"}
+              Halkan ka sii wad marka aad dhammayso casharrada AI-ga.
+            </Text>
+
+            {isPaid ? (
+              <>
+                <Link href="/html-lecture" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      2. Start HTML Course / Bilow Koorsada HTML
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+
+                <Link href="/css-lecture" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      3. Start CSS Course / Bilow Koorsada CSS
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+
+                <Link href="/javascript-lecture" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      4. Start JavaScript Course / Bilow Koorsada JavaScript
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+              </>
+            ) : (
+              <View style={styles.warningBox}>
+                <Text style={styles.warningText}>
+                  🔒 Web Development courses are locked until payment is confirmed.
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>📊 Latest Quiz Results</Text>
+
+            {latestQuizResults.length === 0 ? (
               <Text style={styles.text}>
                 No quiz results yet.
               </Text>
             ) : (
-              quizResults.map((q, index) => (
-                <View
-                  key={q.id || `${q.quiz_name}-${index}`}
-                  style={styles.quizRow}
-                >
-                  <Text style={styles.text}>
-                    {q.quiz_name || "Quiz"}:{" "}
-                    {q.percentage ?? q.score ?? 0}%{" "}
-                    {q.passed ? "✅ Passed" : "❌ Failed"}
-                  </Text>
-                </View>
-              ))
+              latestQuizResults.map((q, index) => {
+                const percentage = Number(
+                  q.percentage ?? q.score ?? 0
+                );
+
+                const passed =
+                  q.passed === true || percentage >= 70;
+
+                return (
+                  <View
+                    key={q.id || `${q.quiz_name}-${index}`}
+                    style={styles.quizRow}
+                  >
+                    <Text style={styles.text}>
+                      {q.quiz_name || "Quiz"}: {percentage}%{" "}
+                      {passed ? "✅ Passed" : "❌ Failed"}
+                    </Text>
+                  </View>
+                );
+              })
             )}
           </View>
 
@@ -374,6 +593,38 @@ export default function LearnerPortal() {
                 🔒 Certificate locked until full payment is confirmed.
               </Text>
             )}
+
+            {isPaid && cssPassed && (
+              <>
+                <Text style={styles.successText}>
+                  🎓 CSS Certificate Ready ✅
+                </Text>
+
+                <Link href="/css-certificate" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      Open CSS Certificate
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+              </>
+            )}
+
+            {isPaid && jsPassed && (
+              <>
+                <Text style={styles.successText}>
+                  🎓 JavaScript Certificate Ready ✅
+                </Text>
+
+                <Link href="/javascript-certificate" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      Open JavaScript Certificate
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+              </>
+            )}
           </View>
 
           <View style={styles.card}>
@@ -387,7 +638,7 @@ export default function LearnerPortal() {
                   🎉 Congratulations! Full Web Development Certificate Ready ✅
                 </Text>
 
-                <Link href="/full-certificate" asChild>
+                <Link href="/master-certificate" asChild>
                   <TouchableOpacity style={styles.startButton}>
                     <Text style={styles.buttonText}>
                       View Final Certificate
@@ -396,10 +647,28 @@ export default function LearnerPortal() {
                 </Link>
               </>
             ) : (
-              <Text style={styles.text}>
-                🔒 Final certificate unlocks after payment and passing HTML,
-                CSS, and JavaScript quizzes.
-              </Text>
+              <>
+                <Text style={styles.text}>
+                  🔒 Final certificate unlocks after payment and passing HTML,
+                  CSS, and JavaScript quizzes.
+                </Text>
+
+                {isPaid && (
+                  <>
+                    <Text style={styles.text}>
+                      HTML: {htmlPassed ? "✅ Passed" : "❌ Not Passed"}
+                    </Text>
+
+                    <Text style={styles.text}>
+                      CSS: {cssPassed ? "✅ Passed" : "❌ Not Passed"}
+                    </Text>
+
+                    <Text style={styles.text}>
+                      JavaScript: {jsPassed ? "✅ Passed" : "❌ Not Passed"}
+                    </Text>
+                  </>
+                )}
+              </>
             )}
           </View>
 
