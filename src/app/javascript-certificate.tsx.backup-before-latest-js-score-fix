@@ -1,0 +1,84 @@
+python3 - <<'PY'
+from pathlib import Path
+
+file_path = Path("src/app/javascript-certificate.tsx")
+
+if not file_path.exists():
+    raise SystemExit("❌ src/app/javascript-certificate.tsx was not found.")
+
+code = file_path.read_text(encoding="utf-8")
+
+backup = Path(
+    "src/app/javascript-certificate.tsx.backup-before-latest-js-score-fix"
+)
+backup.write_text(code, encoding="utf-8")
+
+old = '''      const jsScore = Number(data.js_score ?? 0);
+      const jsQuizScore = Number(data.js_quiz_score ?? 0);
+
+      const finalJavaScriptScore = Math.max(
+        Number.isFinite(jsScore) ? jsScore : 0,
+        Number.isFinite(jsQuizScore) ? jsQuizScore : 0,
+      );
+
+      setVerifiedScore(finalJavaScriptScore);'''
+
+new = '''      // Read the newest submitted JavaScript quiz result.
+      // quiz_results is the history/source of truth for the latest attempt.
+      const { data: latestQuiz, error: latestQuizError } =
+        await supabase
+          .from("quiz_results")
+          .select("percentage, passed, created_at")
+          .eq("student_id", cleanStudentId)
+          .eq("quiz_name", "JavaScript Quiz")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+      if (latestQuizError) {
+        setBilingualMessage(
+          `❌ Could not read the latest JavaScript result: ${latestQuizError.message}`,
+          `❌ Lama akhrin karin natiijadii JavaScript ee ugu dambeysay: ${latestQuizError.message}`,
+        );
+        return;
+      }
+
+      let finalJavaScriptScore = 0;
+
+      if (latestQuiz) {
+        const latestPercentage = Number(latestQuiz.percentage ?? 0);
+
+        finalJavaScriptScore = Number.isFinite(latestPercentage)
+          ? latestPercentage
+          : 0;
+      } else {
+        // Fallback for older student records that do not yet
+        // have JavaScript history inside quiz_results.
+        const jsScore = Number(data.js_score ?? 0);
+        const jsQuizScore = Number(data.js_quiz_score ?? 0);
+
+        finalJavaScriptScore = Number.isFinite(jsQuizScore)
+          ? jsQuizScore
+          : Number.isFinite(jsScore)
+            ? jsScore
+            : 0;
+      }
+
+      setVerifiedScore(finalJavaScriptScore);'''
+
+if old not in code:
+    raise SystemExit(
+        "❌ Expected score-reading section was not found. No changes made."
+    )
+
+code = code.replace(old, new, 1)
+
+file_path.write_text(code, encoding="utf-8")
+
+print("✅ javascript-certificate.tsx updated successfully.")
+print("✅ Certificate now reads the NEWEST JavaScript quiz result.")
+print("✅ Passing score remains 70%.")
+print("✅ Below 70% stays locked.")
+print("✅ 70% or above can unlock only when certificate status is Ready.")
+print("➡️ Refresh JavaScript Certificate and check EGA-2026-8527 again.")
+PY

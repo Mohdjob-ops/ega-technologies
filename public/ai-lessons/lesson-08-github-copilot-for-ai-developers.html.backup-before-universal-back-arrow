@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Elmi Guray Academy AI Developer Course Lesson 8: GitHub Copilot for AI Developers."
+    >
+
+    <title>
+        Lesson 8 - GitHub Copilot for AI Developers
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header,
+        footer {
+            text-align: center;
+        }
+
+        .ega-official-logo {
+            width: 190px;
+            height: 190px;
+            display: block;
+            margin: 20px auto;
+            object-fit: contain;
+        }
+
+        nav {
+            margin: 20px 0;
+        }
+
+        nav a {
+            margin: 0 5px;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+
+        fieldset {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 14px;
+            }
+
+            .ega-official-logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+
+<style id="ega-back-to-portal-style">
+    .ega-back-to-portal {
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 9999;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+
+        padding: 8px 14px;
+
+        color: #1557d6;
+        background: rgba(255, 255, 255, 0.96);
+
+        border: 2px solid #1557d6;
+        border-radius: 999px;
+
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .ega-back-to-portal:hover {
+        background: #eef4ff;
+    }
+
+    .ega-back-arrow {
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    @media (max-width: 600px) {
+        .ega-back-to-portal {
+            top: 10px;
+            left: 10px;
+            padding: 7px 10px;
+            font-size: 13px;
+        }
+
+        .ega-back-arrow {
+            font-size: 21px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<a
+    href="/learner-portal"
+    class="ega-back-to-portal"
+    aria-label="Back to Learner Portal"
+>
+    <span class="ega-back-arrow">←</span>
+    <span>Back to Learner Portal</span>
+</a>
+
+
+
+    <header>
+
+        <img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy logo"
+            class="ega-official-logo"
+        >
+
+        <h1>
+            Elmi Guray Academy
+        </h1>
+
+        <h2>
+            AI Developer Course
+        </h2>
+
+        <h3>
+            Section 2 — Lesson 8
+        </h3>
+
+        <h2>
+            GitHub Copilot for AI Developers
+        </h2>
+
+        <p>
+            Created by
+            <strong>Mohammed Elmi Issak</strong>
+        </p>
+
+        <p>
+            Founder &amp; President,
+            Elmi Guray Academy
+        </p>
+
+        <p>
+            <strong>
+                Knowledge • Integrity • Opportunity
+            </strong>
+        </p>
+
+        <nav>
+            <a href="#english">English</a>
+            |
+            <a href="#somali">Farsamo — Somali</a>
+            |
+            <a href="#gal">GAL</a>
+            |
+            <a href="#examples">Examples</a>
+            |
+            <a href="#test">Test</a>
+            |
+            <a href="#quiz">Quiz</a>
+            |
+            <a href="#remember">Remember</a>
+        </nav>
+
+    </header>
+
+    <hr>
+
+    <main>
+
+        <section>
+
+            <h2>
+                Lesson Introduction
+            </h2>
+
+            <p>
+                GitHub Copilot is an AI-powered coding assistant that can
+                work directly inside development environments such as
+                Visual Studio Code.
+            </p>
+
+            <p>
+                It can help developers generate code, explain code,
+                understand errors, suggest improvements, create tests,
+                and assist with larger development tasks.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Learning Objectives
+            </h2>
+
+            <ul>
+                <li>Explain what GitHub Copilot is.</li>
+                <li>Understand how AI works inside a development environment.</li>
+                <li>Understand code suggestions.</li>
+                <li>Understand Copilot Chat.</li>
+                <li>Understand context.</li>
+                <li>Understand agentic capabilities.</li>
+                <li>Understand configuration and permissions.</li>
+                <li>Review AI-generated code responsibly.</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="english">
+
+            <h2>
+                Technical Explanation — English
+            </h2>
+
+            <h3>
+                What Is GitHub Copilot?
+            </h3>
+
+            <p>
+                GitHub Copilot is an Artificial Intelligence coding
+                assistant designed to support software developers.
+            </p>
+
+            <p>
+                It can work close to the files and code that the developer
+                is already editing.
+            </p>
+
+            <p>
+                It may assist with:
+            </p>
+
+            <ul>
+                <li>Code completion.</li>
+                <li>Code generation.</li>
+                <li>Code explanation.</li>
+                <li>Debugging suggestions.</li>
+                <li>Refactoring.</li>
+                <li>Writing tests.</li>
+                <li>Understanding unfamiliar code.</li>
+            </ul>
+
+            <h3>
+                What Is an IDE?
+            </h3>
+
+            <p>
+                IDE means:
+            </p>
+
+            <blockquote>
+                <strong>
+                    Integrated Development Environment
+                </strong>
+            </blockquote>
+
+            <p>
+                It is software used to write, edit, test, debug, and
+                manage code.
+            </p>
+
+            <p>
+                Visual Studio Code is widely used by developers and can
+                support AI coding tools.
+            </p>
+
+            <h3>
+                Code Suggestions
+            </h3>
+
+            <pre><code>function calculateTotal(price, quantity) {
+    return price * quantity;
+}</code></pre>
+
+            <p>
+                A suggestion is not proof that the code is correct.
+                The developer must review and test it.
+            </p>
+
+            <h3>
+                Copilot Chat
+            </h3>
+
+            <p>
+                Copilot Chat allows a developer to ask programming
+                questions using natural language.
+            </p>
+
+            <pre><code>Explain this function.
+
+Find a possible bug.
+
+Create a validation function.
+
+Explain this error message.
+
+Write tests for this code.</code></pre>
+
+            <h3>
+                Context
+            </h3>
+
+            <p>
+                Context is the information available to the AI when it
+                generates an answer.
+            </p>
+
+            <ul>
+                <li>Your prompt.</li>
+                <li>The current file.</li>
+                <li>Selected code.</li>
+                <li>Error messages.</li>
+                <li>Nearby functions.</li>
+                <li>Related project files.</li>
+            </ul>
+
+            <p>
+                Better context normally produces more relevant assistance.
+            </p>
+
+            <h3>
+                Agentic Capabilities
+            </h3>
+
+            <p>
+                Agentic AI can attempt several connected actions toward
+                one development goal.
+            </p>
+
+            <pre><code>Create a contact form,
+add validation,
+and explain the changes.</code></pre>
+
+            <p>
+                The developer still remains responsible for reviewing
+                important changes.
+            </p>
+
+            <h3>
+                Configuration
+            </h3>
+
+            <p>
+                AI coding tools may contain settings that control:
+            </p>
+
+            <ul>
+                <li>Code suggestions.</li>
+                <li>Supported languages.</li>
+                <li>Chat behavior.</li>
+                <li>Project context.</li>
+                <li>Permissions.</li>
+                <li>Available tools or actions.</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="somali">
+
+            <h2>
+                Farsamo — Somali
+            </h2>
+
+            <h3>
+                GitHub Copilot Waa Maxay?
+            </h3>
+
+            <p>
+                GitHub Copilot waa qalab AI ah oo Developer-ka ka caawiya
+                coding-ka.
+            </p>
+
+            <p>
+                Wuxuu ka dhex shaqayn karaa development environment sida
+                Visual Studio Code.
+            </p>
+
+            <ul>
+                <li>Soo jeedinta code.</li>
+                <li>Samaynta code cusub.</li>
+                <li>Sharaxaadda code.</li>
+                <li>Fahamka error-ka.</li>
+                <li>Hagaajinta code.</li>
+                <li>Samaynta tests.</li>
+            </ul>
+
+            <h3>
+                IDE Waa Maxay?
+            </h3>
+
+            <p>
+                IDE waa meel Developer-ku ku qoro, ku saxo, ku tijaabiyo,
+                kuna maamulo code.
+            </p>
+
+            <h3>
+                Context
+            </h3>
+
+            <p>
+                Context waa macluumaadka AI-gu haysto marka uu jawaab
+                samaynayo.
+            </p>
+
+            <h3>
+                Agentic AI
+            </h3>
+
+            <p>
+                Agentic AI waa marka AI-gu isku dayo dhowr tallaabo oo
+                isku xiran si uu u gaaro hal ujeeddo.
+            </p>
+
+            <p>
+                Developer-ka ayaa wali mas'uul ka ah natiijada kama
+                dambaysta ah.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section id="gal">
+
+            <h2>
+                GAL — General Analogy Learning — English
+            </h2>
+
+            <p>
+                GitHub Copilot is like a skilled carpenter's assistant.
+            </p>
+
+            <p>
+                The assistant can prepare materials and suggest
+                techniques, but the carpenter still checks the
+                measurements and quality.
+            </p>
+
+            <ul>
+                <li>Developer = Carpenter.</li>
+                <li>Software project = Table.</li>
+                <li>Copilot = Skilled assistant.</li>
+                <li>Prompt = Instruction.</li>
+                <li>Testing = Measurement and inspection.</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                GAL — Somali
+            </h2>
+
+            <p>
+                Ka fikir nijaar samaynaya miis.
+            </p>
+
+            <p>
+                Kaaliye xirfad leh ayaa diyaarin kara qaybo ama soo jeedin
+                kara farsamo, laakiin nijaarku waa inuu hubiyaa cabbirka
+                iyo tayada.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section id="examples">
+
+            <h2>
+                Practical Examples
+            </h2>
+
+            <h3>
+                Example 1 — HTML Button
+            </h3>
+
+            <pre><code>&lt;button&gt;
+    Start Lesson
+&lt;/button&gt;</code></pre>
+
+            <h3>
+                Browser Output
+            </h3>
+
+            <button>
+                Start Lesson
+            </button>
+
+            <h3>
+                Example 2 — JavaScript Function
+            </h3>
+
+            <pre><code>function addNumbers(a, b) {
+    return a + b;
+}</code></pre>
+
+            <pre><code>console.log(addNumbers(5, 3));</code></pre>
+
+            <p>
+                Expected output:
+            </p>
+
+            <pre><code>8</code></pre>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Important Rules
+            </h2>
+
+            <ul>
+                <li>Use AI as an assistant.</li>
+                <li>Review generated code.</li>
+                <li>Understand important code before using it.</li>
+                <li>Test generated code.</li>
+                <li>Give AI useful context.</li>
+                <li>Never casually share passwords or secret keys.</li>
+                <li>Review agentic actions before accepting them.</li>
+                <li>Keep developing your own programming skills.</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Common Beginner Mistakes
+            </h2>
+
+            <ul>
+                <li>Copying AI-generated code without reading it.</li>
+                <li>Assuming AI-generated code must be correct.</li>
+                <li>Giving vague prompts.</li>
+                <li>Providing too little context.</li>
+                <li>Ignoring error messages.</li>
+                <li>Sharing secret keys.</li>
+                <li>Publishing generated code without testing.</li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="test">
+
+            <h2>
+                Lesson Test — Multiple Choice
+            </h2>
+
+            <form>
+
+                <fieldset>
+                    <legend>
+                        1. What is GitHub Copilot?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test1">
+                        An AI coding assistant
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test1">
+                        A printer
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test1">
+                        A camera
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        2. What does IDE mean?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test2">
+                        Integrated Development Environment
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test2">
+                        Internet Design Engine
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test2">
+                        Internal Data Entry
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        3. What should a developer do with generated code?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test3">
+                        Review and test it
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test3">
+                        Publish immediately
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test3">
+                        Never read it
+                    </label>
+                </fieldset>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Test Answer Key
+            </h2>
+
+            <ol>
+                <li>A — An AI coding assistant.</li>
+                <li>A — Integrated Development Environment.</li>
+                <li>A — Review and test it.</li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section id="quiz">
+
+            <h2>
+                Lesson 8 Quiz — Multiple Choice
+            </h2>
+
+            <form>
+
+                <fieldset>
+                    <legend>
+                        1. Which tool is an AI coding assistant?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz1">
+                        GitHub Copilot
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz1">
+                        Calculator
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz1">
+                        Camera
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        2. Which application is commonly used for coding?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz2">
+                        Visual Studio Code
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz2">
+                        Clock
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz2">
+                        Music Player
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>
+                        3. What can Copilot Chat help explain?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz3">
+                        Code and programming errors
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz3">
+                        Only photographs
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz3">
+                        Only music
+                    </label>
+                </fieldset>
+
+                <button type="submit">
+                    Submit Quiz
+                </button>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Quiz Answer Key
+            </h2>
+
+            <ol>
+                <li>A — GitHub Copilot.</li>
+                <li>A — Visual Studio Code.</li>
+                <li>A — Code and programming errors.</li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section id="remember">
+
+            <h2>
+                Remember
+            </h2>
+
+            <p>
+                <strong>
+                    GitHub Copilot is an AI coding assistant.<br><br>
+
+                    It can work inside Visual Studio Code and other
+                    supported development environments.<br><br>
+
+                    Copilot can suggest, generate, and explain code.<br><br>
+
+                    Copilot Chat lets developers ask questions using
+                    natural language.<br><br>
+
+                    Context helps AI understand the task.<br><br>
+
+                    Agentic AI can attempt several connected development
+                    steps.<br><br>
+
+                    AI-generated code can still contain mistakes.<br><br>
+
+                    Never blindly accept generated code.<br><br>
+
+                    Never casually share secret keys or passwords.<br><br>
+
+                    The Developer remains responsible.<br><br>
+
+                    Generate → Review → Understand → Test → Improve.
+                </strong>
+            </p>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            <strong>
+                Elmi Guray Academy
+            </strong>
+        </p>
+
+        <p>
+            AI Developer Course
+        </p>
+
+        <p>
+            Section 2 — Lesson 8
+        </p>
+
+        <p>
+            GitHub Copilot for AI Developers
+        </p>
+
+        <p>
+            Created by
+            <strong>Mohammed Elmi Issak</strong>
+        </p>
+
+        <p>
+            Founder &amp; President
+        </p>
+
+        <p>
+            <strong>
+                Knowledge • Integrity • Opportunity
+            </strong>
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

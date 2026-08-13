@@ -16,12 +16,12 @@ const ADMIN_TEMPLATE_ID = "template_w01c7ku";
 const STUDENT_TEMPLATE_ID = "template_9se77eg";
 const PUBLIC_KEY = "eGuNf2PLEmedxzflY";
 
-const COURSE_NAME = "AI Developer Course";
+const COURSE_NAME = "Full Web Development";
 const MAX_STUDENT_ID_ATTEMPTS = 8;
 const ATTEMPT_SOURCE = "vercel-registration-page";
 
 const START_DATE_ANNOUNCEMENT =
-  "The course will officially start on September 1, 2026, both online and offline. / Koorsadu waxay si rasmi ah u bilaaban doontaa 1-da Sebtembar 2026, iyadoo lagu baran doono online iyo offline labadaba.";
+  "The official course starting date will be announced later by the EGA administrator.";
 
 const PAYMENT_ANNOUNCEMENT =
   "The full course fee is due on the student's registration date.";
@@ -33,7 +33,6 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [referralStudentId, setReferralStudentId] = useState("");
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
@@ -201,13 +200,12 @@ export default function RegisterPage() {
     const cleanName = formatName(fullName);
     const cleanPhone = normalizePhone(phone);
     const cleanEmail = email.trim().toLowerCase();
-    const cleanReferralStudentId = referralStudentId.trim().toUpperCase();
     const courseFee = Number(fee || 0);
 
     if (cleanName.split(" ").length < 2) {
       await stopWithMessage(
         "validation_failed",
-        "⚠️ Please enter your full name.\n⚠️ Fadlan geli magacaaga oo buuxa."
+        "⚠️ Please enter your full name."
       );
       return;
     }
@@ -215,7 +213,7 @@ export default function RegisterPage() {
     if (cleanPhone.length < 9) {
       await stopWithMessage(
         "validation_failed",
-        "⚠️ Please enter a valid phone number.\n⚠️ Fadlan geli lambar taleefan oo sax ah."
+        "⚠️ Please enter a valid phone number."
       );
       return;
     }
@@ -223,7 +221,7 @@ export default function RegisterPage() {
     if (!isValidEmail(cleanEmail)) {
       await stopWithMessage(
         "validation_failed",
-        "⚠️ Please enter a valid email address.\n⚠️ Fadlan geli cinwaan iimayl oo sax ah."
+        "⚠️ Please enter a valid email address."
       );
       return;
     }
@@ -234,33 +232,13 @@ export default function RegisterPage() {
     ) {
       await stopWithMessage(
         "validation_failed",
-        "⚠️ Course fee is unavailable. Please try again.\n⚠️ Lacagta koorsada lama heli karo. Fadlan isku day mar kale."
+        "⚠️ Course fee is unavailable. Please try again."
       );
       return;
     }
 
-    let verifiedReferrer: any = null;
-
-    if (cleanReferralStudentId) {
-      const { data: referrer, error: referrerError } =
-        await supabase
-          .from("students")
-          .select("student_id, name, email, phone")
-          .eq("student_id", cleanReferralStudentId)
-          .maybeSingle();
-
-      if (referrerError || !referrer) {
-        setMessage(
-  "❌ Referral Student ID was not found.\n❌ Student ID-ga ardayga ku soo gudbiyey lama helin."
-);
-        return;
-      }
-
-      verifiedReferrer = referrer;
-    }
-
     setLoading(true);
-    setMessage("⏳ Registering student...\n⏳ Ardayga waa la diiwaangelinayaa...");
+    setMessage("⏳ Registering student...");
 
     await logRegistrationAttempt(
       "submitted",
@@ -353,7 +331,6 @@ export default function RegisterPage() {
         payment_method: "Not Selected",
         payment_reference: "Not Provided",
         paid_at: null,
-        referred_by_student_id: verifiedReferrer?.student_id || null,
       });
 
     if (error) {
@@ -562,7 +539,7 @@ export default function RegisterPage() {
         <Link href="/" asChild>
           <TouchableOpacity style={styles.backButton}>
             <Text style={styles.backText}>
-              ← Back to Home / Ku Noqo Bogga Hore
+              ← Back to Home
             </Text>
           </TouchableOpacity>
         </Link>
@@ -570,14 +547,10 @@ export default function RegisterPage() {
         <View style={styles.courseBox}>
           <Text style={styles.courseTitle}>
             {COURSE_NAME}
-            {"\n"}
-            Koorsada Horumarinta AI-ga
           </Text>
 
           <Text style={styles.feeText}>
             Course Fee: {formatFee(fee)}
-            {"\n"}
-            Lacagta Koorsada: {formatFee(fee)}
           </Text>
 
           <Text style={styles.paymentText}>
@@ -586,194 +559,85 @@ export default function RegisterPage() {
           </Text>
 
           <Text style={styles.startText}>
-            📅 The course will officially start on September 1, 2026, both online and offline.
-            {"\n"}
-            📅 Koorsadu waxay si rasmi ah u bilaaban doontaa 1-da Sebtembar 2026, iyadoo lagu baran doono online iyo offline labadaba.
+            📅 The official course starting date will
+            be announced later by the administrator.
           </Text>
         </View>
 
-        <View style={styles.referralCardsRow}>
-          <View style={[styles.referralCard, styles.somaliReferralCard]}>
-            <Text style={styles.somaliReferralTitle}>
-              🇪🇹 ABAALMARINTA EGA EE ARDAYGA
-            </Text>
+        <View style={styles.rewardBox}>
+          <Text style={styles.rewardTitle}>
+            🎁 EGA Student Referral Reward
+          </Text>
 
-            <Text style={styles.referralLanguage}>
-              Somali Speakers
-            </Text>
+          <Text style={styles.rewardText}>
+            🇪🇹 3,000 Birr Monthly Plan
+          </Text>
 
-            <Text style={styles.referralIntro}>
-              Ku soo xiro arday kale si uu isu diiwaangeliyo oo hel abaalmarin adigu.
-            </Text>
+          <Text style={styles.rewardText}>
+            10 verified days → 150 Birr
+          </Text>
 
-            <View style={styles.referralDivider} />
+          <Text style={styles.rewardText}>
+            20 verified days → 300 Birr cumulative
+          </Text>
 
-            <Text style={styles.referralPlanTitle}>
-              🇪🇹 Qorshaha 3,000 Birr Bishii
-            </Text>
+          <Text style={styles.rewardText}>
+            30 verified days → 450 Birr cumulative maximum
+          </Text>
 
-            <Text style={styles.referralLine}>
-              ✅ 10 maalmood oo la xaqiijiyay → 150 Birr
-            </Text>
+          <Text style={styles.rewardText}>
+            🌍 English / International — $15 USD Monthly Plan
+          </Text>
 
-            <Text style={styles.referralLine}>
-              ✅ 20 maalmood oo la xaqiijiyay → 300 Birr (wadar ahaan)
-            </Text>
+          <Text style={styles.rewardText}>
+            10 verified days → $0.75
+          </Text>
 
-            <Text style={styles.referralLine}>
-              ✅ 30 maalmood oo la xaqiijiyay → 450 Birr (ugu badnaan bishii)
-            </Text>
+          <Text style={styles.rewardText}>
+            20 verified days → $1.50 cumulative
+          </Text>
 
-            <View style={styles.referralDivider} />
+          <Text style={styles.rewardText}>
+            30 verified days → $2.25 cumulative maximum
+          </Text>
 
-            <Text style={styles.referralPlanTitle}>
-              🌍 Qorshaha Ingiriisiga / Caalamiga ah — $15 USD Bishii
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 maalmood oo la xaqiijiyay → $0.75
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 maalmood oo la xaqiijiyay → $1.50 (wadar ahaan)
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 maalmood oo la xaqiijiyay → $2.25 (ugu badnaan bishii)
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralNote}>
-              ✅ Abaalmarintu waxay u baahan tahay lacag bixinta oo la xaqiijiyay iyo ka qaybgalka la hubiyay. Heer kasta oo 10 maalmood ah hal mar oo keliya ayaa la abaalmarin karaa.
-            </Text>
-          </View>
-
-          <View style={[styles.referralCard, styles.englishReferralCard]}>
-            <Text style={styles.englishReferralTitle}>
-              🌍 EGA STUDENT REFERRAL REWARD
-            </Text>
-
-            <Text style={styles.referralLanguage}>
-              English Speakers
-            </Text>
-
-            <Text style={styles.referralIntro}>
-              Refer another student to register and earn rewards.
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralPlanTitle}>
-              🇪🇹 3,000 Birr Monthly Plan
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 verified days → 150 Birr
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 verified days → 300 Birr cumulative
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 verified days → 450 Birr cumulative maximum
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralPlanTitle}>
-              🌍 English / International — $15 USD Monthly Plan
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 verified days → $0.75
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 verified days → $1.50 cumulative
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 verified days → $2.25 cumulative maximum
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralNote}>
-              ✅ Rewards require confirmed payment and verified attendance. Each 10-day milestone can be rewarded only once.
-            </Text>
-          </View>
+          <Text style={styles.rewardText}>
+            ✅ Rewards require confirmed payment and verified attendance.
+            Each 10-day milestone can be rewarded only once.
+          </Text>
         </View>
 
-        <Text style={styles.label}>
-          Full Name
-          {"\n"}
-          Magaca oo Buuxa
-        </Text>
+        <Text style={styles.label}>Full Name</Text>
 
         <TextInput
           style={styles.input}
           value={fullName}
           onChangeText={setFullName}
-          placeholder="Enter your full name / Geli magacaaga oo buuxa"
+          placeholder="Enter your full name"
           autoCapitalize="words"
         />
 
-        <Text style={styles.label}>
-          Phone Number
-          {"\n"}
-          Lambarka Taleefanka
-        </Text>
+        <Text style={styles.label}>Phone Number</Text>
 
         <TextInput
           style={styles.input}
           value={phone}
           onChangeText={setPhone}
-          placeholder="Enter your phone number / Geli lambarka taleefanka"
+          placeholder="Enter your phone number"
           keyboardType="phone-pad"
         />
 
-        <Text style={styles.label}>
-          Email Address
-          {"\n"}
-          Cinwaanka Iimaylka
-        </Text>
+        <Text style={styles.label}>Email Address</Text>
 
         <TextInput
           style={styles.input}
           value={email}
           onChangeText={setEmail}
-          placeholder="Enter your email address / Geli cinwaanka iimaylka"
+          placeholder="Enter your email address"
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
         />
-
-        <Text style={styles.label}>
-          Referral Student ID (Optional)
-          {"\n"}
-          Aqoonsiga Ardayga Ku Soo Gudbiyey (Ikhtiyaari)
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          value={referralStudentId}
-          onChangeText={setReferralStudentId}
-          placeholder="Example / Tusaale: EGA-2026-123456"
-          autoCapitalize="characters"
-          autoCorrect={false}
-        />
-
-        <Text style={styles.referralHelpText}>
-          If another EGA student referred you, enter their Student ID here.
-          {"\n"}
-          Haddii arday kale oo EGA ah kuu soo gudbiyey, geli Student ID-giisa halkan.
-          {"\n\n"}
-          The referral reward starts only after payment and attendance are verified.
-          {"\n"}
-          Abaalmarinta gudbintu waxay bilaabataa kaliya marka lacag bixinta iyo xaadiritaanka la xaqiijiyo.
-        </Text>
 
         {message ? (
           <View style={styles.messageBox}>
@@ -791,8 +655,8 @@ export default function RegisterPage() {
         >
           <Text style={styles.buttonText}>
             {loading
-              ? "Registering... / Diiwaangelin..."
-              : "Register Now / Isdiiwaangeli Hadda"}
+              ? "Registering..."
+              : "Register Now"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -899,87 +763,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#9a3412",
     marginBottom: 8,
-  },
-
-  referralCardsRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-    marginBottom: 20,
-  },
-
-  referralCard: {
-    flexGrow: 1,
-    flexBasis: 420,
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 18,
-  },
-
-  somaliReferralCard: {
-    backgroundColor: "#f4fbf3",
-    borderColor: "#b7ddb1",
-  },
-
-  englishReferralCard: {
-    backgroundColor: "#f3f8ff",
-    borderColor: "#b8d4ff",
-  },
-
-  somaliReferralTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#166534",
-    lineHeight: 30,
-  },
-
-  englishReferralTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1d4ed8",
-    lineHeight: 30,
-  },
-
-  referralLanguage: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#475569",
-    marginTop: 4,
-    marginBottom: 14,
-  },
-
-  referralIntro: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#1f2937",
-  },
-
-  referralDivider: {
-    height: 1,
-    backgroundColor: "#cbd5e1",
-    marginVertical: 14,
-  },
-
-  referralPlanTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#12306d",
-    marginBottom: 8,
-    lineHeight: 26,
-  },
-
-  referralLine: {
-    fontSize: 16,
-    color: "#1f2937",
-    lineHeight: 25,
-    marginBottom: 6,
-  },
-
-  referralNote: {
-    fontSize: 15,
-    color: "#334155",
-    lineHeight: 23,
-    fontWeight: "600",
   },
   rewardText: {
     fontSize: 16,

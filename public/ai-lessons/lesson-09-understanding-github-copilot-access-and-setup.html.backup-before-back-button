@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Elmi Guray Academy AI Developer Course Lesson 9: Understanding GitHub Copilot Access and Setup."
+    >
+
+    <title>
+        Lesson 9 - Understanding GitHub Copilot Access and Setup
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header,
+        footer {
+            text-align: center;
+        }
+
+        .ega-official-logo {
+            width: 190px;
+            height: 190px;
+            display: block;
+            margin: 20px auto;
+            object-fit: contain;
+        }
+
+        nav {
+            margin: 20px 0;
+        }
+
+        nav a {
+            margin: 0 5px;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+
+        fieldset {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 14px;
+            }
+
+            .ega-official-logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+
+<style id="ega-back-to-portal-style">
+    .ega-back-to-portal {
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 9999;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+
+        padding: 8px 14px;
+
+        color: #1557d6;
+        background: rgba(255, 255, 255, 0.96);
+
+        border: 2px solid #1557d6;
+        border-radius: 999px;
+
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .ega-back-to-portal:hover {
+        background: #eef4ff;
+    }
+
+    .ega-back-arrow {
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    @media (max-width: 600px) {
+        .ega-back-to-portal {
+            top: 10px;
+            left: 10px;
+            padding: 7px 10px;
+            font-size: 13px;
+        }
+
+        .ega-back-arrow {
+            font-size: 21px;
+        }
+    }
+</style>
+
+
+<style id="ega-lesson-back-style">
+.ega-lesson-back {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 99999;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 13px;
+
+    background: rgba(255,255,255,0.97);
+    color: #1557d6;
+
+    border: 2px solid #1557d6;
+    border-radius: 999px;
+
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.ega-lesson-back:hover {
+    background: #eef4ff;
+}
+
+.ega-lesson-back-arrow {
+    font-size: 23px;
+    line-height: 1;
+}
+
+@media (max-width: 600px) {
+    .ega-lesson-back {
+        top: 8px;
+        left: 8px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .ega-lesson-back-arrow {
+        font-size: 20px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<a
+    href="/learner-portal"
+    class="ega-lesson-back"
+    aria-label="Back to Learner Portal"
+>
+    <span class="ega-lesson-back-arrow">←</span>
+    <span>Back to Learner Portal</span>
+</a>
+
+
+
+
+
+
+
+    <header>
+
+        <img
+            src="../ega-logo.png"
+            alt="Elmi Guray Academy logo"
+            class="ega-official-logo"
+        >
+
+        <h1>
+            Elmi Guray Academy
+        </h1>
+
+        <h2>
+            AI Developer Course
+        </h2>
+
+        <h3>
+            Section 2 — Lesson 9
+        </h3>
+
+        <h2>
+            Understanding GitHub Copilot Access and Setup
+        </h2>
+
+        <p>
+            Created by
+            <strong>Mohammed Elmi Issak</strong>
+        </p>
+
+        <p>
+            Founder &amp; President,
+            Elmi Guray Academy
+        </p>
+
+        <p>
+            <strong>
+                Knowledge • Integrity • Opportunity
+            </strong>
+        </p>
+
+        <nav>
+            <a href="#english">English</a>
+            |
+            <a href="#somali">Farsamo — Somali</a>
+            |
+            <a href="#gal">GAL</a>
+            |
+            <a href="#practical">Practical</a>
+            |
+            <a href="#test">Test</a>
+            |
+            <a href="#quiz">Quiz</a>
+            |
+            <a href="#remember">Remember</a>
+        </nav>
+
+    </header>
+
+    <hr>
+
+    <main>
+
+        <section>
+
+            <h2>
+                Lesson Introduction
+            </h2>
+
+            <p>
+                In Lesson 8, we introduced GitHub Copilot as an AI coding
+                assistant.
+            </p>
+
+            <p>
+                In this lesson, we will focus more closely on how Copilot
+                becomes part of a developer's working environment,
+                how developers access it, why account authentication is
+                required, and why subscription limits should be understood
+                before depending heavily on AI coding tools.
+            </p>
+
+            <p>
+                We will use Visual Studio Code as our main example because
+                it provides a common environment for learning AI-assisted
+                software development.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Learning Objectives
+            </h2>
+
+            <p>
+                By the end of this lesson, you should be able to:
+            </p>
+
+            <ul>
+                <li>
+                    Explain how GitHub Copilot connects to a development
+                    environment.
+                </li>
+
+                <li>
+                    Understand the difference between an editor and an
+                    extension.
+                </li>
+
+                <li>
+                    Identify important Copilot capabilities.
+                </li>
+
+                <li>
+                    Understand why a GitHub account is required.
+                </li>
+
+                <li>
+                    Understand why AI coding services may have usage plans
+                    and limits.
+                </li>
+
+                <li>
+                    Recognize that pricing and plan details may change.
+                </li>
+
+                <li>
+                    Understand the basic Copilot setup workflow.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="english">
+
+            <h2>
+                Technical Explanation — English
+            </h2>
+
+            <h3>
+                1. Copilot Inside the Development Environment
+            </h3>
+
+            <p>
+                GitHub Copilot adds AI-assisted development capabilities
+                to supported coding environments.
+            </p>
+
+            <p>
+                Depending on the editor or IDE, Copilot may be available
+                through an extension, integration, or built-in feature.
+            </p>
+
+            <p>
+                This means the developer does not always need to leave the
+                coding environment to ask an AI tool for help.
+            </p>
+
+            <h3>
+                2. What Is an Extension?
+            </h3>
+
+            <p>
+                An extension is an additional software component that adds
+                new capabilities to an existing application.
+            </p>
+
+            <p>
+                For example, Visual Studio Code can support extensions for:
+            </p>
+
+            <ul>
+                <li>Programming languages.</li>
+                <li>Debugging tools.</li>
+                <li>Formatting.</li>
+                <li>Git integration.</li>
+                <li>AI coding assistance.</li>
+            </ul>
+
+            <p>
+                An extension does not normally replace the editor.
+                Instead, it adds functionality to it.
+            </p>
+
+            <h3>
+                3. Main AI Capabilities
+            </h3>
+
+            <p>
+                A Copilot-enabled development environment may provide
+                several forms of AI assistance.
+            </p>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            Code Completion
+                        </td>
+
+                        <td>
+                            Suggests code while the developer is typing.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Code Generation
+                        </td>
+
+                        <td>
+                            Generates code from an instruction or prompt.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            AI Chat
+                        </td>
+
+                        <td>
+                            Lets developers ask questions about code and
+                            software problems.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Agentic Assistance
+                        </td>
+
+                        <td>
+                            Can attempt several related steps toward a
+                            development goal.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <h3>
+                4. Code Completion
+            </h3>
+
+            <p>
+                Suppose you start writing:
+            </p>
+
+            <pre><code>function greetStudent(name) {</code></pre>
+
+            <p>
+                An AI coding assistant may predict the next part:
+            </p>
+
+            <pre><code>function greetStudent(name) {
+    return "Welcome, " + name;
+}</code></pre>
+
+            <p>
+                This is called a code suggestion or code completion.
+            </p>
+
+            <p>
+                You should still understand the suggestion before
+                accepting it.
+            </p>
+
+            <h3>
+                5. Code Generation
+            </h3>
+
+            <p>
+                Instead of starting the code yourself, you can also
+                describe what you need.
+            </p>
+
+            <p>
+                Example prompt:
+            </p>
+
+            <pre><code>Create a JavaScript function that checks
+whether a quiz score is 70 or higher.</code></pre>
+
+            <p>
+                Possible generated code:
+            </p>
+
+            <pre><code>function hasPassed(score) {
+    return score >= 70;
+}</code></pre>
+
+            <h3>
+                6. AI Chat
+            </h3>
+
+            <p>
+                AI chat provides a conversational way to work with the
+                coding assistant.
+            </p>
+
+            <p>
+                You might ask:
+            </p>
+
+            <pre><code>Explain this file.
+
+Why am I getting this error?
+
+How can I make this function easier to understand?
+
+Write tests for this function.
+
+Explain the difference between let and const.</code></pre>
+
+            <h3>
+                7. AI Agents
+            </h3>
+
+            <p>
+                More advanced AI coding systems may work in an agent-like
+                way.
+            </p>
+
+            <p>
+                Instead of producing only one answer, an AI agent may
+                attempt several related development steps.
+            </p>
+
+            <p>
+                For example:
+            </p>
+
+            <pre><code>Create a registration form,
+add validation,
+check the existing project structure,
+and explain the files you changed.</code></pre>
+
+            <p>
+                This type of assistance can be powerful, but the developer
+                should review important actions before trusting the final
+                result.
+            </p>
+
+            <h3>
+                8. GitHub Account and Sign-In
+            </h3>
+
+            <p>
+                GitHub Copilot is connected to GitHub services.
+            </p>
+
+            <p>
+                Therefore, the developer normally needs to authenticate
+                with a GitHub account before using Copilot features.
+            </p>
+
+            <p>
+                Authentication means proving to the service which account
+                you are using.
+            </p>
+
+            <p>
+                A typical flow may look like:
+            </p>
+
+            <ol>
+                <li>
+                    Open Visual Studio Code.
+                </li>
+
+                <li>
+                    Open the Copilot feature or extension.
+                </li>
+
+                <li>
+                    Choose the sign-in option.
+                </li>
+
+                <li>
+                    Authenticate using your GitHub account.
+                </li>
+
+                <li>
+                    Return to the development environment.
+                </li>
+
+                <li>
+                    Confirm that Copilot features are available.
+                </li>
+            </ol>
+
+            <h3>
+                9. Plans, Usage Limits, and Cost
+            </h3>
+
+            <p>
+                AI coding services can have different access plans and
+                usage limits.
+            </p>
+
+            <p>
+                Some users may have limited access while heavier use may
+                require a paid subscription.
+            </p>
+
+            <p>
+                The exact names, prices, limits, and available features
+                can change over time.
+            </p>
+
+            <p>
+                Therefore, an AI Developer should never build permanent
+                assumptions around an old price or plan name.
+            </p>
+
+            <blockquote>
+                <strong>
+                    Always check the current official service information
+                    before paying for an AI development tool.
+                </strong>
+            </blockquote>
+
+            <h3>
+                10. Usage Planning
+            </h3>
+
+            <p>
+                Developers should think about how heavily they intend to
+                use AI tools.
+            </p>
+
+            <p>
+                Occasional code assistance may require less usage than
+                running AI agents frequently across a large software
+                project.
+            </p>
+
+            <p>
+                This is one reason usage limits matter.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section id="somali">
+
+            <h2>
+                Farsamo — Somali
+            </h2>
+
+            <h3>
+                Copilot iyo Development Environment
+            </h3>
+
+            <p>
+                GitHub Copilot wuxuu AI ku daraa meesha Developer-ku
+                code-ka ku qorayo.
+            </p>
+
+            <p>
+                Meelo qaar wuxuu uga shaqayn karaa extension ahaan,
+                meelaha kalena wuxuu noqon karaa integration si dhow ula
+                shaqaysa editor-ka.
+            </p>
+
+            <h3>
+                Extension Waa Maxay?
+            </h3>
+
+            <p>
+                Extension waa software yar oo awood cusub ku dara
+                application hore u jiray.
+            </p>
+
+            <p>
+                Tusaale ahaan, Visual Studio Code waxaa lagu dari karaa
+                extensions loogu talagalay:
+            </p>
+
+            <ul>
+                <li>Programming languages.</li>
+                <li>Debugging.</li>
+                <li>Code formatting.</li>
+                <li>Git.</li>
+                <li>AI coding assistance.</li>
+            </ul>
+
+            <h3>
+                Awoodaha Muhiimka ah
+            </h3>
+
+            <p>
+                Copilot wuxuu Developer-ka ka caawin karaa dhowr qaab.
+            </p>
+
+            <ul>
+                <li>
+                    Code Completion — dhamaystirka code aad bilowday.
+                </li>
+
+                <li>
+                    Code Generation — samaynta code iyadoo laga duulayo
+                    prompt.
+                </li>
+
+                <li>
+                    AI Chat — su'aalo iyo jawaabo ku saabsan code.
+                </li>
+
+                <li>
+                    Agentic Assistance — dhowr tallaabo oo isku xiran oo
+                    AI-gu isku dayo inuu qabto.
+                </li>
+            </ul>
+
+            <h3>
+                GitHub Account iyo Sign-In
+            </h3>
+
+            <p>
+                Si Copilot loo isticmaalo, Developer-ku wuxuu caadi ahaan
+                u baahan yahay GitHub account.
+            </p>
+
+            <p>
+                Sign-in wuxuu xaqiijinayaa account-ka adeegga isticmaalaya.
+            </p>
+
+            <p>
+                Tallaabooyinka guud waxay noqon karaan:
+            </p>
+
+            <ol>
+                <li>
+                    Fur Visual Studio Code.
+                </li>
+
+                <li>
+                    Fur Copilot.
+                </li>
+
+                <li>
+                    Dooro sign-in.
+                </li>
+
+                <li>
+                    Ku gal GitHub account-kaaga.
+                </li>
+
+                <li>
+                    Ku soo noqo editor-ka.
+                </li>
+
+                <li>
+                    Hubi in Copilot shaqaynayo.
+                </li>
+            </ol>
+
+            <h3>
+                Qiime iyo Usage Limits
+            </h3>
+
+            <p>
+                Adeegyada AI coding-ka waxay yeelan karaan qorshayaal
+                kala duwan iyo usage limits.
+            </p>
+
+            <p>
+                Isticmaal yar iyo isticmaal badan isku baahi ma aha.
+            </p>
+
+            <p>
+                Qof si joogto ah u isticmaala AI agents wuxuu isticmaali
+                karaa resources ka badan qof mararka qaar keliya code
+                suggestion isticmaala.
+            </p>
+
+            <p>
+                Magacyada plans-ka, qiimaha, limits-ka, iyo features-ku
+                way isbeddeli karaan.
+            </p>
+
+            <blockquote>
+                <strong>
+                    Ka hor intaadan lacag bixin, hubi macluumaadka
+                    rasmiga ah ee hadda jira.
+                </strong>
+            </blockquote>
+
+        </section>
+
+        <hr>
+
+        <section id="gal">
+
+            <h2>
+                GAL — General Analogy Learning — English
+            </h2>
+
+            <h3>
+                Copilot Is Like Adding a Skilled Assistant to Your Workshop
+            </h3>
+
+            <p>
+                Imagine a carpenter already has a workshop.
+            </p>
+
+            <p>
+                The workshop contains the table, tools, measurements, and
+                materials needed for the job.
+            </p>
+
+            <p>
+                Instead of leaving the workshop every time help is needed,
+                the carpenter brings a skilled assistant into the workshop.
+            </p>
+
+            <p>
+                The assistant can suggest the next cut, prepare material,
+                or help solve a problem.
+            </p>
+
+            <p>
+                Copilot works similarly inside a development environment.
+            </p>
+
+            <ul>
+                <li>
+                    Workshop = IDE or code editor.
+                </li>
+
+                <li>
+                    Carpenter = Developer.
+                </li>
+
+                <li>
+                    Assistant = GitHub Copilot.
+                </li>
+
+                <li>
+                    Instructions = Prompts.
+                </li>
+
+                <li>
+                    Workshop membership/access = Account and subscription.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                GAL — Somali
+            </h2>
+
+            <p>
+                Ka fikir nijaar leh workshop uu ku shaqeeyo.
+            </p>
+
+            <p>
+                Halkii uu mar kasta bannaanka uga bixi lahaa si uu
+                caawimo u raadsado, wuxuu kaaliye xirfad leh keenaa
+                workshop-ka dhexdiisa.
+            </p>
+
+            <p>
+                Kaaliyuhu wuxuu ka caawin karaa jaridda, cabbirka,
+                qorshaynta, ama xalinta dhibaato.
+            </p>
+
+            <p>
+                Sidaas oo kale Copilot wuxuu Developer-ka uga dhex
+                shaqayn karaa editor-ka ama IDE-ga.
+            </p>
+
+            <ul>
+                <li>
+                    Workshop = IDE.
+                </li>
+
+                <li>
+                    Nijaar = Developer.
+                </li>
+
+                <li>
+                    Kaaliye = Copilot.
+                </li>
+
+                <li>
+                    Tilmaam = Prompt.
+                </li>
+
+                <li>
+                    Ogolaanshaha gelitaanka = Account iyo access plan.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="practical">
+
+            <h2>
+                Practical Setup Example
+            </h2>
+
+            <p>
+                A beginner developer can think of Copilot setup as this
+                workflow:
+            </p>
+
+            <ol>
+                <li>
+                    Install or open Visual Studio Code.
+                </li>
+
+                <li>
+                    Locate GitHub Copilot in the editor.
+                </li>
+
+                <li>
+                    Sign in with the correct GitHub account.
+                </li>
+
+                <li>
+                    Confirm your available Copilot access.
+                </li>
+
+                <li>
+                    Open a code project.
+                </li>
+
+                <li>
+                    Start with a small coding task.
+                </li>
+
+                <li>
+                    Review every suggestion before accepting it.
+                </li>
+            </ol>
+
+            <h3>
+                Example Prompt
+            </h3>
+
+            <pre><code>Create a simple HTML heading
+for Elmi Guray Academy.</code></pre>
+
+            <h3>
+                Possible Result
+            </h3>
+
+            <pre><code>&lt;h1&gt;
+    Elmi Guray Academy
+&lt;/h1&gt;</code></pre>
+
+            <h3>
+                Browser Output
+            </h3>
+
+            <h1>
+                Elmi Guray Academy
+            </h1>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                HTML Learning
+            </h2>
+
+            <p>
+                The previous example introduced the
+                <code>&lt;h1&gt;</code>
+                element.
+            </p>
+
+            <p>
+                Opening tag:
+            </p>
+
+            <pre><code>&lt;h1&gt;</code></pre>
+
+            <p>
+                Closing tag:
+            </p>
+
+            <pre><code>&lt;/h1&gt;</code></pre>
+
+            <p>
+                The
+                <code>&lt;h1&gt;</code>
+                element represents the main heading of a webpage or major
+                content area.
+            </p>
+
+            <p>
+                It should be used according to document structure, not
+                simply because you want large text.
+            </p>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Important Rules
+            </h2>
+
+            <ul>
+                <li>
+                    Use your own GitHub account.
+                </li>
+
+                <li>
+                    Never share your account password.
+                </li>
+
+                <li>
+                    Understand what an extension is before installing it.
+                </li>
+
+                <li>
+                    Review permissions requested by development tools.
+                </li>
+
+                <li>
+                    Do not assume an old subscription price is still
+                    current.
+                </li>
+
+                <li>
+                    Check current official plan information before paying.
+                </li>
+
+                <li>
+                    Review AI-generated code.
+                </li>
+
+                <li>
+                    Test AI-generated code before using it in production.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Common Beginner Mistakes
+            </h2>
+
+            <ul>
+                <li>
+                    Assuming Copilot replaces Visual Studio Code.
+                </li>
+
+                <li>
+                    Confusing an extension with the editor itself.
+                </li>
+
+                <li>
+                    Signing in with the wrong GitHub account.
+                </li>
+
+                <li>
+                    Forgetting that usage limits may exist.
+                </li>
+
+                <li>
+                    Assuming pricing never changes.
+                </li>
+
+                <li>
+                    Accepting every AI suggestion automatically.
+                </li>
+
+                <li>
+                    Giving an AI agent broad access without understanding
+                    what it can change.
+                </li>
+            </ul>
+
+        </section>
+
+        <hr>
+
+        <section id="test">
+
+            <h2>
+                Lesson Test — Multiple Choice
+            </h2>
+
+            <form>
+
+                <fieldset>
+
+                    <legend>
+                        1. What does an extension normally do?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test1" value="a">
+                        Adds capabilities to an existing application
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test1" value="b">
+                        Replaces the entire operating system
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test1" value="c">
+                        Deletes all project files
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        2. Why is GitHub sign-in important for Copilot?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test2" value="a">
+                        It authenticates the account using the service
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test2" value="b">
+                        It increases monitor brightness
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test2" value="c">
+                        It changes HTML into CSS
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        3. Which is a Copilot-style AI capability?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test3" value="a">
+                        Code completion
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test3" value="b">
+                        Physically repairing a computer
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test3" value="c">
+                        Printing documents without a printer
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        4. What should you remember about AI subscription
+                        prices?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test4" value="a">
+                        They can change
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test4" value="b">
+                        They can never change
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test4" value="c">
+                        Every developer pays the same forever
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        5. What should happen before accepting AI-generated
+                        code?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="test5" value="a">
+                        Review and understand it
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test5" value="b">
+                        Publish it immediately
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="test5" value="c">
+                        Never read it
+                    </label>
+
+                </fieldset>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Test Answer Key
+            </h2>
+
+            <ol>
+                <li>A — Adds capabilities to an existing application.</li>
+                <li>A — It authenticates the account using the service.</li>
+                <li>A — Code completion.</li>
+                <li>A — They can change.</li>
+                <li>A — Review and understand it.</li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section id="quiz">
+
+            <h2>
+                Lesson 9 Quiz — Multiple Choice
+            </h2>
+
+            <form>
+
+                <fieldset>
+
+                    <legend>
+                        1. Which development environment are we using as
+                        the main example?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz1" value="a">
+                        Visual Studio Code
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz1" value="b">
+                        Calculator
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz1" value="c">
+                        Camera
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz1" value="d">
+                        Music Player
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        2. Which capability predicts code while you type?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz2" value="a">
+                        Code completion
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz2" value="b">
+                        Screen capture
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz2" value="c">
+                        File printing
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz2" value="d">
+                        Battery charging
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        3. What lets a developer ask natural-language
+                        questions about code?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz3" value="a">
+                        AI Chat
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz3" value="b">
+                        Keyboard brightness
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz3" value="c">
+                        File compression
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz3" value="d">
+                        Printer setup
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        4. Why should developers check current official
+                        pricing information?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz4" value="a">
+                        Plans and prices may change
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz4" value="b">
+                        HTML requires payment
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz4" value="c">
+                        Browsers cannot display prices
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz4" value="d">
+                        Git does not use files
+                    </label>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>
+                        5. What is authentication?
+                    </legend>
+
+                    <label>
+                        <input type="radio" name="quiz5" value="a">
+                        Confirming the identity or account using a service
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz5" value="b">
+                        Making text larger
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz5" value="c">
+                        Deleting code
+                    </label>
+
+                    <br>
+
+                    <label>
+                        <input type="radio" name="quiz5" value="d">
+                        Changing the computer wallpaper
+                    </label>
+
+                </fieldset>
+
+                <button type="submit">
+                    Submit Quiz
+                </button>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>
+                Quiz Answer Key
+            </h2>
+
+            <ol>
+                <li>A — Visual Studio Code.</li>
+                <li>A — Code completion.</li>
+                <li>A — AI Chat.</li>
+                <li>A — Plans and prices may change.</li>
+                <li>
+                    A — Confirming the identity or account using a service.
+                </li>
+            </ol>
+
+        </section>
+
+        <hr>
+
+        <section id="remember">
+
+            <h2>
+                Remember
+            </h2>
+
+            <p>
+                <strong>
+                    GitHub Copilot adds AI assistance to supported
+                    development environments.<br><br>
+
+                    An extension adds capabilities to an existing
+                    application.<br><br>
+
+                    Copilot can provide code completion, code generation,
+                    AI chat, and agentic assistance.<br><br>
+
+                    GitHub account authentication is normally required to
+                    access the service.<br><br>
+
+                    AI coding services may have access plans and usage
+                    limits.<br><br>
+
+                    Plan names, prices, limits, and features can change
+                    over time.<br><br>
+
+                    Check current official information before purchasing a
+                    subscription.<br><br>
+
+                    The Developer remains responsible for reviewing and
+                    testing AI-generated code.
+                </strong>
+            </p>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            <strong>
+                Elmi Guray Academy
+            </strong>
+        </p>
+
+        <p>
+            AI Developer Course
+        </p>
+
+        <p>
+            Section 2 — Lesson 9
+        </p>
+
+        <p>
+            Understanding GitHub Copilot Access and Setup
+        </p>
+
+        <p>
+            Created by
+            <strong>Mohammed Elmi Issak</strong>
+        </p>
+
+        <p>
+            Founder &amp; President
+        </p>
+
+        <p>
+            <strong>
+                Knowledge • Integrity • Opportunity
+            </strong>
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

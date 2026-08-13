@@ -96,86 +96,6 @@
 
 <body>
 
-<style id="ega-lesson-navigation-style">
-.ega-lesson-nav {
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    gap: 8px;
-    justify-content: space-between;
-    align-items: center;
-    margin: 18px auto;
-    padding: 10px;
-    background: #f5f8fc;
-    border: 1px solid #d5dfec;
-    border-radius: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.ega-lesson-nav a,
-.ega-lesson-nav span {
-    flex: 1;
-    min-height: 44px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 10px 8px;
-    border-radius: 9px;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.ega-lesson-nav a {
-    background: #0b3b82;
-    color: white;
-}
-
-.ega-lesson-nav a:active {
-    opacity: 0.75;
-}
-
-.ega-lesson-nav .ega-home {
-    background: #16813b;
-}
-
-.ega-lesson-nav .ega-disabled {
-    background: #e4e4e4;
-    color: #777;
-}
-
-@media (max-width: 600px) {
-    .ega-lesson-nav {
-        gap: 5px;
-        padding: 7px;
-        margin: 12px auto;
-    }
-
-    .ega-lesson-nav a,
-    .ega-lesson-nav span {
-        font-size: 12px;
-        padding: 9px 5px;
-    }
-}
-</style>
-
-
-<!-- EGA LESSON NAVIGATION START -->
-<nav class="ega-lesson-nav">
-    <span class="ega-disabled">← Previous</span>
-    <a class="ega-home" href="/learner-portal">🏠 Learner Portal</a>
-    <a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html">Next →</a>
-</nav>
-<!-- EGA LESSON NAVIGATION END -->
-
-
-
-
-
-
-
 <a
     href="/learner-portal"
     class="ega-restored-lesson-back"
@@ -1603,16 +1523,6 @@
         </p>
 
     </footer>
-
-
-
-<!-- EGA LESSON NAVIGATION START -->
-<nav class="ega-lesson-nav">
-    <span class="ega-disabled">← Previous</span>
-    <a class="ega-home" href="/learner-portal">🏠 Learner Portal</a>
-    <a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html">Next →</a>
-</nav>
-<!-- EGA LESSON NAVIGATION END -->
 
 </body>
 
