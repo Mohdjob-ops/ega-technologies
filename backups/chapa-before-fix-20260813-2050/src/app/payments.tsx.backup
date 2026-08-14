@@ -47,9 +47,6 @@ type ChapaReturnParams = {
   ref_id?: string | string[];
   status?: string | string[];
   student_id?: string | string[];
-  token?: string | string[];
-  PayerID?: string | string[];
-  paypal_cancelled?: string | string[];
 };
 
 function getParam(value?: string | string[]) {
@@ -97,10 +94,6 @@ export default function PaymentsScreen() {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [verifying, setVerifying] = useState(false);
-  const [paypalInitializing, setPaypalInitializing] =
-    useState(false);
-  const [paypalCapturing, setPaypalCapturing] =
-    useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<"chapa" | "paypal" | "bank" | "cash">("chapa");
   const [manualReference, setManualReference] = useState("");
@@ -110,7 +103,6 @@ export default function PaymentsScreen() {
   const [manualDebug, setManualDebug] = useState("");
 
   const processedReturnRef = useRef("");
-  const processedPayPalOrder = useRef("");
 
   async function loadSettings() {
     try {
@@ -373,105 +365,6 @@ export default function PaymentsScreen() {
     }
   }
 
-  async function startPayPalPayment() {
-    if (!student?.student_id) {
-      setMessage("⚠️ Search for your student record first");
-      return;
-    }
-
-    if (String(student.payment_status || "").toLowerCase() === "paid") {
-      setMessage("✅ Your course payment is already complete");
-      return;
-    }
-
-    setPaypalInitializing(true);
-    setMessage("🔄 Preparing secure PayPal checkout...");
-
-    try {
-      const { data, error } = await supabase.functions.invoke(
-        "initialize-paypal-payment",
-        { body: { student_id: student.student_id } }
-      );
-
-      if (error) {
-        setMessage("❌ PayPal initialization error: " + error.message);
-        return;
-      }
-
-      if (!data?.success || !data?.approval_url) {
-        setMessage("❌ " + (data?.message || "PayPal could not initialize the payment"));
-        return;
-      }
-
-      setMessage(
-        `✅ PayPal checkout created for ${formatMoney(data.amount)} ${data.currency || "USD"}. Opening PayPal...`
-      );
-
-      const supported = await Linking.canOpenURL(data.approval_url);
-      if (!supported) {
-        setMessage("❌ This device could not open the PayPal checkout page");
-        return;
-      }
-
-      await Linking.openURL(data.approval_url);
-    } catch (error) {
-      setMessage(
-        "❌ PayPal error: " +
-          (error instanceof Error ? error.message : "Unknown error")
-      );
-    } finally {
-      setPaypalInitializing(false);
-    }
-  }
-
-  async function capturePayPalPayment(orderId: string, studentId: string) {
-    if (!orderId || !studentId) return;
-
-    setPaypalCapturing(true);
-    setMessage("🔄 Confirming and capturing your PayPal payment...");
-
-    try {
-      const { data, error } = await supabase.functions.invoke(
-        "capture-paypal-payment",
-        { body: { order_id: orderId, student_id: studentId } }
-      );
-
-      if (error) {
-        setMessage("❌ PayPal capture error: " + error.message);
-        return;
-      }
-
-      if (!data?.success || !data?.verified) {
-        setMessage(
-          "⚠️ " +
-            (data?.message || "PayPal did not confirm a completed payment. No student record was changed.")
-        );
-        return;
-      }
-
-      if (data.student) {
-        setStudent(data.student as Student);
-        setSearchValue(data.student.student_id || studentId);
-      } else {
-        await findStudent(studentId, false);
-      }
-
-      await loadPaymentHistory(studentId);
-      setMessage(
-        data.already_verified
-          ? "✅ This PayPal payment was already verified; no duplicate was created."
-          : `✅ PayPal payment verified: ${formatMoney(data.payment?.amount)} ${data.payment?.currency || "USD"}`
-      );
-    } catch (error) {
-      setMessage(
-        "❌ PayPal verification error: " +
-          (error instanceof Error ? error.message : "Unknown error")
-      );
-    } finally {
-      setPaypalCapturing(false);
-    }
-  }
-
   function selectPaymentMethod(
     method: "chapa" | "paypal" | "bank" | "cash"
   ) {
@@ -486,7 +379,7 @@ export default function PaymentsScreen() {
 
     if (method === "paypal") {
       setMessage(
-        "✅ PayPal selected. Press Continue with PayPal to open secure checkout."
+        "ℹ️ PayPal will be available after the EGA PayPal Business account is connected."
       );
       return;
     }
@@ -534,8 +427,11 @@ export default function PaymentsScreen() {
     }
 
     if (selectedPaymentMethod === "paypal") {
-      setManualDebug("➡️ Starting PayPal payment");
-      await startPayPalPayment();
+      console.log("[Manual Payment] PayPal not active");
+      setManualDebug("ℹ️ PayPal is not active yet");
+      setMessage(
+        "ℹ️ PayPal is not active yet. Please use Chapa while PayPal setup is being completed."
+      );
       return;
     }
 
@@ -877,33 +773,12 @@ export default function PaymentsScreen() {
     params.student_id,
   ]);
 
-  useEffect(() => {
-    const orderId = getParam(params.token);
-    const returnedStudentId = getParam(params.student_id);
-    const cancelled = getParam(params.paypal_cancelled);
-
-    if (cancelled) {
-      setMessage("⚠️ PayPal checkout was cancelled. No payment was recorded.");
-      return;
-    }
-
-    if (!orderId || !returnedStudentId || processedPayPalOrder.current === orderId) {
-      return;
-    }
-
-    processedPayPalOrder.current = orderId;
-    setSearchValue(returnedStudentId);
-    capturePayPalPayment(orderId, returnedStudentId);
-  }, [params.token, params.PayerID, params.paypal_cancelled, params.student_id]);
-
   const busy =
     searching ||
     historyLoading ||
     initializing ||
     verifying ||
-    submittingManual ||
-    paypalInitializing ||
-    paypalCapturing;
+    submittingManual;
 
   const normalizedPaymentStatus = String(
     student?.payment_status || ""
@@ -1124,7 +999,7 @@ export default function PaymentsScreen() {
                       PayPal
                     </Text>
                     <Text style={styles.paymentMethodSmall}>
-                      Active
+                      Coming Soon
                     </Text>
                   </Pressable>
 
@@ -1191,7 +1066,7 @@ export default function PaymentsScreen() {
                     {selectedPaymentMethod === "chapa"
                       ? "You will be redirected to the secure Chapa checkout page."
                       : selectedPaymentMethod === "paypal"
-                        ? "You will be redirected to PayPal. The USD checkout amount is calculated from the ETB balance using the configured server rate."
+                        ? "PayPal checkout will become available after the business account is connected."
                         : selectedPaymentMethod === "bank"
                           ? "Transfer the remaining balance, then submit the bank reference below for administrator verification."
                           : "Visit the EGA office, pay in cash, and give the administrator your Student ID."}
@@ -1320,8 +1195,6 @@ export default function PaymentsScreen() {
                 >
                   {(initializing &&
                     selectedPaymentMethod === "chapa") ||
-                  ((paypalInitializing || paypalCapturing) &&
-                    selectedPaymentMethod === "paypal") ||
                   (submittingManual &&
                     (selectedPaymentMethod === "bank" ||
                       selectedPaymentMethod === "cash")) ? (
@@ -1331,7 +1204,7 @@ export default function PaymentsScreen() {
                       {selectedPaymentMethod === "chapa"
                         ? "Continue with Chapa"
                         : selectedPaymentMethod === "paypal"
-                          ? "Continue with PayPal"
+                          ? "PayPal Coming Soon"
                           : selectedPaymentMethod === "bank"
                             ? "Submit Bank Transfer"
                             : "Notify Cash Payment"}

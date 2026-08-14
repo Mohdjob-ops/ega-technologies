@@ -226,7 +226,7 @@ Deno.serve(async (request) => {
     );
 
     const returnUrl =
-      "https://y-nu-two-xrtlu2ccm2.vercel.app/payments" +
+      "https://ega-2026.vercel.app/payments" +
       `?tx_ref=${encodeURIComponent(txRef)}` +
       `&student_id=${encodeURIComponent(
         student.student_id
@@ -320,14 +320,15 @@ Deno.serve(async (request) => {
       });
     }
 
-    const { error: updateError } = await supabase.rpc(
-      "record_chapa_payment_attempt",
-      {
-        p_student_id: student.student_id,
-        p_tx_ref: txRef,
-        p_expected_amount: remainingAmount,
-      }
-    );
+    const { error: updateError } =
+      await supabase
+        .from("students")
+        .update({
+          payment_method: "Chapa",
+          payment_reference: txRef,
+          remaining_amount: remainingAmount,
+        })
+        .eq("id", student.id);
 
     if (updateError) {
       console.error(

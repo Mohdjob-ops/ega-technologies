@@ -193,34 +193,53 @@ Deno.serve(async (request) => {
       });
     }
 
-    const { data: paymentAttempt, error: attemptError } =
-      await supabase
-        .from("chapa_payment_attempts")
-        .select("expected_amount, status, verified_amount")
-        .eq("tx_ref", txRef)
-        .eq("student_id", student.student_id)
-        .maybeSingle();
+    const storedReference = cleanText(
+      student.payment_reference
+    );
 
-    if (attemptError) {
+    if (!storedReference) {
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          "Chapa payment attempt lookup failed: " +
-          attemptError.message,
+          "No Chapa payment was initialized for this student.",
       });
     }
 
-    if (!paymentAttempt) {
+    if (storedReference !== txRef) {
       return jsonResponse({
         success: false,
         verified: false,
         message:
-          "This Chapa transaction was not initialized for this student.",
+          "This transaction reference does not belong to this student.",
       });
     }
 
-    if (lowerText(paymentAttempt.status) === "verified") {
+    const transactionNote =
+      `Chapa verified payment: ${txRef}`;
+
+    const {
+      data: existingTransaction,
+      error: existingTransactionError,
+    } = await supabase
+      .from("transactions")
+      .select("id, amount")
+      .eq("student_id", student.student_id)
+      .eq("note", transactionNote)
+      .maybeSingle();
+
+    if (existingTransactionError) {
+      console.error(
+        "Existing transaction lookup failed:",
+        existingTransactionError.message
+      );
+    }
+
+    if (
+      existingTransaction &&
+      lowerText(student.payment_status) ===
+        "paid"
+    ) {
       return jsonResponse({
         success: true,
         verified: true,
@@ -230,7 +249,7 @@ Deno.serve(async (request) => {
         payment: {
           tx_ref: txRef,
           amount: toNumber(
-            paymentAttempt.verified_amount
+            existingTransaction.amount
           ),
           currency: "ETB",
           method:
@@ -374,9 +393,23 @@ Deno.serve(async (request) => {
       });
     }
 
-    const expectedAmount = toNumber(
-      paymentAttempt.expected_amount
+    const fee = toNumber(student.fee);
+
+    const currentPaidAmount = toNumber(
+      student.paid_amount
     );
+
+    const storedRemainingAmount = toNumber(
+      student.remaining_amount
+    );
+
+    const expectedAmount =
+      storedRemainingAmount > 0
+        ? storedRemainingAmount
+        : Math.max(
+            fee - currentPaidAmount,
+            0
+          );
 
     if (
       expectedAmount > 0 &&
@@ -395,6 +428,29 @@ Deno.serve(async (request) => {
       });
     }
 
+    const newPaidAmount =
+      fee > 0
+        ? Math.min(
+            currentPaidAmount +
+              verifiedAmount,
+            fee
+          )
+        : currentPaidAmount +
+          verifiedAmount;
+
+    const newRemainingAmount =
+      fee > 0
+        ? Math.max(
+            fee - newPaidAmount,
+            0
+          )
+        : 0;
+
+    const newPaymentStatus =
+      newRemainingAmount <= 0
+        ? "Paid"
+        : "Partial";
+
     const paymentMethod =
       cleanText(
         transaction?.method ||
@@ -409,31 +465,58 @@ Deno.serve(async (request) => {
         transaction?.paid_at
       ) || new Date().toISOString();
 
-    const { data: appliedPayment, error: updateError } =
-      await supabase.rpc("apply_verified_chapa_payment", {
-        p_student_id: student.student_id,
-        p_tx_ref: txRef,
-        p_verified_amount: verifiedAmount,
-        p_payment_method: paymentMethod,
-        p_paid_at: paidAt,
-      });
+    if (!existingTransaction) {
+      const {
+        error: transactionInsertError,
+      } = await supabase
+        .from("transactions")
+        .insert({
+          student_id: student.student_id,
+          student_name:
+            student.name || "Unknown",
+          amount: verifiedAmount,
+          payment_method: paymentMethod,
+          note: transactionNote,
+        });
+
+      if (transactionInsertError) {
+        return jsonResponse({
+          success: false,
+          verified: true,
+          message:
+            "Payment was verified, but transaction history could not be saved: " +
+            transactionInsertError.message,
+        });
+      }
+    }
+
+    const {
+      data: updatedStudent,
+      error: updateError,
+    } = await supabase
+      .from("students")
+      .update({
+        payment_status: newPaymentStatus,
+        payment_method: paymentMethod,
+        payment_reference: txRef,
+        paid_amount: newPaidAmount,
+        remaining_amount:
+          newRemainingAmount,
+        paid_at: paidAt,
+      })
+      .eq("id", student.id)
+      .select("*")
+      .single();
 
     if (updateError) {
       return jsonResponse({
         success: false,
         verified: true,
         message:
-          "Payment was verified by Chapa, but EGA could not record it: " +
+          "Payment was verified, but the student record could not be updated: " +
           updateError.message,
       });
     }
-
-    const updatedStudent = appliedPayment?.student;
-    const newPaymentStatus = appliedPayment?.payment_status;
-    const newPaidAmount = toNumber(appliedPayment?.paid_amount);
-    const newRemainingAmount = toNumber(
-      appliedPayment?.remaining_amount
-    );
 
     console.log(
       "Payment verified and student updated:",
