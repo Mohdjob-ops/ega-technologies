@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -10,8 +10,282 @@ import {
   View,
 } from "react-native";
 
+type Language = "en" | "so";
+
+const translations = {
+  en: {
+    foundation: "Elmi Guray Foundation",
+    academy: "Elmi Guray Academy",
+
+    heroHeading:
+      "Building Futures Through Technology Education",
+    subtitle:
+      "EGA expands access to practical technology education for talented learners, with special support for students facing financial barriers.",
+
+    register: "📝 Register",
+    learnerPortal: "🎓 Learner Portal",
+    payments: "💳 Payments",
+    supportEga: "❤️ Support EGA",
+
+    ourPurpose: "OUR PURPOSE",
+    purposeTitle:
+      "Talent is everywhere. Opportunity is not.",
+    purposeText1:
+      "Elmi Guray Academy helps learners develop practical skills in web development, artificial intelligence, programming, and digital technology.",
+    purposeText2:
+      "Our goal is not only to teach students, but also to help them build confidence, complete real projects, earn certificates, and prepare for employment, freelancing, and entrepreneurship.",
+
+    ourImpact: "OUR IMPACT",
+    impactTitle: "Education creates opportunity",
+
+    students: "Students",
+    studentsText:
+      "Learning practical technology skills",
+
+    scholarships: "Scholarships",
+    scholarshipsText:
+      "Supporting learners facing financial barriers",
+
+    projects: "Projects",
+    projectsText:
+      "Building real skills through practical work",
+
+    certificates: "Certificates",
+    certificatesText:
+      "Recognizing successful course completion",
+
+    participateLabel: "THREE WAYS TO PARTICIPATE",
+    participateTitle:
+      "Learn, support, and transform lives",
+
+    becomeStudent: "Become a Student",
+    becomeStudentText:
+      "Register for practical training and begin building your technology career.",
+    registerNow: "Register now →",
+
+    sponsorStudent: "Sponsor a Student",
+    sponsorStudentText:
+      "Help remove financial barriers and give a learner access to technology education.",
+    supportLearner: "Support a learner →",
+
+    supportTitle: "Support EGA",
+    supportText:
+      "Help provide scholarships, internet access, learning materials, software, and educational equipment.",
+    makeImpact: "Make an impact →",
+
+    learnLabel: "WHAT STUDENTS LEARN",
+    learnTitle:
+      "Practical skills for the digital economy",
+
+    webDevelopment: "Web Development",
+    webDevelopmentText:
+      "HTML, CSS, JavaScript, React, projects, and modern website development.",
+
+    artificialIntelligence: "Artificial Intelligence",
+    artificialIntelligenceText:
+      "Learn how AI tools work and how to use them responsibly for learning and development.",
+
+    careerSkills: "Career Skills",
+    careerSkillsText:
+      "Build projects, portfolios, confidence, and readiness for remote and global opportunities.",
+
+    exploreCourses: "Explore Courses",
+
+    scholarshipTitle:
+      "Education should not depend on wealth",
+    scholarshipText1:
+      "EGA is developing a scholarship and sponsorship program for committed learners who cannot afford the full cost of technology education.",
+    scholarshipText2:
+      "Every contribution can help a student learn, create, and build a more independent future.",
+    registerInterest: "Register Your Interest",
+
+    founderLabel: "FOUNDER’S MESSAGE",
+    founderQuote:
+      "I founded Elmi Guray Academy with the belief that talent exists everywhere, but opportunity does not. My dream is to ensure that financial hardship never prevents a committed learner from developing the skills that can transform their life.",
+    founderName: "Mohammed Elmi Issak",
+    founderRole1: "Founder, Elmi Guray Foundation",
+    founderRole2:
+      "Founder & President, Elmi Guray Academy",
+
+    platformLabel: "EGA PLATFORM",
+    journeyTitle: "Continue your journey",
+
+    exploreNavigation: "📚 Explore Courses",
+    exploreNavigationText:
+      "Browse lessons, projects, quizzes, and learning resources.",
+
+    learnerNavigation: "🎓 Learner Portal",
+    learnerNavigationText:
+      "View your learning progress, quizzes, assignments, and certificates.",
+
+    leaderboard: "🏆 Student Leaderboard",
+    leaderboardText:
+      "Celebrate student achievement and view top quiz results.",
+
+    paymentsSupport: "💳 Payments & Support",
+    paymentsSupportText:
+      "Check payment information and access available support options.",
+
+    adminDashboard: "🔐 Secure Admin Dashboard",
+    adminOnly: "Authorized administrators only",
+
+    finalTitle:
+      "One Student. One Future. One Opportunity.",
+    finalText:
+      "Join Elmi Guray Academy as a learner, supporter, mentor, volunteer, or future partner.",
+    beginJourney: "Begin Your Journey",
+
+    footerText:
+      "An education initiative of Elmi Guray Foundation",
+    footerMotto:
+      "Learn with Purpose. Build with Integrity. Lead Through Service.",
+    footerFounder:
+      "Founded by Mohammed Elmi Issak",
+    copyright:
+      "© 2026 Elmi Guray Foundation. All rights reserved.",
+  },
+
+  so: {
+    foundation: "Mu’asasada Elmi Guray",
+    academy: "Akadeemiyada Elmi Guray",
+
+    heroHeading:
+      "Dhisidda Mustaqbalka Iyadoo Loo Marayo Waxbarashada Teknoolojiyadda",
+    subtitle:
+      "EGA waxay ballaarisaa helitaanka waxbarashada teknoolojiyadda ee wax-ku-oolka ah, gaar ahaan ardayda kartida leh ee wajahaya caqabado dhaqaale.",
+
+    register: "📝 Isdiiwaangeli",
+    learnerPortal: "🎓 Bogga Ardayga",
+    payments: "💳 Lacag-bixinta",
+    supportEga: "❤️ Taageer EGA",
+
+    ourPurpose: "UJEEDDA AAN LEENAHAY",
+    purposeTitle:
+      "Karti meel walba way ka jirtaa. Fursaddu se meel walba kama jirto.",
+    purposeText1:
+      "Akadeemiyada Elmi Guray waxay ardayda ka caawisaa inay bartaan xirfado wax-ku-ool ah oo ay ka mid yihiin horumarinta webka, sirdoonka macmalka ah, barnaamij-samaynta, iyo teknoolojiyadda dijitaalka ah.",
+    purposeText2:
+      "Ujeeddadeennu ma aha oo keliya inaan ardayda wax barno, balse sidoo kale inaan ka caawinno inay dhistaan kalsooni, dhammeystiraan mashruucyo dhab ah, helaan shahaadooyin, una diyaar garoobaan shaqo, freelancing, iyo ganacsi-abuur.",
+
+    ourImpact: "SAAMAYNTEENNA",
+    impactTitle: "Waxbarashadu waxay abuurtaa fursad",
+
+    students: "Ardayda",
+    studentsText:
+      "Baranaya xirfado teknoolojiyadeed oo wax-ku-ool ah",
+
+    scholarships: "Deeqaha Waxbarasho",
+    scholarshipsText:
+      "Taageeridda ardayda wajahaysa caqabado dhaqaale",
+
+    projects: "Mashruucyada",
+    projectsText:
+      "Dhisidda xirfado dhab ah iyadoo la adeegsanayo shaqo wax-ku-ool ah",
+
+    certificates: "Shahaadooyinka",
+    certificatesText:
+      "Aqoonsiga ardayda si guul leh u dhammeystirta koorsooyinka",
+
+    participateLabel: "SADDEX HAB OO LOOGA QAYBQAATO",
+    participateTitle:
+      "Baro, taageer, noloshana wax ka beddel",
+
+    becomeStudent: "Noqo Arday",
+    becomeStudentText:
+      "Isdiiwaangeli tababar wax-ku-ool ah oo bilow inaad dhisto mustaqbalkaaga teknoolojiyadda.",
+    registerNow: "Hadda isdiiwaangeli →",
+
+    sponsorStudent: "Kafaalo Qaad Arday",
+    sponsorStudentText:
+      "Ka caawi arday inuu ka gudbo caqabadaha dhaqaale oo uu helo waxbarasho teknoolojiyadeed.",
+    supportLearner: "Taageer arday →",
+
+    supportTitle: "Taageer EGA",
+    supportText:
+      "Ka qaybqaado bixinta deeqaha waxbarasho, internetka, agabka waxbarashada, software-ka, iyo qalabka waxbarashada.",
+    makeImpact: "Saamayn samee →",
+
+    learnLabel: "WAXA ARDAYDU BARTAAN",
+    learnTitle:
+      "Xirfado wax-ku-ool ah oo loogu talagalay dhaqaalaha dijitaalka ah",
+
+    webDevelopment: "Horumarinta Webka",
+    webDevelopmentText:
+      "HTML, CSS, JavaScript, React, mashruucyo, iyo samaynta website-yo casri ah.",
+
+    artificialIntelligence: "Sirdoonka Macmalka ah",
+    artificialIntelligenceText:
+      "Baro sida qalabka AI u shaqeeyo iyo sida masuuliyad leh loogu isticmaalo waxbarashada iyo horumarinta.",
+
+    careerSkills: "Xirfadaha Shaqada",
+    careerSkillsText:
+      "Dhis mashruucyo, portfolio, kalsooni, iyo diyaar-garow shaqooyin fog iyo fursado caalami ah.",
+
+    exploreCourses: "Fiiri Koorsooyinka",
+
+    scholarshipTitle:
+      "Waxbarashadu waa inaysan ku xirnaan hantida qofka",
+    scholarshipText1:
+      "EGA waxay horumarinaysaa barnaamij deeq waxbarasho iyo kafaalo-qaad ah oo loogu talagalay ardayda dadaalka leh ee aan awoodin kharashka buuxa ee waxbarashada teknoolojiyadda.",
+    scholarshipText2:
+      "Taageero kasta waxay ka caawin kartaa arday inuu wax barto, wax abuuro, oo uu dhisto mustaqbal madax-bannaan.",
+    registerInterest: "Diiwaangeli Xiisahaaga",
+
+    founderLabel: "FARIINTA AASAASAHA",
+    founderQuote:
+      "Waxaan aasaasay Akadeemiyada Elmi Guray anigoo aaminsan in kartidu meel walba ka jirto, balse fursaddu aysan meel walba ka jirin. Riyadaydu waa in duruufaha dhaqaale aysan waligood ka hor istaagin arday dadaal badan inuu barto xirfadaha beddeli kara noloshiisa.",
+    founderName: "Mohammed Elmi Issak",
+    founderRole1: "Aasaasaha, Mu’asasada Elmi Guray",
+    founderRole2:
+      "Aasaasaha & Madaxweynaha, Akadeemiyada Elmi Guray",
+
+    platformLabel: "BARNAAMIJKA EGA",
+    journeyTitle: "Sii wad safarkaaga",
+
+    exploreNavigation: "📚 Fiiri Koorsooyinka",
+    exploreNavigationText:
+      "Fiiri casharrada, mashruucyada, imtixaannada, iyo agabka waxbarashada.",
+
+    learnerNavigation: "🎓 Bogga Ardayga",
+    learnerNavigationText:
+      "Fiiri horumarkaaga waxbarasho, imtixaannada, waajibaadka, iyo shahaadooyinka.",
+
+    leaderboard: "🏆 Kala Sarreynta Ardayda",
+    leaderboardText:
+      "U dabaaldeg guulaha ardayda oo fiiri natiijooyinka imtixaannada ugu sarreeya.",
+
+    paymentsSupport: "💳 Lacag-bixin & Taageero",
+    paymentsSupportText:
+      "Fiiri macluumaadka lacag-bixinta iyo fursadaha taageero ee la heli karo.",
+
+    adminDashboard: "🔐 Maamulka Ammaan Ah",
+    adminOnly:
+      "Waxaa geli kara oo keliya maamulayaasha la oggolaaday",
+
+    finalTitle:
+      "Hal Arday. Hal Mustaqbal. Hal Fursad.",
+    finalText:
+      "Ku biir Akadeemiyada Elmi Guray adigoo ah arday, taageere, lataliye, mutadawac, ama lammaane mustaqbal.",
+    beginJourney: "Bilow Safarkaaga",
+
+    footerText:
+      "Hindise waxbarasho oo ay leedahay Mu’asasada Elmi Guray",
+    footerMotto:
+      "U Baro Ujeeddo. Ku Dhis Daacadnimo. Ku Hoggaami Adeeg.",
+    footerFounder:
+      "Waxaa aasaasay Mohammed Elmi Issak",
+    copyright:
+      "© 2026 Mu’asasada Elmi Guray. Dhammaan xuquuqdu way dhowran tahay.",
+  },
+};
+
 export default function HomeScreen() {
   const { width } = useWindowDimensions();
+
+  const [language, setLanguage] =
+    useState<Language>("en");
+
+  const t = translations[language];
 
   const isTablet = width >= 700;
   const isDesktop = width >= 1050;
@@ -35,6 +309,16 @@ export default function HomeScreen() {
       return;
     }
 
+    const savedLanguage =
+      window.localStorage.getItem("ega_language");
+
+    if (
+      savedLanguage === "en" ||
+      savedLanguage === "so"
+    ) {
+      setLanguage(savedLanguage);
+    }
+
     const recoveryData =
       `${window.location.search}${window.location.hash}`;
 
@@ -56,6 +340,17 @@ export default function HomeScreen() {
     }
   }, []);
 
+  const changeLanguage = (nextLanguage: Language) => {
+    setLanguage(nextLanguage);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(
+        "ega_language",
+        nextLanguage,
+      );
+    }
+  };
+
   return (
     <ScrollView
       style={styles.page}
@@ -64,6 +359,52 @@ export default function HomeScreen() {
     >
       <View style={styles.hero}>
         <View style={styles.heroInner}>
+          <View style={styles.languageSwitcher}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Use English"
+              onPress={() => changeLanguage("en")}
+              style={({ pressed }) => [
+                styles.languageButton,
+                language === "en" &&
+                  styles.languageButtonActive,
+                pressed && styles.buttonPressed,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.languageButtonText,
+                  language === "en" &&
+                    styles.languageButtonTextActive,
+                ]}
+              >
+                English
+              </Text>
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Isticmaal Af Soomaali"
+              onPress={() => changeLanguage("so")}
+              style={({ pressed }) => [
+                styles.languageButton,
+                language === "so" &&
+                  styles.languageButtonActive,
+                pressed && styles.buttonPressed,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.languageButtonText,
+                  language === "so" &&
+                    styles.languageButtonTextActive,
+                ]}
+              >
+                Soomaali
+              </Text>
+            </Pressable>
+          </View>
+
           <Image
             source={require("../../assets/images/ega-logo.png")}
             style={[
@@ -75,7 +416,7 @@ export default function HomeScreen() {
           />
 
           <Text style={styles.foundationName}>
-            Elmi Guray Foundation
+            {t.foundation}
           </Text>
 
           <Text
@@ -84,7 +425,7 @@ export default function HomeScreen() {
               isTablet && styles.titleLarge,
             ]}
           >
-            Elmi Guray Academy
+            {t.academy}
           </Text>
 
           <Text
@@ -93,13 +434,11 @@ export default function HomeScreen() {
               isTablet && styles.heroHeadingLarge,
             ]}
           >
-            Building Futures Through Technology Education
+            {t.heroHeading}
           </Text>
 
           <Text style={styles.subtitle}>
-            EGA expands access to practical technology
-            education for talented learners, with special
-            support for students facing financial barriers.
+            {t.subtitle}
           </Text>
 
           <View
@@ -110,7 +449,6 @@ export default function HomeScreen() {
           >
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Register as a student"
               style={({ pressed }) => [
                 styles.primaryButton,
                 { width: topActionButtonWidth },
@@ -119,28 +457,28 @@ export default function HomeScreen() {
               onPress={() => router.push("/register")}
             >
               <Text style={styles.primaryButtonText}>
-                📝 Register
+                {t.register}
               </Text>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Open learner portal"
               style={({ pressed }) => [
                 styles.learnerPortalButton,
                 { width: topActionButtonWidth },
                 pressed && styles.buttonPressed,
               ]}
-              onPress={() => router.push("/learner-portal")}
+              onPress={() =>
+                router.push("/learner-portal")
+              }
             >
               <Text style={styles.learnerPortalButtonText}>
-                🎓 Learner Portal
+                {t.learnerPortal}
               </Text>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Open student payments"
               style={({ pressed }) => [
                 styles.paymentButton,
                 { width: topActionButtonWidth },
@@ -149,13 +487,12 @@ export default function HomeScreen() {
               onPress={() => router.push("/payments")}
             >
               <Text style={styles.paymentButtonText}>
-                💳 Payments
+                {t.payments}
               </Text>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Support Elmi Guray Academy"
               style={({ pressed }) => [
                 styles.secondaryButton,
                 { width: topActionButtonWidth },
@@ -164,7 +501,7 @@ export default function HomeScreen() {
               onPress={() => router.push("/payments")}
             >
               <Text style={styles.secondaryButtonText}>
-                ❤️ Support EGA
+                {t.supportEga}
               </Text>
             </Pressable>
           </View>
@@ -174,25 +511,19 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabel}>
-            OUR PURPOSE
+            {t.ourPurpose}
           </Text>
 
           <Text style={styles.sectionTitle}>
-            Talent is everywhere. Opportunity is not.
+            {t.purposeTitle}
           </Text>
 
           <Text style={styles.sectionText}>
-            Elmi Guray Academy helps learners develop
-            practical skills in web development, artificial
-            intelligence, programming, and digital
-            technology.
+            {t.purposeText1}
           </Text>
 
           <Text style={styles.sectionText}>
-            Our goal is not only to teach students, but also
-            to help them build confidence, complete real
-            projects, earn certificates, and prepare for
-            employment, freelancing, and entrepreneurship.
+            {t.purposeText2}
           </Text>
         </View>
       </View>
@@ -200,11 +531,11 @@ export default function HomeScreen() {
       <View style={styles.impactSection}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabelLight}>
-            OUR IMPACT
+            {t.ourImpact}
           </Text>
 
           <Text style={styles.impactTitle}>
-            Education creates opportunity
+            {t.impactTitle}
           </Text>
 
           <View style={styles.cardGrid}>
@@ -215,13 +546,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.impactIcon}>🎓</Text>
-
               <Text style={styles.impactNumber}>
-                Students
+                {t.students}
               </Text>
-
               <Text style={styles.impactText}>
-                Learning practical technology skills
+                {t.studentsText}
               </Text>
             </View>
 
@@ -232,14 +561,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.impactIcon}>❤️</Text>
-
               <Text style={styles.impactNumber}>
-                Scholarships
+                {t.scholarships}
               </Text>
-
               <Text style={styles.impactText}>
-                Supporting learners facing financial
-                barriers
+                {t.scholarshipsText}
               </Text>
             </View>
 
@@ -250,13 +576,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.impactIcon}>💻</Text>
-
               <Text style={styles.impactNumber}>
-                Projects
+                {t.projects}
               </Text>
-
               <Text style={styles.impactText}>
-                Building real skills through practical work
+                {t.projectsText}
               </Text>
             </View>
 
@@ -267,13 +591,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.impactIcon}>📜</Text>
-
               <Text style={styles.impactNumber}>
-                Certificates
+                {t.certificates}
               </Text>
-
               <Text style={styles.impactText}>
-                Recognizing successful course completion
+                {t.certificatesText}
               </Text>
             </View>
           </View>
@@ -283,17 +605,15 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabel}>
-            THREE WAYS TO PARTICIPATE
+            {t.participateLabel}
           </Text>
 
           <Text style={styles.sectionTitle}>
-            Learn, support, and transform lives
+            {t.participateTitle}
           </Text>
 
           <View style={styles.cardGrid}>
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Become an EGA student"
               style={({ pressed }) => [
                 styles.actionCard,
                 { width: threeColumnCardWidth },
@@ -307,23 +627,20 @@ export default function HomeScreen() {
 
               <View style={styles.actionContent}>
                 <Text style={styles.actionTitle}>
-                  Become a Student
+                  {t.becomeStudent}
                 </Text>
 
                 <Text style={styles.actionText}>
-                  Register for practical training and begin
-                  building your technology career.
+                  {t.becomeStudentText}
                 </Text>
 
                 <Text style={styles.actionLink}>
-                  Register now →
+                  {t.registerNow}
                 </Text>
               </View>
             </Pressable>
 
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Sponsor an EGA student"
               style={({ pressed }) => [
                 styles.actionCard,
                 { width: threeColumnCardWidth },
@@ -337,23 +654,20 @@ export default function HomeScreen() {
 
               <View style={styles.actionContent}>
                 <Text style={styles.actionTitle}>
-                  Sponsor a Student
+                  {t.sponsorStudent}
                 </Text>
 
                 <Text style={styles.actionText}>
-                  Help remove financial barriers and give a
-                  learner access to technology education.
+                  {t.sponsorStudentText}
                 </Text>
 
                 <Text style={styles.actionLink}>
-                  Support a learner →
+                  {t.supportLearner}
                 </Text>
               </View>
             </Pressable>
 
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Support EGA programs"
               style={({ pressed }) => [
                 styles.actionCard,
                 { width: threeColumnCardWidth },
@@ -367,17 +681,15 @@ export default function HomeScreen() {
 
               <View style={styles.actionContent}>
                 <Text style={styles.actionTitle}>
-                  Support EGA
+                  {t.supportTitle}
                 </Text>
 
                 <Text style={styles.actionText}>
-                  Help provide scholarships, internet
-                  access, learning materials, software, and
-                  educational equipment.
+                  {t.supportText}
                 </Text>
 
                 <Text style={styles.actionLink}>
-                  Make an impact →
+                  {t.makeImpact}
                 </Text>
               </View>
             </Pressable>
@@ -388,11 +700,11 @@ export default function HomeScreen() {
       <View style={styles.learningSection}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabel}>
-            WHAT STUDENTS LEARN
+            {t.learnLabel}
           </Text>
 
           <Text style={styles.sectionTitle}>
-            Practical skills for the digital economy
+            {t.learnTitle}
           </Text>
 
           <View style={styles.cardGrid}>
@@ -403,14 +715,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.courseIcon}>🌐</Text>
-
               <Text style={styles.courseTitle}>
-                Web Development
+                {t.webDevelopment}
               </Text>
-
               <Text style={styles.courseText}>
-                HTML, CSS, JavaScript, React, projects, and
-                modern website development.
+                {t.webDevelopmentText}
               </Text>
             </View>
 
@@ -421,14 +730,11 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.courseIcon}>🤖</Text>
-
               <Text style={styles.courseTitle}>
-                Artificial Intelligence
+                {t.artificialIntelligence}
               </Text>
-
               <Text style={styles.courseText}>
-                Learn how AI tools work and how to use them
-                responsibly for learning and development.
+                {t.artificialIntelligenceText}
               </Text>
             </View>
 
@@ -439,22 +745,16 @@ export default function HomeScreen() {
               ]}
             >
               <Text style={styles.courseIcon}>💡</Text>
-
               <Text style={styles.courseTitle}>
-                Career Skills
+                {t.careerSkills}
               </Text>
-
               <Text style={styles.courseText}>
-                Build projects, portfolios, confidence, and
-                readiness for remote and global
-                opportunities.
+                {t.careerSkillsText}
               </Text>
             </View>
           </View>
 
           <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Explore EGA courses"
             style={({ pressed }) => [
               styles.exploreButton,
               pressed && styles.buttonPressed,
@@ -462,7 +762,7 @@ export default function HomeScreen() {
             onPress={() => router.push("/explore")}
           >
             <Text style={styles.exploreButtonText}>
-              Explore Courses
+              {t.exploreCourses}
             </Text>
           </Pressable>
         </View>
@@ -473,23 +773,18 @@ export default function HomeScreen() {
           <Text style={styles.scholarshipIcon}>🌱</Text>
 
           <Text style={styles.scholarshipTitle}>
-            Education should not depend on wealth
+            {t.scholarshipTitle}
           </Text>
 
           <Text style={styles.scholarshipText}>
-            EGA is developing a scholarship and sponsorship
-            program for committed learners who cannot afford
-            the full cost of technology education.
+            {t.scholarshipText1}
           </Text>
 
           <Text style={styles.scholarshipText}>
-            Every contribution can help a student learn,
-            create, and build a more independent future.
+            {t.scholarshipText2}
           </Text>
 
           <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Register your interest"
             style={({ pressed }) => [
               styles.scholarshipButton,
               pressed && styles.buttonPressed,
@@ -497,7 +792,7 @@ export default function HomeScreen() {
             onPress={() => router.push("/register")}
           >
             <Text style={styles.scholarshipButtonText}>
-              Register Your Interest
+              {t.registerInterest}
             </Text>
           </Pressable>
         </View>
@@ -506,30 +801,25 @@ export default function HomeScreen() {
       <View style={styles.founderSection}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabelLight}>
-            FOUNDER’S MESSAGE
+            {t.founderLabel}
           </Text>
 
           <Text style={styles.quoteMark}>“</Text>
 
           <Text style={styles.founderQuote}>
-            I founded Elmi Guray Academy with the belief that
-            talent exists everywhere, but opportunity does
-            not. My dream is to ensure that financial
-            hardship never prevents a committed learner from
-            developing the skills that can transform their
-            life.
+            {t.founderQuote}
           </Text>
 
           <Text style={styles.founderName}>
-            Mohammed Elmi Issak
+            {t.founderName}
           </Text>
 
           <Text style={styles.founderRole}>
-            Founder, Elmi Guray Foundation
+            {t.founderRole1}
           </Text>
 
           <Text style={styles.founderRole}>
-            Founder & President, Elmi Guray Academy
+            {t.founderRole2}
           </Text>
         </View>
       </View>
@@ -537,17 +827,15 @@ export default function HomeScreen() {
       <View style={styles.navigationSection}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabel}>
-            EGA PLATFORM
+            {t.platformLabel}
           </Text>
 
           <Text style={styles.sectionTitle}>
-            Continue your journey
+            {t.journeyTitle}
           </Text>
 
           <View style={styles.cardGrid}>
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Explore courses"
               style={({ pressed }) => [
                 styles.navigationCard,
                 { width: twoColumnCardWidth },
@@ -556,38 +844,32 @@ export default function HomeScreen() {
               onPress={() => router.push("/explore")}
             >
               <Text style={styles.navigationTitle}>
-                📚 Explore Courses
+                {t.exploreNavigation}
               </Text>
-
               <Text style={styles.navigationText}>
-                Browse lessons, projects, quizzes, and
-                learning resources.
+                {t.exploreNavigationText}
               </Text>
             </Pressable>
 
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Open learner portal"
               style={({ pressed }) => [
                 styles.navigationCard,
                 { width: twoColumnCardWidth },
                 pressed && styles.cardPressed,
               ]}
-              onPress={() => router.push("/learner-portal")}
+              onPress={() =>
+                router.push("/learner-portal")
+              }
             >
               <Text style={styles.navigationTitle}>
-                🎓 Learner Portal
+                {t.learnerNavigation}
               </Text>
-
               <Text style={styles.navigationText}>
-                View your learning progress, quizzes,
-                assignments, and certificates.
+                {t.learnerNavigationText}
               </Text>
             </Pressable>
 
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Open student leaderboard"
               style={({ pressed }) => [
                 styles.navigationCard,
                 { width: twoColumnCardWidth },
@@ -596,18 +878,14 @@ export default function HomeScreen() {
               onPress={() => router.push("/leaderboard")}
             >
               <Text style={styles.navigationTitle}>
-                🏆 Student Leaderboard
+                {t.leaderboard}
               </Text>
-
               <Text style={styles.navigationText}>
-                Celebrate student achievement and view top
-                quiz results.
+                {t.leaderboardText}
               </Text>
             </Pressable>
 
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Open payments and support"
               style={({ pressed }) => [
                 styles.navigationCard,
                 { width: twoColumnCardWidth },
@@ -616,31 +894,29 @@ export default function HomeScreen() {
               onPress={() => router.push("/payments")}
             >
               <Text style={styles.navigationTitle}>
-                💳 Payments & Support
+                {t.paymentsSupport}
               </Text>
-
               <Text style={styles.navigationText}>
-                Check payment information and access
-                available support options.
+                {t.paymentsSupportText}
               </Text>
             </Pressable>
           </View>
 
           <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Open secure admin dashboard"
             style={({ pressed }) => [
               styles.adminCard,
               pressed && styles.cardPressed,
             ]}
-            onPress={() => router.push("/admin-dashboard")}
+            onPress={() =>
+              router.push("/admin-dashboard")
+            }
           >
             <Text style={styles.adminTitle}>
-              🔐 Secure Admin Dashboard
+              {t.adminDashboard}
             </Text>
 
             <Text style={styles.adminText}>
-              Authorized administrators only
+              {t.adminOnly}
             </Text>
           </Pressable>
         </View>
@@ -649,17 +925,14 @@ export default function HomeScreen() {
       <View style={styles.finalCallSection}>
         <View style={styles.contentContainer}>
           <Text style={styles.finalCallTitle}>
-            One Student. One Future. One Opportunity.
+            {t.finalTitle}
           </Text>
 
           <Text style={styles.finalCallText}>
-            Join Elmi Guray Academy as a learner, supporter,
-            mentor, volunteer, or future partner.
+            {t.finalText}
           </Text>
 
           <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Begin your EGA journey"
             style={({ pressed }) => [
               styles.finalCallButton,
               pressed && styles.buttonPressed,
@@ -667,7 +940,7 @@ export default function HomeScreen() {
             onPress={() => router.push("/register")}
           >
             <Text style={styles.finalCallButtonText}>
-              Begin Your Journey
+              {t.beginJourney}
             </Text>
           </Pressable>
         </View>
@@ -676,25 +949,23 @@ export default function HomeScreen() {
       <View style={styles.footer}>
         <View style={styles.contentContainer}>
           <Text style={styles.footerTitle}>
-            Elmi Guray Academy
+            {t.academy}
           </Text>
 
           <Text style={styles.footerText}>
-            An education initiative of Elmi Guray Foundation
+            {t.footerText}
           </Text>
 
           <Text style={styles.footerMotto}>
-            Learn with Purpose. Build with Integrity. Lead
-            Through Service.
+            {t.footerMotto}
           </Text>
 
           <Text style={styles.footerFounder}>
-            Founded by Mohammed Elmi Issak
+            {t.footerFounder}
           </Text>
 
           <Text style={styles.footerCopyright}>
-            © 2026 Elmi Guray Foundation. All rights
-            reserved.
+            {t.copyright}
           </Text>
         </View>
       </View>
@@ -720,7 +991,7 @@ const styles = StyleSheet.create({
 
   hero: {
     backgroundColor: "#12326b",
-    paddingTop: 52,
+    paddingTop: 28,
     paddingBottom: 58,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 38,
@@ -732,6 +1003,39 @@ const styles = StyleSheet.create({
     maxWidth: 1000,
     alignSelf: "center",
     alignItems: "center",
+  },
+
+  languageSwitcher: {
+    flexDirection: "row",
+    backgroundColor: "#0b2556",
+    borderRadius: 28,
+    padding: 4,
+    marginBottom: 22,
+    borderWidth: 1,
+    borderColor: "#5373a8",
+  },
+
+  languageButton: {
+    minWidth: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 17,
+    borderRadius: 23,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  languageButtonActive: {
+    backgroundColor: "#facc15",
+  },
+
+  languageButtonText: {
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: "800",
+  },
+
+  languageButtonTextActive: {
+    color: "#12326b",
   },
 
   logoImage: {
