@@ -407,6 +407,11 @@ export default function PaymentsScreen() {
         `✅ PayPal checkout created for ${formatMoney(data.amount)} ${data.currency || "USD"}. Opening PayPal...`
       );
 
+      if (Platform.OS === "web" && typeof window !== "undefined") {
+        window.location.assign(data.approval_url);
+        return;
+      }
+
       const supported = await Linking.canOpenURL(data.approval_url);
       if (!supported) {
         setMessage("❌ This device could not open the PayPal checkout page");
