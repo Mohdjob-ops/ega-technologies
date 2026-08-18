@@ -405,42 +405,6 @@ export default function HomeScreen() {
             </Pressable>
           </View>
 
-          <Image
-            source={require("../../assets/images/ega-logo.png")}
-            style={[
-              styles.logoImage,
-              isTablet && styles.logoImageLarge,
-            ]}
-            resizeMode="contain"
-            accessibilityLabel="Elmi Guray Academy logo"
-          />
-
-          <Text style={styles.foundationName}>
-            {t.foundation}
-          </Text>
-
-          <Text
-            style={[
-              styles.title,
-              isTablet && styles.titleLarge,
-            ]}
-          >
-            {t.academy}
-          </Text>
-
-          <Text
-            style={[
-              styles.heroHeading,
-              isTablet && styles.heroHeadingLarge,
-            ]}
-          >
-            {t.heroHeading}
-          </Text>
-
-          <Text style={styles.subtitle}>
-            {t.subtitle}
-          </Text>
-
           <View
             style={[
               styles.heroButtons,
@@ -519,6 +483,43 @@ export default function HomeScreen() {
               </Text>
             </Pressable>
           </View>
+
+          <Image
+            source={require("../../assets/images/ega-logo.png")}
+            style={[
+              styles.logoImage,
+              isTablet && styles.logoImageLarge,
+            ]}
+            resizeMode="contain"
+            accessibilityLabel="Elmi Guray Academy logo"
+          />
+
+          <Text style={styles.foundationName}>
+            {t.foundation}
+          </Text>
+
+          <Text
+            style={[
+              styles.title,
+              isTablet && styles.titleLarge,
+            ]}
+          >
+            {t.academy}
+          </Text>
+
+          <Text
+            style={[
+              styles.heroHeading,
+              isTablet && styles.heroHeadingLarge,
+            ]}
+          >
+            {t.heroHeading}
+          </Text>
+
+          <Text style={styles.subtitle}>
+            {t.subtitle}
+          </Text>
+
         </View>
       </View>
 
