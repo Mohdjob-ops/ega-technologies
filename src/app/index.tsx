@@ -735,10 +735,14 @@ export default function HomeScreen() {
           </Text>
 
           <View style={styles.cardGrid}>
-            <View
-              style={[
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel={t.webDevelopment}
+              onPress={() => router.push("/explore")}
+              style={({ pressed }) => [
                 styles.courseCard,
                 { width: threeColumnCardWidth },
+                pressed && styles.cardPressed,
               ]}
             >
               <Text style={styles.courseIcon}>🌐</Text>
@@ -748,12 +752,16 @@ export default function HomeScreen() {
               <Text style={styles.courseText}>
                 {t.webDevelopmentText}
               </Text>
-            </View>
+            </Pressable>
 
-            <View
-              style={[
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel={t.artificialIntelligence}
+              onPress={() => router.push("/explore")}
+              style={({ pressed }) => [
                 styles.courseCard,
                 { width: threeColumnCardWidth },
+                pressed && styles.cardPressed,
               ]}
             >
               <Text style={styles.courseIcon}>🤖</Text>
@@ -763,12 +771,16 @@ export default function HomeScreen() {
               <Text style={styles.courseText}>
                 {t.artificialIntelligenceText}
               </Text>
-            </View>
+            </Pressable>
 
-            <View
-              style={[
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel={t.careerSkills}
+              onPress={() => router.push("/explore")}
+              style={({ pressed }) => [
                 styles.courseCard,
                 { width: threeColumnCardWidth },
+                pressed && styles.cardPressed,
               ]}
             >
               <Text style={styles.courseIcon}>💡</Text>
@@ -778,7 +790,7 @@ export default function HomeScreen() {
               <Text style={styles.courseText}>
                 {t.careerSkillsText}
               </Text>
-            </View>
+            </Pressable>
           </View>
 
           <Pressable
