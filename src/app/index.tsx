@@ -298,11 +298,9 @@ export default function HomeScreen() {
       ? "48.8%"
       : "100%";
 
-  const topActionButtonWidth = isDesktop
-    ? "18.5%"
-    : isTablet
-      ? "48.5%"
-      : "100%";
+  const topActionButtonWidth = isTablet
+    ? "48.5%"
+    : "100%";
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -359,6 +357,20 @@ export default function HomeScreen() {
     >
       <View style={styles.hero}>
         <View style={styles.heroInner}>
+          <Image
+            source={require("../../assets/images/ega-logo.png")}
+            style={[
+              styles.logoImage,
+              isTablet && styles.logoImageLarge,
+            ]}
+            resizeMode="contain"
+            accessibilityLabel="Elmi Guray Academy logo"
+          />
+
+          <Text style={styles.foundationName}>
+            {t.foundation}
+          </Text>
+
           <View style={styles.languageSwitcher}>
             <Pressable
               accessibilityRole="button"
@@ -425,35 +437,47 @@ export default function HomeScreen() {
               </Text>
             </Pressable>
 
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [
-                styles.learnerPortalButton,
-                { width: topActionButtonWidth },
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={() =>
-                router.push("/learner-portal")
-              }
-            >
-              <Text style={styles.learnerPortalButtonText}>
-                {t.learnerPortal}
-              </Text>
-            </Pressable>
+            <View style={styles.portalExploreRow}>
+              <Pressable
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.learnerPortalButton,
+                  styles.portalExploreButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() =>
+                  router.push("/learner-portal")
+                }
+              >
+                <Text
+                  style={[
+                    styles.learnerPortalButtonText,
+                    styles.portalExploreButtonText,
+                  ]}
+                >
+                  {t.learnerPortal}
+                </Text>
+              </Pressable>
 
-            <Pressable
-              accessibilityRole="button"
-              style={({ pressed }) => [
-                styles.learnerPortalButton,
-                { width: topActionButtonWidth },
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={() => router.push("/explore")}
-            >
-              <Text style={styles.learnerPortalButtonText}>
-                📚 {t.exploreCourses}
-              </Text>
-            </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.learnerPortalButton,
+                  styles.portalExploreButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() => router.push("/explore")}
+              >
+                <Text
+                  style={[
+                    styles.learnerPortalButtonText,
+                    styles.portalExploreButtonText,
+                  ]}
+                >
+                  📚 {t.exploreCourses}
+                </Text>
+              </Pressable>
+            </View>
 
             <Pressable
               accessibilityRole="button"
@@ -483,20 +507,6 @@ export default function HomeScreen() {
               </Text>
             </Pressable>
           </View>
-
-          <Image
-            source={require("../../assets/images/ega-logo.png")}
-            style={[
-              styles.logoImage,
-              isTablet && styles.logoImageLarge,
-            ]}
-            resizeMode="contain"
-            accessibilityLabel="Elmi Guray Academy logo"
-          />
-
-          <Text style={styles.foundationName}>
-            {t.foundation}
-          </Text>
 
           <Text
             style={[
@@ -1053,6 +1063,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0b2556",
     borderRadius: 28,
     padding: 4,
+    marginTop: 22,
     marginBottom: 22,
     borderWidth: 1,
     borderColor: "#5373a8",
@@ -1100,6 +1111,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     textTransform: "uppercase",
     textAlign: "center",
+    marginTop: -4,
   },
 
   title: {
@@ -1168,6 +1180,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     textAlign: "center",
+  },
+
+  portalExploreRow: {
+    width: "100%",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "stretch",
+  },
+
+  portalExploreButton: {
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: 10,
+  },
+
+  portalExploreButtonText: {
+    fontSize: 16,
   },
 
   learnerPortalButton: {
