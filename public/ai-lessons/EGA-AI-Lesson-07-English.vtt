@@ -1,0 +1,194 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.497
+Lesson 7.
+
+3
+00:00:04.497 --> 00:00:06.915
+Learning with a Community.
+
+4
+00:00:06.915 --> 00:00:21.345
+Lesson Overview Course AI Tools for Developers Lesson Lesson 7 Topic Learning with a Community Level Beginner Learning Objectives By the end of this lesson, you should be able to: Explain why learning with other people can be helpful.
+
+5
+00:00:21.345 --> 00:00:25.869
+Identify useful activities inside a learning community.
+
+6
+00:00:25.869 --> 00:00:29.986
+Ask technical questions clearly and respectfully.
+
+7
+00:00:29.986 --> 00:00:34.048
+Support other learners without completing all their work.
+
+8
+00:00:34.048 --> 00:00:38.763
+Share progress, ideas, and achievements responsibly.
+
+9
+00:00:38.763 --> 00:00:42.078
+Follow good online-community behavior.
+
+10
+00:00:42.078 --> 00:00:48.899
+Main principle: You can study independently, but you do not have to solve every problem alone.
+
+11
+00:00:48.899 --> 00:00:56.385
+A respectful learning community can provide encouragement, explanations, feedback, and new ideas.
+
+12
+00:00:56.385 --> 00:01:02.133
+English Technical Section Learning software development can sometimes feel difficult.
+
+13
+00:01:02.133 --> 00:01:11.874
+A learner may encounter errors, unfamiliar terminology, confusing instructions, or a problem that takes a long time to understand.
+
+14
+00:01:11.874 --> 00:01:17.907
+A learning community gives students a place to communicate with people who have similar goals.
+
+15
+00:01:17.907 --> 00:01:26.249
+Members can ask questions, discuss lessons, exchange ideas, celebrate achievements, and encourage one another.
+
+16
+00:01:26.249 --> 00:01:35.543
+1 Ask Questions A community can help when you are stuck, but your question should contain enough information for others to understand the problem.
+
+17
+00:01:35.543 --> 00:01:40.611
+A useful technical question may include: What you are trying to do.
+
+18
+00:01:40.611 --> 00:01:43.288
+What you expected to happen.
+
+19
+00:01:43.288 --> 00:01:45.665
+What actually happened.
+
+20
+00:01:45.665 --> 00:01:48.301
+The exact error message.
+
+21
+00:01:48.301 --> 00:01:51.263
+The relevant code or screenshot.
+
+22
+00:01:51.263 --> 00:01:53.790
+What you have already tried.
+
+23
+00:01:53.790 --> 00:01:59.782
+2 Learn from Other Questions You can learn even when you are not the person asking the question.
+
+24
+00:01:59.782 --> 00:02:05.801
+Reading another learner's problem and solution may teach you how to avoid the same mistake.
+
+25
+00:02:05.801 --> 00:02:12.160
+Community discussions can also introduce different ways to solve the same programming problem.
+
+26
+00:02:12.160 --> 00:02:21.644
+3 Share Your Progress Sharing a completed lesson, small project, certificate, or difficult problem you solved can strengthen your motivation.
+
+27
+00:02:21.644 --> 00:02:25.597
+Progress does not need to be perfect or dramatic.
+
+28
+00:02:25.597 --> 00:02:30.951
+Completing one lesson or fixing one error is still meaningful progress.
+
+29
+00:02:30.951 --> 00:02:37.527
+4 Help Other Learners Explaining a concept to another person can improve your own understanding.
+
+30
+00:02:37.527 --> 00:02:40.937
+Good help guides the learner toward the answer.
+
+31
+00:02:40.937 --> 00:02:44.877
+It does not simply complete every assignment for them.
+
+32
+00:02:44.877 --> 00:02:54.605
+5 Receive Feedback Other learners may notice unclear code, design problems, missing instructions, or mistakes that you did not see.
+
+33
+00:02:54.605 --> 00:03:02.105
+Feedback should be specific, respectful, and focused on improving the work rather than criticizing the person.
+
+34
+00:03:02.105 --> 00:03:10.067
+6 Stay Motivated Seeing others learn and make progress can remind you that difficulty is a normal part of development.
+
+35
+00:03:10.067 --> 00:03:16.413
+A supportive community can encourage you to continue when a lesson or project feels challenging.
+
+36
+00:03:16.413 --> 00:03:22.540
+How to Ask a Good Community Question Avoid questions that contain no useful detail.
+
+37
+00:03:22.540 --> 00:03:25.054
+My code does not work.
+
+38
+00:03:25.054 --> 00:03:26.684
+Help me.
+
+39
+00:03:26.684 --> 00:03:32.880
+A clearer question would be: I am trying to open the registration page from the Home screen.
+
+40
+00:03:32.880 --> 00:03:38.369
+Expected result: Tapping the Register button should open /register.
+
+41
+00:03:38.369 --> 00:03:42.567
+Actual result: Nothing happens when I tap the button.
+
+42
+00:03:42.567 --> 00:03:51.480
+File: src/app/index.tsx What I tried: I restarted Expo and refreshed the browser.
+
+43
+00:03:51.480 --> 00:03:55.271
+Please help me identify the navigation problem.
+
+44
+00:03:55.271 --> 00:04:01.630
+The second question makes it easier for another learner or instructor to understand the problem.
+
+45
+00:04:01.630 --> 00:04:06.317
+How to Give Helpful Feedback Weak feedback: Your code is bad.
+
+46
+00:04:06.317 --> 00:04:12.445
+Better feedback: The form works, but the labels are difficult to read on a small screen.
+
+47
+00:04:12.445 --> 00:04:17.894
+Consider increasing the label size and adding more space between the fields.
+
+48
+00:04:17.894 --> 00:04:24.728
+Good feedback explains the issue and suggests a possible improvement without disrespecting the learner.
+

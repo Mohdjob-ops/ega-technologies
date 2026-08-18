@@ -1,0 +1,362 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.578
+Lesson 6.
+
+3
+00:00:04.578 --> 00:00:08.546
+Prompt and Context Engineering Recommendations.
+
+4
+00:00:08.716 --> 00:00:24.209
+Lesson Overview Course AI Tools for Developers Lesson Lesson 6 Topic Prompt and Context Engineering Level Beginner Learning Objectives By the end of this lesson, you should be able to: Write prompts that are clear, concise, and precise.
+
+5
+00:00:24.159 --> 00:00:28.697
+Separate useful context from unnecessary information.
+
+6
+00:00:28.697 --> 00:00:31.876
+Think and plan before sending a prompt.
+
+7
+00:00:31.876 --> 00:00:36.455
+Warn the AI about known difficulties and common mistakes.
+
+8
+00:00:36.455 --> 00:00:40.857
+Tell an AI agent which tools or features it should use.
+
+9
+00:00:40.857 --> 00:00:47.121
+Understand that the developer remains responsible for directing and reviewing the AI.
+
+10
+00:00:47.121 --> 00:00:52.474
+Main principle: AI does not remove the developer from the process.
+
+11
+00:00:52.474 --> 00:00:59.689
+The developer defines the goal, supplies the right context, sets the limits, and checks the result.
+
+12
+00:00:59.689 --> 00:01:08.276
+English Technical Section Prompt engineering is the practice of writing instructions that clearly describe what an AI system should do.
+
+13
+00:01:08.276 --> 00:01:19.594
+Context engineering is the practice of supplying the information, files, rules, examples, and constraints that the AI needs to perform the task correctly.
+
+14
+00:01:19.594 --> 00:01:24.390
+A strong result normally requires both: A clear instruction.
+
+15
+00:01:24.390 --> 00:01:27.325
+Relevant supporting information.
+
+16
+00:01:27.325 --> 00:01:36.768
+1 Be Concise and Precise A prompt should contain enough detail to define the task, but it should not be filled with unrelated explanations.
+
+17
+00:01:36.768 --> 00:01:39.798
+Concise does not mean incomplete.
+
+18
+00:01:39.798 --> 00:01:44.621
+It means that every sentence should help the AI understand the goal.
+
+19
+00:01:44.621 --> 00:01:49.539
+A precise prompt usually identifies: The exact task.
+
+20
+00:01:49.539 --> 00:01:52.447
+The part of the project involved.
+
+21
+00:01:52.447 --> 00:01:54.662
+Important limits.
+
+22
+00:01:54.662 --> 00:01:57.080
+The expected output.
+
+23
+00:01:57.080 --> 00:01:59.716
+How success should be checked.
+
+24
+00:01:59.716 --> 00:02:08.466
+Very long prompts can still be unclear when they contain repeated ideas, unnecessary history, or unrelated details.
+
+25
+00:02:08.466 --> 00:02:16.061
+2 Avoid Unnecessary Context Context is useful only when it helps the AI complete the current task.
+
+26
+00:02:16.061 --> 00:02:21.971
+Do not attach or reference a file simply because you suspect that it might be related.
+
+27
+00:02:21.971 --> 00:02:28.711
+Include files that you know contain relevant code, settings, requirements, or examples.
+
+28
+00:02:28.711 --> 00:02:33.711
+Useful context may include: The file where the problem occurs.
+
+29
+00:02:33.711 --> 00:02:36.700
+A related configuration file.
+
+30
+00:02:36.700 --> 00:02:39.336
+The exact error message.
+
+31
+00:02:39.336 --> 00:02:42.569
+A required design or business rule.
+
+32
+00:02:42.569 --> 00:02:45.681
+An example of the expected result.
+
+33
+00:02:45.681 --> 00:02:50.871
+Unnecessary context may include: Unrelated project files.
+
+34
+00:02:50.871 --> 00:02:54.268
+Old instructions that no longer apply.
+
+35
+00:02:54.268 --> 00:02:58.507
+Long documentation pages unrelated to the task.
+
+36
+00:02:58.507 --> 00:03:02.189
+Personal stories that do not affect the solution.
+
+37
+00:03:02.189 --> 00:03:11.414
+3 Think, Plan, Then Prompt Before sending a request to an AI tool, pause and identify what you actually want to achieve.
+
+38
+00:03:11.414 --> 00:03:15.654
+For a larger task, prepare a small plan first.
+
+39
+00:03:15.654 --> 00:03:22.624
+This reduces repeated clarification and prevents the AI from making broad changes too early.
+
+40
+00:03:22.624 --> 00:03:24.743
+Define the problem.
+
+41
+00:03:24.743 --> 00:03:28.344
+Identify the files or systems involved.
+
+42
+00:03:28.344 --> 00:03:31.143
+Decide what must not change.
+
+43
+00:03:31.143 --> 00:03:34.268
+Describe the desired final result.
+
+44
+00:03:34.268 --> 00:03:36.849
+Write and review the prompt.
+
+45
+00:03:36.849 --> 00:03:46.048
+Planning mode is especially useful for tasks that involve several files, complex logic, unfamiliar code, or important data.
+
+46
+00:03:46.048 --> 00:03:54.838
+4 Do Not Hide Known Challenges Do not deliberately withhold information just to see whether the AI can discover the problem by itself.
+
+47
+00:03:54.838 --> 00:04:05.382
+When you already know about a dangerous area, common mistake, previous failure, or special requirement, include that information in the original prompt.
+
+48
+00:04:05.382 --> 00:04:11.659
+For example: The registration form previously created duplicate student records.
+
+49
+00:04:11.659 --> 00:04:15.300
+Keep the existing duplicate-checking logic.
+
+50
+00:04:15.300 --> 00:04:19.865
+Do not remove or bypass it when adding the new language field.
+
+51
+00:04:19.865 --> 00:04:26.428
+This gives the AI a better chance of completing the task without reintroducing an old problem.
+
+52
+00:04:26.428 --> 00:04:33.887
+5 Name the Tools the AI Should Use AI coding agents may have access to several tools and features.
+
+53
+00:04:33.887 --> 00:04:44.947
+These can include terminal commands, search, web access, testing tools, project search, connected servers, skills, or specialized subagents.
+
+54
+00:04:44.947 --> 00:04:49.499
+When a specific tool is necessary, mention it directly.
+
+55
+00:04:49.499 --> 00:04:53.439
+Do not assume the agent will automatically choose it.
+
+56
+00:04:53.439 --> 00:04:59.268
+Example: Use the terminal to run the existing test command after the change.
+
+57
+00:04:59.268 --> 00:05:02.162
+Do not install new packages.
+
+58
+00:05:02.162 --> 00:05:07.692
+If a test fails, report the exact error before editing another file.
+
+59
+00:05:07.692 --> 00:05:15.450
+This instruction tells the agent which tool to use, what not to do, and how to respond if a problem appears.
+
+60
+00:05:15.450 --> 00:05:23.982
+6 You Remain in Control The AI may suggest code, edit files, run commands, analyze errors, or
+
+61
+00:05:24.172 --> 00:05:26.350
+review changes.
+
+62
+00:05:26.300 --> 00:05:31.762
+However, the developer remains responsible for the direction of the work.
+
+63
+00:05:31.762 --> 00:05:35.879
+You should decide: What the AI is allowed to change.
+
+64
+00:05:35.879 --> 00:05:38.542
+Which files it may inspect.
+
+65
+00:05:38.542 --> 00:05:41.082
+Which tools it should use.
+
+66
+00:05:41.082 --> 00:05:43.800
+How the result should be tested.
+
+67
+00:05:43.800 --> 00:05:47.074
+Whether the final output is acceptable.
+
+68
+00:05:47.074 --> 00:05:49.751
+The AI is an assistant.
+
+69
+00:05:49.751 --> 00:05:52.740
+The developer is the decision-maker.
+
+70
+00:05:52.740 --> 00:06:01.816
+Recommended Prompt Structure A practical developer prompt can use the following structure: Task: Describe exactly what should be done.
+
+71
+00:06:01.816 --> 00:06:07.754
+Relevant context: List the files, error message, or rules that matter.
+
+72
+00:06:07.754 --> 00:06:11.490
+Constraints: State what must not be changed.
+
+73
+00:06:11.490 --> 00:06:16.762
+Tools: Name any tool, command, or feature that should be used.
+
+74
+00:06:16.762 --> 00:06:21.150
+Verification: Explain how the result should be checked.
+
+75
+00:06:21.150 --> 00:06:26.137
+Output: State what the AI should return after completing the work.
+
+76
+00:06:26.137 --> 00:06:33.202
+Complete Example Task: Add a required preferred-language field to the student registration page.
+
+77
+00:06:33.202 --> 00:06:40.226
+Relevant context: The page is in src/app/register.tsx.
+
+78
+00:06:40.226 --> 00:06:44.167
+The students table already has a language column.
+
+79
+00:06:44.167 --> 00:06:47.455
+The choices must be English and Somali.
+
+80
+00:06:47.455 --> 00:06:51.857
+Constraints: Keep the existing duplicate-student check.
+
+81
+00:06:51.857 --> 00:06:54.751
+Do not change payment logic.
+
+82
+00:06:54.751 --> 00:06:57.917
+Do not edit unrelated files.
+
+83
+00:06:57.917 --> 00:07:00.919
+Keep the existing page design.
+
+84
+00:07:00.919 --> 00:07:06.531
+Tools: Search the project for the existing registration insert function.
+
+85
+00:07:06.531 --> 00:07:10.471
+Run the existing type-check command after editing.
+
+86
+00:07:10.471 --> 00:07:17.088
+Verification: Confirm that registration cannot be submitted without selecting a language.
+
+87
+00:07:17.088 --> 00:07:20.607
+Confirm that the selected language is saved.
+
+88
+00:07:20.607 --> 00:07:27.767
+Output: Return the complete replacement register.tsx file and list the checks performed.
+
+89
+00:07:27.767 --> 00:07:32.400
+This prompt is detailed, but every part supports the task.
+
+90
+00:07:32.400 --> 00:07:36.531
+It does not include unrelated background information.
+

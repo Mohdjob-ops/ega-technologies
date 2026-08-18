@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps -- The saved-student certificate lookup intentionally runs once when the screen mounts. */
 import { router } from "expo-router";
 import {
   ScrollView,

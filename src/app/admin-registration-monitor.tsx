@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps -- The polling effect intentionally follows admin access only; changing callback identities must not restart its interval. */
 import { Link } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {

@@ -1,0 +1,266 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.538
+Lesson 5.
+
+3
+00:00:04.538 --> 00:00:07.391
+Categories of AI Tools.
+
+4
+00:00:07.540 --> 00:00:24.844
+Lesson Overview Course AI Tools for Developers Lesson Lesson 5 Topic Categories of AI Development Tools Level Beginner Learning Objectives By the end of this lesson, you should be able to: Identify four important categories of AI tools used by developers.
+
+5
+00:00:24.844 --> 00:00:30.945
+Explain the difference between an external AI chatbot and a project-aware coding tool.
+
+6
+00:00:30.945 --> 00:00:34.872
+Explain how intelligent code completion works.
+
+7
+00:00:34.872 --> 00:00:39.994
+Describe what coding agents can do across multiple project files.
+
+8
+00:00:39.994 --> 00:00:44.763
+Explain how AI code-review tools support human reviewers.
+
+9
+00:00:44.763 --> 00:00:49.749
+Select an appropriate AI tool for a specific development task.
+
+10
+00:00:49.749 --> 00:00:55.537
+Central idea: AI development tools do not all perform the same job.
+
+11
+00:00:55.537 --> 00:01:01.964
+A responsible developer must understand which tool category is suitable for each task.
+
+12
+00:01:01.964 --> 00:01:08.567
+English Technical Section Developers now have access to several types of AI-powered tools.
+
+13
+00:01:08.567 --> 00:01:17.453
+Although many of these tools use similar AI technology, they interact with developers and software projects in different ways.
+
+14
+00:01:17.453 --> 00:01:27.426
+The four important categories covered in this lesson are: 1 External AI Chatbots External AI chatbots are general conversation tools.
+
+15
+00:01:27.426 --> 00:01:38.635
+Developers can use them to ask questions, learn programming concepts, plan projects, analyze short code examples, and discuss possible solutions.
+
+16
+00:01:38.635 --> 00:01:46.257
+Examples mentioned in this course include: ChatGPT Gemini Good uses Learning a programming concept.
+
+17
+00:01:46.257 --> 00:01:48.662
+Planning a new project.
+
+18
+00:01:48.662 --> 00:01:51.366
+Explaining an error message.
+
+19
+00:01:51.366 --> 00:01:54.586
+Discussing different solution ideas.
+
+20
+00:01:54.586 --> 00:01:57.344
+Generating a small example.
+
+21
+00:01:57.344 --> 00:02:04.844
+Main limitation A normal external chatbot does not automatically know everything inside your local project.
+
+22
+00:02:04.844 --> 00:02:14.437
+It can only work with project information that you provide through your message, uploaded files, connected services, or another supported method.
+
+23
+00:02:14.437 --> 00:02:21.380
+2 AI Code-Completion Tools Code-completion tools work inside or alongside a code editor.
+
+24
+00:02:21.380 --> 00:02:30.157
+They examine the current file, nearby code, and other available context to predict what the developer may want to type next.
+
+25
+00:02:30.157 --> 00:02:37.263
+Examples covered in this course include: GitHub Copilot Cursor What makes the completion intelligent?
+
+26
+00:02:37.263 --> 00:02:43.676
+Traditional autocomplete may suggest a variable, method, or property from a known list.
+
+27
+00:02:43.676 --> 00:02:49.029
+AI-powered completion can often suggest: A complete line of code.
+
+28
+00:02:49.029 --> 00:02:51.719
+A group of related lines.
+
+29
+00:02:51.719 --> 00:02:54.450
+An HTML structure.
+
+30
+00:02:54.450 --> 00:02:57.820
+A function based on its name or comment.
+
+31
+00:02:57.820 --> 00:03:01.026
+Code that matches the surrounding pattern.
+
+32
+00:03:01.026 --> 00:03:08.499
+The developer remains in control and decides whether to accept, modify, or reject each suggestion.
+
+33
+00:03:08.499 --> 00:03:16.054
+3 AI Coding Agents A coding agent can perform work that is larger than a normal autocomplete suggestion.
+
+34
+00:03:16.054 --> 00:03:31.298
+Depending on its permissions and instructions, an agent may inspect the project, create files, update existing files, search for related code, run commands, and attempt to complete a multi-step development task.
+
+35
+00:03:31.298 --> 00:03:40.361
+Examples mentioned in the lesson include: GitHub Copilot Cursor Claude Code Possible agent tasks Create a complete webpage.
+
+36
+00:03:40.361 --> 00:03:43.459
+Update several related files.
+
+37
+00:03:43.459 --> 00:03:46.488
+Find where a feature is implemented.
+
+38
+00:03:46.488 --> 00:03:49.545
+Repair a bug across a project.
+
+39
+00:03:49.545 --> 00:03:52.399
+Add a new component or route.
+
+40
+00:03:52.399 --> 00:03:55.999
+Run tests and react to test results.
+
+41
+00:03:55.999 --> 00:04:02.358
+Important: An agent can make changes quickly, but speed does not guarantee correctness.
+
+42
+00:04:02.358 --> 00:04:08.064
+The developer must provide clear instructions and review every important change.
+
+43
+00:04:08.064 --> 00:04:18.377
+4 AI Code-Review Tools AI code-review tools examine code changes and provide feedback before those changes are accepted into the main project.
+
+44
+00:04:18.377 --> 00:04:23.554
+They are commonly used with pull requests on platforms such as GitHub.
+
+45
+00:04:23.554 --> 00:04:29.545
+Examples mentioned in this lesson include: BugBot CodeRabbit What might they detect?
+
+46
+00:04:29.545 --> 00:04:31.665
+Possible bugs.
+
+47
+00:04:31.665 --> 00:04:34.111
+Missing error handling.
+
+48
+00:04:34.111 --> 00:04:36.584
+Security concerns.
+
+49
+00:04:36.584 --> 00:04:38.676
+Repeated code.
+
+50
+00:04:38.676 --> 00:04:40.931
+Unclear logic.
+
+51
+00:04:40.931 --> 00:04:43.717
+Possible performance problems.
+
+52
+00:04:43.717 --> 00:04:51.747
+Their feedback can give a human reviewer a useful starting point, but it should not automatically replace human judgment.
+
+53
+00:04:51.747 --> 00:05:03.146
+Example: Asking an External Chatbot A developer could ask a general chatbot: Explain the difference between an HTML class and an HTML id.
+
+54
+00:05:03.146 --> 00:05:06.339
+Give me one simple example of each.
+
+55
+00:05:06.339 --> 00:05:12.439
+This question does not require the chatbot to understand an entire private project.
+
+56
+00:05:12.439 --> 00:05:15.483
+It is a general programming question.
+
+57
+00:05:15.483 --> 00:05:21.325
+Example: Giving a Coding Agent Instructions A developer could instruct a
+
+58
+00:05:21.508 --> 00:05:27.055
+project-aware coding agent: Inspect the existing registration page.
+
+59
+00:05:27.005 --> 00:05:32.617
+Add a required preferred-language field with two choices: English and Somali.
+
+60
+00:05:32.617 --> 00:05:35.185
+Keep the existing design.
+
+61
+00:05:35.185 --> 00:05:38.201
+Do not change the payment logic.
+
+62
+00:05:38.201 --> 00:05:41.027
+Show me the files you changed.
+
+63
+00:05:41.027 --> 00:05:44.927
+This request relates to a specific project.
+
+64
+00:05:44.927 --> 00:05:51.530
+The agent needs access to the relevant project files and must understand how they work together.
+
+65
+00:05:51.530 --> 00:05:57.875
+Professional habit: Give coding agents narrow, clear, testable instructions.
+
+66
+00:05:57.875 --> 00:06:01.679
+Review the result before moving to the next task.
+

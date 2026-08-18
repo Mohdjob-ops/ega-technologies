@@ -1,0 +1,206 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.388
+Lesson 8.
+
+3
+00:00:04.388 --> 00:00:07.472
+Introduction to GitHub Copilot.
+
+4
+00:00:07.472 --> 00:00:17.595
+Lesson Introduction GitHub Copilot is an AI-powered coding assistant that can work directly inside development environments such as Visual Studio Code.
+
+5
+00:00:17.595 --> 00:00:28.491
+It can help developers generate code, explain code, understand errors, suggest improvements, create tests, and assist with larger development tasks.
+
+6
+00:00:28.491 --> 00:00:32.771
+Learning Objectives Explain what GitHub Copilot is.
+
+7
+00:00:32.771 --> 00:00:37.459
+Understand how AI works inside a development environment.
+
+8
+00:00:37.459 --> 00:00:40.394
+Understand code suggestions.
+
+9
+00:00:40.394 --> 00:00:43.192
+Understand Copilot Chat.
+
+10
+00:00:43.192 --> 00:00:45.733
+Understand context.
+
+11
+00:00:45.733 --> 00:00:48.953
+Understand agentic capabilities.
+
+12
+00:00:48.953 --> 00:00:52.554
+Understand configuration and permissions.
+
+13
+00:00:52.554 --> 00:00:56.277
+Review AI-generated code responsibly.
+
+14
+00:00:56.277 --> 00:01:00.896
+Technical Explanation — English What Is GitHub Copilot?
+
+15
+00:01:00.896 --> 00:01:08.084
+GitHub Copilot is an Artificial Intelligence coding assistant designed to support software developers.
+
+16
+00:01:08.084 --> 00:01:13.437
+It can work close to the files and code that the developer is already editing.
+
+17
+00:01:13.437 --> 00:01:16.752
+It may assist with: Code completion.
+
+18
+00:01:16.752 --> 00:01:18.926
+Code generation.
+
+19
+00:01:18.926 --> 00:01:21.182
+Code explanation.
+
+20
+00:01:21.182 --> 00:01:23.817
+Debugging suggestions.
+
+21
+00:01:23.817 --> 00:01:25.801
+Refactoring.
+
+22
+00:01:25.801 --> 00:01:27.853
+Writing tests.
+
+23
+00:01:27.853 --> 00:01:30.910
+Understanding unfamiliar code.
+
+24
+00:01:30.910 --> 00:01:33.288
+What Is an IDE?
+
+25
+00:01:33.288 --> 00:01:42.269
+IDE means: Integrated Development Environment It is software used to write, edit, test, debug, and manage code.
+
+26
+00:01:42.269 --> 00:01:48.682
+Visual Studio Code is widely used by developers and can support AI coding tools.
+
+27
+00:01:48.682 --> 00:01:59.239
+Code Suggestions function calculateTotal(price, quantity) { return price * quantity; } A suggestion is not proof that the code is correct.
+
+28
+00:01:59.239 --> 00:02:02.499
+The developer must review and test it.
+
+29
+00:02:02.499 --> 00:02:09.796
+Copilot Chat Copilot Chat allows a developer to ask programming questions using natural language.
+
+30
+00:02:09.796 --> 00:02:12.173
+Explain this function.
+
+31
+00:02:12.173 --> 00:02:14.565
+Find a possible bug.
+
+32
+00:02:14.565 --> 00:02:17.391
+Create a validation function.
+
+33
+00:02:17.391 --> 00:02:20.095
+Explain this error message.
+
+34
+00:02:20.095 --> 00:02:22.785
+Write tests for this code.
+
+35
+00:02:22.785 --> 00:02:29.021
+Context Context is the information available to the AI when it generates an answer.
+
+36
+00:02:29.021 --> 00:02:30.815
+Your prompt.
+
+37
+00:02:30.815 --> 00:02:32.907
+The current file.
+
+38
+00:02:32.907 --> 00:02:35.013
+Selected code.
+
+39
+00:02:35.013 --> 00:02:37.105
+Error messages.
+
+40
+00:02:37.105 --> 00:02:39.415
+Nearby functions.
+
+41
+00:02:39.415 --> 00:02:42.065
+Related project files.
+
+42
+00:02:42.065 --> 00:02:46.616
+Better context normally produces more relevant assistance.
+
+43
+00:02:46.616 --> 00:02:53.845
+Agentic Capabilities Agentic AI can attempt several connected actions toward one development goal.
+
+44
+00:02:53.845 --> 00:02:59.239
+Create a contact form, add validation, and explain the changes.
+
+45
+00:02:59.239 --> 00:03:04.592
+The developer still remains responsible for reviewing important changes.
+
+46
+00:03:04.592 --> 00:03:11.236
+Configuration AI coding tools may contain settings that control: Code suggestions.
+
+47
+00:03:11.236 --> 00:03:13.654
+Supported languages.
+
+48
+00:03:13.654 --> 00:03:15.652
+Chat behavior.
+
+49
+00:03:15.652 --> 00:03:18.070
+Project context.
+
+50
+00:03:18.070 --> 00:03:19.945
+Permissions.
+
+51
+00:03:19.945 --> 00:03:22.880
+Available tools or actions.
+

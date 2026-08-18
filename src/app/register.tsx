@@ -1003,6 +1003,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 8,
   },
+  referralHelpText: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: "#475569",
+    marginTop: 4,
+  },
   messageBox: {
     backgroundColor: "#f0fdf4",
     borderWidth: 1,

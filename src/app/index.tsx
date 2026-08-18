@@ -508,6 +508,33 @@ export default function HomeScreen() {
         </View>
       </View>
 
+      <View style={styles.coursePreviewSection}>
+        <View style={styles.contentContainer}>
+          <Text style={styles.coursePreviewLabel}>📚 EGA Courses</Text>
+
+          <Text style={styles.coursePreviewTitle}>
+            🤖 AI Developer Course + 🌐 Web Development Courses
+          </Text>
+
+          <Text style={styles.coursePreviewText}>
+            Learn practical AI tools, programming, HTML, CSS, JavaScript, projects, and modern digital skills.
+          </Text>
+
+          <Pressable
+            accessibilityRole="button"
+            style={({ pressed }) => [
+              styles.coursePreviewButton,
+              pressed && styles.buttonPressed,
+            ]}
+            onPress={() => router.push("/explore")}
+          >
+            <Text style={styles.coursePreviewButtonText}>
+              ▶ Watch EGA Course Preview
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+
       <View style={styles.section}>
         <View style={styles.contentContainer}>
           <Text style={styles.sectionLabel}>
@@ -1187,6 +1214,53 @@ const styles = StyleSheet.create({
   cardPressed: {
     opacity: 0.82,
     transform: [{ scale: 0.995 }],
+  },
+
+  coursePreviewSection: {
+    paddingVertical: 28,
+    backgroundColor: "#f8fafc",
+  },
+
+  coursePreviewLabel: {
+    fontSize: 15,
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#0f172a",
+  },
+
+  coursePreviewTitle: {
+    fontSize: 24,
+    fontWeight: "800",
+    textAlign: "center",
+    lineHeight: 32,
+    color: "#0f172a",
+    marginBottom: 12,
+  },
+
+  coursePreviewText: {
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: "center",
+    color: "#475569",
+    maxWidth: 720,
+    alignSelf: "center",
+    marginBottom: 18,
+  },
+
+  coursePreviewButton: {
+    alignSelf: "center",
+    backgroundColor: "#0f172a",
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    borderRadius: 12,
+  },
+
+  coursePreviewButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "800",
+    textAlign: "center",
   },
 
   section: {

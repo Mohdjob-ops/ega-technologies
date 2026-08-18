@@ -1,0 +1,258 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.456
+Lesson 9.
+
+3
+00:00:04.456 --> 00:00:07.459
+GitHub Copilot Core Features.
+
+4
+00:00:07.612 --> 00:00:14.749
+Lesson Introduction In Lesson 8, we introduced GitHub Copilot as an AI coding assistant.
+
+5
+00:00:14.699 --> 00:00:32.444
+In this lesson, we will focus more closely on how Copilot becomes part of a developer's working environment, how developers access it, why account authentication is required, and why subscription limits should be understood before depending heavily on AI coding tools.
+
+6
+00:00:32.444 --> 00:00:41.520
+We will use Visual Studio Code as our main example because it provides a common environment for learning AI-assisted software development.
+
+7
+00:00:41.520 --> 00:00:50.433
+Learning Objectives By the end of this lesson, you should be able to: Explain how GitHub Copilot connects to a development environment.
+
+8
+00:00:50.433 --> 00:00:54.903
+Understand the difference between an editor and an extension.
+
+9
+00:00:54.903 --> 00:00:58.857
+Identify important Copilot capabilities.
+
+10
+00:00:58.857 --> 00:01:02.539
+Understand why a GitHub account is required.
+
+11
+00:01:02.539 --> 00:01:08.082
+Understand why AI coding services may have usage plans and limits.
+
+12
+00:01:08.082 --> 00:01:12.444
+Recognize that pricing and plan details may change.
+
+13
+00:01:12.444 --> 00:01:16.425
+Understand the basic Copilot setup workflow.
+
+14
+00:01:16.425 --> 00:01:19.876
+Technical Explanation — English 1.
+
+15
+00:01:19.876 --> 00:01:29.196
+Copilot Inside the Development Environment GitHub Copilot adds AI-assisted development capabilities to supported coding environments.
+
+16
+00:01:29.196 --> 00:01:37.552
+Depending on the editor or IDE, Copilot may be available through an extension, integration, or built-in feature.
+
+17
+00:01:37.552 --> 00:01:44.821
+This means the developer does not always need to leave the coding environment to ask an AI tool for help.
+
+18
+00:01:44.821 --> 00:01:47.579
+2. What Is an Extension?
+
+19
+00:01:47.579 --> 00:01:54.699
+An extension is an additional software component that adds new capabilities to an existing application.
+
+20
+00:01:54.699 --> 00:02:01.533
+For example, Visual Studio Code can support extensions for: Programming languages.
+
+21
+00:02:01.533 --> 00:02:03.761
+Debugging tools.
+
+22
+00:02:03.761 --> 00:02:05.582
+Formatting.
+
+23
+00:02:05.582 --> 00:02:07.675
+Git integration.
+
+24
+00:02:07.675 --> 00:02:10.324
+AI coding assistance.
+
+25
+00:02:10.324 --> 00:02:14.223
+An extension does not normally replace the editor.
+
+26
+00:02:14.223 --> 00:02:17.824
+Instead, it adds functionality to it.
+
+27
+00:02:17.824 --> 00:02:26.642
+3. Main AI Capabilities A Copilot-enabled development environment may provide several forms of AI assistance.
+
+28
+00:02:26.642 --> 00:02:32.308
+Capability Purpose Code Completion Suggests code while the developer is typing.
+
+29
+00:02:32.308 --> 00:02:37.104
+Code Generation Generates code from an instruction or prompt.
+
+30
+00:02:37.104 --> 00:02:42.783
+AI Chat Lets developers ask questions about code and software problems.
+
+31
+00:02:42.783 --> 00:02:48.300
+Agentic Assistance Can attempt several related steps toward a development goal.
+
+32
+00:02:48.300 --> 00:03:04.821
+4. Code Completion Suppose you start writing: function greetStudent(name) { An AI coding assistant may predict the next part: function greetStudent(name) { return "Welcome, " + name; } This is called a code suggestion or code completion.
+
+33
+00:03:04.821 --> 00:03:09.196
+You should still understand the suggestion before accepting it.
+
+34
+00:03:09.196 --> 00:03:16.044
+5. Code Generation Instead of starting the code yourself, you can also describe what you need.
+
+35
+00:03:16.044 --> 00:03:23.069
+Example prompt: Create a JavaScript function that checks whether a quiz score is 70 or higher.
+
+36
+00:03:23.069 --> 00:03:31.357
+Possible generated code: function hasPassed(score) { return score >= 70; } 6.
+
+37
+00:03:31.357 --> 00:03:37.403
+AI Chat AI chat provides a conversational way to work with the coding assistant.
+
+38
+00:03:37.403 --> 00:03:40.650
+You might ask: Explain this file.
+
+39
+00:03:40.650 --> 00:03:43.069
+Why am I getting this error?
+
+40
+00:03:43.069 --> 00:03:46.927
+How can I make this function easier to understand?
+
+41
+00:03:46.927 --> 00:03:49.672
+Write tests for this function.
+
+42
+00:03:49.672 --> 00:03:53.843
+Explain the difference between let and const. 7.
+
+43
+00:03:53.843 --> 00:03:59.767
+AI Agents More advanced AI coding systems may work in an agent-like way.
+
+44
+00:03:59.767 --> 00:04:07.145
+Instead of producing only one answer, an AI agent may attempt several related development steps.
+
+45
+00:04:07.145 --> 00:04:16.533
+For example: Create a registration form, add validation, check the existing project structure, and explain the files you changed.
+
+46
+00:04:16.533 --> 00:04:24.726
+This type of assistance can be powerful, but the developer should review important actions before trusting the final result.
+
+47
+00:04:24.726 --> 00:04:30.704
+8. GitHub Account and Sign-In GitHub Copilot is connected to GitHub services.
+
+48
+00:04:30.704 --> 00:04:38.340
+Therefore, the developer normally needs to authenticate with a GitHub account before using Copilot features.
+
+49
+00:04:38.340 --> 00:04:43.123
+Authentication means proving to the service which account you are using.
+
+50
+00:04:43.123 --> 00:04:47.702
+A typical flow may look like: Open Visual Studio Code.
+
+51
+00:04:47.702 --> 00:04:51.248
+Open the Copilot feature or extension.
+
+52
+00:04:51.248 --> 00:04:53.680
+Choose the sign-in option.
+
+53
+00:04:53.680 --> 00:04:56.968
+Authenticate using your GitHub account.
+
+54
+00:04:56.968 --> 00:05:00.066
+Return to the development environment.
+
+55
+00:05:00.066 --> 00:05:03.694
+Confirm that Copilot features are available.
+
+56
+00:05:03.694 --> 00:05:12.240
+9. Plans, Usage Limits, and Cost AI coding services can have different access plans and usage limits.
+
+57
+00:05:12.240 --> 00:05:18.435
+Some users may have limited access while heavier use may require a paid subscription.
+
+58
+00:05:18.435 --> 00:05:20.650
+The exact names,
+
+59
+00:05:20.836 --> 00:05:25.881
+prices, limits, and available features can change over time.
+
+60
+00:05:25.831 --> 00:05:33.317
+Therefore, an AI Developer should never build permanent assumptions around an old price or plan name.
+
+61
+00:05:33.317 --> 00:05:39.852
+Always check the current official service information before paying for an AI development tool.
+
+62
+00:05:39.852 --> 00:05:46.646
+10. Usage Planning Developers should think about how heavily they intend to use AI tools.
+
+63
+00:05:46.646 --> 00:05:55.056
+Occasional code assistance may require less usage than running AI agents frequently across a large software project.
+
+64
+00:05:55.056 --> 00:05:58.466
+This is one reason usage limits matter.
+

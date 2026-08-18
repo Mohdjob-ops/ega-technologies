@@ -1,0 +1,338 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.470
+Lesson 4.
+
+3
+00:00:04.470 --> 00:00:08.125
+AI Tool Costs and Changing Results.
+
+4
+00:00:08.284 --> 00:00:16.685
+Technical Explanation — English AI development tools can improve productivity, but many of them are not completely free.
+
+5
+00:00:16.635 --> 00:00:32.599
+Some services may offer: A free trial A limited free plan A small number of monthly requests Access to fewer AI models Reduced speed or fewer features These free options may be useful for learning, experimenting, or testing a tool.
+
+6
+00:00:32.599 --> 00:00:37.939
+However, regular professional use may require a paid subscription.
+
+7
+00:00:37.939 --> 00:00:44.298
+Why AI Tools Cost Money AI systems require powerful computer infrastructure.
+
+8
+00:00:44.298 --> 00:00:50.167
+When a developer sends a prompt, the service may need to: Receive the request.
+
+9
+00:00:50.167 --> 00:00:52.355
+Process the prompt.
+
+10
+00:00:52.355 --> 00:00:55.126
+Read project context.
+
+11
+00:00:55.126 --> 00:00:57.491
+Run an AI model.
+
+12
+00:00:57.491 --> 00:00:59.855
+Generate a response.
+
+13
+00:00:59.855 --> 00:01:02.762
+Send the result back to the user.
+
+14
+00:01:02.762 --> 00:01:11.078
+This process uses servers, electricity, networking, storage, security systems, and technical support.
+
+15
+00:01:11.078 --> 00:01:18.061
+Therefore, service providers often charge users when usage becomes frequent or advanced.
+
+16
+00:01:18.061 --> 00:01:45.289
+Free Plans and Paid Plans Plan Type Possible Benefits Possible Limitations Free plan Useful for testing and basic learning Limited prompts, features, speed, or models Paid plan Higher limits, more features, and more reliable access Monthly or yearly cost Team plan Shared administration, controls, and team features Higher cost and account-management needs The exact plans may differ between providers.
+
+17
+00:01:45.289 --> 00:01:52.694
+Students should always read the current pricing, limitations, and cancellation rules before subscribing.
+
+18
+00:01:52.694 --> 00:01:59.569
+Budgeting for AI Tools Developers should treat AI subscriptions like other professional tools.
+
+19
+00:01:59.569 --> 00:02:03.822
+Before paying, ask: Do I use this tool regularly?
+
+20
+00:02:03.822 --> 00:02:06.472
+Does it save meaningful time?
+
+21
+00:02:06.472 --> 00:02:09.325
+Does it improve my work quality?
+
+22
+00:02:09.325 --> 00:02:12.708
+Can one tool replace another subscription?
+
+23
+00:02:12.708 --> 00:02:15.493
+Is the monthly cost affordable?
+
+24
+00:02:15.493 --> 00:02:17.857
+Can I cancel easily?
+
+25
+00:02:17.857 --> 00:02:21.105
+Does the plan include the features I need?
+
+26
+00:02:21.105 --> 00:02:27.151
+EGA Budget Principle Do not pay for an AI tool only because it is popular.
+
+27
+00:02:27.151 --> 00:02:31.689
+Pay when it gives clear value to your learning or development work.
+
+28
+00:02:31.689 --> 00:02:40.113
+AI Results Are Not Always Identical AI tools may produce different answers even when two users enter similar prompts.
+
+29
+00:02:40.113 --> 00:03:00.357
+Results may change because of: Different wording in the prompt Different project files Different account settings Different AI models Changes made by the service provider Different conversation history Different software versions Therefore, students should not expect every generated answer to match a course demonstration exactly.
+
+30
+00:03:00.357 --> 00:03:06.295
+AI Models Change Over Time AI providers regularly update their systems.
+
+31
+00:03:06.295 --> 00:03:26.920
+A newer model may: Understand instructions better Generate different code Use a different writing style Support longer project context Include new features Remove or rename older features The interface of GitHub Copilot, Cursor, ChatGPT, or another AI service may also change after a lesson is created.
+
+32
+00:03:26.920 --> 00:03:34.379
+Students should focus on the method and principles, rather than memorizing one exact screen or response.
+
+33
+00:03:34.379 --> 00:03:42.871
+Focus on the Workflow, Not the Exact Output The main purpose of an AI-development lesson is to teach a repeatable workflow.
+
+34
+00:03:42.871 --> 00:03:47.260
+A useful workflow is: Understand the development task.
+
+35
+00:03:47.260 --> 00:03:50.072
+Choose the correct AI tool.
+
+36
+00:03:50.072 --> 00:03:52.368
+Write a clear prompt.
+
+37
+00:03:52.368 --> 00:03:54.963
+Add useful context.
+
+38
+00:03:54.963 --> 00:03:57.694
+Review the generated result.
+
+39
+00:03:57.694 --> 00:03:59.637
+Test the code.
+
+40
+00:03:59.637 --> 00:04:01.716
+Correct errors.
+
+41
+00:04:01.716 --> 00:04:04.569
+Save the verified solution.
+
+42
+00:04:04.569 --> 00:04:11.526
+Even when the AI produces a different response, the same review and testing process still applies.
+
+43
+00:04:11.526 --> 00:04:19.991
+Example: Different Results from Similar Prompts Consider these two prompts: Create an HTML registration form.
+
+44
+00:04:19.991 --> 00:04:31.010
+Create a beginner-friendly HTML student-registration form with name, email, phone, course selection, labels, required fields, and a submit button.
+
+45
+00:04:31.010 --> 00:04:34.393
+The second prompt contains more detail.
+
+46
+00:04:34.393 --> 00:04:40.588
+It is likely to produce a more specific result because the AI has clearer requirements.
+
+47
+00:04:40.588 --> 00:04:45.031
+This shows that prompt quality can affect output quality.
+
+48
+00:04:45.031 --> 00:04:52.925
+Never Depend on One Generated Result A developer should not assume that the first AI response is the final answer.
+
+49
+00:04:52.925 --> 00:05:08.510
+A better approach is to: Read the response carefully Ask follow-up questions Request corrections Compare possible solutions Test the code Keep a working backup AI assistance is an interactive process, not a guarantee of perfect output.
+
+50
+00:05:08.510 --> 00:05:12.463
+Safe Subscription Practices Confirm the official
+
+51
+00:05:12.628 --> 00:05:15.064
+provider before paying.
+
+52
+00:05:15.014 --> 00:05:18.574
+Read whether the price is monthly or yearly.
+
+53
+00:05:18.574 --> 00:05:21.332
+Check whether taxes are added.
+
+54
+00:05:21.332 --> 00:05:24.253
+Understand automatic renewal.
+
+55
+00:05:24.253 --> 00:05:26.807
+Save payment receipts.
+
+56
+00:05:26.807 --> 00:05:29.280
+Use a strong password.
+
+57
+00:05:29.280 --> 00:05:33.193
+Enable two-factor authentication when available.
+
+58
+00:05:33.193 --> 00:05:36.074
+Cancel unused subscriptions.
+
+59
+00:05:36.074 --> 00:05:39.606
+Never share an account password with students.
+
+60
+00:05:39.606 --> 00:05:48.003
+HTML Learning in This Lesson This lesson uses HTML to teach both AI concepts and webpage structure.
+
+61
+00:05:48.003 --> 00:06:04.416
+Important HTML features in this lesson include: The <meta> element The name attribute The content attribute The <article> element The <blockquote> element Table elements The Meta Description Element A meta description provides a short description of a webpage.
+
+62
+00:06:04.416 --> 00:06:12.799
+HTML Code <meta name="description" content="A lesson about AI tool costs and changing results.
+
+63
+00:06:12.799 --> 00:06:16.345
+The <meta> element is placed inside the <head> .
+
+64
+00:06:16.345 --> 00:06:19.158
+It does not use a closing tag.
+
+65
+00:06:19.158 --> 00:06:23.737
+name="description" identifies the type of metadata.
+
+66
+00:06:23.737 --> 00:06:27.364
+content contains the webpage description.
+
+67
+00:06:27.364 --> 00:06:32.989
+The meta description does not normally appear inside the visible webpage body.
+
+68
+00:06:32.989 --> 00:06:38.193
+The Head and Body Difference The <head> contains information about the webpage.
+
+69
+00:06:38.193 --> 00:06:42.473
+The <body> contains content that users see in the browser.
+
+70
+00:06:42.473 --> 00:06:57.269
+head> <title> Lesson 4 </title> <meta name="description" content="Lesson description" > </head> <body> <h1> Visible Lesson Title </h1> </body> Browser Output The title may appear in the browser tab.
+
+71
+00:06:57.269 --> 00:07:01.087
+The heading appears inside the visible webpage.
+
+72
+00:07:01.087 --> 00:07:05.802
+The Table Element Reminder The plan comparison uses a table.
+
+73
+00:07:05.802 --> 00:07:39.742
+table border="1"> <tr> <th>Plan</th> <th>Limit</th> </tr> <tr> <td>Free</td> <td>Limited usage</td> </tr> </table> Browser Output Plan Limit Free Limited usage Image Path Reminder The EGA logo uses: <img src="images/ega-logo.png" alt="Elmi Guray Academy logo" width="180" > The image works because ega-logo.png is stored inside the images folder.
+
+74
+00:07:39.742 --> 00:07:43.913
+Important Rules Free access may have usage limits.
+
+75
+00:07:43.913 --> 00:07:47.894
+Regular professional use may require payment.
+
+76
+00:07:47.894 --> 00:07:51.291
+Check current pricing before subscribing.
+
+77
+00:07:51.291 --> 00:07:54.593
+Do not pay for tools you do not use.
+
+78
+00:07:54.593 --> 00:07:58.180
+AI results may differ between users.
+
+79
+00:07:58.180 --> 00:08:01.794
+AI models and interfaces may change.
+
+80
+00:08:01.794 --> 00:08:05.938
+Focus on the workflow, not one exact response.
+
+81
+00:08:05.938 --> 00:08:09.321
+Review and test all generated code.
+
+82
+00:08:09.321 --> 00:08:13.261
+Save receipts and monitor recurring subscriptions.
+
+83
+00:08:13.261 --> 00:08:16.998
+Never share passwords or payment details.
+
+84
+00:08:16.998 --> 00:08:43.112
+Common Beginner Mistakes Assuming every AI tool is permanently free Forgetting about automatic renewal Paying before testing the free plan Expecting exactly the same AI answer as another user Copying an AI response without testing it Believing an old course interface will never change Paying for several overlapping tools Ignoring monthly subscription costs Using the wrong image path in HTML
+

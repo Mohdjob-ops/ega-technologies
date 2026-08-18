@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps -- Payment-return effects are keyed by URL parameters and protected by processed-reference guards; callback identity changes must not reprocess payments. */
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {

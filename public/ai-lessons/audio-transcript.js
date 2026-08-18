@@ -54,7 +54,7 @@
       });
 
       let activeIndex = -1;
-      function updateActiveLine() {
+      const updateActiveLine = () => {
         const time = audio.currentTime;
         let nextIndex = cues.findIndex((cue) => time >= cue.start && time < cue.end);
         if (nextIndex < 0) {
@@ -73,7 +73,7 @@
           activeButton.classList.add("is-active");
           activeButton.scrollIntoView({ behavior: "smooth", block: "center" });
         }
-      }
+      };
 
       audio.addEventListener("timeupdate", updateActiveLine);
       audio.addEventListener("seeked", updateActiveLine);

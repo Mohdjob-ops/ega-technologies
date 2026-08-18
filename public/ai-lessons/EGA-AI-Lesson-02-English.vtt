@@ -1,0 +1,262 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.415
+Lesson 2.
+
+3
+00:00:04.415 --> 00:00:08.274
+What to Expect from the AI Developer Course.
+
+4
+00:00:08.428 --> 00:00:18.500
+Technical Explanation — English This course is designed for developers who want to use artificial intelligence as part of their normal programming workflow.
+
+5
+00:00:18.450 --> 00:00:22.689
+The goal is not to remove the need for programming knowledge.
+
+6
+00:00:22.689 --> 00:00:37.499
+The goal is to combine: Existing programming knowledge Careful problem-solving AI-powered development tools Code review and testing Students should learn how to use AI as an assistant instead of treating it as a replacement for the developer.
+
+7
+00:00:37.499 --> 00:00:45.366
+This Is Not a No-Code Course A no-code course normally focuses on creating software without writing traditional code.
+
+8
+00:00:45.366 --> 00:00:48.260
+This EGA course is different.
+
+9
+00:00:48.260 --> 00:00:56.317
+Students will still need to understand programming concepts, read code, recognize errors, and test results.
+
+10
+00:00:56.317 --> 00:01:02.607
+AI may suggest code, but the developer remains responsible for the final decision.
+
+11
+00:01:02.607 --> 00:01:08.368
+Developer Responsibility Understand the problem before asking AI for help.
+
+12
+00:01:08.368 --> 00:01:11.385
+Read generated code carefully.
+
+13
+00:01:11.385 --> 00:01:14.754
+Check whether the code matches the project.
+
+14
+00:01:14.754 --> 00:01:17.675
+Test the code before using it.
+
+15
+00:01:17.675 --> 00:01:22.295
+Correct unsafe, incorrect, or unnecessary code.
+
+16
+00:01:22.295 --> 00:01:28.925
+Main Course Areas The course will explore several types of AI tools used by developers.
+
+17
+00:01:28.925 --> 00:02:04.129
+Course Area Main Purpose What Students Will Learn GitHub Copilot AI assistance inside a code editor Suggestions, chat, code completion, limitations, and safe usage Cursor IDE An AI-focused development environment Working with AI features deeply integrated into the editor ChatGPT General-purpose AI support Planning, explanations, debugging support, documentation, and project discussions Demo Project Practical application How several AI tools can support one development workflow GitHub Copilot
+
+18
+00:02:04.129 --> 00:02:11.167
+GitHub Copilot is an AI-powered development assistant that can work inside supported code editors.
+
+19
+00:02:11.167 --> 00:02:29.075
+It may help with: Completing code while the developer types Suggesting functions or code blocks Explaining code Answering questions about a project Supporting debugging Students will also learn that AI suggestions may be incomplete, inaccurate, or unsuitable for the project.
+
+20
+00:02:29.075 --> 00:02:33.830
+Good developers do not accept every suggestion automatically.
+
+21
+00:02:33.830 --> 00:02:38.341
+Cursor IDE Cursor is an AI-focused code editor.
+
+22
+00:02:38.341 --> 00:02:45.556
+An IDE or code editor is software used to write, organize, review, and test source code.
+
+23
+00:02:45.556 --> 00:02:51.058
+Cursor includes AI features directly inside the development environment.
+
+24
+00:02:51.058 --> 00:03:08.368
+This can make it easier to: Ask questions about files Request code changes Review several parts of a project Generate or improve code Understand unfamiliar code The course will help students understand when such features are useful and when manual review is still required.
+
+25
+00:03:08.368 --> 00:03:15.461
+ChatGPT for Developers ChatGPT is not limited to code completion inside an editor.
+
+26
+00:03:15.461 --> 00:03:37.227
+It can support developers in situations such as: Planning a new project Comparing technical approaches Explaining programming concepts Creating documentation Reviewing error messages Preparing learning exercises Discussing project structure A general AI chatbot may be useful when the task is broader than writing one small piece of code.
+
+27
+00:03:37.227 --> 00:03:43.558
+Editor-Integrated AI and General AI Different tools are useful for different tasks.
+
+28
+00:03:43.558 --> 00:04:04.020
+Tool Type Best Used For Editor-integrated AI Working directly with source code, suggestions, files, and project context General AI chatbot Planning, explanations, comparisons, documentation, and broader questions A skilled developer learns how to choose the right tool for the current problem.
+
+29
+00:04:04.020 --> 00:04:09.333
+The Demo Project The course will include a practical demonstration project.
+
+30
+00:04:09.333 --> 00:04:15.325
+The main purpose of the project is not to master one particular programming language.
+
+31
+00:04:15.325 --> 00:04:21.031
+Its purpose is to show how AI tools can support a real development process.
+
+32
+00:04:21.031 --> 00:04:42.675
+Students should focus on: How the problem is explained to the AI How suggestions are reviewed How errors are identified How code is tested How one tool may be chosen instead of another The same ideas can later be applied to HTML, CSS, JavaScript, Python, Java, C#, or other programming languages.
+
+33
+00:04:42.675 --> 00:04:49.034
+Language Independence AI-development skills are not limited to one programming language.
+
+34
+00:04:49.034 --> 00:04:58.654
+The exact syntax may change, but the main workflow is similar: Understand the task Give useful context Ask for focused assistance
+
+35
+00:04:58.828 --> 00:05:09.864
+Review the response Test the result Improve the code HTML Learning in This Lesson This lesson also teaches HTML structure while explaining the course content.
+
+36
+00:05:09.814 --> 00:05:21.825
+The page uses: Headings Paragraphs Links Images Tables Lists Semantic HTML Forms The Table Element The <table> element displays information in rows and columns.
+
+37
+00:05:21.825 --> 00:05:39.108
+table border="1"> <tr> <th>Tool</th> <th>Purpose</th> </tr> <tr> <td>GitHub Copilot</td> <td>Code assistance</td> </tr> </table> Important Table Elements <table> creates the table.
+
+38
+00:05:39.108 --> 00:05:41.893
+tr> creates a table row.
+
+39
+00:05:41.893 --> 00:05:44.828
+th> creates a heading cell.
+
+40
+00:05:44.828 --> 00:05:47.627
+td> creates a data cell.
+
+41
+00:05:47.627 --> 00:05:58.116
+Browser Output Tool Purpose GitHub Copilot Code assistance The Article Element The <article> element contains a complete piece of content that can stand on its own.
+
+42
+00:05:58.116 --> 00:06:06.051
+article> <h3>Developer Responsibility</h3> <p> Developers must review AI-generated code.
+
+43
+00:06:06.051 --> 00:06:10.426
+/p> </article> The opening tag is <article> .
+
+44
+00:06:10.426 --> 00:06:13.510
+The closing tag is </article> .
+
+45
+00:06:13.510 --> 00:06:20.806
+It is useful for a complete lesson topic, news item, blog entry, or independent explanation.
+
+46
+00:06:20.806 --> 00:06:26.037
+The Emphasis Element The <em> element gives emphasis to important words.
+
+47
+00:06:26.037 --> 00:06:30.263
+p> AI should <em>support</em> the developer.
+
+48
+00:06:30.263 --> 00:06:34.882
+/p> Browser Output AI should support the developer.
+
+49
+00:06:34.882 --> 00:06:37.437
+The opening tag is <em> .
+
+50
+00:06:37.437 --> 00:06:40.290
+The closing tag is </em> .
+
+51
+00:06:40.290 --> 00:06:44.733
+The Anchor Element The <a> element creates a clickable link.
+
+52
+00:06:44.733 --> 00:06:53.225
+a href="#activity"> Go to the Practice Activity </a> The href attribute tells the browser where the link should go.
+
+53
+00:06:53.225 --> 00:06:59.271
+Go to the Practice Activity The Image Element The <img> element displays an image.
+
+54
+00:06:59.271 --> 00:07:10.453
+img src="ega-logo.png" alt="Elmi Guray Academy logo" width="180" > src contains the image location.
+
+55
+00:07:10.453 --> 00:07:12.967
+alt describes the image.
+
+56
+00:07:12.967 --> 00:07:15.901
+width controls the displayed width.
+
+57
+00:07:15.901 --> 00:07:19.665
+The image element does not use a closing tag.
+
+58
+00:07:19.665 --> 00:07:24.217
+Important Rules Use AI together with programming knowledge.
+
+59
+00:07:24.217 --> 00:07:28.075
+Do not accept suggestions without reviewing them.
+
+60
+00:07:28.075 --> 00:07:31.608
+Choose the correct AI tool for the task.
+
+61
+00:07:31.608 --> 00:07:35.752
+Test generated code before adding it to a project.
+
+62
+00:07:35.752 --> 00:07:40.602
+Do not share passwords, API keys, or private data.
+
+63
+00:07:40.602 --> 00:07:45.100
+Focus on learning the workflow, not only copying code.
+
+64
+00:07:45.100 --> 00:07:48.850
+Ask focused questions with enough context.
+
+65
+00:07:48.850 --> 00:08:10.453
+Common Beginner Mistakes Assuming every AI suggestion is correct Asking a vague question without context Copying code without understanding it Using a general chatbot when project context is required Using an editor assistant for a broad planning task Forgetting to test the generated result Believing one tool is best for every task
+

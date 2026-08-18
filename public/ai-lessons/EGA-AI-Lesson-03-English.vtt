@@ -1,0 +1,326 @@
+WEBVTT
+
+1
+00:00:00.100 --> 00:00:02.522
+Elmi Guray Academy.
+
+2
+00:00:02.472 --> 00:00:04.470
+Lesson 3.
+
+3
+00:00:04.470 --> 00:00:07.690
+Main AI Tools for Developers.
+
+4
+00:00:07.852 --> 00:00:16.552
+Technical Explanation — English Many AI services are available to developers, but they do not all solve the same problem.
+
+5
+00:00:16.502 --> 00:00:22.507
+Some AI products are designed to work beside the developer inside a code editor.
+
+6
+00:00:22.507 --> 00:00:28.879
+Other products attempt to generate most of an application automatically from a short description.
+
+7
+00:00:28.879 --> 00:00:45.999
+This EGA course focuses mainly on tools that help developers improve their normal coding workflow: GitHub Copilot Cursor ChatGPT These tools can help a developer work faster, understand code, explore solutions, and improve existing work.
+
+8
+00:00:45.999 --> 00:00:53.431
+However, the developer must remain responsible for reviewing, testing, and approving the final result.
+
+9
+00:00:53.431 --> 00:01:00.211
+Two Approaches to AI Development AI development services can be placed into two broad groups.
+
+10
+00:01:00.211 --> 00:01:09.531
+Approach Main Idea Developer Role AI-assisted development AI helps the developer write, understand, edit, and review code.
+
+11
+00:01:09.531 --> 00:01:12.996
+The developer stays actively involved.
+
+12
+00:01:12.996 --> 00:01:20.319
+AI-generated applications AI attempts to create large parts of an application from instructions.
+
+13
+00:01:20.319 --> 00:01:24.626
+The developer reviews and adjusts the generated result.
+
+14
+00:01:24.626 --> 00:01:32.398
+AI-Assisted Development AI-assisted development means using AI while still controlling the programming process.
+
+15
+00:01:32.398 --> 00:01:37.779
+The developer may ask AI to: Complete an unfinished line of code.
+
+16
+00:01:37.779 --> 00:01:40.863
+Explain an unfamiliar function.
+
+17
+00:01:40.863 --> 00:01:43.540
+Suggest a better solution.
+
+18
+00:01:43.540 --> 00:01:46.107
+Find a possible mistake.
+
+19
+00:01:46.107 --> 00:01:48.825
+Improve code organization.
+
+20
+00:01:48.825 --> 00:01:51.284
+Create documentation.
+
+21
+00:01:51.284 --> 00:01:53.635
+Help prepare tests.
+
+22
+00:01:53.635 --> 00:01:57.806
+This method combines human knowledge with AI speed.
+
+23
+00:01:57.806 --> 00:02:05.374
+AI Application Builders Some services try to build complete applications from natural-language instructions.
+
+24
+00:02:05.374 --> 00:02:14.491
+Examples of services in this wider category may include tools such as Replit, Bolt, v0, and similar platforms.
+
+25
+00:02:14.491 --> 00:02:24.260
+A user may enter an instruction such as: Create a student-registration website with a form, dashboard, payment page, and database.
+
+26
+00:02:24.260 --> 00:02:39.423
+The service may attempt to generate: Page layouts User-interface components Application logic Database connections Deployment settings These services may be helpful for quick prototypes, experiments, and simple applications.
+
+27
+00:02:39.423 --> 00:02:50.537
+They may become more difficult to manage when a project requires detailed business rules, security, payments, database permissions, or several connected features.
+
+28
+00:02:50.537 --> 00:02:59.491
+Why Complex Projects Require More Control A generated application can look correct while still containing serious hidden problems.
+
+29
+00:02:59.491 --> 00:03:24.939
+Possible problems include: Incorrect database permissions Weak authentication Missing error handling Incorrect payment calculations Duplicate records Broken mobile layouts Code that is difficult to maintain Features that do not match the real requirements EGA Development Principle The more important the application becomes, the more carefully the developer must understand and verify every part of it.
+
+30
+00:03:24.939 --> 00:03:32.561
+Why GitHub Copilot Is a Main Focus GitHub Copilot can work directly inside supported code editors.
+
+31
+00:03:32.561 --> 00:03:38.295
+It can examine nearby code and suggest what the developer may want to write next.
+
+32
+00:03:38.295 --> 00:03:52.738
+GitHub Copilot may help with: Code completion Repeated code patterns Function suggestions Code explanations Test suggestions Documentation The developer can accept, modify, or reject every suggestion.
+
+33
+00:03:52.738 --> 00:03:59.260
+Why Cursor Is a Main Focus Cursor is a code editor built around AI-assisted development.
+
+34
+00:03:59.260 --> 00:04:16.828
+Its AI tools can work with: One selected line A complete file Several related files A larger project structure Refactoring requests Questions about existing code This deeper project context can be useful when a coding task involves more than one small code example.
+
+35
+00:04:16.828 --> 00:04:25.442
+Why ChatGPT Is Included ChatGPT is useful for development tasks that are not limited to editing one code file.
+
+36
+00:04:25.442 --> 00:04:47.140
+A developer may use it for: Planning a project Learning technical concepts Comparing possible solutions Understanding an error message Preparing documentation Discussing database structure Creating exercises and learning materials ChatGPT can be helpful when the developer needs a broad discussion before making a technical decision.
+
+37
+00:04:47.140 --> 00:05:00.510
+Choosing a Tool Based on the Task Development Task Possible Tool Completing code while typing GitHub Copilot Updating several connected files Cursor Planning project architecture ChatGPT or Cursor
+
+38
+00:05:00.676 --> 00:05:11.726
+Creating a quick prototype An AI application builder Checking production security Developer knowledge supported by AI No single tool is best for every situation.
+
+39
+00:05:11.676 --> 00:05:19.013
+A developer should choose based on the task, project size, required control, and possible risks.
+
+40
+00:05:19.013 --> 00:05:23.334
+A Responsible AI Workflow Understand the problem.
+
+41
+00:05:23.334 --> 00:05:26.065
+Choose the most suitable tool.
+
+42
+00:05:26.065 --> 00:05:29.923
+Give clear instructions and useful context.
+
+43
+00:05:29.923 --> 00:05:32.518
+Read the generated result.
+
+44
+00:05:32.518 --> 00:05:35.806
+Check whether it matches the requirements.
+
+45
+00:05:35.806 --> 00:05:37.749
+Test the code.
+
+46
+00:05:37.749 --> 00:05:41.160
+Correct errors and security problems.
+
+47
+00:05:41.160 --> 00:05:44.176
+Save only the verified version.
+
+48
+00:05:44.176 --> 00:05:50.440
+Efficiency means reducing unnecessary work without removing careful technical review.
+
+49
+00:05:50.440 --> 00:06:00.412
+HTML Learning in This Lesson This lesson uses real HTML elements so that students can learn both AI development and webpage structure.
+
+50
+00:06:00.412 --> 00:06:16.105
+Important elements used in this lesson include: <blockquote> <article> <table> <thead> <tbody> <tr> <th> <td> The Blockquote Element The <blockquote> element displays a longer quotation or an important statement separately from the surrounding paragraphs.
+
+51
+00:06:16.105 --> 00:06:21.595
+HTML Code <blockquote> AI should support the developer's knowledge.
+
+52
+00:06:21.595 --> 00:06:27.206
+/blockquote> Browser Output AI should support the developer's knowledge.
+
+53
+00:06:27.206 --> 00:06:30.032
+blockquote> is the opening tag.
+
+54
+00:06:30.032 --> 00:06:32.695
+The sentence is the content.
+
+55
+00:06:32.695 --> 00:06:35.997
+/blockquote> is the closing tag.
+
+56
+00:06:35.997 --> 00:06:42.627
+The Article Element The <article> element groups complete content that can make sense independently.
+
+57
+00:06:42.627 --> 00:06:51.119
+HTML Code <article> <h3>Important Principle</h3> <p> Developers must test AI-generated code.
+
+58
+00:06:51.119 --> 00:06:55.494
+/p> </article> The opening tag is <article> .
+
+59
+00:06:55.494 --> 00:06:58.578
+The closing tag is </article> .
+
+60
+00:06:58.578 --> 00:07:05.684
+It is useful for an independent explanation, lesson, article, news item, or blog post.
+
+61
+00:07:05.684 --> 00:07:12.546
+HTML Table Structure A table organizes related information into rows and columns.
+
+62
+00:07:12.546 --> 00:07:31.893
+table border="1"> <thead> <tr> <th>Tool</th> <th>Purpose</th> </tr> </thead> <tbody> <tr> <td>Cursor</td> <td>AI-supported code editing</td> </tr> </tbody> </table> <table> creates the complete table.
+
+63
+00:07:31.893 --> 00:07:34.950
+thead> contains the table headings.
+
+64
+00:07:34.950 --> 00:07:38.551
+tbody> contains the main table information.
+
+65
+00:07:38.551 --> 00:07:41.024
+tr> creates a row.
+
+66
+00:07:41.024 --> 00:07:43.959
+th> creates a heading cell.
+
+67
+00:07:43.959 --> 00:07:47.124
+td> creates a normal data cell.
+
+68
+00:07:47.124 --> 00:07:56.839
+Browser Output Tool Purpose Cursor AI-supported code editing Image Path Reminder The EGA logo is displayed with the <img> element.
+
+69
+00:07:56.839 --> 00:08:09.230
+img src="images/ega-logo.png" alt="Elmi Guray Academy logo" width="180" > src identifies the image location.
+
+70
+00:08:09.230 --> 00:08:11.744
+alt describes the image.
+
+71
+00:08:11.744 --> 00:08:14.842
+width controls its displayed width.
+
+72
+00:08:14.842 --> 00:08:22.383
+The correct path is images/ega-logo.png because the file is inside the images folder.
+
+73
+00:08:22.383 --> 00:08:26.825
+Important Rules Choose an AI tool according to the task.
+
+74
+00:08:26.825 --> 00:08:30.806
+Do not assume that one tool can solve every problem.
+
+75
+00:08:30.806 --> 00:08:34.325
+Review generated code before using it.
+
+76
+00:08:34.325 --> 00:08:39.380
+Test databases, payments, forms, and authentication.
+
+77
+00:08:39.380 --> 00:08:42.967
+Do not use code that you do not understand.
+
+78
+00:08:42.967 --> 00:08:46.581
+Keep control of the final development decision.
+
+79
+00:08:46.581 --> 00:08:51.703
+Never share passwords, private keys, or secret credentials.
+
+80
+00:08:51.703 --> 00:08:55.942
+Use AI to strengthen learning, not avoid learning.
+
+81
+00:08:55.942 --> 00:09:19.611
+Common Beginner Mistakes Accepting every AI suggestion automatically Believing a generated application is always complete Failing to test forms and database operations Choosing a popular tool that does not fit the task Giving instructions without enough context Ignoring security and maintenance Depending on AI without learning programming Using an incorrect image path
+
