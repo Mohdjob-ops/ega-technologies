@@ -30,11 +30,13 @@ export default function CoursesPage() {
         </TouchableOpacity>
       </Link>
 
-      <TouchableOpacity style={styles.card} activeOpacity={1}>
-        <Text style={styles.icon}>🌐</Text>
-        <Text style={styles.cardTitle}>Web Development Courses</Text>
-        <Text style={styles.cardText}>Start with HTML, then CSS, then JavaScript.</Text>
-      </TouchableOpacity>
+      <Link href="/html-lecture" asChild>
+        <TouchableOpacity style={styles.card}>
+          <Text style={styles.icon}>🌐</Text>
+          <Text style={styles.cardTitle}>Web Development Courses</Text>
+          <Text style={styles.cardText}>Start with HTML, then CSS, then JavaScript.</Text>
+        </TouchableOpacity>
+      </Link>
 
       <Link href="/html-lecture" asChild>
         <TouchableOpacity style={styles.card}>

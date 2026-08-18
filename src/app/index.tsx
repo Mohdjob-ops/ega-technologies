@@ -299,7 +299,7 @@ export default function HomeScreen() {
       : "100%";
 
   const topActionButtonWidth = isDesktop
-    ? "23.5%"
+    ? "18.5%"
     : isTablet
       ? "48.5%"
       : "100%";
@@ -474,6 +474,20 @@ export default function HomeScreen() {
             >
               <Text style={styles.learnerPortalButtonText}>
                 {t.learnerPortal}
+              </Text>
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              style={({ pressed }) => [
+                styles.learnerPortalButton,
+                { width: topActionButtonWidth },
+                pressed && styles.buttonPressed,
+              ]}
+              onPress={() => router.push("/explore")}
+            >
+              <Text style={styles.learnerPortalButtonText}>
+                📚 {t.exploreCourses}
               </Text>
             </Pressable>
 
@@ -793,17 +807,6 @@ export default function HomeScreen() {
             </Pressable>
           </View>
 
-          <Pressable
-            style={({ pressed }) => [
-              styles.exploreButton,
-              pressed && styles.buttonPressed,
-            ]}
-            onPress={() => router.push("/explore")}
-          >
-            <Text style={styles.exploreButtonText}>
-              {t.exploreCourses}
-            </Text>
-          </Pressable>
         </View>
       </View>
 
