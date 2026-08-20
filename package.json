@@ -51,7 +51,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "build": "expo export --platform web",
+    "build": "expo export --platform web && node scripts/inject-web-icons.mjs",
     "check:deploy": "npm run typecheck && npm run lint && npm run build"
   },
   "private": true
