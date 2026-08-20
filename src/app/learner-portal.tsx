@@ -47,6 +47,10 @@ const aiLessons = [
     title: "Lesson 9: GitHub Copilot Core Features",
     path: "/ai-lessons/lesson-09-understanding-github-copilot-access-and-setup.html",
   },
+  {
+    title: "Lesson 10: GitHub Copilot Features and AI-Powered Code Completion",
+    path: "/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html",
+  },
 ];
 
 export default function LearnerPortal() {
@@ -85,8 +89,38 @@ export default function LearnerPortal() {
     setStudent(null);
     setQuizResults([]);
 
-    if (!studentId.trim() || !phone.trim()) {
+    const cleanStudentId = studentId.trim().toUpperCase();
+    const cleanLoginPhone = phone.trim();
+
+    if (!cleanStudentId || !cleanLoginPhone) {
       setMessage("⚠️ Please enter Student ID and Phone Number");
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke(
+      "learner-access",
+      {
+        body: {
+          student_id: cleanStudentId,
+          phone: cleanLoginPhone,
+        },
+      }
+    );
+
+    if (error) {
+      setMessage(
+        "❌ Student ID or phone number is incorrect."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (!data?.success || !data?.student) {
+      setMessage(
+        data?.message ||
+          "❌ Student ID or phone number is incorrect."
+      );
       setLoading(false);
       return;
     }
@@ -94,60 +128,22 @@ export default function LearnerPortal() {
     if (typeof window !== "undefined") {
       sessionStorage.setItem(
         "ega_student_id",
-        studentId.trim()
+        cleanStudentId
       );
-
       sessionStorage.setItem(
         "ega_student_phone",
-        phone.trim()
+        cleanLoginPhone
+      );
+      localStorage.setItem(
+        "student_id",
+        data.student.student_id
       );
     }
 
-    const { data, error } = await supabase
-      .from("students")
-      .select("*")
-      .eq("student_id", studentId.trim())
-      .maybeSingle();
-
-    if (error) {
-      setMessage("❌ Supabase error: " + error.message);
-      setLoading(false);
-      return;
-    }
-
-    if (!data) {
-      setMessage("❌ Student not found");
-      setLoading(false);
-      return;
-    }
-
-    if (cleanPhone(data.phone || "") !== cleanPhone(phone)) {
-      setMessage("❌ Phone number does not match");
-      setLoading(false);
-      return;
-    }
-
-    const { data: results, error: quizError } = await supabase
-      .from("quiz_results")
-      .select("*")
-      .eq("student_id", data.student_id)
-      .order("created_at", { ascending: false });
-
-    if (quizError) {
-      setMessage(
-        "⚠️ Login successful, but quiz results could not load: " +
-          quizError.message
-      );
-    } else {
-      setMessage("✅ Login successful");
-    }
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("student_id", data.student_id);
-    }
-
-    setStudent(data);
-    setQuizResults(results || []);
+    setStudentId(cleanStudentId);
+    setStudent(data.student);
+    setQuizResults(data.quiz_results || []);
+    setMessage("✅ Login successful");
     setLoading(false);
   }
 
@@ -478,6 +474,14 @@ export default function LearnerPortal() {
                     </Text>
                   </TouchableOpacity>
                 ))}
+
+                <Link href="/quiz" asChild>
+                  <TouchableOpacity style={styles.startButton}>
+                    <Text style={styles.buttonText}>
+                      🧠 AI Lessons 1–9 Assessment — 60 Minutes
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
               </>
             ) : (
               <View style={styles.warningBox}>
@@ -749,6 +753,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     borderWidth: 1,
     borderColor: "#cbd5e1",
+    width: "70%",
+    maxWidth: 520,
+    minWidth: 260,
+    alignSelf: "center",
   },
 
   loginButton: {
@@ -756,6 +764,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
+    width: "32%",
+    maxWidth: 240,
+    minWidth: 160,
+    alignSelf: "center",
   },
 
   disabledButton: {
