@@ -9,7 +9,7 @@
   "theme_color": "#173f7a",
   "icons": [
     {
-      "src": "/ega-logo.png",
+      "src": "/ega-logo.png?v=20260821",
       "sizes": "512x512",
       "type": "image/png"
     }
