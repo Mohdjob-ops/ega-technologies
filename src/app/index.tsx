@@ -307,15 +307,8 @@ export default function HomeScreen() {
       return;
     }
 
-    const savedLanguage =
-      window.localStorage.getItem("ega_language");
-
-    if (
-      savedLanguage === "en" ||
-      savedLanguage === "so"
-    ) {
-      setLanguage(savedLanguage);
-    }
+    setLanguage("en");
+    window.localStorage.setItem("ega_language", "en");
 
     const recoveryData =
       `${window.location.search}${window.location.hash}`;
@@ -396,23 +389,25 @@ export default function HomeScreen() {
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Isticmaal Af Soomaali"
-              onPress={() => changeLanguage("so")}
-              style={({ pressed }) => [
+              accessibilityLabel="Af Soomaali — Coming Soon"
+              accessibilityState={{ disabled: true }}
+              disabled
+              style={[
                 styles.languageButton,
-                language === "so" &&
-                  styles.languageButtonActive,
-                pressed && styles.buttonPressed,
+                styles.languageButtonDisabled,
               ]}
             >
               <Text
                 style={[
                   styles.languageButtonText,
-                  language === "so" &&
-                    styles.languageButtonTextActive,
+                  styles.languageButtonTextDisabled,
                 ]}
               >
                 Soomaali
+              </Text>
+
+              <Text style={styles.comingSoonText}>
+                Coming Soon
               </Text>
             </Pressable>
           </View>
@@ -1082,6 +1077,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#facc15",
   },
 
+  languageButtonDisabled: {
+    backgroundColor: "#334d7c",
+    opacity: 0.75,
+  },
+
   languageButtonText: {
     color: "#ffffff",
     fontSize: 15,
@@ -1090,6 +1090,17 @@ const styles = StyleSheet.create({
 
   languageButtonTextActive: {
     color: "#12326b",
+  },
+
+  languageButtonTextDisabled: {
+    color: "#dbeafe",
+  },
+
+  comingSoonText: {
+    color: "#facc15",
+    fontSize: 10,
+    fontWeight: "800",
+    marginTop: 2,
   },
 
   logoImage: {
