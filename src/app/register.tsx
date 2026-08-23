@@ -593,7 +593,7 @@ export default function RegisterPage() {
         </View>
 
         <View style={styles.referralCardsRow}>
-          <View style={[styles.referralCard, styles.somaliReferralCard]}>
+          <View style={{ display: "none" }} accessibilityElementsHidden>
             <Text style={styles.somaliReferralTitle}>
               🇪🇹 ABAALMARINTA EGA EE ARDAYGA
             </Text>

@@ -14,6 +14,67 @@ header,main,footer{width:min(100% - 32px,960px);margin:auto}header{padding:48px 
 section{margin:28px 0;padding:28px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(24,46,84,.06)}.intro-card{background:linear-gradient(135deg,#eef5ff,#f3fff5)}.key-message{padding:18px;background:#eef8f1;border-left:5px solid var(--green);border-radius:8px}table{width:100%;border-collapse:collapse}th,td{padding:12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface);color:var(--blue)}fieldset{margin:0 0 22px;padding:18px;border:1px solid var(--line);border-radius:10px}legend{padding:0 7px;font-weight:700}label{display:inline-block;margin:5px 0}button{padding:12px 20px;background:var(--green);color:#fff;border:0;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}footer{padding:18px 0 48px;text-align:center;color:#566176}
 @media(max-width:600px){body{font-size:16px}section{padding:20px}.ega-official-logo{width:150px;height:150px}.ega-restored-lesson-back{top:8px;left:8px;padding:6px 10px;font-size:12px}.ega-lesson-nav{gap:5px;padding:7px}.ega-lesson-nav a,.ega-lesson-nav span{font-size:12px;padding:9px 5px}table{display:block;overflow-x:auto}}
 </style>
+
+<!-- EGA: Somali version temporarily disabled -->
+<style id="ega-disable-somali">
+  a[href="#somali"],
+  a[href="#gal-somali"],
+  #somali,
+  #gal-somali,
+  .somali {
+    display: none !important;
+  }
+</style>
+<script id="ega-disable-somali-script">
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("h1, h2, h3, h4").forEach(function (heading) {
+    const label = (heading.textContent || "").toLowerCase();
+
+    if (
+      label.includes("somali") ||
+      label.includes("soomaali") ||
+      label.includes("af-soomaali")
+    ) {
+      const section =
+        heading.closest("section") ||
+        heading.closest("article") ||
+        heading.parentElement;
+
+      if (section) {
+        section.style.display = "none";
+        section.setAttribute("aria-hidden", "true");
+      }
+    }
+  });
+});
+</script>
+
+
+<!-- EGA: all artificial lesson audio disabled -->
+<style>
+  #listen,
+  .ega-audio-reader {
+    display: none !important;
+  }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("audio").forEach(function (audio) {
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.querySelectorAll("source").forEach(function (source) {
+      source.removeAttribute("src");
+    });
+    audio.load();
+    audio.remove();
+  });
+
+  document.querySelectorAll("#listen, .ega-audio-reader").forEach(function (section) {
+    section.remove();
+  });
+});
+</script>
+
 </head>
 <body id="top">
 <nav class="ega-lesson-nav" aria-label="Lesson navigation"><span class="ega-disabled">← Previous</span><a class="ega-home" href="/learner-portal">🏠 Learner Portal</a><a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html">Next →</a></nav>

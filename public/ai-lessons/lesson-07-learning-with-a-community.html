@@ -473,6 +473,67 @@
 }
 </style>
 
+
+<!-- EGA: Somali version temporarily disabled -->
+<style id="ega-disable-somali">
+  a[href="#somali"],
+  a[href="#gal-somali"],
+  #somali,
+  #gal-somali,
+  .somali {
+    display: none !important;
+  }
+</style>
+<script id="ega-disable-somali-script">
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("h1, h2, h3, h4").forEach(function (heading) {
+    const label = (heading.textContent || "").toLowerCase();
+
+    if (
+      label.includes("somali") ||
+      label.includes("soomaali") ||
+      label.includes("af-soomaali")
+    ) {
+      const section =
+        heading.closest("section") ||
+        heading.closest("article") ||
+        heading.parentElement;
+
+      if (section) {
+        section.style.display = "none";
+        section.setAttribute("aria-hidden", "true");
+      }
+    }
+  });
+});
+</script>
+
+
+<!-- EGA: all artificial lesson audio disabled -->
+<style>
+  #listen,
+  .ega-audio-reader {
+    display: none !important;
+  }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("audio").forEach(function (audio) {
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.querySelectorAll("source").forEach(function (source) {
+      source.removeAttribute("src");
+    });
+    audio.load();
+    audio.remove();
+  });
+
+  document.querySelectorAll("#listen, .ega-audio-reader").forEach(function (section) {
+    section.remove();
+  });
+});
+</script>
+
 </head>
 
 <body>

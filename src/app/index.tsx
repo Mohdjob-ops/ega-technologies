@@ -386,30 +386,6 @@ export default function HomeScreen() {
                 English
               </Text>
             </Pressable>
-
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Af Soomaali — Coming Soon"
-              accessibilityState={{ disabled: true }}
-              disabled
-              style={[
-                styles.languageButton,
-                styles.languageButtonDisabled,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.languageButtonText,
-                  styles.languageButtonTextDisabled,
-                ]}
-              >
-                Soomaali
-              </Text>
-
-              <Text style={styles.comingSoonText}>
-                Coming Soon
-              </Text>
-            </Pressable>
           </View>
 
           <View

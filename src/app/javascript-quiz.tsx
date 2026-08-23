@@ -352,18 +352,10 @@ export default function JavaScriptQuizPage() {
         <Text style={styles.back}>
           ← Back to JavaScript Course
         </Text>
-
-        <Text style={styles.backSomali}>
-          ← Ku Noqo Casharrada JavaScript
-        </Text>
       </TouchableOpacity>
 
       <Text style={styles.title}>
         ⚡ JavaScript Quiz
-      </Text>
-
-      <Text style={styles.titleSomali}>
-        ⚡ Imtixaanka JavaScript
       </Text>
 
       <Text style={styles.subtitle}>
@@ -371,17 +363,8 @@ export default function JavaScriptQuizPage() {
         JavaScript result can be saved.
       </Text>
 
-      <Text style={styles.subtitleSomali}>
-        Geli Lambarka Ardayga iyo Lambarka Telefoonka si
-        natiijada JavaScript loo kaydiyo.
-      </Text>
-
       <Text style={styles.label}>
         Student ID
-      </Text>
-
-      <Text style={styles.labelSomali}>
-        Lambarka Ardayga
       </Text>
 
       <TextInput
@@ -394,10 +377,6 @@ export default function JavaScriptQuizPage() {
 
       <Text style={styles.label}>
         Phone Number
-      </Text>
-
-      <Text style={styles.labelSomali}>
-        Lambarka Telefoonka
       </Text>
 
       <TextInput
@@ -415,10 +394,6 @@ export default function JavaScriptQuizPage() {
         >
           <Text style={styles.question}>
             {index + 1}. {item.q}
-          </Text>
-
-          <Text style={styles.questionSomali}>
-            {index + 1}. {item.so}
           </Text>
 
           {item.options.map((option) => {
@@ -453,10 +428,6 @@ export default function JavaScriptQuizPage() {
         <Text style={styles.passText}>
           Passing Score: 70%
         </Text>
-
-        <Text style={styles.passTextSomali}>
-          Dhibcaha Gudubka: 70%
-        </Text>
       </View>
 
       <TouchableOpacity
@@ -472,22 +443,12 @@ export default function JavaScriptQuizPage() {
             ? "Saving..."
             : "Send JavaScript Quiz"}
         </Text>
-
-        <Text style={styles.buttonTextSomali}>
-          {loading
-            ? "Waa la kaydinayaa..."
-            : "Dir JavaScript Quiz"}
-        </Text>
       </TouchableOpacity>
 
       {score !== null ? (
         <View style={styles.scoreBox}>
           <Text style={styles.score}>
             Score: {score}%
-          </Text>
-
-          <Text style={styles.scoreSomali}>
-            Dhibcaha: {score}%
           </Text>
         </View>
       ) : null}
@@ -496,10 +457,6 @@ export default function JavaScriptQuizPage() {
         <View style={styles.messageBox}>
           <Text style={styles.message}>
             {messageEnglish}
-          </Text>
-
-          <Text style={styles.messageSomali}>
-            {messageSomali}
           </Text>
         </View>
       ) : null}
@@ -513,10 +470,6 @@ export default function JavaScriptQuizPage() {
         >
           <Text style={styles.certText}>
             🎓 Check JavaScript Certificate
-          </Text>
-
-          <Text style={styles.certTextSomali}>
-            🎓 Hubi Shahaadada JavaScript
           </Text>
         </TouchableOpacity>
       ) : null}

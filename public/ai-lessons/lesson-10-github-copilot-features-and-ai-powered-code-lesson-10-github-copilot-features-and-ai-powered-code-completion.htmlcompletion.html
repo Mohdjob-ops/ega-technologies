@@ -59,3 +59,22 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+cd '/Users/mohdelmi/Desktop/Ega-project/EGA/EGA2026' || exit 1
+
+python3 <<'PY'
+from pathlib import Path
+
+p = Path("public/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html")
+
+# GFFDO = Give Full File, Delete Old
+# Replace the entire Lesson 10 file only.
+# Do NOT modify Lessons 1–9.
+
+html = r'''PASTE THE COMPLETE LESSON 10 HTML HERE'''
+
+p.write_text(html, encoding="utf-8")
+
+print("✅ Lesson 10 created/replaced successfully")
+print("✅ File:", p)
+print("✅ Lessons 1–9 unchanged")
+PY
