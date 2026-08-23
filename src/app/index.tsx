@@ -364,30 +364,6 @@ export default function HomeScreen() {
             {t.foundation}
           </Text>
 
-          <View style={styles.languageSwitcher}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Use English"
-              onPress={() => changeLanguage("en")}
-              style={({ pressed }) => [
-                styles.languageButton,
-                language === "en" &&
-                  styles.languageButtonActive,
-                pressed && styles.buttonPressed,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.languageButtonText,
-                  language === "en" &&
-                    styles.languageButtonTextActive,
-                ]}
-              >
-                English
-              </Text>
-            </Pressable>
-          </View>
-
           <View
             style={[
               styles.heroButtons,
