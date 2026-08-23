@@ -562,22 +562,110 @@ export default function RegisterPage() {
         <Link href="/" asChild>
           <TouchableOpacity style={styles.backButton}>
             <Text style={styles.backText}>
-              ← Back to Home / Ku Noqo Bogga Hore
+              ← Back to Home
             </Text>
           </TouchableOpacity>
         </Link>
 
+        <Text style={styles.label}>
+          Full Name
+
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          value={fullName}
+          onChangeText={setFullName}
+          placeholder="Enter your full name"
+          autoCapitalize="words"
+        />
+
+        <Text style={styles.label}>
+          Phone Number
+
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="Enter your phone number"
+          keyboardType="phone-pad"
+        />
+
+        <Text style={styles.label}>
+          Email Address
+
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Enter your email address"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+
+        <Text style={styles.label}>
+          Referral Student ID (Optional)
+
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          value={referralStudentId}
+          onChangeText={setReferralStudentId}
+          placeholder="Example: EGA-2026-123456"
+          autoCapitalize="characters"
+          autoCorrect={false}
+        />
+
+        <Text style={styles.referralHelpText}>
+          If another EGA student referred you, enter their Student ID here.
+
+          {"\n\n"}
+          The referral reward starts only after payment and attendance are verified.
+
+        </Text>
+
+        {message ? (
+          <View style={styles.messageBox}>
+            <Text style={styles.message}>{message}</Text>
+          </View>
+        ) : null}
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            loading && styles.disabledButton,
+          ]}
+          onPress={handleRegister}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading
+              ? "Registering..."
+              : "Register Now"}
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.courseBox}>
+          <Text style={styles.paymentText}>
+            ✅ After registering, scroll down to read the important course and referral reward information.
+          </Text>
+        </View>
+
         <View style={styles.courseBox}>
           <Text style={styles.courseTitle}>
             {COURSE_NAME}
-            {"\n"}
-            Koorsada Horumarinta AI-ga
+
           </Text>
 
           <Text style={styles.feeText}>
             Course Fee: {formatFee(fee)}
-            {"\n"}
-            Lacagta Koorsada: {formatFee(fee)}
+
           </Text>
 
           <Text style={styles.paymentText}>
@@ -587,68 +675,11 @@ export default function RegisterPage() {
 
           <Text style={styles.startText}>
             📅 The course will officially start on September 1, 2026, both online and offline.
-            {"\n"}
-            📅 Koorsadu waxay si rasmi ah u bilaaban doontaa 1-da Sebtembar 2026, iyadoo lagu baran doono online iyo offline labadaba.
+
           </Text>
         </View>
 
         <View style={styles.referralCardsRow}>
-          <View style={{ display: "none" }} accessibilityElementsHidden>
-            <Text style={styles.somaliReferralTitle}>
-              🇪🇹 ABAALMARINTA EGA EE ARDAYGA
-            </Text>
-
-            <Text style={styles.referralLanguage}>
-              Somali Speakers
-            </Text>
-
-            <Text style={styles.referralIntro}>
-              Ku soo xiro arday kale si uu isu diiwaangeliyo oo hel abaalmarin adigu.
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralPlanTitle}>
-              🇪🇹 Qorshaha 3,000 Birr Bishii
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 maalmood oo la xaqiijiyay → 150 Birr
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 maalmood oo la xaqiijiyay → 300 Birr (wadar ahaan)
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 maalmood oo la xaqiijiyay → 450 Birr (ugu badnaan bishii)
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralPlanTitle}>
-              🌍 Qorshaha Ingiriisiga / Caalamiga ah — $15 USD Bishii
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 maalmood oo la xaqiijiyay → $0.75
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 maalmood oo la xaqiijiyay → $1.50 (wadar ahaan)
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 maalmood oo la xaqiijiyay → $2.25 (ugu badnaan bishii)
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralNote}>
-              ✅ Abaalmarintu waxay u baahan tahay lacag bixinta oo la xaqiijiyay iyo ka qaybgalka la hubiyay. Heer kasta oo 10 maalmood ah hal mar oo keliya ayaa la abaalmarin karaa.
-            </Text>
-          </View>
-
           <View style={[styles.referralCard, styles.englishReferralCard]}>
             <Text style={styles.englishReferralTitle}>
               🌍 EGA STUDENT REFERRAL REWARD
@@ -705,96 +736,6 @@ export default function RegisterPage() {
             </Text>
           </View>
         </View>
-
-        <Text style={styles.label}>
-          Full Name
-          {"\n"}
-          Magaca oo Buuxa
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          value={fullName}
-          onChangeText={setFullName}
-          placeholder="Enter your full name / Geli magacaaga oo buuxa"
-          autoCapitalize="words"
-        />
-
-        <Text style={styles.label}>
-          Phone Number
-          {"\n"}
-          Lambarka Taleefanka
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Enter your phone number / Geli lambarka taleefanka"
-          keyboardType="phone-pad"
-        />
-
-        <Text style={styles.label}>
-          Email Address
-          {"\n"}
-          Cinwaanka Iimaylka
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Enter your email address / Geli cinwaanka iimaylka"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-
-        <Text style={styles.label}>
-          Referral Student ID (Optional)
-          {"\n"}
-          Aqoonsiga Ardayga Ku Soo Gudbiyey (Ikhtiyaari)
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          value={referralStudentId}
-          onChangeText={setReferralStudentId}
-          placeholder="Example / Tusaale: EGA-2026-123456"
-          autoCapitalize="characters"
-          autoCorrect={false}
-        />
-
-        <Text style={styles.referralHelpText}>
-          If another EGA student referred you, enter their Student ID here.
-          {"\n"}
-          Haddii arday kale oo EGA ah kuu soo gudbiyey, geli Student ID-giisa halkan.
-          {"\n\n"}
-          The referral reward starts only after payment and attendance are verified.
-          {"\n"}
-          Abaalmarinta gudbintu waxay bilaabataa kaliya marka lacag bixinta iyo xaadiritaanka la xaqiijiyo.
-        </Text>
-
-        {message ? (
-          <View style={styles.messageBox}>
-            <Text style={styles.message}>{message}</Text>
-          </View>
-        ) : null}
-
-        <TouchableOpacity
-          style={[
-            styles.button,
-            loading && styles.disabledButton,
-          ]}
-          onPress={handleRegister}
-          disabled={loading}
-        >
-          <Text style={styles.buttonText}>
-            {loading
-              ? "Registering... / Diiwaangelin..."
-              : "Register Now / Isdiiwaangeli Hadda"}
-          </Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
