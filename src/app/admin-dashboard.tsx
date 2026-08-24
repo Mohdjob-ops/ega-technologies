@@ -403,6 +403,14 @@ export default function AdminDashboard() {
         </Pressable>
       </Link>
 
+      <Link href="/admin-quiz-results" asChild>
+        <Pressable style={styles.linkButton}>
+          <Text style={styles.linkText}>
+            📊 Quiz Results
+          </Text>
+        </Pressable>
+      </Link>
+
       <Link href="/admin-payment-requests" asChild>
         <Pressable style={styles.linkButton}>
           <Text style={styles.linkText}>
