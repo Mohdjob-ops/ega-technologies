@@ -558,6 +558,37 @@ export default function AILessonsAssessment() {
       return;
     }
 
+    const currentAttemptId = attempt.id;
+
+    const { data: currentAttempt, error: attemptCheckError } = await supabase
+      .from("ai_quiz_attempts")
+      .select("status")
+      .eq("id", currentAttemptId)
+      .maybeSingle();
+
+    if (
+      attemptCheckError ||
+      !currentAttempt ||
+      currentAttempt.status !== "In Progress"
+    ) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(
+          `ega_ai_assessment_state_${currentAttemptId}`
+        );
+      }
+
+      setAttempt(null);
+      setStarted(false);
+      setSubmitted(false);
+      setAssessmentLocked(false);
+      setQuestionStates(emptyQuestionStates());
+      setSecondsLeft(TEST_SECONDS);
+      setMessage(
+        "🔓 EGA Admin cancelled the previous attempt and allowed a retake. Press Start Test to begin a new 60-minute assessment."
+      );
+      return;
+    }
+
     if (!autoSubmit) {
       const unfinished = questions.some(
         (_, index) => !questionStates[index]?.locked
