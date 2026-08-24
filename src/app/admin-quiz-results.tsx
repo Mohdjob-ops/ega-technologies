@@ -213,6 +213,31 @@ export default function AdminQuizResults() {
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
+      {/* TOP_ADMIN_BACK_BUTTON */}
+      <Link href="/admin-dashboard" asChild>
+        <Pressable
+          style={{
+            alignSelf: "flex-start",
+            backgroundColor: "#003366",
+            paddingVertical: 12,
+            paddingHorizontal: 18,
+            borderRadius: 12,
+            marginBottom: 18,
+          }}
+        >
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            ← Back to Admin Dashboard
+          </Text>
+        </Pressable>
+      </Link>
+
+
       <Text style={styles.title}>📊 Quiz Results</Text>
 
       <Text style={styles.subtitle}>
