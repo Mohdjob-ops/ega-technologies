@@ -415,8 +415,10 @@ export default function AILessonsAssessment() {
     }
 
     if (remaining <= 0) {
-      autoSubmitting.current = true;
-      setTimeout(() => submitAssessment(true), 0);
+      autoSubmitting.current = false;
+      setMessage(
+        "⏰ This assessment attempt has expired and is being submitted automatically."
+      );
     } else {
       setMessage(
         "▶️ Your existing assessment attempt has been restored. The original timer is still running."
