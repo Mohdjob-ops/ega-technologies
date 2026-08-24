@@ -265,6 +265,41 @@ export default function JavaScriptQuizPage() {
         return;
       }
 
+      const { data: existingResult, error: attemptCheckError } =
+        await supabase
+          .from("quiz_results")
+          .select("score, total, percentage, passed")
+          .eq("student_id", cleanStudentId)
+          .eq("quiz_name", "JavaScript Quiz")
+          .order("created_at", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+      if (attemptCheckError) {
+        setBilingualMessage(
+          `❌ Could not verify previous attempts: ${attemptCheckError.message}`,
+          `❌ Lama xaqiijin karin isku-dayadii hore: ${attemptCheckError.message}`,
+        );
+        return;
+      }
+
+      if (existingResult) {
+        const previousPercentage =
+          Number(existingResult.percentage) || 0;
+
+        setScore(previousPercentage);
+
+        setBilingualMessage(
+          `🔒 This JavaScript Quiz is already completed and cannot be taken again. Previous result: ${previousPercentage}% — ${
+            existingResult.passed ? "Passed" : "Not Passed"
+          }. Contact EGA Admin if a new attempt is required.`,
+          `🔒 JavaScript Quiz-kan horay ayaa loo dhammeeyey, mar labaadna lama geli karo. Natiijadii hore: ${previousPercentage}% — ${
+            existingResult.passed ? "Gudbay" : "Ma gudbin"
+          }. La xiriir Maamulka EGA haddii isku-day cusub loo baahan yahay.`,
+        );
+        return;
+      }
+
       const { error: updateError } = await supabase
         .from("students")
         .update({
@@ -316,13 +351,13 @@ export default function JavaScriptQuizPage() {
 
       if (passed) {
         setBilingualMessage(
-          `🎓 Passed! You scored ${finalScore}%. JavaScript Certificate unlocked.`,
-          `🎓 Waad gudubtay! Waxaad heshay ${finalScore}%. Shahaadada JavaScript waa kuu furantay.`,
+          `🎓 Passed! You scored ${finalScore}%. JavaScript Certificate unlocked. This quiz is now locked.`,
+          `🎓 Waad gudubtay! Waxaad heshay ${finalScore}%. Shahaadada JavaScript waa kuu furantay. Quiz-kan hadda waa xiran yahay.`,
         );
       } else {
         setBilingualMessage(
-          `✅ JavaScript quiz saved. You scored ${finalScore}%. You need 70% to pass.`,
-          `✅ JavaScript quiz-ka waa la kaydiyey. Waxaad heshay ${finalScore}%. Waxaad u baahan tahay 70% si aad u gudubto.`,
+          `❌ JavaScript Quiz submitted. You scored ${finalScore}% and did not pass. This quiz is now locked; contact EGA Admin if another attempt is required.`,
+          `❌ JavaScript Quiz-ka waa la diray. Waxaad heshay ${finalScore}%, mana gudbin. Quiz-kan hadda waa xiran yahay; la xiriir Maamulka EGA haddii isku-day kale loo baahan yahay.`,
         );
       }
     } catch (error: any) {

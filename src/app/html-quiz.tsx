@@ -1,6 +1,6 @@
 
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -66,15 +66,107 @@ const questions = [
 export default function HTMLQuiz() {
   const [selectedAnswers, setSelectedAnswers] = useState<any>({});
   const [submitted, setSubmitted] = useState(false);
+  const [locked, setLocked] = useState(true);
+  const [checkingAttempt, setCheckingAttempt] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    checkExistingAttempt();
+  }, []);
+
+  function getStudentId() {
+    if (typeof window === "undefined") return "";
+    return (localStorage.getItem("student_id") || "").trim().toUpperCase();
+  }
+
+  async function checkExistingAttempt() {
+    const studentId = getStudentId();
+
+    if (!studentId) {
+      setLocked(true);
+      setCheckingAttempt(false);
+      setMessage("⚠️ Please log in through the Learner Portal before taking this quiz.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("quiz_results")
+      .select("score, total, percentage, passed")
+      .eq("student_id", studentId)
+      .eq("quiz_name", "HTML Quiz")
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      setLocked(true);
+      setMessage("❌ Could not verify your quiz status: " + error.message);
+    } else if (data) {
+      const savedPercentage = Number(data.percentage) || 0;
+      setScore(savedPercentage);
+      setSubmitted(true);
+      setLocked(true);
+      setMessage(
+        `🔒 This quiz is already completed and cannot be taken again. Previous result: ${savedPercentage}% — ${
+          data.passed ? "Passed" : "Not Passed"
+        }. Contact EGA Admin if a new attempt is required.`
+      );
+    } else {
+      setLocked(false);
+    }
+
+    setCheckingAttempt(false);
+  }
+
   function selectAnswer(index: number, option: string) {
-    if (submitted) return;
+    if (submitted || locked || saving) return;
     setSelectedAnswers({ ...selectedAnswers, [index]: option });
   }
 
   async function submitQuiz() {
+    if (checkingAttempt || locked || saving) return;
+
+    const studentId = getStudentId();
+
+    if (!studentId) {
+      setLocked(true);
+      setMessage("⚠️ Please log in through the Learner Portal before taking this quiz.");
+      return;
+    }
+
+    setSaving(true);
+    setMessage("Checking previous attempts...");
+
+    const { data: existingResult, error: checkError } = await supabase
+      .from("quiz_results")
+      .select("percentage, passed")
+      .eq("student_id", studentId)
+      .eq("quiz_name", "HTML Quiz")
+      .limit(1)
+      .maybeSingle();
+
+    if (checkError) {
+      setMessage("❌ Could not verify your quiz status: " + checkError.message);
+      setSaving(false);
+      return;
+    }
+
+    if (existingResult) {
+      const savedPercentage = Number(existingResult.percentage) || 0;
+      setScore(savedPercentage);
+      setSubmitted(true);
+      setLocked(true);
+      setSaving(false);
+      setMessage(
+        `🔒 This quiz was already completed. Previous result: ${savedPercentage}% — ${
+          existingResult.passed ? "Passed" : "Not Passed"
+        }. Contact EGA Admin if a new attempt is required.`
+      );
+      return;
+    }
+
     let correct = 0;
 
     questions.forEach((q, index) => {
@@ -87,20 +179,14 @@ export default function HTMLQuiz() {
     const passed = finalScore >= 70;
 
     setScore(finalScore);
-    setSubmitted(true);
     setMessage("Saving quiz result...");
-
-    const studentId =
-      typeof window !== "undefined"
-        ? localStorage.getItem("student_id") || "Manual-Test-Student"
-        : "Manual-Test-Student";
 
     const { error } = await supabase.from("quiz_results").insert([
       {
         student_id: studentId,
         quiz_name: "HTML Quiz",
         course: "HTML",
-        score: finalScore,
+        score: correct,
         total: questions.length,
         percentage: finalScore,
         passed: passed,
@@ -108,14 +194,19 @@ export default function HTMLQuiz() {
     ]);
 
     if (error) {
-      setMessage("❌ Quiz completed, but result was not saved: " + error.message);
+      setMessage("❌ Quiz result was not saved: " + error.message);
+      setSaving(false);
       return;
     }
 
+    setSubmitted(true);
+    setLocked(true);
+    setSaving(false);
+
     setMessage(
       passed
-        ? "✅ Quiz submitted and saved. You passed!"
-        : "⚠️ Quiz submitted and saved. Please review the lecture and try again."
+        ? "✅ Quiz submitted and saved. You passed. This quiz is now locked."
+        : "❌ Quiz submitted and saved. You did not pass. This quiz is now locked; contact EGA Admin if another attempt is required."
     );
   }
 
@@ -149,9 +240,15 @@ export default function HTMLQuiz() {
         </View>
       ))}
 
-      {!submitted ? (
-        <TouchableOpacity style={styles.submitButton} onPress={submitQuiz}>
-          <Text style={styles.submitText}>Submit Quiz</Text>
+      {!submitted && !locked && !checkingAttempt ? (
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={submitQuiz}
+          disabled={saving}
+        >
+          <Text style={styles.submitText}>
+            {saving ? "Saving..." : "Submit Quiz"}
+          </Text>
         </TouchableOpacity>
       ) : (
         <View style={styles.resultBox}>

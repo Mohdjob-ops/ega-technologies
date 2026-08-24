@@ -249,6 +249,7 @@ export default function AILessonsAssessment() {
   const [attempt, setAttempt] = useState<AttemptData | null>(null);
   const [started, setStarted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [assessmentLocked, setAssessmentLocked] = useState(false);
 
   const [questionStates, setQuestionStates] =
     useState<QuestionStates>(emptyQuestionStates());
@@ -334,6 +335,39 @@ export default function AILessonsAssessment() {
 
     setStudent(data);
 
+    const { data: existingResult, error: resultCheckError } =
+      await supabase
+        .from("quiz_results")
+        .select("score, total, percentage, passed")
+        .eq("student_id", data.student_id)
+        .eq("quiz_name", QUIZ_NAME)
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+    if (resultCheckError) {
+      setAssessmentLocked(true);
+      setMessage(
+        "❌ Could not verify your previous assessment status: " +
+          resultCheckError.message
+      );
+      setLoadingStudent(false);
+      return;
+    }
+
+    if (existingResult) {
+      setAssessmentLocked(true);
+      setMessage(
+        `🔒 This AI assessment is already completed and cannot be taken again. Previous result: ${
+          existingResult.score
+        }/${existingResult.total} (${existingResult.percentage}%) — ${
+          existingResult.passed ? "Passed" : "Not Passed"
+        }. Contact EGA Admin if a new attempt is required.`
+      );
+      setLoadingStudent(false);
+      return;
+    }
+
     await restoreAttempt(data.student_id);
 
     setLoadingStudent(false);
@@ -391,7 +425,7 @@ export default function AILessonsAssessment() {
   }
 
   async function startAssessment() {
-    if (!student || started || saving) {
+    if (!student || started || saving || assessmentLocked) {
       return;
     }
 
@@ -537,6 +571,40 @@ export default function AILessonsAssessment() {
 
     setSaving(true);
 
+    const { data: existingResult, error: resultCheckError } =
+      await supabase
+        .from("quiz_results")
+        .select("score, total, percentage, passed")
+        .eq("student_id", student.student_id)
+        .eq("quiz_name", QUIZ_NAME)
+        .limit(1)
+        .maybeSingle();
+
+    if (resultCheckError) {
+      setMessage(
+        "❌ Could not verify previous assessment attempts: " +
+          resultCheckError.message
+      );
+      setSaving(false);
+      autoSubmitting.current = false;
+      return;
+    }
+
+    if (existingResult) {
+      setAssessmentLocked(true);
+      setStarted(false);
+      setMessage(
+        `🔒 This AI assessment was already completed. Previous result: ${
+          existingResult.score
+        }/${existingResult.total} (${existingResult.percentage}%) — ${
+          existingResult.passed ? "Passed" : "Not Passed"
+        }. Contact EGA Admin if another attempt is required.`
+      );
+      setSaving(false);
+      autoSubmitting.current = false;
+      return;
+    }
+
     if (autoSubmit) {
       setMessage("⏰ Time is up. Your test is being submitted automatically.");
     } else {
@@ -604,13 +672,14 @@ export default function AILessonsAssessment() {
     }
 
     setSubmitted(true);
+    setAssessmentLocked(true);
     setStarted(false);
     setSaving(false);
 
     setMessage(
       passed
-        ? `🎉 ${student.name}, you passed the AI Lessons 1–9 Assessment. Score: ${score}/${total} (${percentage}%).`
-        : `📘 ${student.name}, your score is ${score}/${total} (${percentage}%). Review Lessons 1–9 before another assessment attempt.`
+        ? `🎉 ${student.name}, you passed the AI assessment. Score: ${score}/${total} (${percentage}%). This assessment is now locked.`
+        : `📘 ${student.name}, your score is ${score}/${total} (${percentage}%). You did not pass. This assessment is now locked; contact EGA Admin if another attempt is required.`
     );
   }
 
@@ -659,7 +728,7 @@ export default function AILessonsAssessment() {
         </View>
       )}
 
-      {student && !started && !submitted && (
+      {student && !started && !submitted && !assessmentLocked && (
         <View style={styles.instructionsCard}>
           <Text style={styles.instructionsTitle}>
             Assessment Rules
