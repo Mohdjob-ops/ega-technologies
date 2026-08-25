@@ -59,6 +59,10 @@ const aiLessons = [
     title: "Lesson 12: Creating a PowerPoint from an Existing File",
     path: "/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html",
   },
+  {
+    title: "Lesson 13: GitHub Copilot Integrated AI Chat",
+    path: "/ai-lessons/lesson-13-github-copilot-integrated-ai-chat.html",
+  },
 ];
 
 export default function LearnerPortal() {

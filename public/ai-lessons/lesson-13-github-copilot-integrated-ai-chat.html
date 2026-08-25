@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13: GitHub Copilot Integrated AI Chat | EGA</title>
+
+  <style>
+    :root {
+      --navy: #071a33;
+      --blue: #1457d9;
+      --gold: #f4b400;
+      --green: #087f5b;
+      --red: #c92a2a;
+      --purple: #7048e8;
+      --text: #172033;
+      --muted: #5f6b7a;
+      --border: #dbe4f0;
+      --background: #f5f8fc;
+      --white: #ffffff;
+      --shadow: 0 12px 30px rgba(7, 26, 51, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      color: white;
+      background: rgba(7, 26, 51, 0.97);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .topbar-inner {
+      width: min(1100px, calc(100% - 30px));
+      min-height: 70px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      border: 2px solid white;
+      border-radius: 50%;
+      font-weight: 900;
+    }
+
+    .brand strong,
+    .brand small {
+      display: block;
+    }
+
+    .brand small {
+      color: #cbd8ea;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .lesson-label {
+      color: #d8e4f4;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hero {
+      padding: 75px 20px 68px;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(244,180,0,.25), transparent 27%),
+        linear-gradient(135deg, #06162b, #0b2c59 55%, #1457a8);
+      text-align: center;
+    }
+
+    .hero-inner {
+      width: min(900px, 100%);
+      margin: auto;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 8px 17px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 22px auto 15px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: auto;
+      color: #dceafd;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .course-name {
+      margin-top: 23px;
+      color: #ffe39a;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1000px, calc(100% - 30px));
+      margin: -27px auto 0;
+      padding-bottom: 65px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .card,
+    .navigation {
+      margin-bottom: 22px;
+      padding: clamp(23px, 5vw, 40px);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .navigation {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .button {
+      min-height: 46px;
+      padding: 11px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: var(--navy);
+      border-radius: 11px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .button:hover {
+      background: var(--blue);
+    }
+
+    .button.portal {
+      color: var(--navy);
+      background: var(--gold);
+    }
+
+    .section-label {
+      display: inline-block;
+      margin-bottom: 9px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      color: var(--navy);
+      font-size: clamp(25px, 4vw, 34px);
+      line-height: 1.22;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    li {
+      margin: 9px 0;
+    }
+
+    .lead {
+      color: #34445a;
+      font-size: 18px;
+    }
+
+    .info {
+      margin: 20px 0;
+      padding: 17px 19px;
+      background: #edf4ff;
+      border-left: 5px solid var(--blue);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .objectives {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    .objective {
+      padding: 18px;
+      display: flex;
+      gap: 13px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .number {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: white;
+      background: var(--blue);
+      border-radius: 11px;
+      font-weight: 900;
+    }
+
+    .objective strong,
+    .chat-type strong,
+    .workflow-step strong {
+      display: block;
+      color: var(--navy);
+    }
+
+    .technical {
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .technical:first-of-type {
+      margin-top: 8px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .technical-title {
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .chat-types {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .chat-type {
+      padding: 20px;
+      background: #faf9ff;
+      border: 1px solid #ded8ff;
+      border-top: 5px solid var(--purple);
+      border-radius: 14px;
+    }
+
+    .chat-icon {
+      margin-bottom: 8px;
+      font-size: 29px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 22px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: white;
+      background: var(--navy);
+    }
+
+    .workflow {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .workflow-step {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--blue);
+      border-radius: 14px;
+    }
+
+    .prompt {
+      margin-top: 22px;
+      padding: 21px;
+      color: #dcecff;
+      background: #07182f;
+      border-radius: 14px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .prompt strong {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--gold);
+      font-family: Inter, Arial, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .summary {
+      border-top: 6px solid var(--blue);
+    }
+
+    .somali-farsamo {
+      display: none;
+    }
+
+    .rules {
+      border-top: 6px solid var(--green);
+    }
+
+    .mistakes {
+      border-top: 6px solid var(--red);
+    }
+
+    .mistake {
+      margin: 14px 0;
+      padding: 16px 18px;
+      background: #fff0f0;
+      border: 1px solid #ffc9c9;
+      border-radius: 12px;
+    }
+
+    .mistake strong {
+      color: var(--red);
+    }
+
+    .quiz {
+      border-top: 6px solid var(--purple);
+    }
+
+    .question {
+      margin: 22px 0;
+      padding: 19px;
+      background: #faf9ff;
+      border: 1px solid #ded8ff;
+      border-radius: 14px;
+    }
+
+    .question-title {
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .option {
+      margin: 8px 0;
+      padding: 9px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    details {
+      margin-top: 20px;
+      background: #e9f8f2;
+      border: 1px solid #a9e8ce;
+      border-radius: 13px;
+    }
+
+    summary {
+      padding: 17px 19px;
+      color: #065f46;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .answers {
+      padding: 0 20px 18px;
+    }
+
+    .remember {
+      color: #e3eefb;
+      background: linear-gradient(135deg, var(--navy), #123e79);
+      border: 0;
+    }
+
+    .remember h2 {
+      color: white;
+    }
+
+    .remember strong {
+      color: #ffe29a;
+    }
+
+    footer {
+      padding: 30px 20px;
+      color: #c4d2e4;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    footer span {
+      display: block;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .lesson-label,
+      .brand small {
+        display: none;
+      }
+
+      .navigation {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .objectives,
+      .chat-types {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/learner-portal">
+        <div class="logo">EGA</div>
+        <div>
+          <strong>Elmi Guray Academy</strong>
+          <small>Knowledge • Integrity • Opportunity</small>
+        </div>
+      </a>
+
+      <div class="lesson-label">AI Developer Course · Lesson 13</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="pill">Lesson 13</span>
+
+      <h1>GitHub Copilot Integrated AI Chat</h1>
+
+      <p>
+        Learn how to open GitHub Copilot Chat, understand its different chat
+        experiences, and organize it inside Visual Studio Code.
+      </p>
+
+      <div class="course-name">EGA AI Developer Course</div>
+    </div>
+  </section>
+
+  <main>
+    <nav class="navigation">
+      <a class="button" href="/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html">
+        ← Previous Lesson
+      </a>
+
+      <a class="button portal" href="/learner-portal">
+        Learner Portal
+      </a>
+    </nav>
+
+    <section class="card">
+      <span class="section-label">Introduction</span>
+      <h2>Beyond AI Code Completion</h2>
+
+      <p class="lead">
+        GitHub Copilot can predict and complete code while you type. Its
+        integrated AI chat provides a conversational way to work with
+        artificial intelligence inside Visual Studio Code.
+      </p>
+
+      <p>
+        Copilot Chat lets developers ask questions, request explanations,
+        investigate errors, discuss code, and plan improvements without
+        leaving the development environment.
+      </p>
+
+      <div class="info">
+        <strong>Main idea:</strong> Code completion suggests code while you
+        type. Copilot Chat responds to natural-language questions and
+        instructions.
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Learning Objectives</span>
+      <h2>What You Will Learn</h2>
+
+      <div class="objectives">
+        <div class="objective">
+          <span class="number">1</span>
+          <div>
+            <strong>Identify chat types</strong>
+            Recognize standard chat, inline chat, and quick chat.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">2</span>
+          <div>
+            <strong>Open Copilot Chat</strong>
+            Use the Copilot button, menu, or available shortcut.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">3</span>
+          <div>
+            <strong>Choose a location</strong>
+            Use the sidebar, editor area, or a separate window.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">4</span>
+          <div>
+            <strong>Organize the workspace</strong>
+            Select a layout that supports comfortable development.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Technical Lesson</span>
+      <h2>Understanding Copilot Chat</h2>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">1</span>
+          <h3>What Is Integrated AI Chat?</h3>
+        </div>
+
+        <p>
+          Integrated AI chat is a conversational interface inside the
+          development environment. It allows developers to communicate with
+          GitHub Copilot without opening a separate AI website.
+        </p>
+
+        <ul>
+          <li>Ask for explanations of unfamiliar code.</li>
+          <li>Request help understanding errors.</li>
+          <li>Plan features before modifying a project.</li>
+          <li>Ask for suggestions to improve existing code.</li>
+          <li>Learn about programming languages and tools.</li>
+        </ul>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">2</span>
+          <h3>Three Copilot Chat Experiences</h3>
+        </div>
+
+        <div class="chat-types">
+          <div class="chat-type">
+            <div class="chat-icon">💬</div>
+            <strong>Standard Chat</strong>
+            A full conversation for connected technical questions and longer
+            AI responses.
+          </div>
+
+          <div class="chat-type">
+            <div class="chat-icon">⌨️</div>
+            <strong>Inline Chat</strong>
+            Opens close to the code and works well with the current file or
+            selected code.
+          </div>
+
+          <div class="chat-type">
+            <div class="chat-icon">⚡</div>
+            <strong>Quick Chat</strong>
+            A compact interface for short questions that do not require a
+            permanent panel.
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Chat type</th>
+              <th>Best use</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Standard Chat</td>
+              <td>Long conversations</td>
+              <td>Sidebar, editor, or separate window</td>
+            </tr>
+            <tr>
+              <td>Inline Chat</td>
+              <td>Working directly with current code</td>
+              <td>Inside the editor</td>
+            </tr>
+            <tr>
+              <td>Quick Chat</td>
+              <td>Short questions</td>
+              <td>Compact temporary interface</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">3</span>
+          <h3>Opening Standard Copilot Chat</h3>
+        </div>
+
+        <ol>
+          <li>Open Visual Studio Code.</li>
+          <li>Confirm GitHub Copilot is installed and active.</li>
+          <li>Select the Copilot or chat button near the top.</li>
+          <li>Choose <strong>Open Chat</strong>.</li>
+          <li>Enter a clear technical question or request.</li>
+        </ol>
+
+        <p>
+          Visual Studio Code may display a keyboard shortcut beside the
+          command. Shortcuts can differ by operating system and version.
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">4</span>
+          <h3>Using the Secondary Sidebar</h3>
+        </div>
+
+        <p>
+          Standard Copilot Chat commonly opens in the secondary sidebar. This
+          keeps the conversation beside the main editor so you can read code
+          and communicate with Copilot at the same time.
+        </p>
+
+        <p>
+          Hide the secondary sidebar when you need more coding space and
+          reopen it when you want to continue the conversation.
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">5</span>
+          <h3>Opening Chat in a Separate Window</h3>
+        </div>
+
+        <p>
+          Copilot Chat can be detached from Visual Studio Code and opened in a
+          separate window. This is particularly useful when working with two
+          monitors.
+        </p>
+
+        <p>
+          The code editor can remain on the first monitor while the Copilot
+          conversation appears on the second monitor.
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">6</span>
+          <h3>Moving Chat into the Editor Area</h3>
+        </div>
+
+        <p>
+          Chat can also be placed inside the editor area, where it behaves
+          similarly to an open editor tab.
+        </p>
+
+        <ul>
+          <li>Use more width for long AI responses.</li>
+          <li>Keep the sidebar available for project files.</li>
+          <li>Switch between chat and code using editor tabs.</li>
+          <li>Read detailed technical explanations more comfortably.</li>
+        </ul>
+
+        <div class="info">
+          There is no single correct layout. Choose the arrangement that best
+          matches your screen size, monitors, and development task.
+        </div>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">7</span>
+          <h3>Chat and AI Agents</h3>
+        </div>
+
+        <p>
+          Standard Copilot Chat can support advanced workflows, including AI
+          agents. An agent may work on broader tasks than simple code
+          completion.
+        </p>
+
+        <p>
+          Inline chat and quick chat serve different purposes and will be
+          explored separately.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Practical Workflow</span>
+      <h2>Open and Organize Copilot Chat</h2>
+
+      <div class="workflow">
+        <div class="workflow-step">
+          <span class="number">1</span>
+          <div>
+            <strong>Open your project</strong>
+            Start Visual Studio Code and open a familiar project.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">2</span>
+          <div>
+            <strong>Open the Copilot menu</strong>
+            Select the Copilot control near the top of Visual Studio Code.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">3</span>
+          <div>
+            <strong>Select Open Chat</strong>
+            Observe whether it appears in the secondary sidebar.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">4</span>
+          <div>
+            <strong>Ask a clear question</strong>
+            Describe the task, relevant file, and desired result.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">5</span>
+          <div>
+            <strong>Test another location</strong>
+            Move chat into the editor or open it in a separate window.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">6</span>
+          <div>
+            <strong>Select your preferred layout</strong>
+            Keep the arrangement that provides enough room for code and chat.
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <strong>Example Copilot Chat request</strong>
+        Explain this HTML file in simple steps. Identify its main sections,
+        point out accessibility problems, and suggest improvements without
+        changing the design.
+      </div>
+    </section>
+
+    <section class="card summary">
+      <span class="section-label">English Technical Summary</span>
+      <h2>Technical Summary</h2>
+
+      <ul>
+        <li>GitHub Copilot provides code completion and integrated chat.</li>
+        <li>Visual Studio Code offers standard, inline, and quick chat.</li>
+        <li>Standard chat commonly opens in the secondary sidebar.</li>
+        <li>Chat can move into the editor or a separate window.</li>
+        <li>A separate window is useful with multiple monitors.</li>
+        <li>The best location depends on the developer’s workflow.</li>
+        <li>All AI responses must be reviewed and tested.</li>
+      </ul>
+    </section>
+
+    <section class="card somali-farsamo" lang="so">
+      <span class="section-label">Somali Farsamo</span>
+      <h2>Soo Koobid Farsamo</h2>
+
+      <p>
+        GitHub Copilot wuxuu leeyahay dhammaystir kood iyo wada sheekeysi AI
+        ah oo ku dhex jira Visual Studio Code.
+      </p>
+
+      <ul>
+        <li>Chat-ka caadiga ah wuxuu ka furmi karaa dhinaca labaad.</li>
+        <li>Inline Chat wuxuu ka shaqeeyaa meel u dhow koodka.</li>
+        <li>Quick Chat wuxuu ku habboon yahay su'aalo gaaban.</li>
+        <li>Chat-ka waxaa loo wareejin karaa editor-ka ama daaqad gaar ah.</li>
+        <li>Jawaabaha AI waa in la hubiyaa lana tijaabiyaa.</li>
+      </ul>
+    </section>
+
+    <section class="card rules">
+      <span class="section-label">Rules</span>
+      <h2>Rules for Using Copilot Chat</h2>
+
+      <ol>
+        <li>Describe the task and expected result clearly.</li>
+        <li>Never assume every Copilot response is correct.</li>
+        <li>Read and understand suggested code before accepting it.</li>
+        <li>Test changes in a safe development environment.</li>
+        <li>Never share passwords, keys, or private student information.</li>
+        <li>Divide large requests into smaller, verifiable tasks.</li>
+        <li>Remember that shortcuts vary by system and version.</li>
+      </ol>
+    </section>
+
+    <section class="card mistakes">
+      <span class="section-label">Common Mistakes</span>
+      <h2>Mistakes to Avoid</h2>
+
+      <div class="mistake">
+        <strong>Confusing completion with chat</strong>
+        <p>
+          Completion predicts code while you type. Chat responds to questions
+          and instructions.
+        </p>
+      </div>
+
+      <div class="mistake">
+        <strong>Using an unclear request</strong>
+        <p>
+          “Fix it” provides too little context. Explain the problem and
+          expected result.
+        </p>
+      </div>
+
+      <div class="mistake">
+        <strong>Believing the sidebar is the only location</strong>
+        <p>Chat can be moved into the editor or a separate window.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Accepting answers without testing</strong>
+        <p>Copilot can produce incomplete or incorrect suggestions.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Sharing sensitive information</strong>
+        <p>Never include passwords, private keys, or personal information.</p>
+      </div>
+    </section>
+
+    <section class="card quiz">
+      <span class="section-label">Knowledge Check</span>
+      <h2>Multiple-Choice Questions</h2>
+
+      <div class="question">
+        <div class="question-title">1. What is a main purpose of Copilot Chat?</div>
+        <div class="option">A. Replace the operating system</div>
+        <div class="option">B. Communicate with AI inside the development environment</div>
+        <div class="option">C. Delete project files</div>
+        <div class="option">D. Disable Visual Studio Code</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">2. Where does standard chat commonly open?</div>
+        <div class="option">A. Secondary sidebar</div>
+        <div class="option">B. Computer lock screen</div>
+        <div class="option">C. Printed document</div>
+        <div class="option">D. Phone settings</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">3. Which chat works close to the current code?</div>
+        <div class="option">A. Email chat</div>
+        <div class="option">B. Inline Chat</div>
+        <div class="option">C. Video chat</div>
+        <div class="option">D. Browser history</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">4. Why use a separate chat window?</div>
+        <div class="option">A. To uninstall the editor</div>
+        <div class="option">B. To use chat on another monitor</div>
+        <div class="option">C. To disable the project</div>
+        <div class="option">D. To remove the keyboard</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">5. What should you do with AI-generated code?</div>
+        <div class="option">A. Publish it immediately</div>
+        <div class="option">B. Accept it without reading</div>
+        <div class="option">C. Review, understand, and test it</div>
+        <div class="option">D. Delete the project</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">6. Which information must not be included in chat?</div>
+        <div class="option">A. A general HTML question</div>
+        <div class="option">B. A public function name</div>
+        <div class="option">C. A password or secret API key</div>
+        <div class="option">D. A description of a layout</div>
+      </div>
+
+      <details>
+        <summary>Open Answer Key</summary>
+        <div class="answers">
+          <ol>
+            <li><strong>B</strong> — Chat provides AI conversation inside the editor.</li>
+            <li><strong>A</strong> — Standard chat commonly opens in the secondary sidebar.</li>
+            <li><strong>B</strong> — Inline Chat appears close to the current code.</li>
+            <li><strong>B</strong> — A separate window can be placed on another monitor.</li>
+            <li><strong>C</strong> — AI-generated code must be reviewed and tested.</li>
+            <li><strong>C</strong> — Passwords and secret keys must remain private.</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <section class="card remember">
+      <span class="section-label" style="color:#ffe29a">Remember</span>
+      <h2>Important Points</h2>
+
+      <ul>
+        <li>
+          <strong>Copilot Chat is conversational:</strong> ask questions using
+          natural language.
+        </li>
+        <li>
+          <strong>You control the layout:</strong> use the sidebar, editor, or
+          a separate window.
+        </li>
+        <li>
+          <strong>Chat types have different purposes:</strong> standard,
+          inline, and quick chat are not identical.
+        </li>
+        <li>
+          <strong>Clear instructions produce better assistance:</strong>
+          provide context and the desired result.
+        </li>
+        <li>
+          <strong>You remain responsible:</strong> review and test all
+          suggestions.
+        </li>
+      </ul>
+    </section>
+
+    <nav class="navigation">
+      <a class="button" href="/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html">
+        ← Previous Lesson
+      </a>
+
+      <a class="button portal" href="/learner-portal">
+        Learner Portal
+      </a>
+    </nav>
+  </main>
+
+  <footer>
+    <strong>Elmi Guray Academy</strong>
+    <span>Knowledge • Integrity • Opportunity</span>
+  </footer>
+</body>
+</html>
