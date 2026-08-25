@@ -33,6 +33,10 @@
   ],
   "rewrites": [
     {
+      "source": "/apple-touch-icon.png",
+      "destination": "/assets/images/ega-logo.cf28c458a75b8c211bf7d48fb1505cc3.png"
+    },
+    {
       "source": "/ai-lessons/(.*)",
       "destination": "/ai-lessons/$1"
     },
