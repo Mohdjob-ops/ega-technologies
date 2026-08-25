@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn how to use Microsoft Copilot to create a PowerPoint presentation from an existing Word document." />
+  <title>Lesson 12: Creating a PowerPoint from an Existing File | EGA</title>
+
+  <style>
+    :root {
+      --navy: #071b33;
+      --navy-light: #102d4f;
+      --blue: #1769e0;
+      --blue-dark: #0d4fa9;
+      --cyan: #14b8d4;
+      --gold: #f4b942;
+      --green: #14804a;
+      --red: #c0392b;
+      --purple: #7048b8;
+      --paper: #ffffff;
+      --page: #eef4f8;
+      --soft-blue: #eaf3ff;
+      --soft-green: #eaf8f0;
+      --soft-gold: #fff8e5;
+      --soft-red: #fff0ee;
+      --soft-purple: #f2edff;
+      --text: #172033;
+      --muted: #586578;
+      --border: #d9e3ec;
+      --shadow: 0 12px 34px rgba(7, 27, 51, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(20, 184, 212, 0.10), transparent 28rem),
+        var(--page);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page-shell {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 27, 51, 0.97);
+      border-bottom: 3px solid var(--gold);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .topbar-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--navy-light), var(--blue));
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+    }
+
+    .brand-copy {
+      line-height: 1.15;
+    }
+
+    .brand-copy small {
+      display: block;
+      margin-top: 4px;
+      color: #cbd8e6;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+    }
+
+    .top-portal {
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      background: white;
+      color: var(--navy);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .hero {
+      overflow: hidden;
+      position: relative;
+      margin: 28px 0 22px;
+      padding: 48px clamp(24px, 6vw, 70px);
+      border-radius: 26px;
+      background:
+        linear-gradient(135deg, rgba(7, 27, 51, 0.98), rgba(13, 79, 169, 0.95)),
+        var(--navy);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -85px;
+      bottom: -105px;
+      width: 280px;
+      height: 280px;
+      border: 42px solid rgba(244, 185, 66, 0.17);
+      border-radius: 50%;
+    }
+
+    .lesson-label {
+      display: inline-flex;
+      position: relative;
+      z-index: 1;
+      padding: 7px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.11);
+      color: #ffe7a5;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 850px;
+      margin: 18px 0 14px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0;
+      color: #dae8f6;
+      font-size: clamp(17px, 2.2vw, 21px);
+    }
+
+    .hero-tags {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .hero-tag {
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .lesson-nav {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .nav-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 12px 15px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--paper);
+      color: var(--navy);
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 5px 16px rgba(7, 27, 51, 0.07);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 22px rgba(7, 27, 51, 0.13);
+    }
+
+    .nav-button.portal {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+
+    .content-card {
+      margin: 20px 0;
+      padding: clamp(24px, 4vw, 42px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--paper);
+      box-shadow: 0 7px 24px rgba(7, 27, 51, 0.07);
+    }
+
+    .content-card.accent-blue {
+      border-top: 6px solid var(--blue);
+    }
+
+    .content-card.accent-green {
+      border-top: 6px solid var(--green);
+    }
+
+    .content-card.accent-gold {
+      border-top: 6px solid var(--gold);
+    }
+
+    .content-card.accent-purple {
+      border-top: 6px solid var(--purple);
+    }
+
+    .content-card.accent-red {
+      border-top: 6px solid var(--red);
+    }
+
+    .section-kicker {
+      margin-bottom: 5px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      color: var(--navy);
+      font-size: clamp(25px, 4vw, 36px);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 24px 0 9px;
+      color: var(--navy);
+      font-size: 21px;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul,
+    ol {
+      margin: 12px 0 0;
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    li::marker {
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .objectives {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .objective {
+      display: flex;
+      gap: 12px;
+      padding: 17px;
+      border: 1px solid #cfe0f2;
+      border-radius: 15px;
+      background: var(--soft-blue);
+    }
+
+    .objective-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .objective p {
+      margin: 2px 0 0;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .mini-card {
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f8fbfd;
+    }
+
+    .mini-card .icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      background: var(--soft-blue);
+      font-size: 22px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 7px;
+      font-size: 18px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .note,
+    .warning,
+    .success {
+      margin: 20px 0;
+      padding: 18px 20px;
+      border-radius: 15px;
+    }
+
+    .note {
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+
+    .warning {
+      border-left: 5px solid var(--gold);
+      background: var(--soft-gold);
+    }
+
+    .success {
+      border-left: 5px solid var(--green);
+      background: var(--soft-green);
+    }
+
+    .note strong,
+    .warning strong,
+    .success strong {
+      color: var(--navy);
+    }
+
+    .steps {
+      counter-reset: workflow;
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .step {
+      counter-increment: workflow;
+      position: relative;
+      padding: 20px 20px 20px 72px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f9fbfd;
+    }
+
+    .step::before {
+      content: counter(workflow);
+      position: absolute;
+      top: 19px;
+      left: 18px;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: white;
+      font-weight: 900;
+    }
+
+    .step h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .prompt-box {
+      margin: 16px 0;
+      padding: 19px;
+      border: 1px solid #bcd3eb;
+      border-radius: 15px;
+      background: #f4f9ff;
+      color: #12365d;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .comparison {
+      width: 100%;
+      margin-top: 18px;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    .comparison th,
+    .comparison td {
+      padding: 14px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .comparison th {
+      background: var(--navy);
+      color: white;
+    }
+
+    .comparison tr:nth-child(even) td {
+      background: #f6f9fb;
+    }
+
+    .rules-list,
+    .mistakes-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .rule,
+    .mistake {
+      position: relative;
+      padding: 16px 17px 16px 52px;
+      border-radius: 14px;
+    }
+
+    .rule {
+      border: 1px solid #cbe8d8;
+      background: var(--soft-green);
+    }
+
+    .mistake {
+      border: 1px solid #f0cbc6;
+      background: var(--soft-red);
+    }
+
+    .rule::before,
+    .mistake::before {
+      position: absolute;
+      top: 14px;
+      left: 17px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .rule::before {
+      content: "✓";
+      color: var(--green);
+    }
+
+    .mistake::before {
+      content: "!";
+      color: var(--red);
+    }
+
+    .quiz-question {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f9fbfd;
+    }
+
+    .quiz-question h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .quiz-question ol {
+      margin-top: 0;
+      padding-left: 28px;
+    }
+
+    details {
+      margin-top: 18px;
+      border: 1px solid #cabcf0;
+      border-radius: 16px;
+      background: var(--soft-purple);
+    }
+
+    summary {
+      padding: 18px 20px;
+      color: #3d2476;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .answer-content {
+      padding: 0 20px 20px;
+    }
+
+    .answer-content p {
+      margin: 9px 0;
+    }
+
+    .somali-section {
+      display: none !important;
+    }
+
+    .remember {
+      padding: clamp(28px, 5vw, 48px);
+      border: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue-dark));
+      color: white;
+    }
+
+    .remember h2 {
+      color: white;
+    }
+
+    .remember p,
+    .remember li {
+      color: #e1edf8;
+    }
+
+    .remember li::marker {
+      color: var(--gold);
+    }
+
+    footer {
+      padding: 24px 0 38px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 780px) {
+      body {
+        font-size: 16px;
+      }
+
+      .page-shell {
+        width: min(100% - 18px, 1120px);
+      }
+
+      .topbar-inner {
+        min-height: 64px;
+      }
+
+      .brand-copy {
+        font-size: 14px;
+      }
+
+      .brand-copy small {
+        display: none;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+      }
+
+      .top-portal {
+        padding: 9px 11px;
+        font-size: 12px;
+      }
+
+      .hero {
+        margin-top: 18px;
+        padding: 34px 22px;
+        border-radius: 20px;
+      }
+
+      .lesson-nav {
+        grid-template-columns: 1fr;
+      }
+
+      .content-card {
+        padding: 23px 18px;
+        border-radius: 18px;
+      }
+
+      .objectives,
+      .concept-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .lesson-nav {
+        display: none;
+      }
+
+      body {
+        background: white;
+      }
+
+      .content-card,
+      .hero {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="page-shell topbar-inner">
+      <a class="brand" href="/learner-portal">
+        <span class="brand-mark">EGA</span>
+        <span class="brand-copy">
+          Elmi Guray Academy
+          <small>KNOWLEDGE • INTEGRITY • OPPORTUNITY</small>
+        </span>
+      </a>
+
+      <a class="top-portal" href="/learner-portal">Learner Portal</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <nav class="lesson-nav" aria-label="Lesson navigation">
+      <a class="nav-button" href="/ai-lessons/lesson-11-copilot-creating-images-in-powerpoint.html">
+        ← Previous Lesson
+      </a>
+      <a class="nav-button portal" href="/learner-portal">
+        Learner Portal
+      </a>
+      <a class="nav-button" href="/learner-portal">
+        Course Lessons
+      </a>
+    </nav>
+
+    <section class="hero">
+      <span class="lesson-label">EGA AI Developer Course • Lesson 12</span>
+      <h1>Creating a PowerPoint from an Existing File</h1>
+      <p>
+        Learn how Microsoft Copilot can transform an existing Word document,
+        Excel workbook, or other Microsoft 365 file into a structured
+        PowerPoint presentation—and why every generated slide must still be
+        reviewed carefully.
+      </p>
+
+      <div class="hero-tags">
+        <span class="hero-tag">Microsoft Copilot</span>
+        <span class="hero-tag">PowerPoint</span>
+        <span class="hero-tag">Word to Slides</span>
+        <span class="hero-tag">OneDrive</span>
+        <span class="hero-tag">Human Review</span>
+      </div>
+    </section>
+
+    <section class="content-card accent-blue">
+      <div class="section-kicker">Introduction</div>
+      <h2>Build from Work You Already Have</h2>
+
+      <p>
+        Creating a presentation from a blank page can be useful, but many
+        professional presentations begin with information that already exists.
+        You may have a completed business plan in Word, financial information
+        in Excel, or project files stored in OneDrive or SharePoint.
+      </p>
+
+      <p>
+        Microsoft Copilot for PowerPoint can use those files as source
+        material. It can identify important topics, produce an outline, create
+        slides, suggest layouts, and add relevant visual elements. This can
+        reduce the time spent copying and formatting information manually.
+      </p>
+
+      <div class="warning">
+        <strong>Important:</strong> Copilot accelerates the first draft. It does
+        not guarantee that every slide is accurate, current, relevant, or
+        suitable for your audience.
+      </div>
+    </section>
+
+    <section class="content-card accent-green">
+      <div class="section-kicker">Learning Objectives</div>
+      <h2>By the End of This Lesson</h2>
+
+      <div class="objectives">
+        <div class="objective">
+          <span class="objective-number">1</span>
+          <p>Explain how Copilot uses an existing Microsoft 365 file.</p>
+        </div>
+
+        <div class="objective">
+          <span class="objective-number">2</span>
+          <p>Create a PowerPoint draft from a Word document.</p>
+        </div>
+
+        <div class="objective">
+          <span class="objective-number">3</span>
+          <p>Add instructions for tone, audience, purpose, and call to action.</p>
+        </div>
+
+        <div class="objective">
+          <span class="objective-number">4</span>
+          <p>Review generated slides against the original source file.</p>
+        </div>
+
+        <div class="objective">
+          <span class="objective-number">5</span>
+          <p>Use Copilot to add, organize, edit, and summarize slides.</p>
+        </div>
+
+        <div class="objective">
+          <span class="objective-number">6</span>
+          <p>Identify mistakes caused by incomplete or outdated source files.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card accent-blue">
+      <div class="section-kicker">Technical Section 1</div>
+      <h2>How File-Based Presentation Generation Works</h2>
+
+      <p>
+        When you ask Copilot to create a presentation from a file, Copilot
+        analyzes the selected source and converts its structure into a proposed
+        slide deck. Headings may become slide titles, paragraphs may become
+        bullet points, and tables may become visual or tabular slides.
+      </p>
+
+      <div class="concept-grid">
+        <article class="mini-card">
+          <div class="icon">📄</div>
+          <h3>Source File</h3>
+          <p>
+            A Word document, Excel workbook, or supported file containing the
+            facts and ideas for the presentation.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">✨</div>
+          <h3>Copilot Processing</h3>
+          <p>
+            Copilot identifies topics, summarizes content, and proposes a
+            presentation structure.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">📊</div>
+          <h3>PowerPoint Draft</h3>
+          <p>
+            PowerPoint receives editable slides that you can verify, redesign,
+            reorganize, or delete.
+          </p>
+        </article>
+      </div>
+
+      <div class="note">
+        <strong>Microsoft environment requirement:</strong> The source file
+        normally needs to be accessible through your Microsoft 365 environment,
+        such as OneDrive or SharePoint, so Copilot can locate and use it.
+      </div>
+    </section>
+
+    <section class="content-card accent-purple">
+      <div class="section-kicker">Technical Section 2</div>
+      <h2>Prepare the Source Before Generating Slides</h2>
+
+      <p>
+        The quality of a generated presentation depends heavily on the quality
+        of its source. An unfinished or outdated document can produce an
+        unfinished or outdated presentation.
+      </p>
+
+      <h3>Before using the file, check that it has:</h3>
+
+      <ul>
+        <li>Clear headings and a logical order.</li>
+        <li>Accurate names, numbers, dates, and financial information.</li>
+        <li>Only the audience descriptions that are still relevant.</li>
+        <li>No abandoned ideas or duplicate sections.</li>
+        <li>A clear conclusion or desired action.</li>
+        <li>The latest approved version of the content.</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Garbage in, garbage out:</strong> If an old business plan still
+        describes families as the target audience, Copilot may include that
+        information even when the current target is business professionals.
+      </div>
+    </section>
+
+    <section class="content-card accent-blue">
+      <div class="section-kicker">Technical Section 3</div>
+      <h2>Create the Presentation from a File</h2>
+
+      <div class="steps">
+        <article class="step">
+          <h3>Open PowerPoint</h3>
+          <p>
+            Open Microsoft PowerPoint and start with a blank presentation or an
+            approved organizational template.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Open Copilot</h3>
+          <p>
+            Select Copilot and choose the option to create a presentation from
+            an existing file.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Locate the Source</h3>
+          <p>
+            Search for the document stored in OneDrive or SharePoint. Verify
+            its filename and version before selecting it.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Add Specific Instructions</h3>
+          <p>
+            Describe the intended audience, presentation tone, purpose, length,
+            and desired call to action.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Review the Proposed Outline</h3>
+          <p>
+            Examine the outline before treating it as final. Look for missing,
+            repeated, outdated, or irrelevant topics.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Generate and Inspect the Slides</h3>
+          <p>
+            Allow Copilot to produce the deck, then compare every important
+            slide with the original source.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-card accent-gold">
+      <div class="section-kicker">Technical Section 4</div>
+      <h2>Give Copilot Better Instructions</h2>
+
+      <p>
+        Selecting the source file is only the beginning. A useful prompt tells
+        Copilot what the presentation must accomplish.
+      </p>
+
+      <h3>Example: investor or bank presentation</h3>
+
+      <div class="prompt-box">
+        Create a professional PowerPoint presentation from the selected
+        vegetarian restaurant business plan. The audience is a bank lending
+        team. Use a confident and serious tone. Emphasize the target market,
+        menu concept, local partnerships, competitive position, financial
+        projections, and break-even plan. Finish with a clear call to action
+        requesting a business loan. Do not introduce facts that are not
+        supported by the source document.
+      </div>
+
+      <h3>A strong instruction usually identifies:</h3>
+
+      <table class="comparison">
+        <thead>
+          <tr>
+            <th>Instruction</th>
+            <th>Question to Answer</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Audience</td>
+            <td>Who will view the deck?</td>
+            <td>Bank lending team</td>
+          </tr>
+          <tr>
+            <td>Purpose</td>
+            <td>What should the presentation achieve?</td>
+            <td>Support a loan request</td>
+          </tr>
+          <tr>
+            <td>Tone</td>
+            <td>How should it sound?</td>
+            <td>Professional and confident</td>
+          </tr>
+          <tr>
+            <td>Focus</td>
+            <td>Which information matters most?</td>
+            <td>Market, operations, and financial projections</td>
+          </tr>
+          <tr>
+            <td>Call to action</td>
+            <td>What should the audience do next?</td>
+            <td>Approve or discuss the requested financing</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card accent-red">
+      <div class="section-kicker">Technical Section 5</div>
+      <h2>Verify the Generated Presentation</h2>
+
+      <p>
+        Copilot may use content from the wrong version of a document, retain an
+        idea you intended to remove, choose an unsuitable image, or create
+        duplicate slides. Human verification is therefore mandatory.
+      </p>
+
+      <h3>Perform a source-to-slide review:</h3>
+
+      <ol>
+        <li>Open the original document beside the presentation.</li>
+        <li>Compare target audiences, names, dates, and financial figures.</li>
+        <li>Check that tables were transferred correctly.</li>
+        <li>Remove content that does not support the presentation goal.</li>
+        <li>Replace generic or inaccurate images.</li>
+        <li>Confirm that the conclusion includes the intended call to action.</li>
+        <li>Check that the deck does not claim unsupported facts.</li>
+      </ol>
+
+      <div class="warning">
+        <strong>Source-grounded does not mean error-free.</strong> Copilot may
+        reproduce an error already present in the source or misunderstand the
+        relationship between sections.
+      </div>
+    </section>
+
+    <section class="content-card accent-purple">
+      <div class="section-kicker">Technical Section 6</div>
+      <h2>Edit, Organize, and Understand the Deck</h2>
+
+      <p>
+        After generating the presentation, Copilot can continue assisting with
+        the editing process. Available options may vary depending on your
+        Microsoft 365 version and account.
+      </p>
+
+      <div class="concept-grid">
+        <article class="mini-card">
+          <div class="icon">➕</div>
+          <h3>Create</h3>
+          <p>
+            Add a slide about a topic, create a divider slide, or introduce a
+            missing section.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">✏️</div>
+          <h3>Edit</h3>
+          <p>
+            Rewrite content, add an image, change tone, or improve a selected
+            slide.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">🗂️</div>
+          <h3>Organize</h3>
+          <p>
+            Group related slides and add section-divider slides to improve the
+            presentation flow.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">🔎</div>
+          <h3>Understand</h3>
+          <p>
+            Summarize the presentation, identify actions or deadlines, and show
+            important slides.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">💬</div>
+          <h3>Ask</h3>
+          <p>
+            Request improvement ideas for a specific audience, such as an
+            investor or leadership review.
+          </p>
+        </article>
+
+        <article class="mini-card">
+          <div class="icon">🎨</div>
+          <h3>Design</h3>
+          <p>
+            Use PowerPoint Designer and normal PowerPoint tools to improve
+            layout, typography, colors, and images.
+          </p>
+        </article>
+      </div>
+
+      <div class="note">
+        If a free-form prompt fails, try a built-in Copilot action such as
+        <strong>Create → Add a slide</strong>. AI features can be
+        temperamental, so use clear instructions and retry safely.
+      </div>
+    </section>
+
+    <section class="content-card accent-green">
+      <div class="section-kicker">Practical Workflow</div>
+      <h2>From Business Plan to Funding Presentation</h2>
+
+      <div class="steps">
+        <article class="step">
+          <h3>Finalize the business plan</h3>
+          <p>
+            Correct the target market, menu, staffing plan, competition,
+            financial projections, and funding requirement.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Save the approved version</h3>
+          <p>
+            Store the clearly named final document in OneDrive or SharePoint.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Create the PowerPoint draft</h3>
+          <p>
+            Use Copilot to generate a deck from the approved business plan.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Compare source and slides</h3>
+          <p>
+            Verify the executive summary, target audience, menu, competition,
+            staffing, financial data, and frequently asked questions.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Improve the visual design</h3>
+          <p>
+            Replace generic images with genuine product, team, location, or
+            brand images. Improve weak title slides with Designer.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Remove unnecessary material</h3>
+          <p>
+            Delete repeated tables, incorrect audience slides, irrelevant
+            images, and sections that distract from the funding request.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Add the call to action</h3>
+          <p>
+            State the financing request clearly and explain what the funds will
+            support.
+          </p>
+        </article>
+
+        <article class="step">
+          <h3>Practice the presentation</h3>
+          <p>
+            Use the saved preparation time to understand the numbers, refine
+            the story, and rehearse delivery.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-card accent-blue">
+      <div class="section-kicker">English Technical Summary</div>
+      <h2>Technical Summary</h2>
+
+      <p>
+        Microsoft Copilot for PowerPoint can create a presentation using an
+        existing Microsoft 365 file as source material. Files stored in
+        OneDrive or SharePoint can provide Copilot with structured business,
+        project, or analytical information.
+      </p>
+
+      <p>
+        Copilot can generate an outline, create slides, reproduce tables,
+        suggest images, organize sections, add slides, and summarize the deck.
+        However, its output depends on the accuracy and completeness of the
+        selected source file.
+      </p>
+
+      <p>
+        The user remains responsible for verifying facts, removing outdated
+        material, correcting design problems, confirming financial figures,
+        and ensuring that the final presentation has a clear audience,
+        objective, tone, and call to action.
+      </p>
+    </section>
+
+    <section class="content-card accent-green somali-section" lang="so">
+      <div class="section-kicker">Somali Farsamo</div>
+      <h2>Soo Koobidda Farsamada</h2>
+
+      <p>
+        Microsoft Copilot wuxuu PowerPoint ka samayn karaa fayl hore oo ku jira
+        Word, Excel, OneDrive ama SharePoint. Wuxuu ka soo saari karaa
+        cinwaannada, qodobada muhiimka ah, jadwallada iyo qaab-dhismeedka
+        bandhigga.
+      </p>
+
+      <p>
+        Faylka laga bilaabayo waa inuu noqdaa kii ugu dambeeyay, dhammeystiran
+        oo sax ah. Haddii faylku leeyahay xog duug ah ama khalad ah, Copilot
+        wuxuu khaladkaas ku dari karaa bandhigga.
+      </p>
+
+      <p>
+        Ardaygu waa inuu isbarbardhigaa PowerPoint-ka iyo faylka asalka ah,
+        saxaa xogta, beddelaa sawirrada aan ku habboonayn, tirtiraa
+        ku-celcelinta, kadibna ku daraa ujeeddo iyo baaq ficil oo cad.
+      </p>
+    </section>
+
+    <section class="content-card accent-green">
+      <div class="section-kicker">Rules</div>
+      <h2>Rules for Responsible Use</h2>
+
+      <div class="rules-list">
+        <div class="rule">
+          Use the latest reviewed and approved source file.
+        </div>
+        <div class="rule">
+          Verify important claims and numbers against the original document.
+        </div>
+        <div class="rule">
+          Tell Copilot the audience, purpose, tone, and desired call to action.
+        </div>
+        <div class="rule">
+          Remove irrelevant or duplicate slides before presenting.
+        </div>
+        <div class="rule">
+          Replace generic images with accurate and legally usable visuals.
+        </div>
+        <div class="rule">
+          Keep confidential documents within approved organizational systems.
+        </div>
+        <div class="rule">
+          Treat Copilot output as an editable draft, not a finished authority.
+        </div>
+        <div class="rule">
+          Practice and understand the presentation before delivering it.
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card accent-red">
+      <div class="section-kicker">Common Mistakes</div>
+      <h2>Mistakes to Avoid</h2>
+
+      <div class="mistakes-list">
+        <div class="mistake">
+          Selecting an older or incomplete version of the source document.
+        </div>
+        <div class="mistake">
+          Assuming Copilot will automatically understand which content was
+          abandoned.
+        </div>
+        <div class="mistake">
+          Presenting AI-generated financial figures without verification.
+        </div>
+        <div class="mistake">
+          Keeping every generated slide even when some slides are repeated.
+        </div>
+        <div class="mistake">
+          Accepting visually attractive images that do not represent the real
+          business or topic.
+        </div>
+        <div class="mistake">
+          Using a vague prompt that does not identify the audience or purpose.
+        </div>
+        <div class="mistake">
+          Forgetting to include a clear call to action.
+        </div>
+        <div class="mistake">
+          Spending no time rehearsing because Copilot created the deck quickly.
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card accent-purple">
+      <div class="section-kicker">Knowledge Check</div>
+      <h2>Multiple-Choice Questions</h2>
+
+      <article class="quiz-question">
+        <h3>1. Why should the source document be finalized first?</h3>
+        <ol type="A">
+          <li>PowerPoint cannot open incomplete files.</li>
+          <li>Copilot may reproduce outdated or incorrect source content.</li>
+          <li>Copilot only accepts PDF files.</li>
+          <li>A final document guarantees perfect slide design.</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>2. Where should a source file normally be accessible?</h3>
+        <ol type="A">
+          <li>Only on a printed page</li>
+          <li>In a social-media post</li>
+          <li>Within the connected Microsoft 365 environment</li>
+          <li>Only in the Downloads folder</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>3. What should a strong generation prompt include?</h3>
+        <ol type="A">
+          <li>Audience, purpose, tone, focus, and call to action</li>
+          <li>Only the presentation filename</li>
+          <li>Only a color choice</li>
+          <li>The presenter’s password</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>4. What should you do immediately after generation?</h3>
+        <ol type="A">
+          <li>Send the deck without opening it.</li>
+          <li>Delete the original source.</li>
+          <li>Compare important slides with the source document.</li>
+          <li>Convert every slide into an image.</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>5. Why might Copilot include the wrong target audience?</h3>
+        <ol type="A">
+          <li>The outdated audience may still exist in the selected file.</li>
+          <li>PowerPoint does not support audiences.</li>
+          <li>All AI tools always choose families.</li>
+          <li>Designer changes the source document.</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>6. What can the Organize action help do?</h3>
+        <ol type="A">
+          <li>Approve a bank loan</li>
+          <li>Group slides and create section dividers</li>
+          <li>Correct every factual error automatically</li>
+          <li>Upload private files publicly</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>7. What is an appropriate use of a presentation summary?</h3>
+        <ol type="A">
+          <li>Use it as an email preview or invitation description.</li>
+          <li>Use it to replace all financial evidence.</li>
+          <li>Use it as a password.</li>
+          <li>Use it to delete the presentation.</li>
+        </ol>
+      </article>
+
+      <article class="quiz-question">
+        <h3>8. What is the best description of Copilot’s output?</h3>
+        <ol type="A">
+          <li>A legally approved final document</li>
+          <li>An editable first draft requiring human review</li>
+          <li>A presentation that cannot be changed</li>
+          <li>A guaranteed source of accurate financial advice</li>
+        </ol>
+      </article>
+
+      <details>
+        <summary>Open Answer Key</summary>
+        <div class="answer-content">
+          <p><strong>1. B</strong> — Errors or outdated ideas in the source may appear in the deck.</p>
+          <p><strong>2. C</strong> — Copilot needs access through the connected Microsoft 365 environment.</p>
+          <p><strong>3. A</strong> — Specific context produces a more purposeful draft.</p>
+          <p><strong>4. C</strong> — Source-to-slide verification is essential.</p>
+          <p><strong>5. A</strong> — Copilot may reproduce content still present in the selected version.</p>
+          <p><strong>6. B</strong> — Organize can group content and add section structure.</p>
+          <p><strong>7. A</strong> — A summary can help explain what recipients will learn.</p>
+          <p><strong>8. B</strong> — Generated slides remain a draft under human responsibility.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="content-card remember">
+      <div class="section-kicker" style="color:#ffe7a5;">Remember</div>
+      <h2>Start with Existing Knowledge, Then Improve It</h2>
+
+      <p>
+        Copilot’s greatest productivity benefit is not only creating content
+        from a blank page. It can also connect the work already stored in your
+        Microsoft environment and transform that material into a new format.
+      </p>
+
+      <ul>
+        <li>A reliable presentation begins with a reliable source.</li>
+        <li>Choose the correct file and clearly define the audience.</li>
+        <li>Use Copilot for structure and speed, then apply human judgment.</li>
+        <li>Check every important statement, table, image, and number.</li>
+        <li>Make the call to action clear.</li>
+        <li>Use the time saved to improve and practice your presentation.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Bottom lesson navigation">
+      <a class="nav-button" href="/ai-lessons/lesson-11-copilot-creating-images-in-powerpoint.html">
+        ← Previous Lesson
+      </a>
+      <a class="nav-button portal" href="/learner-portal">
+        Learner Portal
+      </a>
+      <a class="nav-button" href="/learner-portal">
+        Course Lessons
+      </a>
+    </nav>
+  </main>
+
+  <footer>
+    © 2026 Elmi Guray Academy • EGA AI Developer Course<br />
+    KNOWLEDGE • INTEGRITY • OPPORTUNITY
+  </footer>
+</body>
+</html>

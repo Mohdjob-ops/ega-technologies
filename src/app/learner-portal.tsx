@@ -51,6 +51,14 @@ const aiLessons = [
     title: "Lesson 10: GitHub Copilot Features and AI-Powered Code Completion",
     path: "/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html",
   },
+  {
+    title: "Lesson 11: Creating and Adding AI Images with Copilot in PowerPoint",
+    path: "/ai-lessons/lesson-11-creating-and-adding-ai-images-with-copilot-in-powerpoint.html",
+  },
+  {
+    title: "Lesson 12: Creating a PowerPoint from an Existing File",
+    path: "/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html",
+  },
 ];
 
 export default function LearnerPortal() {
