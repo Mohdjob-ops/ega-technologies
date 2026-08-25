@@ -331,14 +331,22 @@ export default function HomeScreen() {
     }
   }, []);
 
+  // Homepage release: 2026-08-25-somali-temporarily-disabled
   const changeLanguage = (nextLanguage: Language) => {
-    setLanguage(nextLanguage);
+    if (nextLanguage === "so") {
+      setLanguage("en");
+
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("ega_language", "en");
+      }
+
+      return;
+    }
+
+    setLanguage("en");
 
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(
-        "ega_language",
-        nextLanguage,
-      );
+      window.localStorage.setItem("ega_language", "en");
     }
   };
 
