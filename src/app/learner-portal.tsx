@@ -505,7 +505,7 @@ export default function LearnerPortal() {
                 <Link href="/quiz" asChild>
                   <TouchableOpacity style={styles.startButton}>
                     <Text style={styles.buttonText}>
-                      🧠 AI Lessons 1–9 Assessment — 60 Minutes
+                      🧠 AI Lessons 1–15 Assessment — 60 Minutes
                     </Text>
                   </TouchableOpacity>
                 </Link>

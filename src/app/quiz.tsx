@@ -33,7 +33,7 @@ type AttemptData = {
   status: string;
 };
 
-const QUIZ_NAME = "AI Lessons 1-9 Assessment";
+const QUIZ_NAME = "AI Lessons 1-15 Assessment";
 const TEST_SECONDS = 60 * 60;
 
 const questions = [
@@ -214,6 +214,98 @@ const questions = [
     hint:
       "Think about account access and having the appropriate development environment ready.",
   },
+
+  {
+    lesson: "Lesson 10",
+    question:
+      "What should a developer do with an AI-powered code-completion suggestion?",
+    options: [
+      "Review, understand, and test it before accepting it",
+      "Accept it automatically without reading it",
+      "Assume it is secure because AI generated it",
+      "Delete the entire project before using it",
+    ],
+    answer:
+      "Review, understand, and test it before accepting it",
+    hint:
+      "Code completion provides suggestions, but the developer remains responsible for the final code.",
+  },
+  {
+    lesson: "Lesson 11",
+    question:
+      "What should you do after Copilot creates or suggests an image for a PowerPoint presentation?",
+    options: [
+      "Review whether the image is accurate, appropriate, and relevant to the slide",
+      "Assume every generated image is perfect",
+      "Remove all text from the presentation",
+      "Publish the image without checking it",
+    ],
+    answer:
+      "Review whether the image is accurate, appropriate, and relevant to the slide",
+    hint:
+      "Generated visual content must still be checked before it is used.",
+  },
+  {
+    lesson: "Lesson 12",
+    question:
+      "When using Copilot to create a PowerPoint from an existing file, what is important?",
+    options: [
+      "Use a clear source file and review the generated presentation for accuracy",
+      "Delete the source file before Copilot reads it",
+      "Assume Copilot will understand an empty document",
+      "Skip reviewing the generated slides",
+    ],
+    answer:
+      "Use a clear source file and review the generated presentation for accuracy",
+    hint:
+      "The quality of the source material and your final review both affect the presentation.",
+  },
+  {
+    lesson: "Lesson 13",
+    question:
+      "What is a key benefit of GitHub Copilot integrated AI Chat?",
+    options: [
+      "It can provide assistance using the context of the developer's project and code",
+      "It guarantees that every answer contains no errors",
+      "It replaces the need to understand the project",
+      "It works only when no project is open",
+    ],
+    answer:
+      "It can provide assistance using the context of the developer's project and code",
+    hint:
+      "Integrated chat can use relevant development context to make its assistance more useful.",
+  },
+  {
+    lesson: "Lesson 14",
+    question:
+      "What is a practical use of Inline Chat in Visual Studio Code?",
+    options: [
+      "Requesting focused help or changes near the code currently being edited",
+      "Replacing the computer operating system",
+      "Purchasing a GitHub subscription automatically",
+      "Deleting every file in the workspace",
+    ],
+    answer:
+      "Requesting focused help or changes near the code currently being edited",
+    hint:
+      "Inline Chat is designed for focused assistance close to the active code.",
+  },
+  {
+    lesson: "Lesson 15",
+    question:
+      "What must you do before running a terminal command suggested by Copilot?",
+    options: [
+      "Read and understand the complete command and confirm its effects",
+      "Run it immediately without reviewing it",
+      "Share passwords and API keys with the chat",
+      "Assume every suggested command is safe",
+    ],
+    answer:
+      "Read and understand the complete command and confirm its effects",
+    hint:
+      "Terminal commands can affect files and systems, so review always comes first.",
+  },
+
 ];
 
 function emptyQuestionStates(): QuestionStates {
@@ -590,13 +682,13 @@ export default function AILessonsAssessment() {
     }
 
     if (!autoSubmit) {
-      const unfinished = questions.some(
-        (_, index) => !questionStates[index]?.locked
-      );
+      const unfinishedQuestions = questions
+        .map((_, index) => (!questionStates[index]?.locked ? index + 1 : null))
+        .filter((number): number is number => number !== null);
 
-      if (unfinished) {
+      if (unfinishedQuestions.length > 0) {
         setMessage(
-          "⚠️ Finish every question before submitting. A correct answer locks immediately; after one wrong answer you receive a hint and one final attempt."
+          `⚠️ Finish question${unfinishedQuestions.length > 1 ? "s" : ""}: ${unfinishedQuestions.join(", ")}. After one wrong answer, read the hint and make one final attempt.`
         );
         return;
       }
@@ -730,7 +822,7 @@ export default function AILessonsAssessment() {
       </Link>
 
       <Text style={styles.title}>
-        🧠 AI Lessons 1–9 Assessment
+        🧠 AI Lessons 1–15 Assessment
       </Text>
 
       <Text style={styles.subtitle}>
