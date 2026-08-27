@@ -63,6 +63,21 @@ const aiLessons = [
     title: "Lesson 13: GitHub Copilot Integrated AI Chat",
     path: "/ai-lessons/lesson-13-github-copilot-integrated-ai-chat.html",
   },
+  {
+    title: "Lesson 14: Using Inline Chat and Quick Chat",
+    path: "/ai-lessons/lesson-14-using-inline-and-quick-chat.html",
+  },
+  {
+    title: "Lesson 15: Using Inline Chat in the Terminal",
+    path: "/ai-lessons/lesson-15-using-inline-chat-in-the-terminal.html",
+  },
+];
+
+const chatgptLessons = [
+  {
+    title: "Lesson 1: ChatGPT and Apps",
+    path: "/courses/chatgpt/lesson-01-chatgpt-and-apps.html",
+  },
 ];
 
 export default function LearnerPortal() {
@@ -499,6 +514,39 @@ export default function LearnerPortal() {
               <View style={styles.warningBox}>
                 <Text style={styles.warningText}>
                   🔒 AI lessons are locked until payment is confirmed.
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>
+              💬 2. ChatGPT Course — START HERE
+            </Text>
+
+            {isPaid ? (
+              <>
+                <Text style={styles.sectionDescription}>
+                  Learn how to use ChatGPT, connected apps, plugins, and
+                  practical AI features. Complete the lessons in order.
+                </Text>
+
+                {chatgptLessons.map((lesson) => (
+                  <TouchableOpacity
+                    key={lesson.path}
+                    style={styles.aiLessonButton}
+                    onPress={() => openAiLesson(lesson.path)}
+                  >
+                    <Text style={styles.aiLessonButtonText}>
+                      {lesson.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </>
+            ) : (
+              <View style={styles.warningBox}>
+                <Text style={styles.warningText}>
+                  🔒 ChatGPT lessons are locked until payment is confirmed.
                 </Text>
               </View>
             )}

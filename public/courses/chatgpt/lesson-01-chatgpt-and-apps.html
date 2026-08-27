@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lesson 1: ChatGPT and Apps | EGA</title>
+
+  <style>
+    :root {
+      --navy: #07182f;
+      --blue: #1457a8;
+      --gold: #f4b400;
+      --green: #0b8f68;
+      --red: #c93636;
+      --purple: #7048c8;
+      --border: #dce4ef;
+      --shadow: 0 18px 45px rgba(7, 24, 47, .11);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: #25354a;
+      background: #f3f6fb;
+      font-family: Inter, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    .topbar {
+      color: white;
+      background: var(--navy);
+    }
+
+    .topbar-inner {
+      width: min(1100px, calc(100% - 30px));
+      min-height: 70px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      border: 2px solid white;
+      border-radius: 50%;
+      font-weight: 900;
+    }
+
+    .brand strong,
+    .brand small {
+      display: block;
+    }
+
+    .brand small {
+      color: #cbd8ea;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .lesson-label {
+      color: #d8e4f4;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hero {
+      padding: 75px 20px 68px;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(244,180,0,.25), transparent 27%),
+        linear-gradient(135deg, #06162b, #0b2c59 55%, #1457a8);
+      text-align: center;
+    }
+
+    .hero-inner {
+      width: min(900px, 100%);
+      margin: auto;
+    }
+
+    .pill,
+    .section-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      padding: 8px 17px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 999px;
+    }
+
+    .hero h1 {
+      margin: 22px auto 15px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: auto;
+      color: #dceafd;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .course-name {
+      margin-top: 23px;
+      color: #ffe39a;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1000px, calc(100% - 30px));
+      margin: -27px auto 0;
+      padding-bottom: 65px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .card,
+    .navigation {
+      margin-bottom: 22px;
+      padding: clamp(23px, 5vw, 40px);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .navigation {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .button {
+      min-height: 46px;
+      padding: 11px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: var(--navy);
+      border-radius: 11px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .button:hover {
+      background: var(--blue);
+    }
+
+    .button.portal {
+      color: var(--navy);
+      background: var(--gold);
+    }
+
+    .section-label {
+      margin-bottom: 9px;
+      color: var(--blue);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      color: var(--navy);
+      font-size: clamp(25px, 4vw, 34px);
+      line-height: 1.22;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    li {
+      margin: 9px 0;
+    }
+
+    .lead {
+      color: #34445a;
+      font-size: 18px;
+    }
+
+    .info {
+      margin: 20px 0;
+      padding: 17px 19px;
+      background: #edf4ff;
+      border-left: 5px solid var(--blue);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .objectives,
+    .chat-types {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    .objective,
+    .chat-type,
+    .workflow-step {
+      padding: 18px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .objective,
+    .workflow-step {
+      display: flex;
+      gap: 13px;
+    }
+
+    .chat-type {
+      border-top: 5px solid var(--purple);
+    }
+
+    .number {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: white;
+      background: var(--blue);
+      border-radius: 11px;
+      font-weight: 900;
+    }
+
+    .objective strong,
+    .chat-type strong,
+    .workflow-step strong {
+      display: block;
+      color: var(--navy);
+    }
+
+    .technical {
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .technical:first-of-type {
+      margin-top: 8px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .technical-title {
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .workflow {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .workflow-step {
+      border-left: 5px solid var(--blue);
+    }
+
+    .prompt {
+      margin-top: 22px;
+      padding: 21px;
+      color: #dcecff;
+      background: #07182f;
+      border-radius: 14px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .prompt strong {
+      display: block;
+      color: var(--gold);
+    }
+
+    .summary { border-top: 6px solid var(--blue); }
+    .somali-farsamo { display: none; }
+    .rules { border-top: 6px solid var(--green); }
+    .mistakes { border-top: 6px solid var(--red); }
+    .quiz { border-top: 6px solid var(--purple); }
+
+    .mistake,
+    .question {
+      margin: 16px 0;
+      padding: 18px;
+      border-radius: 14px;
+    }
+
+    .mistake {
+      background: #fff0f0;
+      border: 1px solid #ffc9c9;
+    }
+
+    .mistake strong {
+      color: var(--red);
+    }
+
+    .question {
+      background: #faf9ff;
+      border: 1px solid #ded8ff;
+    }
+
+    .question-title {
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .option {
+      margin: 8px 0;
+      padding: 9px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    details {
+      margin-top: 20px;
+      background: #e9f8f2;
+      border: 1px solid #a9e8ce;
+      border-radius: 13px;
+    }
+
+    summary {
+      padding: 17px 19px;
+      color: #065f46;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .answers {
+      padding: 0 20px 18px;
+    }
+
+    .remember {
+      color: #e3eefb;
+      background: linear-gradient(135deg, var(--navy), #123e79);
+      border: 0;
+    }
+
+    .remember h2 {
+      color: white;
+    }
+
+    .remember strong {
+      color: #ffe29a;
+    }
+
+    footer {
+      padding: 30px 20px;
+      color: #c4d2e4;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    footer strong,
+    footer span {
+      display: block;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    footer span {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .lesson-label,
+      .brand small {
+        display: none;
+      }
+
+      .navigation {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .objectives,
+      .chat-types {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/learner-portal">
+        <div class="logo">EGA</div>
+        <div>
+          <strong>Elmi Guray Academy</strong>
+          <small>Knowledge • Integrity • Opportunity</small>
+        </div>
+      </a>
+      <div class="lesson-label">ChatGPT Course · Lesson 1</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="pill">Lesson 1</span>
+      <h1>ChatGPT and Apps</h1>
+      <p>
+        Learn how plugins and connected apps extend ChatGPT beyond text
+        responses and allow it to work with supported external services.
+      </p>
+      <div class="course-name">EGA ChatGPT Course</div>
+    </div>
+  </section>
+
+  <main>
+    <nav class="navigation">
+      <a class="button portal" href="/learner-portal">Learner Portal</a>
+    </nav>
+
+    <section class="card">
+      <span class="section-label">Introduction</span>
+      <h2>ChatGPT Became More Powerful</h2>
+
+      <p class="lead">
+        ChatGPT can answer questions, explain ideas, help you write, and think
+        through problems. Connected apps extend those abilities beyond the chat.
+      </p>
+
+      <p>
+        With an appropriate plugin or app connected, ChatGPT may search a
+        supported service, create content, organize information, or prepare an
+        action using the permissions you have granted.
+      </p>
+
+      <div class="info">
+        <strong>Important:</strong> ChatGPT can use only apps that are available,
+        connected, and authorized. The final capabilities depend on each app.
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Learning Objectives</span>
+      <h2>What You Will Learn</h2>
+
+      <div class="objectives">
+        <div class="objective">
+          <span class="number">1</span>
+          <div>
+            <strong>Understand plugins</strong>
+            Explain how plugins extend ChatGPT with apps and reusable tools.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">2</span>
+          <div>
+            <strong>Connect an app</strong>
+            Find a suitable plugin and grant only the permissions it needs.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">3</span>
+          <div>
+            <strong>Request an outcome</strong>
+            Clearly describe what you want ChatGPT and the connected app to do.
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">4</span>
+          <div>
+            <strong>Review actions safely</strong>
+            Check results, permissions, and important details before confirming.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Technical Lesson</span>
+      <h2>How ChatGPT Works With Apps</h2>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">1</span>
+          <h3>What Is a Plugin?</h3>
+        </div>
+
+        <p>
+          A plugin is an extension that gives ChatGPT additional capabilities.
+          Depending on the plugin, it may include connected apps, reusable
+          skills, templates, or specialized tools.
+        </p>
+
+        <p>
+          Plugins can support tasks such as productivity, creativity,
+          communication, research, data analysis, travel planning, and project
+          management.
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">2</span>
+          <h3>ChatGPT Alone and ChatGPT With an App</h3>
+        </div>
+
+        <p>
+          Without a connected app, ChatGPT can explain how to complete a task
+          and may provide useful public information. You usually perform the
+          external action yourself.
+        </p>
+
+        <p>
+          With a suitable app connected, ChatGPT can use that app's available
+          functions. For example, it may search a booking service, create a
+          design, prepare a calendar event, or organize a task list.
+        </p>
+
+        <div class="prompt">
+          <strong>Example request</strong>
+          Find suitable hotel options in Sydney for September 18–21 with a
+          budget of $120 per night.
+        </div>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">3</span>
+          <h3>Apps for Search and Creation</h3>
+        </div>
+
+        <p>
+          Different apps provide different capabilities. A booking app may
+          search accommodations. A design app such as Canva may create a visual.
+          A music app may recommend or prepare a playlist.
+        </p>
+
+        <ul>
+          <li><strong>Travel:</strong> search and compare available options.</li>
+          <li><strong>Calendar:</strong> prepare events using confirmed details.</li>
+          <li><strong>Design:</strong> create visual drafts from a description.</li>
+          <li><strong>Productivity:</strong> organize tasks and project information.</li>
+          <li><strong>Music:</strong> recommend playlists for a mood or activity.</li>
+        </ul>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">4</span>
+          <h3>Permissions and User Control</h3>
+        </div>
+
+        <p>
+          Connecting an app does not give ChatGPT unlimited access. Each app has
+          a defined scope, and private account information requires the
+          permissions you explicitly grant.
+        </p>
+
+        <ul>
+          <li>Connect only apps you recognize and intend to use.</li>
+          <li>Read the requested permissions before approving them.</li>
+          <li>Check important details before confirming an external action.</li>
+          <li>Do not share passwords, security codes, or private keys in chat.</li>
+          <li>Disconnect an app when you no longer want it linked.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Practical Workflow</span>
+      <h2>Use a Plugin From Start to Finish</h2>
+
+      <div class="workflow">
+        <div class="workflow-step">
+          <span class="number">1</span>
+          <div>
+            <strong>Define the task</strong>
+            Decide what result you want ChatGPT to produce.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">2</span>
+          <div>
+            <strong>Find the plugin</strong>
+            Open Plugins and choose an app suitable for the task.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">3</span>
+          <div>
+            <strong>Review permissions</strong>
+            Understand what information and actions the app can access.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">4</span>
+          <div>
+            <strong>Connect the app</strong>
+            Complete the app's authorized connection process.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">5</span>
+          <div>
+            <strong>Write a clear request</strong>
+            Include the required outcome, limits, dates, style, or other details.
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">6</span>
+          <div>
+            <strong>Review the result</strong>
+            Verify names, dates, costs, and permissions before continuing.
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <strong>Example creation prompt</strong>
+        Create a minimal Instagram travel post about Beijing with a candid,
+        soft style, a heading, a subheading, and a simple background.
+      </div>
+    </section>
+
+    <section class="card summary">
+      <span class="section-label">English Technical Summary</span>
+      <h2>Technical Summary</h2>
+
+      <ul>
+        <li>Plugins extend ChatGPT with connected capabilities.</li>
+        <li>A plugin may include apps, skills, templates, and specialized tools.</li>
+        <li>ChatGPT can use only apps that are available and connected.</li>
+        <li>Every app has a limited scope and its own supported actions.</li>
+        <li>Private account access depends on permissions granted by the user.</li>
+        <li>Important external actions must be reviewed before confirmation.</li>
+      </ul>
+    </section>
+
+    <section class="card somali-farsamo" lang="so">
+      <span class="section-label">Somali Farsamo</span>
+      <h2>Soo Koobid Farsamo</h2>
+
+      <p>
+        Plugins-ku waxay ChatGPT ku xiraan apps iyo adeegyo kale. App kasta
+        wuxuu leeyahay awood iyo oggolaansho u gaar ah.
+      </p>
+
+      <ul>
+        <li>Dooro plugin ku habboon hawsha aad rabto.</li>
+        <li>Akhri oggolaanshaha ka hor intaadan app-ka xiriirin.</li>
+        <li>Si cad u sheeg natiijada aad rabto.</li>
+        <li>Hubi magaca, taariikhda, qiimaha, iyo faahfaahinta kale.</li>
+        <li>Ha wadaagin password, security code, ama private key.</li>
+      </ul>
+    </section>
+
+    <section class="card rules">
+      <span class="section-label">Rules</span>
+      <h2>Rules for Connected Apps</h2>
+
+      <ol>
+        <li>Use an app only when it is relevant to the task.</li>
+        <li>Connect apps from a trusted and recognized source.</li>
+        <li>Read requested permissions before approving access.</li>
+        <li>Provide clear instructions and necessary limits.</li>
+        <li>Verify names, dates, prices, and destinations carefully.</li>
+        <li>Never provide passwords, private keys, or security codes.</li>
+        <li>Review important actions before final confirmation.</li>
+      </ol>
+    </section>
+
+    <section class="card mistakes">
+      <span class="section-label">Common Mistakes</span>
+      <h2>Mistakes to Avoid</h2>
+
+      <div class="mistake">
+        <strong>Expecting an unconnected app to work</strong>
+        <p>ChatGPT cannot use an app that has not been installed or connected.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Choosing the wrong plugin</strong>
+        <p>An app can perform only the actions supported within its scope.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Writing an incomplete request</strong>
+        <p>Missing dates, budgets, locations, or style details can reduce accuracy.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Approving without reviewing</strong>
+        <p>Always verify important information before confirming an external action.</p>
+      </div>
+
+      <div class="mistake">
+        <strong>Sharing sensitive information</strong>
+        <p>Passwords and security codes should never be entered into a normal chat.</p>
+      </div>
+    </section>
+
+    <section class="card quiz">
+      <span class="section-label">Knowledge Check</span>
+      <h2>Multiple-Choice Questions</h2>
+
+      <div class="question">
+        <div class="question-title">1. What is the main purpose of a plugin?</div>
+        <div class="option">A. Extend ChatGPT with additional capabilities</div>
+        <div class="option">B. Turn off the internet</div>
+        <div class="option">C. Delete every conversation</div>
+        <div class="option">D. Replace the user's account</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">2. What must happen before ChatGPT can use a private app account?</div>
+        <div class="option">A. The app must be connected and authorized</div>
+        <div class="option">B. The phone must be restarted</div>
+        <div class="option">C. The browser history must be deleted</div>
+        <div class="option">D. The user must share a password in chat</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">3. What should you check before confirming an external action?</div>
+        <div class="option">A. Names, dates, prices, and other important details</div>
+        <div class="option">B. Only the color of the screen</div>
+        <div class="option">C. Nothing</div>
+        <div class="option">D. The phone's wallpaper</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">4. Why should requested permissions be reviewed?</div>
+        <div class="option">A. They define what the app can access and do</div>
+        <div class="option">B. They change the weather</div>
+        <div class="option">C. They increase screen brightness</div>
+        <div class="option">D. They rename the course automatically</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">5. Which information should never be shared in a normal chat?</div>
+        <div class="option">A. Passwords and security codes</div>
+        <div class="option">B. A public course title</div>
+        <div class="option">C. A general travel destination</div>
+        <div class="option">D. A design color preference</div>
+      </div>
+
+      <details>
+        <summary>Open Answer Key</summary>
+        <div class="answers">
+          <ol>
+            <li><strong>A</strong> — Plugins add connected capabilities to ChatGPT.</li>
+            <li><strong>A</strong> — The user must connect and authorize the app.</li>
+            <li><strong>A</strong> — Important details must be verified first.</li>
+            <li><strong>A</strong> — Permissions control the app's access and actions.</li>
+            <li><strong>A</strong> — Passwords and security codes must remain private.</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <section class="card remember">
+      <span class="section-label" style="color:#ffe29a">Remember</span>
+      <h2>Important Points</h2>
+
+      <ul>
+        <li><strong>Plugins add capabilities:</strong> they connect ChatGPT with supported tools.</li>
+        <li><strong>Only connected apps work:</strong> unavailable apps cannot be used.</li>
+        <li><strong>Every app has limits:</strong> capabilities depend on the app's scope.</li>
+        <li><strong>You remain in control:</strong> review permissions and important actions.</li>
+        <li><strong>Availability changes:</strong> new apps and features may be added over time.</li>
+      </ul>
+    </section>
+
+    <nav class="navigation">
+      <a class="button portal" href="/learner-portal">Learner Portal</a>
+    </nav>
+  </main>
+
+  <footer>
+    <strong>Elmi Guray Academy</strong>
+    <span>Knowledge • Integrity • Opportunity</span>
+  </footer>
+</body>
+</html>
