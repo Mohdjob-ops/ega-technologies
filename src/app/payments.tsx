@@ -1394,7 +1394,7 @@ export default function PaymentsScreen() {
                   }
                 >
                   <Text style={styles.buttonText}>
-                    Open Learner Portal
+                    Open My EGA
                   </Text>
                 </Pressable>
               </>

@@ -280,7 +280,7 @@ export default function MasterCertificate() {
         onPress={() => router.push("/learner-portal")}
       >
         <Text style={styles.back}>
-          ← Back to Learner Portal
+          ← Back to My EGA
         </Text>
       </TouchableOpacity>
 

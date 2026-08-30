@@ -67,7 +67,7 @@ export default function HTMLLecture() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Link href="/learner-portal" style={styles.back}>
-        ← Back to Learner Portal
+        ← Back to My EGA
       </Link>
 
       <Text style={styles.title}>📘 HTML Full Lecture</Text>

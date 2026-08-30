@@ -87,7 +87,7 @@ export default function HTMLQuiz() {
     if (!studentId) {
       setLocked(true);
       setCheckingAttempt(false);
-      setMessage("⚠️ Please log in through the Learner Portal before taking this quiz.");
+      setMessage("⚠️ Please log in through My EGA before taking this quiz.");
       return;
     }
 
@@ -132,7 +132,7 @@ export default function HTMLQuiz() {
 
     if (!studentId) {
       setLocked(true);
-      setMessage("⚠️ Please log in through the Learner Portal before taking this quiz.");
+      setMessage("⚠️ Please log in through My EGA before taking this quiz.");
       return;
     }
 

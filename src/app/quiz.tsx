@@ -405,7 +405,7 @@ export default function AILessonsAssessment() {
 
     if (!savedStudentId) {
       setMessage(
-        "⚠️ Please log in through the Learner Portal before taking the AI assessment."
+        "⚠️ Please log in through My EGA before taking the AI assessment."
       );
       setLoadingStudent(false);
       return;
@@ -419,7 +419,7 @@ export default function AILessonsAssessment() {
 
     if (error || !data) {
       setMessage(
-        "❌ Student information could not be verified. Return to the Learner Portal and log in again."
+        "❌ Student information could not be verified. Return to My EGA and log in again."
       );
       setLoadingStudent(false);
       return;
@@ -817,7 +817,7 @@ export default function AILessonsAssessment() {
     >
       <Link href="/learner-portal" asChild>
         <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backText}>← Learner Portal</Text>
+          <Text style={styles.backText}>← My EGA</Text>
         </TouchableOpacity>
       </Link>
 
@@ -848,7 +848,7 @@ export default function AILessonsAssessment() {
       ) : (
         <View style={styles.warningCard}>
           <Text style={styles.warningText}>
-            Please log in through the Learner Portal first.
+            Please log in through My EGA first.
           </Text>
         </View>
       )}
@@ -1027,7 +1027,7 @@ export default function AILessonsAssessment() {
         <Link href="/learner-portal" asChild>
           <TouchableOpacity style={styles.portalButton}>
             <Text style={styles.buttonText}>
-              Return to Learner Portal
+              Return to My EGA
             </Text>
           </TouchableOpacity>
         </Link>

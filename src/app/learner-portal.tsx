@@ -83,8 +83,14 @@ const chatgptLessons = [
 export default function LearnerPortal() {
   const [studentId, setStudentId] = useState(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("ega_student_id") || "";
+      const savedStudentId =
+        sessionStorage.getItem("ega_student_id") || "";
+
+      return savedStudentId
+        .replace(/^EGA-2026-/i, "")
+        .replace(/\D/g, "");
     }
+
     return "";
   });
   const [phone, setPhone] = useState(() => {
@@ -116,11 +122,21 @@ export default function LearnerPortal() {
     setStudent(null);
     setQuizResults([]);
 
-    const cleanStudentId = studentId.trim().toUpperCase();
-    const cleanLoginPhone = phone.trim();
+    const studentIdDigits = studentId
+      .trim()
+      .replace(/^EGA-2026-/i, "")
+      .replace(/\D/g, "");
 
-    if (!cleanStudentId || !cleanLoginPhone) {
-      setMessage("⚠️ Please enter Student ID and Phone Number");
+    const cleanStudentId = studentIdDigits
+      ? `EGA-2026-${studentIdDigits}`
+      : "";
+
+    const cleanLoginPhone = cleanPhone(phone);
+
+    if (!studentIdDigits || !cleanLoginPhone) {
+      setMessage(
+        "⚠️ Please enter your Student ID digits and Phone Number"
+      );
       setLoading(false);
       return;
     }
@@ -167,7 +183,7 @@ export default function LearnerPortal() {
       );
     }
 
-    setStudentId(cleanStudentId);
+    setStudentId(studentIdDigits);
     setStudent(data.student);
     setQuizResults(data.quiz_results || []);
     setMessage("✅ Login successful");
@@ -351,22 +367,32 @@ export default function LearnerPortal() {
         ← Back to Home
       </Link>
 
-      <Text style={styles.title}>🎓 Learner Portal</Text>
+      <Text style={styles.title}>🎓 My EGA</Text>
 
       <Text style={styles.subtitle}>
-        Login to view payment, lessons, progress, quiz, and certificate status.
+        Enter My EGA to view your lessons, payments, progress, assessments, results, and certificates.
       </Text>
 
       {!student && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Student Login</Text>
+          <Text style={styles.cardTitle}>Enter My EGA</Text>
+
+          <Text style={styles.text}>
+            Student ID: EGA-2026-
+          </Text>
 
           <TextInput
             style={styles.input}
-            placeholder="Student ID"
+            placeholder="Enter your ID digits"
             value={studentId}
-            onChangeText={setStudentId}
-            autoCapitalize="characters"
+            onChangeText={(value) =>
+              setStudentId(
+                value
+                  .replace(/^EGA-2026-/i, "")
+                  .replace(/\D/g, "")
+              )
+            }
+            keyboardType="number-pad"
           />
 
           <TextInput

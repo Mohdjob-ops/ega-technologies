@@ -304,7 +304,7 @@ export default function RegisterPage() {
           `❌ This phone number is already registered.` +
           `\n\nStudent: ${existingStudent.name}` +
           `\nStudent ID: ${existingStudent.student_id}` +
-          `\n\nPlease use the Learner Portal instead.`;
+          `\n\nPlease use My EGA instead.`;
 
         setMessage(statusMessage);
 
@@ -325,7 +325,7 @@ export default function RegisterPage() {
           `❌ This email address is already registered.` +
           `\n\nStudent: ${existingStudent.name}` +
           `\nStudent ID: ${existingStudent.student_id}` +
-          `\n\nPlease use the Learner Portal instead.`;
+          `\n\nPlease use My EGA instead.`;
 
         setMessage(statusMessage);
 
@@ -455,26 +455,37 @@ export default function RegisterPage() {
       course: COURSE_NAME,
     };
 
-    const emailResults = await Promise.allSettled([
+    const isPlaceholderEmail =
+      cleanEmail.endsWith("@ega.local");
+
+    const emailPromises = [
       emailjs.send(
         SERVICE_ID,
         ADMIN_TEMPLATE_ID,
         adminEmailData,
         PUBLIC_KEY
       ),
-      emailjs.send(
-        SERVICE_ID,
-        STUDENT_TEMPLATE_ID,
-        studentEmailData,
-        PUBLIC_KEY
-      ),
-    ]);
+      ...(isPlaceholderEmail
+        ? []
+        : [
+            emailjs.send(
+              SERVICE_ID,
+              STUDENT_TEMPLATE_ID,
+              studentEmailData,
+              PUBLIC_KEY
+            ),
+          ]),
+    ];
+
+    const emailResults =
+      await Promise.allSettled(emailPromises);
 
     const adminEmailOk =
-      emailResults[0].status === "fulfilled";
+      emailResults[0]?.status === "fulfilled";
 
     const studentEmailOk =
-      emailResults[1].status === "fulfilled";
+      isPlaceholderEmail ||
+      emailResults[1]?.status === "fulfilled";
 
     if (adminEmailOk && studentEmailOk) {
       const statusMessage =
@@ -485,8 +496,11 @@ export default function RegisterPage() {
         `\nCourse Fee: ${formatFee(fee)}` +
         `\nPayment Status: Pending` +
         `\n\nThe course starting date will be announced later by the administrator.` +
-        `\n\nUse your Student ID and phone number to log in to the Learner Portal.` +
-        `\n\nA confirmation email has been sent.`;
+        `\n\nNext step: Go to My EGA.` +
+        `\nEnter only the digits after EGA-2026- from your Student ID, together with your registered phone number.` +
+        (isPlaceholderEmail
+          ? `\n\nA temporary EGA email is being used. No student email was sent. You can update your real email later from your My EGA profile.`
+          : `\n\nA confirmation email has been sent.`);
 
       setMessage(statusMessage);
 

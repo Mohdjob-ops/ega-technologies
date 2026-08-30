@@ -23,7 +23,7 @@ const translations = {
       "EGA expands access to practical technology education for talented learners, with special support for students facing financial barriers.",
 
     register: "📝 Register",
-    learnerPortal: "🎓 Learner Portal",
+    learnerPortal: "🎓 My EGA",
     payments: "💳 Payments",
     supportEga: "❤️ Support EGA",
 
@@ -114,7 +114,7 @@ const translations = {
     exploreNavigationText:
       "Browse lessons, projects, quizzes, and learning resources.",
 
-    learnerNavigation: "🎓 Learner Portal",
+    learnerNavigation: "🎓 My EGA",
     learnerNavigationText:
       "View your learning progress, quizzes, assignments, and certificates.",
 

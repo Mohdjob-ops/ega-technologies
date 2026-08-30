@@ -4,7 +4,7 @@ import { ScrollView, Text, StyleSheet, View, TouchableOpacity } from "react-nati
 export default function CSSLecture() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Link href="/learner-portal" style={styles.back}>← Back to Learner Portal</Link>
+      <Link href="/learner-portal" style={styles.back}>← Back to My EGA</Link>
 
       <Text style={styles.title}>🎨 CSS Full Lecture</Text>
       <Text style={styles.subtitle}>
