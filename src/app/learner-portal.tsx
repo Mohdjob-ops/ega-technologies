@@ -272,6 +272,15 @@ export default function LearnerPortal() {
 
   const isPaid = student?.payment_status === "Paid";
 
+  const now = new Date();
+  const freeAiStart = new Date(2026, 8, 1);
+  const freeAiEnd = new Date(2026, 8, 21);
+
+  const hasFreeAiAccess =
+    now >= freeAiStart && now < freeAiEnd;
+
+  const canAccessAiLessons = isPaid || hasFreeAiAccess;
+
   /*
    * quizResults is already ordered newest → oldest.
    * Keep ONLY the newest attempt for each quiz.
@@ -510,11 +519,19 @@ export default function LearnerPortal() {
               🤖 1. AI Developer Course — START HERE
             </Text>
 
-            {isPaid ? (
+            {canAccessAiLessons ? (
               <>
                 <Text style={styles.sectionDescription}>
                   Start here. Complete the AI lessons in order. / Halkan ka bilow. Casharrada AI-ga u baro sida ay u kala horreeyaan.
                 </Text>
+
+                {hasFreeAiAccess && !isPaid && (
+                  <View style={styles.successBox}>
+                    <Text style={styles.successText}>
+                      ✅ Free AI lesson access is active from September 1–20, 2026.
+                    </Text>
+                  </View>
+                )}
 
                 {aiLessons.map((lesson) => (
                   <TouchableOpacity
@@ -528,18 +545,20 @@ export default function LearnerPortal() {
                   </TouchableOpacity>
                 ))}
 
-                <Link href="/quiz" asChild>
-                  <TouchableOpacity style={styles.startButton}>
-                    <Text style={styles.buttonText}>
-                      🧠 AI Lessons 1–15 Assessment — 60 Minutes
-                    </Text>
-                  </TouchableOpacity>
-                </Link>
+                {isPaid && (
+                  <Link href="/quiz" asChild>
+                    <TouchableOpacity style={styles.startButton}>
+                      <Text style={styles.buttonText}>
+                        🧠 AI Lessons 1–15 Assessment — 60 Minutes
+                      </Text>
+                    </TouchableOpacity>
+                  </Link>
+                )}
               </>
             ) : (
               <View style={styles.warningBox}>
                 <Text style={styles.warningText}>
-                  🔒 AI lessons are locked until payment is confirmed.
+                  🔒 AI lessons are locked until payment is confirmed or the free AI period begins.
                 </Text>
               </View>
             )}
