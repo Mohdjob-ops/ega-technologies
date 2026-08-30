@@ -683,8 +683,8 @@ export default function RegisterPage() {
           </Text>
 
           <Text style={styles.paymentText}>
-            The course fee must be paid on the
-            registration date.
+            AI learning is free from September 1–20, 2026.
+            The 3,000 Birr course fee applies after the free period.
           </Text>
 
           <Text style={styles.startText}>
