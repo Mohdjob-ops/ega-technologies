@@ -261,7 +261,35 @@ export default function LearnerPortal() {
     setMessage("");
   }
 
-  function openAiLesson(path: string) {
+  async function openAiLesson(path: string) {
+    if (!student) return;
+
+    try {
+      const { error } = await supabase.functions.invoke(
+        "learner-access",
+        {
+          body: {
+            student_id: student.student_id,
+            phone: student.phone,
+            activity_type: "AI_LESSON_OPEN",
+            lesson_path: path,
+          },
+        }
+      );
+
+      if (error) {
+        console.error(
+          "AI lesson activity logging failed:",
+          error
+        );
+      }
+    } catch (error) {
+      console.error(
+        "AI lesson activity logging failed:",
+        error
+      );
+    }
+
     if (typeof window !== "undefined") {
       window.location.href = path;
       return;

@@ -170,6 +170,41 @@ Deno.serve(async (request) => {
       );
     }
 
+    const activityType = String(
+      body.activity_type || "LOGIN"
+    )
+      .trim()
+      .toUpperCase();
+
+    const lessonPath = String(
+      body.lesson_path || ""
+    ).trim();
+
+    if (
+      !["LOGIN", "AI_LESSON_OPEN"].includes(activityType)
+    ) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Invalid activity type.",
+        },
+        400
+      );
+    }
+
+    if (
+      activityType === "AI_LESSON_OPEN" &&
+      !lessonPath
+    ) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Lesson path is required.",
+        },
+        400
+      );
+    }
+
     const { data: quizResults, error: quizError } =
       await supabase
         .from("quiz_results")
@@ -204,6 +239,28 @@ Deno.serve(async (request) => {
             "Learner verified, but quiz results could not be loaded.",
         },
         500
+      );
+    }
+
+    const { error: activityError } = await supabase
+      .from("student_activity")
+      .insert({
+        student_id: student.student_id,
+        student_name: student.name || null,
+        payment_status:
+          student.payment_status || null,
+        activity_type: activityType,
+        course_name: student.course || null,
+        lesson_path:
+          activityType === "AI_LESSON_OPEN"
+            ? lessonPath
+            : null,
+      });
+
+    if (activityError) {
+      console.error(
+        "Student activity logging failed:",
+        activityError
       );
     }
 
