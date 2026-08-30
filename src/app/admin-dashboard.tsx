@@ -30,6 +30,9 @@ export default function AdminDashboard() {
   const [totalOutstanding, setTotalOutstanding] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  const [studentActivity, setStudentActivity] = useState<any[]>([]);
+  const [activityLoading, setActivityLoading] = useState(false);
+
   useEffect(() => {
     if (adminError === "expired_link") {
       setAdminMessage(
@@ -126,6 +129,7 @@ export default function AdminDashboard() {
        * A finance-loading error must not close the dashboard.
        */
       await loadFinanceSummary();
+      await loadStudentActivity();
     } catch (error) {
       const message =
         error instanceof Error
@@ -157,6 +161,7 @@ export default function AdminDashboard() {
       setTotalFees(0);
       setTotalCollected(0);
       setTotalOutstanding(0);
+      setStudentActivity([]);
     } catch (error) {
       const message =
         error instanceof Error
@@ -219,6 +224,52 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function loadStudentActivity() {
+    setActivityLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from("student_activity")
+        .select(
+          "id, student_id, student_name, payment_status, activity_type, course_name, lesson_path, created_at"
+        )
+        .order("created_at", {
+          ascending: false,
+        })
+        .limit(50);
+
+      if (error) {
+        console.error("Student activity error:", error);
+
+        setAdminMessage(
+          `❌ Student activity error: ${error.message}`
+        );
+
+        return;
+      }
+
+      setStudentActivity(data || []);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "An unexpected student activity error occurred.";
+
+      console.error("Student activity error:", error);
+      setAdminMessage(
+        `❌ Student activity error: ${message}`
+      );
+    } finally {
+      setActivityLoading(false);
+    }
+  }
+
+  function activityDate(value: string) {
+    if (!value) return "";
+
+    return new Date(value).toLocaleString("en-GB");
   }
 
   function money(value: number) {
@@ -378,6 +429,99 @@ export default function AdminDashboard() {
         >
           <Text style={styles.refreshText}>
             {loading ? "Loading..." : "🔄 Refresh Summary"}
+          </Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.activityBox}>
+        <Text style={styles.summaryTitle}>
+          📈 Student Activity Statement
+        </Text>
+
+        <Text style={styles.activityHelp}>
+          Latest learner logins and AI lesson access.
+        </Text>
+
+        {activityLoading ? (
+          <View style={styles.loadingBox}>
+            <ActivityIndicator size="large" />
+
+            <Text style={styles.loadingText}>
+              Loading student activity...
+            </Text>
+          </View>
+        ) : studentActivity.length === 0 ? (
+          <Text style={styles.activityEmpty}>
+            No student activity recorded yet.
+          </Text>
+        ) : (
+          studentActivity.map((activity) => (
+            <View
+              key={activity.id}
+              style={styles.activityRow}
+            >
+              <View style={styles.activityHeader}>
+                <Text style={styles.activityStudent}>
+                  {activity.student_name || "Unknown Student"}
+                </Text>
+
+                <Text
+                  style={
+                    activity.payment_status === "Paid"
+                      ? styles.activityPaid
+                      : styles.activityPending
+                  }
+                >
+                  {activity.payment_status || "Unknown"}
+                </Text>
+              </View>
+
+              <Text style={styles.activityDetail}>
+                Student ID: {activity.student_id}
+              </Text>
+
+              <Text style={styles.activityDetail}>
+                Activity:{" "}
+                {activity.activity_type === "LOGIN"
+                  ? "Login"
+                  : activity.activity_type === "AI_LESSON_OPEN"
+                  ? "AI Lesson Open"
+                  : activity.activity_type}
+              </Text>
+
+              {activity.course_name ? (
+                <Text style={styles.activityDetail}>
+                  Course: {activity.course_name}
+                </Text>
+              ) : null}
+
+              {activity.lesson_path ? (
+                <Text style={styles.activityPath}>
+                  Lesson: {activity.lesson_path}
+                </Text>
+              ) : null}
+
+              <Text style={styles.activityDate}>
+                {activityDate(activity.created_at)}
+              </Text>
+            </View>
+          ))
+        )}
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.refreshButton,
+            pressed ? styles.pressedButton : null,
+          ]}
+          onPress={() => {
+            void loadStudentActivity();
+          }}
+          disabled={activityLoading}
+        >
+          <Text style={styles.refreshText}>
+            {activityLoading
+              ? "Loading..."
+              : "🔄 Refresh Activity"}
           </Text>
         </Pressable>
       </View>
@@ -619,6 +763,80 @@ const styles = StyleSheet.create({
     color: "#334155",
     fontSize: 16,
     fontWeight: "bold",
+  },
+
+  activityBox: {
+    backgroundColor: "#ffffff",
+    padding: 22,
+    borderRadius: 16,
+    marginBottom: 25,
+  },
+
+  activityHelp: {
+    fontSize: 16,
+    color: "#475569",
+    textAlign: "center",
+    marginBottom: 15,
+  },
+
+  activityEmpty: {
+    fontSize: 17,
+    color: "#64748b",
+    textAlign: "center",
+    paddingVertical: 15,
+  },
+
+  activityRow: {
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 12,
+  },
+
+  activityHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 8,
+  },
+
+  activityStudent: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0f172a",
+  },
+
+  activityPaid: {
+    color: "#166534",
+    fontWeight: "bold",
+  },
+
+  activityPending: {
+    color: "#ca8a04",
+    fontWeight: "bold",
+  },
+
+  activityDetail: {
+    fontSize: 15,
+    color: "#334155",
+    marginBottom: 4,
+  },
+
+  activityPath: {
+    fontSize: 14,
+    color: "#003366",
+    marginTop: 2,
+    marginBottom: 5,
+  },
+
+  activityDate: {
+    fontSize: 13,
+    color: "#64748b",
+    marginTop: 5,
   },
 
   logoutButton: {
