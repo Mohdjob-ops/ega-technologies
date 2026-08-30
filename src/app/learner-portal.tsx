@@ -273,7 +273,7 @@ export default function LearnerPortal() {
   const isPaid = student?.payment_status === "Paid";
 
   const now = new Date();
-  const freeAiStart = new Date(2026, 8, 1);
+  const freeAiStart = new Date(2026, 7, 30);
   const freeAiEnd = new Date(2026, 8, 21);
 
   const hasFreeAiAccess =
