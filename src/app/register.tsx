@@ -2,6 +2,7 @@ import emailjs from "@emailjs/browser";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -58,6 +59,7 @@ export default function RegisterPage() {
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [customCourse, setCustomCourse] = useState("");
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
+  const [referralDetailsOpen, setReferralDetailsOpen] = useState(false);
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
@@ -791,11 +793,33 @@ export default function RegisterPage() {
 
         <Text style={styles.referralHelpText}>
           If another EGA student referred you, enter their Student ID here.
-
-          {"\n\n"}
-          The referral reward starts only after payment and attendance are verified.
-
         </Text>
+
+        <TouchableOpacity
+          onPress={() => setReferralDetailsOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="View referral reward details"
+          style={{
+            borderWidth: 1,
+            borderColor: "#12306d",
+            borderRadius: 10,
+            paddingVertical: 11,
+            paddingHorizontal: 14,
+            marginBottom: 16,
+            alignItems: "center",
+            backgroundColor: "#eff6ff",
+          }}
+        >
+          <Text
+            style={{
+              color: "#12306d",
+              fontWeight: "700",
+              fontSize: 15,
+            }}
+          >
+            🎁 Referral Reward Details
+          </Text>
+        </TouchableOpacity>
 
         {message ? (
           <View style={styles.messageBox}>
@@ -819,20 +843,12 @@ export default function RegisterPage() {
         </TouchableOpacity>
 
         <View style={styles.courseBox}>
-          <Text style={styles.paymentText}>
-            ✅ After registering, scroll down to read the important course and referral reward information.
-          </Text>
-        </View>
-
-        <View style={styles.courseBox}>
           <Text style={styles.courseTitle}>
-            {getSelectedCourses() || "Choose Your EGA Course"}
-
+            Course Information
           </Text>
 
           <Text style={styles.feeText}>
             Course Fee: {formatFee(fee)}
-
           </Text>
 
           <Text style={styles.paymentText}>
@@ -846,63 +862,156 @@ export default function RegisterPage() {
           </Text>
         </View>
 
-        <View style={styles.referralCardsRow}>
-          <View style={[styles.referralCard, styles.englishReferralCard]}>
-            <Text style={styles.englishReferralTitle}>
-              🌍 EGA STUDENT REFERRAL REWARD
-            </Text>
+        <Modal
+          visible={referralDetailsOpen}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setReferralDetailsOpen(false)}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(15, 23, 42, 0.58)",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 18,
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                maxWidth: 600,
+                maxHeight: "88%",
+                backgroundColor: "#ffffff",
+                borderRadius: 16,
+                overflow: "hidden",
+              }}
+            >
+              <ScrollView
+                contentContainerStyle={{
+                  padding: 20,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 21,
+                    fontWeight: "800",
+                    color: "#12306d",
+                    marginBottom: 6,
+                  }}
+                >
+                  🌍 EGA Student Referral Reward
+                </Text>
 
-            <Text style={styles.referralLanguage}>
-              English Speakers
-            </Text>
+                <Text
+                  style={{
+                    color: "#475569",
+                    marginBottom: 18,
+                    lineHeight: 21,
+                  }}
+                >
+                  Refer another student to register and earn rewards after
+                  payment and attendance are verified.
+                </Text>
 
-            <Text style={styles.referralIntro}>
-              Refer another student to register and earn rewards.
-            </Text>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "800",
+                    color: "#12306d",
+                    marginBottom: 10,
+                  }}
+                >
+                  🇪🇹 3,000 Birr Monthly Plan
+                </Text>
 
-            <View style={styles.referralDivider} />
+                <Text style={{ color: "#334155", lineHeight: 26 }}>
+                  ✅ 10 verified days → 150 Birr{"\n"}
+                  ✅ 20 verified days → 300 Birr cumulative{"\n"}
+                  ✅ 30 verified days → 450 Birr cumulative maximum
+                </Text>
 
-            <Text style={styles.referralPlanTitle}>
-              🇪🇹 3,000 Birr Monthly Plan
-            </Text>
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: "#e2e8f0",
+                    marginVertical: 18,
+                  }}
+                />
 
-            <Text style={styles.referralLine}>
-              ✅ 10 verified days → 150 Birr
-            </Text>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "800",
+                    color: "#12306d",
+                    marginBottom: 10,
+                  }}
+                >
+                  🌍 English / International — $15 USD Monthly Plan
+                </Text>
 
-            <Text style={styles.referralLine}>
-              ✅ 20 verified days → 300 Birr cumulative
-            </Text>
+                <Text style={{ color: "#334155", lineHeight: 26 }}>
+                  ✅ 10 verified days → $0.75{"\n"}
+                  ✅ 20 verified days → $1.50 cumulative{"\n"}
+                  ✅ 30 verified days → $2.25 cumulative maximum
+                </Text>
 
-            <Text style={styles.referralLine}>
-              ✅ 30 verified days → 450 Birr cumulative maximum
-            </Text>
+                <View
+                  style={{
+                    backgroundColor: "#f0fdf4",
+                    borderWidth: 1,
+                    borderColor: "#bbf7d0",
+                    borderRadius: 10,
+                    padding: 12,
+                    marginTop: 18,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#166534",
+                      lineHeight: 21,
+                      fontWeight: "600",
+                    }}
+                  >
+                    ✅ Rewards require confirmed payment and verified
+                    attendance. Each 10-day milestone can be rewarded only once.
 
-            <View style={styles.referralDivider} />
+                    {"\n\n"}
+                    <Text style={{ color: "#dc2626", fontWeight: "700" }}>
+                      ⚠️ Important: EGA Administration reserves the right to modify,
+                      suspend, or discontinue the Referral Reward Program when necessary.
+                      Any change will be communicated to students and applied in
+                      accordance with EGA policies.
+                    </Text>
+                  </Text>
+                </View>
 
-            <Text style={styles.referralPlanTitle}>
-              🌍 English / International — $15 USD Monthly Plan
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 10 verified days → $0.75
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 20 verified days → $1.50 cumulative
-            </Text>
-
-            <Text style={styles.referralLine}>
-              ✅ 30 verified days → $2.25 cumulative maximum
-            </Text>
-
-            <View style={styles.referralDivider} />
-
-            <Text style={styles.referralNote}>
-              ✅ Rewards require confirmed payment and verified attendance. Each 10-day milestone can be rewarded only once.
-            </Text>
+                <TouchableOpacity
+                  onPress={() => setReferralDetailsOpen(false)}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close referral reward details"
+                  style={{
+                    backgroundColor: "#12306d",
+                    borderRadius: 10,
+                    paddingVertical: 13,
+                    marginTop: 20,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "800",
+                      fontSize: 16,
+                    }}
+                  >
+                    Close
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
           </View>
-        </View>
+        </Modal>
       </View>
     </ScrollView>
   );
