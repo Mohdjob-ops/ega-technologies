@@ -31,7 +31,7 @@ const COURSE_OPTIONS = [
   "Computer & Digital Skills - Beginner",
 ];
 
-const SCENE_TIME = 6000;
+const SCENE_TIME = 10000;
 
 export default function PromoPreview() {
   const [scene, setScene] = useState(0);
@@ -39,6 +39,9 @@ export default function PromoPreview() {
 
   const fade = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(1)).current;
+
+  const offerOpacity = useRef(new Animated.Value(0)).current;
+  const offerScale = useRef(new Animated.Value(0.35)).current;
 
   function animateTo(nextScene: number) {
     Animated.parallel([
@@ -82,10 +85,67 @@ export default function PromoPreview() {
     return () => clearInterval(timer);
   }, [scene, paused]);
 
+  useEffect(() => {
+    if (paused) {
+      offerOpacity.stopAnimation();
+      offerScale.stopAnimation();
+      return;
+    }
+
+    offerOpacity.setValue(0);
+    offerScale.setValue(0.35);
+
+    const offerAnimation = Animated.sequence([
+      Animated.delay(1400),
+
+      Animated.parallel([
+        Animated.timing(offerOpacity, {
+          toValue: 1,
+          duration: 350,
+          useNativeDriver: true,
+        }),
+        Animated.spring(offerScale, {
+          toValue: 1.12,
+          friction: 5,
+          tension: 70,
+          useNativeDriver: true,
+        }),
+      ]),
+
+      Animated.spring(offerScale, {
+        toValue: 1,
+        friction: 6,
+        tension: 60,
+        useNativeDriver: true,
+      }),
+
+      Animated.delay(1500),
+
+      Animated.parallel([
+        Animated.timing(offerOpacity, {
+          toValue: 0,
+          duration: 650,
+          useNativeDriver: true,
+        }),
+        Animated.timing(offerScale, {
+          toValue: 0.45,
+          duration: 650,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]);
+
+    offerAnimation.start();
+
+    return () => offerAnimation.stop();
+  }, [scene, paused]);
+
   function restart() {
     setPaused(false);
     fade.setValue(1);
     scale.setValue(1);
+    offerOpacity.setValue(0);
+    offerScale.setValue(0.35);
     setScene(0);
   }
 
@@ -243,6 +303,33 @@ export default function PromoPreview() {
               </Text>
             </>
           ) : null}
+        </Animated.View>
+
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.freeOfferOverlay,
+            {
+              opacity: offerOpacity,
+              transform: [{ scale: offerScale }],
+            },
+          ]}
+        >
+          <View style={styles.freeOfferCard}>
+            <Text style={styles.freeOfferGift}>🎁 SEPTEMBER SPECIAL</Text>
+
+            <Text style={styles.freeOfferBig}>
+              FREE AI COURSES
+            </Text>
+
+            <Text style={styles.freeOfferMedium}>
+              THIS MONTH
+            </Text>
+
+            <Text style={styles.freeOfferSmall}>
+              Learn Artificial Intelligence & Generative AI with EGA
+            </Text>
+          </View>
         </Animated.View>
 
         <View style={styles.controls}>
@@ -460,6 +547,64 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     maxWidth: 650,
     marginBottom: 22,
+  },
+
+  freeOfferOverlay: {
+    ...StyleSheet.absoluteFill,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 20,
+    paddingHorizontal: 18,
+  },
+
+  freeOfferCard: {
+    width: "92%",
+    maxWidth: 700,
+    backgroundColor: "rgba(255,255,255,0.97)",
+    borderRadius: 30,
+    paddingVertical: 30,
+    paddingHorizontal: 24,
+    alignItems: "center",
+    shadowColor: "#000000",
+    shadowOpacity: 0.32,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 16,
+  },
+
+  freeOfferGift: {
+    color: "#047857",
+    fontSize: 17,
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 8,
+    letterSpacing: 1,
+  },
+
+  freeOfferBig: {
+    color: "#073b78",
+    fontSize: 42,
+    lineHeight: 48,
+    fontWeight: "900",
+    textAlign: "center",
+  },
+
+  freeOfferMedium: {
+    color: "#7c3aed",
+    fontSize: 27,
+    lineHeight: 34,
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 3,
+  },
+
+  freeOfferSmall: {
+    color: "#334155",
+    fontSize: 16,
+    lineHeight: 23,
+    fontWeight: "600",
+    textAlign: "center",
+    marginTop: 10,
   },
 
   controls: {
