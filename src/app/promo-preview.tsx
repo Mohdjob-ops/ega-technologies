@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -31,11 +32,12 @@ const COURSE_OPTIONS = [
   "Computer & Digital Skills - Beginner",
 ];
 
-const SCENE_TIME = 10000;
+const SCENE_TIME = 8000;
 
 export default function PromoPreview() {
   const [scene, setScene] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [contactVisible, setContactVisible] = useState(false);
 
   const fade = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(1)).current;
@@ -76,17 +78,22 @@ export default function PromoPreview() {
   }
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || contactVisible) return;
 
-    const timer = setInterval(() => {
+    const timer = setTimeout(() => {
+      if (scene === 1 || scene === 3) {
+        setContactVisible(true);
+        return;
+      }
+
       animateTo((scene + 1) % 4);
     }, SCENE_TIME);
 
-    return () => clearInterval(timer);
-  }, [scene, paused]);
+    return () => clearTimeout(timer);
+  }, [scene, paused, contactVisible]);
 
   useEffect(() => {
-    if (paused) {
+    if (paused || contactVisible) {
       offerOpacity.stopAnimation();
       offerScale.stopAnimation();
       return;
@@ -138,10 +145,16 @@ export default function PromoPreview() {
     offerAnimation.start();
 
     return () => offerAnimation.stop();
-  }, [scene, paused]);
+  }, [scene, paused, contactVisible]);
+
+  function closeContactAndContinue() {
+    setContactVisible(false);
+    animateTo((scene + 1) % 4);
+  }
 
   function restart() {
     setPaused(false);
+    setContactVisible(false);
     fade.setValue(1);
     scale.setValue(1);
     offerOpacity.setValue(0);
@@ -332,6 +345,62 @@ export default function PromoPreview() {
           </View>
         </Animated.View>
 
+        {contactVisible ? (
+          <View style={styles.contactOverlay}>
+            <View style={styles.contactCard}>
+              <TouchableOpacity
+                style={styles.contactClose}
+                onPress={closeContactAndContinue}
+                accessibilityLabel="Close contact information"
+              >
+                <Text style={styles.contactCloseText}>✕</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.contactHeading}>
+                CONTACT ELMI GURAY ACADEMY
+              </Text>
+
+              <Text style={styles.contactName}>
+                Mohammed Elmi Issak
+              </Text>
+
+              <Text style={styles.contactRole}>
+                Founder & President
+              </Text>
+
+              <View style={styles.whatsappBox}>
+                <Text style={styles.whatsappLabel}>
+                  WhatsApp
+                </Text>
+
+                <Text selectable style={styles.whatsappNumber}>
+                  0908659988
+                </Text>
+              </View>
+
+              <Text style={styles.contactMessage}>
+                Interested in joining EGA? Save this number and send
+                “Hi” on WhatsApp to receive the EGA registration and
+                course access link.
+              </Text>
+
+              <Text style={styles.contactWait}>
+                Take your time. This preview will remain paused until
+                you continue.
+              </Text>
+
+              <TouchableOpacity
+                style={styles.continueButton}
+                onPress={closeContactAndContinue}
+              >
+                <Text style={styles.continueButtonText}>
+                  Continue Preview ▶
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : null}
+
         <View style={styles.controls}>
           <TouchableOpacity
             style={styles.controlButton}
@@ -348,6 +417,15 @@ export default function PromoPreview() {
           >
             <Text style={styles.controlText}>
               ↻ Restart
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.controlButton}
+            onPress={() => router.replace("/")}
+          >
+            <Text style={styles.controlText}>
+              ← Back to EGA Home
             </Text>
           </TouchableOpacity>
         </View>
@@ -605,6 +683,137 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     marginTop: 10,
+  },
+
+  contactOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(3,21,47,0.88)",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 40,
+    paddingHorizontal: 18,
+    paddingVertical: 24,
+  },
+
+  contactCard: {
+    width: "94%",
+    maxWidth: 620,
+    backgroundColor: "#ffffff",
+    borderRadius: 28,
+    paddingTop: 48,
+    paddingBottom: 30,
+    paddingHorizontal: 24,
+    alignItems: "center",
+    position: "relative",
+    shadowColor: "#000000",
+    shadowOpacity: 0.35,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 20,
+  },
+
+  contactClose: {
+    position: "absolute",
+    right: 14,
+    top: 14,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#e2e8f0",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  contactCloseText: {
+    color: "#0f172a",
+    fontSize: 20,
+    fontWeight: "900",
+  },
+
+  contactHeading: {
+    color: "#047857",
+    fontSize: 15,
+    fontWeight: "900",
+    letterSpacing: 1.2,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+
+  contactName: {
+    color: "#073b78",
+    fontSize: 28,
+    lineHeight: 34,
+    fontWeight: "900",
+    textAlign: "center",
+  },
+
+  contactRole: {
+    color: "#475569",
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: 5,
+  },
+
+  whatsappBox: {
+    width: "100%",
+    backgroundColor: "#ecfdf5",
+    borderWidth: 2,
+    borderColor: "#10b981",
+    borderRadius: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    alignItems: "center",
+    marginTop: 22,
+  },
+
+  whatsappLabel: {
+    color: "#047857",
+    fontSize: 15,
+    fontWeight: "800",
+    marginBottom: 4,
+  },
+
+  whatsappNumber: {
+    color: "#064e3b",
+    fontSize: 31,
+    lineHeight: 38,
+    fontWeight: "900",
+    letterSpacing: 1.5,
+    textAlign: "center",
+  },
+
+  contactMessage: {
+    color: "#334155",
+    fontSize: 17,
+    lineHeight: 25,
+    textAlign: "center",
+    marginTop: 20,
+    maxWidth: 520,
+  },
+
+  contactWait: {
+    color: "#64748b",
+    fontSize: 13,
+    lineHeight: 19,
+    textAlign: "center",
+    marginTop: 12,
+  },
+
+  continueButton: {
+    backgroundColor: "#073b78",
+    paddingVertical: 14,
+    paddingHorizontal: 26,
+    borderRadius: 24,
+    marginTop: 22,
+    minWidth: 220,
+  },
+
+  continueButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "900",
+    textAlign: "center",
   },
 
   controls: {
