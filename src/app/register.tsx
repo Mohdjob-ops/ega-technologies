@@ -16,7 +16,28 @@ const ADMIN_TEMPLATE_ID = "template_w01c7ku";
 const STUDENT_TEMPLATE_ID = "template_9se77eg";
 const PUBLIC_KEY = "eGuNf2PLEmedxzflY";
 
-const COURSE_NAME = "AI Developer Course";
+const COURSE_OPTIONS = [
+  "Artificial Intelligence & Generative AI",
+  "Web Development",
+  "Software Development & Programming",
+  "Data Analytics & Data Science",
+  "Cybersecurity",
+  "Cloud Computing & DevOps",
+  "UI/UX & Digital Product Design",
+  "Digital Marketing & Social Media",
+  "Business Administration & Management",
+  "Accounting & Financial Management",
+  "Entrepreneurship & Small Business Management",
+  "Human Resources Management",
+  "Project Management",
+  "Leadership & Organizational Management",
+  "Healthcare Administration & Management",
+  "Health Information & Medical Records",
+  "Digital Health & Healthcare Technology",
+  "Public Health Fundamentals",
+  "Computer & Digital Skills - Beginner",
+];
+
 const MAX_STUDENT_ID_ATTEMPTS = 8;
 const ATTEMPT_SOURCE = "vercel-registration-page";
 
@@ -34,10 +55,29 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [referralStudentId, setReferralStudentId] = useState("");
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const [customCourse, setCustomCourse] = useState("");
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  function toggleCourse(course: string) {
+    setSelectedCourses((current) =>
+      current.includes(course)
+        ? current.filter((item) => item !== course)
+        : [...current, course]
+    );
+  }
+
+  function getSelectedCourses() {
+    const typedCourse = customCourse.trim();
+
+    return [
+      ...selectedCourses,
+      ...(typedCourse ? [typedCourse] : []),
+    ].join(", ");
+  }
 
   useEffect(() => {
     loadSettings();
@@ -118,7 +158,7 @@ export default function RegisterPage() {
         p_full_name: fullName.trim(),
         p_phone: normalizePhone(phone),
         p_email: email.trim().toLowerCase(),
-        p_course: COURSE_NAME,
+        p_course: getSelectedCourses() || "Not selected",
         p_status: status,
         p_status_message: statusMessage,
         p_student_id: studentId || null,
@@ -189,7 +229,8 @@ export default function RegisterPage() {
     if (
       !fullName.trim() ||
       !phone.trim() ||
-      !email.trim()
+      !email.trim() ||
+      !getSelectedCourses()
     ) {
       await stopWithMessage(
         "validation_failed",
@@ -202,6 +243,7 @@ export default function RegisterPage() {
     const cleanPhone = normalizePhone(phone);
     const cleanEmail = email.trim().toLowerCase();
     const cleanReferralStudentId = referralStudentId.trim().toUpperCase();
+    const cleanCourse = getSelectedCourses();
     const courseFee = Number(fee || 0);
 
     if (cleanName.split(" ").length < 2) {
@@ -345,7 +387,7 @@ export default function RegisterPage() {
         phone: cleanPhone,
         email: cleanEmail,
         language: "English",
-        course: COURSE_NAME,
+        course: cleanCourse,
         fee: courseFee,
         paid_amount: 0,
         remaining_amount: courseFee,
@@ -378,7 +420,7 @@ export default function RegisterPage() {
         student_name: cleanName,
         phone: cleanPhone,
         email: cleanEmail,
-        course: COURSE_NAME,
+        course: cleanCourse,
         amount: courseFee,
         status: "Pending",
         type: "Registration Fee",
@@ -408,7 +450,7 @@ export default function RegisterPage() {
       student_email: cleanEmail,
       student_phone: cleanPhone,
       student_id: studentId,
-      student_course: COURSE_NAME,
+      student_course: cleanCourse,
 
       course_fee: formatFee(fee),
       fee_text: formatFee(fee),
@@ -442,7 +484,7 @@ export default function RegisterPage() {
       name: cleanName,
       from_name: cleanName,
       phone: cleanPhone,
-      course: COURSE_NAME,
+      course: cleanCourse,
     };
 
     const studentEmailData = {
@@ -452,7 +494,7 @@ export default function RegisterPage() {
       name: cleanName,
       from_name: "EGA Technologies",
       phone: cleanPhone,
-      course: COURSE_NAME,
+      course: cleanCourse,
     };
 
     const isPlaceholderEmail =
@@ -568,7 +610,7 @@ export default function RegisterPage() {
         </Text>
 
         <Text style={styles.subtitle}>
-          Join EGA Technologies Web Development Training
+          Choose the skills and courses you want to learn
         </Text>
       </View>
 
@@ -623,6 +665,87 @@ export default function RegisterPage() {
         />
 
         <Text style={styles.label}>
+          Course(s) You Want to Learn *
+
+        </Text>
+
+        <Text style={{ color: "#475569", marginBottom: 12, lineHeight: 21 }}>
+          Select one or more suggested courses below. You may also enter
+          your own course if it is not listed.
+        </Text>
+
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 8,
+            marginBottom: 14,
+          }}
+        >
+          {COURSE_OPTIONS.map((course) => {
+            const selected = selectedCourses.includes(course);
+
+            return (
+              <TouchableOpacity
+                key={course}
+                onPress={() => toggleCourse(course)}
+                style={{
+                  borderWidth: 1,
+                  borderColor: selected ? "#12306d" : "#cbd5e1",
+                  backgroundColor: selected ? "#dbeafe" : "#ffffff",
+                  borderRadius: 18,
+                  paddingVertical: 8,
+                  paddingHorizontal: 12,
+                }}
+              >
+                <Text
+                  style={{
+                    color: selected ? "#12306d" : "#334155",
+                    fontWeight: selected ? "700" : "500",
+                  }}
+                >
+                  {selected ? "✓ " : ""}
+                  {course}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <Text style={styles.label}>
+          Other / Enter Your Own Course (Optional)
+
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          value={customCourse}
+          onChangeText={setCustomCourse}
+          placeholder="Example: Logistics and Supply Chain Management"
+          autoCapitalize="words"
+        />
+
+        {getSelectedCourses() ? (
+          <View
+            style={{
+              backgroundColor: "#f0fdf4",
+              borderWidth: 1,
+              borderColor: "#bbf7d0",
+              borderRadius: 10,
+              padding: 12,
+              marginBottom: 16,
+            }}
+          >
+            <Text style={{ fontWeight: "700", color: "#166534" }}>
+              Selected Course(s):
+            </Text>
+            <Text style={{ color: "#166534", marginTop: 5, lineHeight: 21 }}>
+              {getSelectedCourses()}
+            </Text>
+          </View>
+        ) : null}
+
+        <Text style={styles.label}>
           Referral Student ID (Optional)
 
         </Text>
@@ -673,7 +796,7 @@ export default function RegisterPage() {
 
         <View style={styles.courseBox}>
           <Text style={styles.courseTitle}>
-            {COURSE_NAME}
+            {getSelectedCourses() || "Choose Your EGA Course"}
 
           </Text>
 
