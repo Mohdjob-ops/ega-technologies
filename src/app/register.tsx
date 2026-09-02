@@ -765,7 +765,7 @@ export default function RegisterPage() {
           style={styles.input}
           value={customCourse}
           onChangeText={setCustomCourse}
-          placeholder="Other course (optional) — enter course name"
+          placeholder="Other course (optional)"
           autoCapitalize="words"
         />
 
@@ -786,7 +786,7 @@ export default function RegisterPage() {
           style={styles.input}
           value={referralStudentId}
           onChangeText={setReferralStudentId}
-          placeholder="Referral Student ID (Optional) — Example: EGA-2026-123456"
+          placeholder="Referral Student ID (optional)"
           autoCapitalize="characters"
           autoCorrect={false}
         />
