@@ -129,6 +129,9 @@ const translations = {
     adminDashboard: "🔐 Secure Admin Dashboard",
     adminOnly: "Authorized administrators only",
 
+    assistantDashboard: "👤 Assistant Admin",
+    assistantOnly: "Authorized EGA assistants only",
+
     finalTitle:
       "One Student. One Future. One Opportunity.",
     finalText:
@@ -261,6 +264,10 @@ const translations = {
     adminDashboard: "🔐 Maamulka Ammaan Ah",
     adminOnly:
       "Waxaa geli kara oo keliya maamulayaasha la oggolaaday",
+
+    assistantDashboard: "👤 Kaaliyaha Maamulka",
+    assistantOnly:
+      "Waxaa geli kara oo keliya kaaliyeyaasha EGA ee la oggolaaday",
 
     finalTitle:
       "Hal Arday. Hal Mustaqbal. Hal Fursad.",
@@ -493,11 +500,11 @@ export default function HomeScreen() {
           <Text style={styles.coursePreviewLabel}>📚 EGA Courses</Text>
 
           <Text style={styles.coursePreviewTitle}>
-            🤖 AI Developer Course + 🌐 Web Development Courses
+            Explore EGA Courses & Global Career Opportunities
           </Text>
 
           <Text style={styles.coursePreviewText}>
-            Learn practical AI tools, programming, HTML, CSS, JavaScript, projects, and modern digital skills.
+            Discover EGA learning opportunities across technology, business, healthcare, digital skills, and more.
           </Text>
 
           <Pressable
@@ -506,7 +513,7 @@ export default function HomeScreen() {
               styles.coursePreviewButton,
               pressed && styles.buttonPressed,
             ]}
-            onPress={() => router.push("/explore")}
+            onPress={() => router.push("/promo-preview")}
           >
             <Text style={styles.coursePreviewButtonText}>
               ▶ Watch EGA Course Preview
@@ -925,6 +932,24 @@ export default function HomeScreen() {
 
             <Text style={styles.adminText}>
               {t.adminOnly}
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.adminCard,
+              pressed && styles.cardPressed,
+            ]}
+            onPress={() =>
+              router.push("/assistant-dashboard")
+            }
+          >
+            <Text style={styles.adminTitle}>
+              {t.assistantDashboard}
+            </Text>
+
+            <Text style={styles.adminText}>
+              {t.assistantOnly}
             </Text>
           </Pressable>
         </View>
