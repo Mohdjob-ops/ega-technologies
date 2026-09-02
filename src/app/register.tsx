@@ -57,6 +57,7 @@ export default function RegisterPage() {
   const [referralStudentId, setReferralStudentId] = useState("");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [customCourse, setCustomCourse] = useState("");
+  const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
@@ -623,11 +624,6 @@ export default function RegisterPage() {
           </TouchableOpacity>
         </Link>
 
-        <Text style={styles.label}>
-          Full Name
-
-        </Text>
-
         <TextInput
           style={styles.input}
           value={fullName}
@@ -636,11 +632,6 @@ export default function RegisterPage() {
           autoCapitalize="words"
         />
 
-        <Text style={styles.label}>
-          Phone Number
-
-        </Text>
-
         <TextInput
           style={styles.input}
           value={phone}
@@ -648,11 +639,6 @@ export default function RegisterPage() {
           placeholder="Enter your phone number"
           keyboardType="phone-pad"
         />
-
-        <Text style={styles.label}>
-          Email Address
-
-        </Text>
 
         <TextInput
           style={styles.input}
@@ -664,97 +650,141 @@ export default function RegisterPage() {
           autoCorrect={false}
         />
 
-        <Text style={styles.label}>
-          Course(s) You Want to Learn *
-
-        </Text>
-
-        <Text style={{ color: "#475569", marginBottom: 12, lineHeight: 21 }}>
-          Select one or more suggested courses below. You may also enter
-          your own course if it is not listed.
-        </Text>
-
-        <View
+        <TouchableOpacity
+          onPress={() => setCourseDropdownOpen((current) => !current)}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+          accessibilityLabel="Select course"
           style={{
+            minHeight: 52,
+            borderWidth: 1,
+            borderColor: "#cbd5e1",
+            borderRadius: 10,
+            paddingHorizontal: 14,
+            paddingVertical: 14,
+            backgroundColor: "#ffffff",
+            marginBottom: courseDropdownOpen ? 8 : 16,
             flexDirection: "row",
-            flexWrap: "wrap",
-            gap: 8,
-            marginBottom: 14,
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          {COURSE_OPTIONS.map((course) => {
-            const selected = selectedCourses.includes(course);
+          <Text
+            style={{
+              color: selectedCourses.length ? "#0f172a" : "#64748b",
+              flex: 1,
+              paddingRight: 10,
+            }}
+            numberOfLines={1}
+          >
+            {selectedCourses.length
+              ? `${selectedCourses.length} course${
+                  selectedCourses.length === 1 ? "" : "s"
+                } selected`
+              : "Select Course(s) *"}
+          </Text>
 
-            return (
-              <TouchableOpacity
-                key={course}
-                onPress={() => toggleCourse(course)}
-                style={{
-                  borderWidth: 1,
-                  borderColor: selected ? "#12306d" : "#cbd5e1",
-                  backgroundColor: selected ? "#dbeafe" : "#ffffff",
-                  borderRadius: 18,
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                }}
-              >
-                <Text
+          <Text style={{ color: "#334155", fontSize: 16 }}>
+            {courseDropdownOpen ? "▲" : "▼"}
+          </Text>
+        </TouchableOpacity>
+
+        {courseDropdownOpen ? (
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: "#cbd5e1",
+              borderRadius: 10,
+              backgroundColor: "#ffffff",
+              padding: 8,
+              marginBottom: 14,
+            }}
+          >
+            {COURSE_OPTIONS.map((course) => {
+              const selected = selectedCourses.includes(course);
+
+              return (
+                <TouchableOpacity
+                  key={course}
+                  onPress={() => toggleCourse(course)}
+                  activeOpacity={0.75}
                   style={{
-                    color: selected ? "#12306d" : "#334155",
-                    fontWeight: selected ? "700" : "500",
+                    minHeight: 46,
+                    paddingVertical: 11,
+                    paddingHorizontal: 10,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#e2e8f0",
+                    backgroundColor: selected ? "#eff6ff" : "#ffffff",
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  {selected ? "✓ " : ""}
-                  {course}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  <Text
+                    style={{
+                      width: 28,
+                      color: "#12306d",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {selected ? "✓" : ""}
+                  </Text>
 
-        <Text style={styles.label}>
-          Other / Enter Your Own Course (Optional)
+                  <Text
+                    style={{
+                      flex: 1,
+                      color: selected ? "#12306d" : "#334155",
+                      fontWeight: selected ? "700" : "500",
+                    }}
+                  >
+                    {course}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
 
-        </Text>
+            <TouchableOpacity
+              onPress={() => setCourseDropdownOpen(false)}
+              style={{
+                marginTop: 8,
+                backgroundColor: "#12306d",
+                borderRadius: 8,
+                paddingVertical: 12,
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#ffffff", fontWeight: "700" }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         <TextInput
           style={styles.input}
           value={customCourse}
           onChangeText={setCustomCourse}
-          placeholder="Example: Logistics and Supply Chain Management"
+          placeholder="Other course (optional) — enter course name"
           autoCapitalize="words"
         />
 
         {getSelectedCourses() ? (
-          <View
+          <Text
             style={{
-              backgroundColor: "#f0fdf4",
-              borderWidth: 1,
-              borderColor: "#bbf7d0",
-              borderRadius: 10,
-              padding: 12,
+              color: "#166534",
+              marginTop: -6,
               marginBottom: 16,
+              lineHeight: 20,
             }}
           >
-            <Text style={{ fontWeight: "700", color: "#166534" }}>
-              Selected Course(s):
-            </Text>
-            <Text style={{ color: "#166534", marginTop: 5, lineHeight: 21 }}>
-              {getSelectedCourses()}
-            </Text>
-          </View>
+            ✓ {getSelectedCourses()}
+          </Text>
         ) : null}
-
-        <Text style={styles.label}>
-          Referral Student ID (Optional)
-
-        </Text>
 
         <TextInput
           style={styles.input}
           value={referralStudentId}
           onChangeText={setReferralStudentId}
-          placeholder="Example: EGA-2026-123456"
+          placeholder="Referral Student ID (Optional) — Example: EGA-2026-123456"
           autoCapitalize="characters"
           autoCorrect={false}
         />
