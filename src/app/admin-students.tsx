@@ -17,8 +17,11 @@ export default function AdminStudents() {
   const [adminEmail, setAdminEmail] = useState("");
 
   const [students, setStudents] = useState<any[]>([]);
+  const [recentStudents, setRecentStudents] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  const [studentView, setStudentView] = useState<"all" | "recent">("all");
   const [partialAmounts, setPartialAmounts] = useState<
     Record<string, string>
   >({});
@@ -54,6 +57,8 @@ export default function AdminStudents() {
         setIsAdmin(false);
         setAdminEmail("");
         setStudents([]);
+        setRecentStudents([]);
+        setStudentView("all");
         setCheckingAccess(false);
         return;
       }
@@ -80,17 +85,21 @@ export default function AdminStudents() {
   useEffect(() => {
     if (isAdmin) {
       loadStudents();
+      loadRecentStudents();
     }
   }, [isAdmin]);
 
   const filteredStudents = useMemo(() => {
+    const sourceStudents =
+      studentView === "recent" ? recentStudents : students;
+
     const search = searchText.trim().toLowerCase();
 
     if (!search) {
-      return students;
+      return sourceStudents;
     }
 
-    return students.filter((student) => {
+    return sourceStudents.filter((student) => {
       const searchableText = [
         student.name,
         student.student_id,
@@ -107,7 +116,67 @@ export default function AdminStudents() {
 
       return searchableText.includes(search);
     });
-  }, [students, searchText]);
+  }, [students, recentStudents, studentView, searchText]);
+
+  async function loadRecentStudents() {
+    const since = new Date(
+      Date.now() - 3 * 24 * 60 * 60 * 1000
+    ).toISOString();
+
+    const { data: activityData, error: activityError } = await supabase
+      .from("student_activity")
+      .select("student_id, created_at")
+      .eq("activity_type", "LOGIN")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false });
+
+    if (activityError) {
+      setMessage(
+        "❌ Error loading recent sign-ins: " + activityError.message
+      );
+      return;
+    }
+
+    const latestLoginByStudent = new Map<string, string>();
+
+    for (const row of activityData || []) {
+      const studentId = String(row.student_id || "").trim();
+
+      if (studentId && !latestLoginByStudent.has(studentId)) {
+        latestLoginByStudent.set(studentId, row.created_at);
+      }
+    }
+
+    const recentIds = Array.from(latestLoginByStudent.keys());
+
+    if (recentIds.length === 0) {
+      setRecentStudents([]);
+      return;
+    }
+
+    const { data: studentData, error: studentError } = await supabase
+      .from("students")
+      .select("*")
+      .in("student_id", recentIds);
+
+    if (studentError) {
+      setMessage(
+        "❌ Error loading recent students: " + studentError.message
+      );
+      return;
+    }
+
+    const sortedStudents = (studentData || []).sort((a, b) => {
+      const aLogin =
+        latestLoginByStudent.get(String(a.student_id || "").trim()) || "";
+      const bLogin =
+        latestLoginByStudent.get(String(b.student_id || "").trim()) || "";
+
+      return bLogin.localeCompare(aLogin);
+    });
+
+    setRecentStudents(sortedStudents);
+  }
 
   async function loadStudents() {
     setMessage("Loading students...");
@@ -408,7 +477,29 @@ export default function AdminStudents() {
       <View style={styles.topButtons}>
         <TouchableOpacity
           style={styles.refreshButton}
-          onPress={loadStudents}
+          onPress={() => setStudentView("all")}
+        >
+          <Text style={styles.buttonText}>
+            {studentView === "all" ? "✓ " : ""}All Students
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.paidButton}
+          onPress={() => setStudentView("recent")}
+        >
+          <Text style={styles.buttonText}>
+            {studentView === "recent" ? "✓ " : ""}🟢 Signed In — Last 3 Days
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.refreshButton}
+          onPress={
+            studentView === "recent"
+              ? loadRecentStudents
+              : loadStudents
+          }
         >
           <Text style={styles.buttonText}>
             🔄 Refresh Students
@@ -430,12 +521,17 @@ export default function AdminStudents() {
       ) : null}
 
       <Text style={styles.resultCount}>
-        Showing {filteredStudents.length} of {students.length} students
+        Showing {filteredStudents.length} of{" "}
+        {studentView === "recent"
+          ? recentStudents.length
+          : students.length} students
       </Text>
 
       {filteredStudents.length === 0 && !message ? (
         <Text style={styles.emptyText}>
-          No matching students found.
+          {studentView === "recent" && !searchText.trim()
+            ? "No students signed in during the last 3 days."
+            : "No matching students found."}
         </Text>
       ) : null}
 
