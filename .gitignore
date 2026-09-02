@@ -45,3 +45,4 @@ example
 
 # Supabase CLI temporary files
 supabase/.temp/
+.env*
