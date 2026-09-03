@@ -200,24 +200,37 @@ export default function AdminStudents() {
   }
 
   async function copyStudentRecord(student: any) {
+    const { data: latestStudent, error } = await supabase
+      .from("students")
+      .select("*")
+      .eq("id", student.id)
+      .single();
+
+    if (error || !latestStudent) {
+      setMessage(
+        "❌ Could not load the latest saved student record."
+      );
+      return;
+    }
+
     const record = [
-      `Sequence #: ${student.sequence_number ?? "N/A"}`,
-      `Student ID: ${student.student_id || "N/A"}`,
-      `Name: ${student.name || "No name"}`,
-      `Email: ${student.email || "Not added"}`,
-      `Phone: ${student.phone || "Not added"}`,
-      `Course: ${student.course || "Full Web Development"}`,
-      `Fee: ${money(student.fee)}`,
-      `Paid: ${money(student.paid_amount)}`,
-      `Remaining: ${money(student.remaining_amount)}`,
-      `Payment Status: ${student.payment_status || "Pending"}`,
-      `Payment Method: ${student.payment_method || "Not Selected"}`,
-      `Payment Reference: ${student.payment_reference || "Not provided"}`,
+      `Sequence #: ${latestStudent.sequence_number ?? "N/A"}`,
+      `Student ID: ${latestStudent.student_id || "N/A"}`,
+      `Name: ${latestStudent.name || "No name"}`,
+      `Email: ${latestStudent.email || "Not added"}`,
+      `Phone: ${latestStudent.phone || "Not added"}`,
+      `Course: ${latestStudent.course || "Full Web Development"}`,
+      `Fee: ${money(latestStudent.fee)}`,
+      `Paid: ${money(latestStudent.paid_amount)}`,
+      `Remaining: ${money(latestStudent.remaining_amount)}`,
+      `Payment Status: ${latestStudent.payment_status || "Pending"}`,
+      `Payment Method: ${latestStudent.payment_method || "Not Selected"}`,
+      `Payment Reference: ${latestStudent.payment_reference || "Not provided"}`,
     ].join("\n");
 
     await Clipboard.setStringAsync(record);
     setMessage(
-      `✅ Student #${student.sequence_number ?? ""} record copied.`
+      `✅ Student #${latestStudent.sequence_number ?? ""} record copied.`
     );
   }
 
