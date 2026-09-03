@@ -1,3 +1,4 @@
+import * as Clipboard from "expo-clipboard";
 import { Link } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -25,6 +26,14 @@ export default function AdminStudents() {
   const [partialAmounts, setPartialAmounts] = useState<
     Record<string, string>
   >({});
+
+  const [editingStudentId, setEditingStudentId] = useState<string | null>(
+    null
+  );
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editCourse, setEditCourse] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -99,8 +108,20 @@ export default function AdminStudents() {
       return sourceStudents;
     }
 
+    if (/^\d+$/.test(search)) {
+      const exactSequenceMatch = sourceStudents.filter(
+        (student) =>
+          String(student.sequence_number ?? "") === search
+      );
+
+      if (exactSequenceMatch.length > 0) {
+        return exactSequenceMatch;
+      }
+    }
+
     return sourceStudents.filter((student) => {
       const searchableText = [
+        student.sequence_number,
         student.name,
         student.student_id,
         student.email,
@@ -178,6 +199,77 @@ export default function AdminStudents() {
     setRecentStudents(sortedStudents);
   }
 
+  async function copyStudentRecord(student: any) {
+    const record = [
+      `Sequence #: ${student.sequence_number ?? "N/A"}`,
+      `Student ID: ${student.student_id || "N/A"}`,
+      `Name: ${student.name || "No name"}`,
+      `Email: ${student.email || "Not added"}`,
+      `Phone: ${student.phone || "Not added"}`,
+      `Course: ${student.course || "Full Web Development"}`,
+      `Fee: ${money(student.fee)}`,
+      `Paid: ${money(student.paid_amount)}`,
+      `Remaining: ${money(student.remaining_amount)}`,
+      `Payment Status: ${student.payment_status || "Pending"}`,
+      `Payment Method: ${student.payment_method || "Not Selected"}`,
+      `Payment Reference: ${student.payment_reference || "Not provided"}`,
+    ].join("\n");
+
+    await Clipboard.setStringAsync(record);
+    setMessage(
+      `✅ Student #${student.sequence_number ?? ""} record copied.`
+    );
+  }
+
+  function startEditingStudent(student: any) {
+    setEditingStudentId(String(student.id));
+    setEditName(student.name || "");
+    setEditEmail(student.email || "");
+    setEditPhone(student.phone || "");
+    setEditCourse(student.course || "");
+    setMessage(
+      `✏️ Editing Student #${student.sequence_number ?? ""}`
+    );
+  }
+
+  function cancelEditingStudent() {
+    setEditingStudentId(null);
+    setEditName("");
+    setEditEmail("");
+    setEditPhone("");
+    setEditCourse("");
+    setMessage("");
+  }
+
+  async function saveStudentEdits(student: any) {
+    if (!editingStudentId) return;
+
+    setMessage("Saving student changes...");
+
+    const { error } = await supabase
+      .from("students")
+      .update({
+        name: editName.trim(),
+        email: editEmail.trim(),
+        phone: editPhone.trim(),
+        course: editCourse.trim(),
+      })
+      .eq("id", student.id);
+
+    if (error) {
+      setMessage("❌ Error saving student: " + error.message);
+      return;
+    }
+
+    setEditingStudentId(null);
+    setMessage(
+      `✅ Student #${student.sequence_number ?? ""} updated successfully.`
+    );
+
+    await loadStudents();
+    await loadRecentStudents();
+  }
+
   async function loadStudents() {
     setMessage("Loading students...");
 
@@ -185,7 +277,7 @@ export default function AdminStudents() {
       .from("students")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(50);
+      .limit(1000);
 
     if (error) {
       setMessage("❌ Error loading students: " + error.message);
@@ -537,26 +629,115 @@ export default function AdminStudents() {
 
       {filteredStudents.map((student) => (
         <View key={student.id} style={styles.card}>
-          <Text style={styles.name}>
-            {student.name || "No name"}
-          </Text>
+          {editingStudentId === String(student.id) ? (
+            <>
+              <TextInput
+                style={styles.input}
+                value={editName}
+                onChangeText={setEditName}
+                placeholder="Student name"
+              />
 
-          <Text style={styles.text}>
-            Student ID: {student.student_id || "N/A"}
-          </Text>
+              <Text style={styles.text}>
+                Sequence #: {student.sequence_number ?? "N/A"}
+              </Text>
 
-          <Text style={styles.text}>
-            Email: {student.email || "Not added"}
-          </Text>
+              <Text style={styles.text}>
+                Student ID: {student.student_id || "N/A"}
+              </Text>
 
-          <Text style={styles.text}>
-            Phone: {student.phone || "Not added"}
-          </Text>
+              <TextInput
+                style={styles.input}
+                value={editEmail}
+                onChangeText={setEditEmail}
+                placeholder="Email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-          <Text style={styles.text}>
-            Course:{" "}
-            {student.course || "Full Web Development"}
-          </Text>
+              <TextInput
+                style={styles.input}
+                value={editPhone}
+                onChangeText={setEditPhone}
+                placeholder="Phone"
+                keyboardType="phone-pad"
+              />
+
+              <TextInput
+                style={styles.input}
+                value={editCourse}
+                onChangeText={setEditCourse}
+                placeholder="Course"
+              />
+            </>
+          ) : (
+            <>
+              <Text style={styles.name}>
+                {student.name || "No name"}
+              </Text>
+
+              <Text style={styles.text}>
+                Sequence #: {student.sequence_number ?? "N/A"}
+              </Text>
+
+              <Text style={styles.text}>
+                Student ID: {student.student_id || "N/A"}
+              </Text>
+
+              <Text style={styles.text}>
+                Email: {student.email || "Not added"}
+              </Text>
+
+              <Text style={styles.text}>
+                Phone: {student.phone || "Not added"}
+              </Text>
+
+              <Text style={styles.text}>
+                Course:{" "}
+                {student.course || "Full Web Development"}
+              </Text>
+            </>
+          )}
+
+          <TouchableOpacity
+            style={styles.copyButton}
+            onPress={() => copyStudentRecord(student)}
+          >
+            <Text style={styles.buttonText}>
+              📋 Copy Record
+            </Text>
+          </TouchableOpacity>
+
+          {editingStudentId === String(student.id) ? (
+            <>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={() => saveStudentEdits(student)}
+              >
+                <Text style={styles.buttonText}>
+                  💾 Save Changes
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={cancelEditingStudent}
+              >
+                <Text style={styles.buttonText}>
+                  ❌ Cancel
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => startEditingStudent(student)}
+            >
+              <Text style={styles.buttonText}>
+                ✏️ Edit Student
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <View style={styles.paymentBox}>
             <Text style={styles.text}>
@@ -797,6 +978,35 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: "#475569",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  copyButton: {
+    backgroundColor: "#7c3aed",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  editButton: {
+    backgroundColor: "#0f766e",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: "#15803d",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: "#b91c1c",
     padding: 15,
     borderRadius: 12,
     alignItems: "center",
