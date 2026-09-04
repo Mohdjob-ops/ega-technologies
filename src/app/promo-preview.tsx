@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -32,12 +33,59 @@ const COURSE_OPTIONS = [
   "Computer & Digital Skills - Beginner",
 ];
 
+const CEGA_LADIES = [
+  {
+    name: "Asiya Mukhtar Aydid",
+    phone: "0909700204",
+    whatsapp: "251909700204",
+  },
+  {
+    name: "Sumaya Ali",
+    phone: "0927933389",
+    whatsapp: "251927933389",
+  },
+];
+
+const CEGA_MALE = [
+  {
+    name: "Abdulla Elmi Issak",
+    phone: "251915304848",
+    whatsapp: "251915304848",
+  },
+  {
+    name: "Abdulahi Mohammed Ibrahim",
+    phone: "0924907077",
+    whatsapp: "251924907077",
+  },
+  {
+    name: "Abdirahman Haye Aydid",
+    phone: "0915456363",
+    whatsapp: "251915456363",
+  },
+  {
+    name: "Badal Mukhtar Bada",
+    phone: "0907697431",
+    whatsapp: "251907697431",
+  },
+  {
+    name: "Abdirahman Abdulahi Abdi",
+    phone: "251929471073",
+    whatsapp: "251929471073",
+  },
+  {
+    name: "Musab Abdirahman Farah",
+    phone: "0911909836",
+    whatsapp: "251911909836",
+  },
+];
+
 const SCENE_TIME = 8000;
 
 export default function PromoPreview() {
   const [scene, setScene] = useState(0);
   const [paused, setPaused] = useState(false);
   const [contactVisible, setContactVisible] = useState(false);
+  const [contactStep, setContactStep] = useState(0);
 
   const fade = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(1)).current;
@@ -81,7 +129,8 @@ export default function PromoPreview() {
     if (paused || contactVisible) return;
 
     const timer = setTimeout(() => {
-      if (scene === 1 || scene === 3) {
+      if (scene === 3) {
+        setContactStep(0);
         setContactVisible(true);
         return;
       }
@@ -147,14 +196,38 @@ export default function PromoPreview() {
     return () => offerAnimation.stop();
   }, [scene, paused, contactVisible]);
 
+  function openWhatsApp(number: string) {
+    const message =
+      "Hello EGA. I am interested in Elmi Guray Academy and would like more information.";
+
+    const url =
+      "https://wa.me/" +
+      number +
+      "?text=" +
+      encodeURIComponent(message);
+
+    void Linking.openURL(url);
+  }
+
   function closeContactAndContinue() {
     setContactVisible(false);
+    setContactStep(0);
     animateTo((scene + 1) % 4);
+  }
+
+  function nextContactCard() {
+    if (contactStep < 2) {
+      setContactStep((current) => current + 1);
+      return;
+    }
+
+    closeContactAndContinue();
   }
 
   function restart() {
     setPaused(false);
     setContactVisible(false);
+    setContactStep(0);
     fade.setValue(1);
     scale.setValue(1);
     offerOpacity.setValue(0);
@@ -347,57 +420,215 @@ export default function PromoPreview() {
 
         {contactVisible ? (
           <View style={styles.contactOverlay}>
-            <View style={styles.contactCard}>
-              <TouchableOpacity
-                style={styles.contactClose}
-                onPress={closeContactAndContinue}
-                accessibilityLabel="Close contact information"
-              >
-                <Text style={styles.contactCloseText}>✕</Text>
-              </TouchableOpacity>
+            <ScrollView
+              style={styles.contactScroll}
+              contentContainerStyle={styles.contactScrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.contactCard}>
+                <TouchableOpacity
+                  style={styles.contactClose}
+                  onPress={closeContactAndContinue}
+                >
+                  <Text style={styles.contactCloseText}>✕</Text>
+                </TouchableOpacity>
 
-              <Text style={styles.contactHeading}>
-                CONTACT ELMI GURAY ACADEMY
-              </Text>
+                <Text style={styles.cegaBadge}>CEGA</Text>
 
-              <Text style={styles.contactName}>
-                Mohammed Elmi Issak
-              </Text>
-
-              <Text style={styles.contactRole}>
-                Founder & President
-              </Text>
-
-              <View style={styles.whatsappBox}>
-                <Text style={styles.whatsappLabel}>
-                  WhatsApp
+                <Text style={styles.contactHeading}>
+                  CONTACT ELMI GURAY ACADEMY
                 </Text>
 
-                <Text selectable style={styles.whatsappNumber}>
-                  0908659988
+                {contactStep === 0 ? (
+                  <>
+                    <Text style={styles.contactName}>
+                      Mohammed Elmi Issak
+                    </Text>
+
+                    <Text style={styles.contactRole}>
+                      Founder & President • CEGA Lead
+                    </Text>
+
+                    <TouchableOpacity
+                      style={styles.whatsappBox}
+                      onPress={() => openWhatsApp("251908659988")}
+                    >
+                      <Text style={styles.whatsappLabel}>
+                        WhatsApp EGA
+                      </Text>
+
+                      <Text style={styles.whatsappNumber}>
+                        0908659988
+                      </Text>
+
+                      <Text style={styles.tapWhatsApp}>
+                        Tap to open WhatsApp
+                      </Text>
+                    </TouchableOpacity>
+
+                    <Text style={styles.contactMessage}>
+                      EGA students helping future EGA students.
+                      CEGA provides course links, registration guidance,
+                      learning support and follow-up assistance.
+                    </Text>
+
+                    <View style={styles.supportChoiceRow}>
+                      <View style={styles.supportChoice}>
+                        <Text style={styles.supportChoiceIcon}>👩</Text>
+                        <Text style={styles.supportChoiceTitle}>
+                          Ladies’ Support
+                        </Text>
+                        <Text style={styles.supportChoiceText}>
+                          Asiya & Sumaya
+                        </Text>
+                      </View>
+
+                      <View style={styles.supportChoice}>
+                        <Text style={styles.supportChoiceIcon}>👨</Text>
+                        <Text style={styles.supportChoiceTitle}>
+                          Male Support
+                        </Text>
+                        <Text style={styles.supportChoiceText}>
+                          Six CEGA representatives
+                        </Text>
+                      </View>
+                    </View>
+                  </>
+                ) : null}
+
+                {contactStep === 1 ? (
+                  <>
+                    <Text style={styles.contactName}>
+                      👩 Ladies’ CEGA Support
+                    </Text>
+
+                    <Text style={styles.contactRole}>
+                      Ladies supporting ladies in learning and digital opportunities
+                    </Text>
+
+                    <Text style={styles.contactMessage}>
+                      Ladies interested in EGA can contact our Ladies’
+                      CEGA representatives for course links, registration
+                      guidance and continued support.
+                    </Text>
+
+                    <View style={styles.memberList}>
+                      {CEGA_LADIES.map((member) => (
+                        <TouchableOpacity
+                          key={member.name}
+                          style={styles.memberCard}
+                          onPress={() => openWhatsApp(member.whatsapp)}
+                        >
+                          <Text style={styles.memberName}>
+                            {member.name}
+                          </Text>
+
+                          <Text style={styles.memberRole}>
+                            Ladies’ CEGA Support Representative
+                          </Text>
+
+                          <Text style={styles.memberPhone}>
+                            WhatsApp: {member.phone}
+                          </Text>
+
+                          
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : null}
+
+                {contactStep === 2 ? (
+                  <>
+                    <Text style={styles.contactName}>
+                      👨 Male CEGA Support
+                    </Text>
+
+                    <Text style={styles.contactRole}>
+                      Male students supporting interested male students
+                    </Text>
+
+                    <Text style={styles.contactMessage}>
+                      Interested male students can contact any of these
+                      CEGA representatives for EGA links, course information,
+                      registration guidance and follow-up support.
+                    </Text>
+
+                    <View style={styles.memberList}>
+                      {CEGA_MALE.map((member) => (
+                        <TouchableOpacity
+                          key={member.name}
+                          style={styles.memberCard}
+                          onPress={() => openWhatsApp(member.whatsapp)}
+                        >
+                          <Text style={styles.memberName}>
+                            {member.name}
+                          </Text>
+
+                          <Text style={styles.memberRole}>
+                            Male CEGA Support Representative
+                          </Text>
+
+                          <Text style={styles.memberPhone}>
+                            WhatsApp: {member.phone}
+                          </Text>
+
+                          
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+
+                    <View style={styles.opportunityBox}>
+                      <Text style={styles.opportunityTitle}>
+                        🎓 FREE AI → ASSESSMENT → FUTURE OPPORTUNITIES
+                      </Text>
+
+                      <Text style={styles.opportunityText}>
+                        Students who successfully complete the free AI
+                        course and pass the assessment may be considered
+                        for EGA work opportunities when positions become available.
+                      </Text>
+
+                      <Text style={styles.opportunityDisclaimer}>
+                        Completing the course and passing the assessment
+                        does not guarantee employment. Selection depends
+                        on available opportunities and EGA requirements.
+                      </Text>
+                    </View>
+                  </>
+                ) : null}
+
+                <View style={styles.contactNavigation}>
+                  {contactStep > 0 ? (
+                    <TouchableOpacity
+                      style={styles.backCardButton}
+                      onPress={() =>
+                        setContactStep((current) => current - 1)
+                      }
+                    >
+                      <Text style={styles.backCardButtonText}>
+                        ◀ Previous
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
+
+                  <TouchableOpacity
+                    style={styles.continueButton}
+                    onPress={nextContactCard}
+                  >
+                    <Text style={styles.continueButtonText}>
+                      {contactStep < 2
+                        ? "Next CEGA Card ▶"
+                        : "Continue Preview ▶"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.cardCounter}>
+                  CEGA Card {contactStep + 1} of 3
                 </Text>
               </View>
-
-              <Text style={styles.contactMessage}>
-                Interested in joining EGA? Save this number and send
-                “Hi” on WhatsApp to receive the EGA registration and
-                course access link.
-              </Text>
-
-              <Text style={styles.contactWait}>
-                Take your time. This preview will remain paused until
-                you continue.
-              </Text>
-
-              <TouchableOpacity
-                style={styles.continueButton}
-                onPress={closeContactAndContinue}
-              >
-                <Text style={styles.continueButtonText}>
-                  Continue Preview ▶
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </ScrollView>
           </View>
         ) : null}
 
@@ -695,14 +926,27 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
 
+  contactScroll: {
+    width: "100%",
+    maxWidth: 820,
+  },
+
+  contactScrollContent: {
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 28,
+    paddingBottom: 16,
+  },
+
   contactCard: {
     width: "94%",
-    maxWidth: 620,
+    maxWidth: 760,
     backgroundColor: "#ffffff",
-    borderRadius: 28,
-    paddingTop: 48,
-    paddingBottom: 30,
-    paddingHorizontal: 24,
+    borderRadius: 24,
+    paddingTop: 38,
+    paddingBottom: 18,
+    paddingHorizontal: 22,
     alignItems: "center",
     position: "relative",
     shadowColor: "#000000",
@@ -730,6 +974,18 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
 
+  cegaBadge: {
+    backgroundColor: "#047857",
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: "900",
+    letterSpacing: 1.5,
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 18,
+    marginBottom: 10,
+  },
+
   contactHeading: {
     color: "#047857",
     fontSize: 15,
@@ -741,8 +997,8 @@ const styles = StyleSheet.create({
 
   contactName: {
     color: "#073b78",
-    fontSize: 28,
-    lineHeight: 34,
+    fontSize: 24,
+    lineHeight: 29,
     fontWeight: "900",
     textAlign: "center",
   },
@@ -760,11 +1016,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecfdf5",
     borderWidth: 2,
     borderColor: "#10b981",
-    borderRadius: 20,
-    paddingVertical: 16,
+    borderRadius: 18,
+    paddingVertical: 10,
     paddingHorizontal: 18,
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 12,
   },
 
   whatsappLabel: {
@@ -776,8 +1032,8 @@ const styles = StyleSheet.create({
 
   whatsappNumber: {
     color: "#064e3b",
-    fontSize: 31,
-    lineHeight: 38,
+    fontSize: 26,
+    lineHeight: 31,
     fontWeight: "900",
     letterSpacing: 1.5,
     textAlign: "center",
@@ -785,10 +1041,10 @@ const styles = StyleSheet.create({
 
   contactMessage: {
     color: "#334155",
-    fontSize: 17,
-    lineHeight: 25,
+    fontSize: 15,
+    lineHeight: 21,
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 12,
     maxWidth: 520,
   },
 
@@ -802,10 +1058,10 @@ const styles = StyleSheet.create({
 
   continueButton: {
     backgroundColor: "#073b78",
-    paddingVertical: 14,
-    paddingHorizontal: 26,
-    borderRadius: 24,
-    marginTop: 22,
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    marginTop: 12,
     minWidth: 220,
   },
 
@@ -814,6 +1070,161 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "900",
     textAlign: "center",
+  },
+
+  tapWhatsApp: {
+    color: "#047857",
+    fontSize: 12,
+    fontWeight: "700",
+    marginTop: 5,
+  },
+
+  supportChoiceRow: {
+    width: "100%",
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 12,
+  },
+
+  supportChoice: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 16,
+    padding: 10,
+    alignItems: "center",
+  },
+
+  supportChoiceIcon: {
+    fontSize: 22,
+  },
+
+  supportChoiceTitle: {
+    color: "#073b78",
+    fontSize: 16,
+    fontWeight: "900",
+    textAlign: "center",
+    marginTop: 6,
+  },
+
+  supportChoiceText: {
+    color: "#475569",
+    fontSize: 13,
+    textAlign: "center",
+    marginTop: 4,
+  },
+
+  memberList: {
+    width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 7,
+    marginTop: 9,
+  },
+
+  memberCard: {
+    width: "48.5%",
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 13,
+    paddingVertical: 7,
+    paddingHorizontal: 8,
+    alignItems: "center",
+  },
+
+  memberName: {
+    color: "#073b78",
+    fontSize: 14,
+    lineHeight: 17,
+    fontWeight: "900",
+    textAlign: "center",
+  },
+
+  memberRole: {
+    color: "#475569",
+    fontSize: 10,
+    lineHeight: 13,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: 2,
+  },
+
+  memberPhone: {
+    color: "#047857",
+    fontSize: 13,
+    lineHeight: 16,
+    fontWeight: "900",
+    marginTop: 3,
+  },
+
+  memberTap: {
+    color: "#64748b",
+    fontSize: 11,
+    marginTop: 3,
+  },
+
+  opportunityBox: {
+    width: "100%",
+    backgroundColor: "#eff6ff",
+    borderRadius: 14,
+    padding: 10,
+    marginTop: 9,
+  },
+
+  opportunityTitle: {
+    color: "#073b78",
+    fontSize: 13,
+    fontWeight: "900",
+    textAlign: "center",
+  },
+
+  opportunityText: {
+    color: "#334155",
+    fontSize: 11,
+    lineHeight: 15,
+    textAlign: "center",
+    marginTop: 5,
+  },
+
+  opportunityDisclaimer: {
+    color: "#64748b",
+    fontSize: 9,
+    lineHeight: 12,
+    textAlign: "center",
+    marginTop: 5,
+  },
+
+  contactNavigation: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 8,
+  },
+
+  backCardButton: {
+    backgroundColor: "#e2e8f0",
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 24,
+    marginTop: 22,
+  },
+
+  backCardButtonText: {
+    color: "#0f172a",
+    fontSize: 14,
+    fontWeight: "900",
+  },
+
+  cardCounter: {
+    color: "#64748b",
+    fontSize: 12,
+    fontWeight: "700",
+    marginTop: 12,
   },
 
   controls: {
