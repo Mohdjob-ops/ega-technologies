@@ -60,17 +60,27 @@ export default function RegisterPage() {
   const [customCourse, setCustomCourse] = useState("");
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
   const [referralDetailsOpen, setReferralDetailsOpen] = useState(false);
+  const [cybersecurityDetailsOpen, setCybersecurityDetailsOpen] = useState(false);
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   function toggleCourse(course: string) {
-    setSelectedCourses((current) =>
-      current.includes(course)
+    setSelectedCourses((current) => {
+      const alreadySelected = current.includes(course);
+
+      if (
+        course === "Cybersecurity" &&
+        !alreadySelected
+      ) {
+        setCybersecurityDetailsOpen(true);
+      }
+
+      return alreadySelected
         ? current.filter((item) => item !== course)
-        : [...current, course]
-    );
+        : [...current, course];
+    });
   }
 
   function getSelectedCourses() {
@@ -861,6 +871,120 @@ export default function RegisterPage() {
 
           </Text>
         </View>
+
+        <Modal
+          visible={cybersecurityDetailsOpen}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setCybersecurityDetailsOpen(false)}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(15, 23, 42, 0.62)",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 18,
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                maxWidth: 560,
+                backgroundColor: "#ffffff",
+                borderRadius: 18,
+                overflow: "hidden",
+              }}
+            >
+              <ScrollView
+                contentContainerStyle={{
+                  padding: 22,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "800",
+                    color: "#12306d",
+                    textAlign: "center",
+                    marginBottom: 6,
+                  }}
+                >
+                  🔐 CEGA Cybersecurity Course
+                </Text>
+
+                <Text
+                  style={{
+                    color: "#166534",
+                    fontSize: 17,
+                    fontWeight: "800",
+                    textAlign: "center",
+                    marginBottom: 20,
+                  }}
+                >
+                  Registration Now Open
+                </Text>
+
+                <View
+                  style={{
+                    backgroundColor: "#eff6ff",
+                    borderWidth: 1,
+                    borderColor: "#bfdbfe",
+                    borderRadius: 12,
+                    padding: 16,
+                    marginBottom: 18,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#1e3a8a",
+                      fontSize: 16,
+                      lineHeight: 29,
+                      fontWeight: "600",
+                    }}
+                  >
+                    📅 Registration: September 5–30, 2026{"\n"}
+                    🚀 Course Starts: October 1, 2026{"\n"}
+                    💳 Course Fee: 3,000 Birr{"\n"}
+                    🏁 Course Ends: May 31, 2027
+                  </Text>
+                </View>
+
+                <Text
+                  style={{
+                    color: "#334155",
+                    lineHeight: 23,
+                    textAlign: "center",
+                    marginBottom: 20,
+                  }}
+                >
+                  Learn practical cybersecurity skills and prepare for
+                  opportunities in the growing global technology industry.
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => setCybersecurityDetailsOpen(false)}
+                  style={{
+                    backgroundColor: "#12306d",
+                    borderRadius: 10,
+                    paddingVertical: 13,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#ffffff",
+                      fontSize: 16,
+                      fontWeight: "800",
+                    }}
+                  >
+                    OK — Continue Registration
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
 
         <Modal
           visible={referralDetailsOpen}

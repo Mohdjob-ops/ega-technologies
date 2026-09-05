@@ -79,13 +79,14 @@ const CEGA_MALE = [
   },
 ];
 
-const SCENE_TIME = 8000;
+const SCENE_TIME = 13000;
 
 export default function PromoPreview() {
   const [scene, setScene] = useState(0);
   const [paused, setPaused] = useState(false);
   const [contactVisible, setContactVisible] = useState(false);
   const [contactStep, setContactStep] = useState(0);
+  const [offerKind, setOfferKind] = useState<"ai" | "cyber">("ai");
 
   const fade = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(1)).current;
@@ -148,52 +149,86 @@ export default function PromoPreview() {
       return;
     }
 
+    let cancelled = false;
+
+    setOfferKind("ai");
     offerOpacity.setValue(0);
     offerScale.setValue(0.35);
 
-    const offerAnimation = Animated.sequence([
-      Animated.delay(1400),
+    const showOffer = (
+      visibleTime: number,
+      onComplete?: () => void
+    ) => {
+      const animation = Animated.sequence([
+        Animated.parallel([
+          Animated.timing(offerOpacity, {
+            toValue: 1,
+            duration: 350,
+            useNativeDriver: true,
+          }),
+          Animated.spring(offerScale, {
+            toValue: 1.12,
+            friction: 5,
+            tension: 70,
+            useNativeDriver: true,
+          }),
+        ]),
 
-      Animated.parallel([
-        Animated.timing(offerOpacity, {
-          toValue: 1,
-          duration: 350,
-          useNativeDriver: true,
-        }),
         Animated.spring(offerScale, {
-          toValue: 1.12,
-          friction: 5,
-          tension: 70,
+          toValue: 1,
+          friction: 6,
+          tension: 60,
           useNativeDriver: true,
         }),
-      ]),
 
-      Animated.spring(offerScale, {
-        toValue: 1,
-        friction: 6,
-        tension: 60,
-        useNativeDriver: true,
-      }),
+        Animated.delay(visibleTime),
 
-      Animated.delay(1500),
+        Animated.parallel([
+          Animated.timing(offerOpacity, {
+            toValue: 0,
+            duration: 450,
+            useNativeDriver: true,
+          }),
+          Animated.timing(offerScale, {
+            toValue: 0.45,
+            duration: 450,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]);
 
-      Animated.parallel([
-        Animated.timing(offerOpacity, {
-          toValue: 0,
-          duration: 650,
-          useNativeDriver: true,
-        }),
-        Animated.timing(offerScale, {
-          toValue: 0.45,
-          duration: 650,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]);
+      animation.start(({ finished }) => {
+        if (finished && !cancelled && onComplete) {
+          onComplete();
+        }
+      });
 
-    offerAnimation.start();
+      return animation;
+    };
 
-    return () => offerAnimation.stop();
+    let cyberAnimation: Animated.CompositeAnimation | null = null;
+
+    const delayTimer = setTimeout(() => {
+      if (cancelled) return;
+
+      showOffer(4000, () => {
+        if (cancelled) return;
+
+        setOfferKind("cyber");
+        offerOpacity.setValue(0);
+        offerScale.setValue(0.35);
+
+        cyberAnimation = showOffer(5000);
+      });
+    }, 900);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(delayTimer);
+      cyberAnimation?.stop();
+      offerOpacity.stopAnimation();
+      offerScale.stopAnimation();
+    };
   }, [scene, paused, contactVisible]);
 
   function openWhatsApp(number: string) {
@@ -232,6 +267,7 @@ export default function PromoPreview() {
     scale.setValue(1);
     offerOpacity.setValue(0);
     offerScale.setValue(0.35);
+    setOfferKind("ai");
     setScene(0);
   }
 
@@ -402,19 +438,45 @@ export default function PromoPreview() {
           ]}
         >
           <View style={styles.freeOfferCard}>
-            <Text style={styles.freeOfferGift}>🎁 SEPTEMBER SPECIAL</Text>
+            {offerKind === "ai" ? (
+              <>
+                <Text style={styles.freeOfferGift}>
+                  🎁 SEPTEMBER SPECIAL
+                </Text>
 
-            <Text style={styles.freeOfferBig}>
-              FREE AI COURSES
-            </Text>
+                <Text style={styles.freeOfferBig}>
+                  FREE AI COURSES
+                </Text>
 
-            <Text style={styles.freeOfferMedium}>
-              THIS MONTH
-            </Text>
+                <Text style={styles.freeOfferMedium}>
+                  THIS MONTH
+                </Text>
 
-            <Text style={styles.freeOfferSmall}>
-              Learn Artificial Intelligence & Generative AI with EGA
-            </Text>
+                <Text style={styles.freeOfferSmall}>
+                  Learn Artificial Intelligence & Generative AI with EGA
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.freeOfferGift}>
+                  🔐 CEGA CYBERSECURITY
+                </Text>
+
+                <Text style={styles.freeOfferBig}>
+                  REGISTRATION OPEN
+                </Text>
+
+                <Text style={styles.freeOfferMedium}>
+                  SEPTEMBER 5–30, 2026
+                </Text>
+
+                <Text style={styles.freeOfferSmall}>
+                  🚀 Starts October 1, 2026{"\n"}
+                  💳 Course Fee: 3,000 Birr{"\n"}
+                  🏁 Ends May 31, 2027
+                </Text>
+              </>
+            )}
           </View>
         </Animated.View>
 
