@@ -19,10 +19,11 @@ export default function AdminStudents() {
 
   const [students, setStudents] = useState<any[]>([]);
   const [recentStudents, setRecentStudents] = useState<any[]>([]);
+  const [archivedStudents, setArchivedStudents] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [searchText, setSearchText] = useState("");
 
-  const [studentView, setStudentView] = useState<"all" | "recent">("all");
+  const [studentView, setStudentView] = useState<"all" | "recent" | "archived">("all");
   const [partialAmounts, setPartialAmounts] = useState<
     Record<string, string>
   >({});
@@ -95,12 +96,17 @@ export default function AdminStudents() {
     if (isAdmin) {
       loadStudents();
       loadRecentStudents();
+      loadArchivedStudents();
     }
   }, [isAdmin]);
 
   const filteredStudents = useMemo(() => {
     const sourceStudents =
-      studentView === "recent" ? recentStudents : students;
+      studentView === "recent"
+        ? recentStudents
+        : studentView === "archived"
+          ? archivedStudents
+          : students;
 
     const search = searchText.trim().toLowerCase();
 
@@ -137,7 +143,13 @@ export default function AdminStudents() {
 
       return searchableText.includes(search);
     });
-  }, [students, recentStudents, studentView, searchText]);
+  }, [
+    students,
+    recentStudents,
+    archivedStudents,
+    studentView,
+    searchText,
+  ]);
 
   async function loadRecentStudents() {
     const since = new Date(
@@ -178,7 +190,8 @@ export default function AdminStudents() {
     const { data: studentData, error: studentError } = await supabase
       .from("students")
       .select("*")
-      .in("student_id", recentIds);
+      .in("student_id", recentIds)
+      .eq("is_archived", false);
 
     if (studentError) {
       setMessage(
@@ -214,7 +227,7 @@ export default function AdminStudents() {
     }
 
     const record = [
-      `Sequence #: ${latestStudent.sequence_number ?? "N/A"}`,
+      `Record #: ${latestStudent.sequence_number ?? "N/A"}`,
       `Student ID: ${latestStudent.student_id || "N/A"}`,
       `Name: ${latestStudent.name || "No name"}`,
       `Email: ${latestStudent.email || "Not added"}`,
@@ -289,6 +302,7 @@ export default function AdminStudents() {
     const { data, error } = await supabase
       .from("students")
       .select("*")
+      .eq("is_archived", false)
       .order("created_at", { ascending: false })
       .limit(1000);
 
@@ -299,6 +313,76 @@ export default function AdminStudents() {
 
     setStudents(data || []);
     setMessage("");
+  }
+
+  async function loadArchivedStudents() {
+    const { data, error } = await supabase
+      .from("students")
+      .select("*")
+      .eq("is_archived", true)
+      .order("archived_at", { ascending: false })
+      .limit(1000);
+
+    if (error) {
+      setMessage("❌ Error loading archived students: " + error.message);
+      return;
+    }
+
+    setArchivedStudents(data || []);
+  }
+
+  async function archiveStudent(student: any) {
+    setMessage(
+      `Archiving Student #${student.sequence_number ?? ""}...`
+    );
+
+    const { error } = await supabase
+      .from("students")
+      .update({
+        is_archived: true,
+        archived_at: new Date().toISOString(),
+      })
+      .eq("id", student.id);
+
+    if (error) {
+      setMessage("❌ Error archiving student: " + error.message);
+      return;
+    }
+
+    setMessage(
+      `✅ Student #${student.sequence_number ?? ""} archived safely.`
+    );
+
+    await loadStudents();
+    await loadRecentStudents();
+    await loadArchivedStudents();
+  }
+
+  async function restoreStudent(student: any) {
+    setMessage(
+      `Restoring Student #${student.sequence_number ?? ""}...`
+    );
+
+    const { error } = await supabase
+      .from("students")
+      .update({
+        is_archived: false,
+        archived_at: null,
+      })
+      .eq("id", student.id);
+
+    if (error) {
+      setMessage("❌ Error restoring student: " + error.message);
+      return;
+    }
+
+    setMessage(
+      `✅ Student #${student.sequence_number ?? ""} restored successfully.`
+    );
+
+    await loadStudents();
+    await loadRecentStudents();
+    await loadArchivedStudents();
   }
 
   async function markFullPaid(student: any) {
@@ -495,6 +579,10 @@ export default function AdminStudents() {
     }
 
     setStudents([]);
+    setRecentStudents([]);
+    setArchivedStudents([]);
+    setStudentView("all");
+    setSearchText("");
     setAdminEmail("");
     setIsAdmin(false);
     setMessage("");
@@ -558,7 +646,7 @@ export default function AdminStudents() {
       <Text style={styles.title}>📋 Admin Students</Text>
 
       <Text style={styles.subtitle}>
-        Secure payment management for the latest 50 students
+        Secure student records and payment management
       </Text>
 
       <View style={styles.adminSessionBox}>
@@ -573,7 +661,7 @@ export default function AdminStudents() {
 
       <TextInput
         style={styles.searchInput}
-        placeholder="Search name, Student ID, phone or email"
+        placeholder="Search Record #, Student ID, name, phone or email"
         value={searchText}
         onChangeText={setSearchText}
         autoCapitalize="none"
@@ -599,11 +687,22 @@ export default function AdminStudents() {
         </TouchableOpacity>
 
         <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={() => setStudentView("archived")}
+        >
+          <Text style={styles.buttonText}>
+            {studentView === "archived" ? "✓ " : ""}📦 Archived Students
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={styles.refreshButton}
           onPress={
             studentView === "recent"
               ? loadRecentStudents
-              : loadStudents
+              : studentView === "archived"
+                ? loadArchivedStudents
+                : loadStudents
           }
         >
           <Text style={styles.buttonText}>
@@ -629,14 +728,18 @@ export default function AdminStudents() {
         Showing {filteredStudents.length} of{" "}
         {studentView === "recent"
           ? recentStudents.length
-          : students.length} students
+          : studentView === "archived"
+            ? archivedStudents.length
+            : students.length} students
       </Text>
 
       {filteredStudents.length === 0 && !message ? (
         <Text style={styles.emptyText}>
           {studentView === "recent" && !searchText.trim()
             ? "No students signed in during the last 3 days."
-            : "No matching students found."}
+            : studentView === "archived" && !searchText.trim()
+              ? "No archived students found."
+              : "No matching students found."}
         </Text>
       ) : null}
 
@@ -652,7 +755,7 @@ export default function AdminStudents() {
               />
 
               <Text style={styles.text}>
-                Sequence #: {student.sequence_number ?? "N/A"}
+                Record #: {student.sequence_number ?? "N/A"}
               </Text>
 
               <Text style={styles.text}>
@@ -690,7 +793,7 @@ export default function AdminStudents() {
               </Text>
 
               <Text style={styles.text}>
-                Sequence #: {student.sequence_number ?? "N/A"}
+                Record #: {student.sequence_number ?? "N/A"}
               </Text>
 
               <Text style={styles.text}>
@@ -721,7 +824,16 @@ export default function AdminStudents() {
             </Text>
           </TouchableOpacity>
 
-          {editingStudentId === String(student.id) ? (
+          {studentView === "archived" ? (
+            <TouchableOpacity
+              style={styles.restoreButton}
+              onPress={() => restoreStudent(student)}
+            >
+              <Text style={styles.buttonText}>
+                ♻️ Restore Student
+              </Text>
+            </TouchableOpacity>
+          ) : editingStudentId === String(student.id) ? (
             <>
               <TouchableOpacity
                 style={styles.saveButton}
@@ -742,14 +854,25 @@ export default function AdminStudents() {
               </TouchableOpacity>
             </>
           ) : (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => startEditingStudent(student)}
-            >
-              <Text style={styles.buttonText}>
-                ✏️ Edit Student
-              </Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => startEditingStudent(student)}
+              >
+                <Text style={styles.buttonText}>
+                  ✏️ Edit Student
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.archiveButton}
+                onPress={() => archiveStudent(student)}
+              >
+                <Text style={styles.buttonText}>
+                  📦 Archive Student
+                </Text>
+              </TouchableOpacity>
+            </>
           )}
 
           <View style={styles.paymentBox}>
@@ -787,47 +910,51 @@ export default function AdminStudents() {
             </Text>
           </View>
 
-          <TextInput
-            style={styles.input}
-            placeholder={`Enter payment up to ${money(
-              student.remaining_amount
-            )}`}
-            keyboardType="numeric"
-            value={partialAmounts[student.id] || ""}
-            onChangeText={(value) =>
-              setPartialAmounts((current) => ({
-                ...current,
-                [student.id]: value,
-              }))
-            }
-          />
+          {studentView !== "archived" ? (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder={`Enter payment up to ${money(
+                  student.remaining_amount
+                )}`}
+                keyboardType="numeric"
+                value={partialAmounts[student.id] || ""}
+                onChangeText={(value) =>
+                  setPartialAmounts((current) => ({
+                    ...current,
+                    [student.id]: value,
+                  }))
+                }
+              />
 
-          <TouchableOpacity
-            style={styles.partialButton}
-            onPress={() => addPartialPayment(student)}
-          >
-            <Text style={styles.buttonText}>
-              ➕ Add Partial Payment
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.partialButton}
+                onPress={() => addPartialPayment(student)}
+              >
+                <Text style={styles.buttonText}>
+                  ➕ Add Partial Payment
+                </Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.paidButton}
-            onPress={() => markFullPaid(student)}
-          >
-            <Text style={styles.buttonText}>
-              ✅ Mark Full Paid
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.paidButton}
+                onPress={() => markFullPaid(student)}
+              >
+                <Text style={styles.buttonText}>
+                  ✅ Mark Full Paid
+                </Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.pendingButton}
-            onPress={() => markPending(student)}
-          >
-            <Text style={styles.buttonText}>
-              ⏳ Reset as Pending
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.pendingButton}
+                onPress={() => markPending(student)}
+              >
+                <Text style={styles.buttonText}>
+                  ⏳ Reset as Pending
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : null}
         </View>
       ))}
     </ScrollView>
@@ -1044,6 +1171,20 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     alignItems: "center",
+  },
+  archiveButton: {
+    backgroundColor: "#b45309",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  restoreButton: {
+    backgroundColor: "#15803d",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 10,
   },
   buttonText: {
     color: "#ffffff",
