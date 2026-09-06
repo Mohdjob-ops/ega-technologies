@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import * as Clipboard from "expo-clipboard";
 import { useEffect, useState } from "react";
 import {
   Image,
@@ -8,9 +9,12 @@ import {
   Text,
   useWindowDimensions,
   View,
+  Linking,
 } from "react-native";
 
 type Language = "en" | "so";
+
+const EGA_WEBSITE = "https://ega-technologies.vercel.app";
 
 const translations = {
   en: {
@@ -468,6 +472,46 @@ export default function HomeScreen() {
                 {t.supportEga}
               </Text>
             </Pressable>
+
+            <View style={styles.portalExploreRow}>
+              <Pressable
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.learnerPortalButton,
+                  styles.portalExploreButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() => Linking.openURL(EGA_WEBSITE)}
+              >
+                <Text
+                  style={[
+                    styles.learnerPortalButtonText,
+                    styles.portalExploreButtonText,
+                  ]}
+                >
+                  🌐 Open EGA Website
+                </Text>
+              </Pressable>
+
+              <Pressable
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.learnerPortalButton,
+                  styles.portalExploreButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() => Clipboard.setStringAsync(EGA_WEBSITE)}
+              >
+                <Text
+                  style={[
+                    styles.learnerPortalButtonText,
+                    styles.portalExploreButtonText,
+                  ]}
+                >
+                  📋 Copy EGA Link
+                </Text>
+              </Pressable>
+            </View>
           </View>
 
           <Text

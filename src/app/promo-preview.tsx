@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import * as Clipboard from "expo-clipboard";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -10,6 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+const EGA_WEBSITE = "https://ega-technologies.vercel.app";
 
 const COURSE_OPTIONS = [
   "Artificial Intelligence & Generative AI",
@@ -721,6 +724,24 @@ export default function PromoPreview() {
               ← Back to EGA Home
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.controlButton}
+            onPress={() => Linking.openURL(EGA_WEBSITE)}
+          >
+            <Text style={styles.controlText}>
+              🌐 Open EGA Website
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.controlButton}
+            onPress={() => Clipboard.setStringAsync(EGA_WEBSITE)}
+          >
+            <Text style={styles.controlText}>
+              📋 Copy EGA Link
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -1291,23 +1312,26 @@ const styles = StyleSheet.create({
 
   controls: {
     position: "absolute",
-    left: 15,
-    right: 15,
+    left: 10,
+    right: 10,
     bottom: 18,
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "center",
-    gap: 12,
+    gap: 8,
   },
 
   controlButton: {
     backgroundColor: "#ffffff",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 13,
     borderRadius: 24,
   },
 
   controlText: {
     color: "#12306d",
     fontWeight: "900",
+    fontSize: 12,
+    textAlign: "center",
   },
 });
