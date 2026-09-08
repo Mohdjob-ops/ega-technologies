@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -123,21 +123,47 @@ export default function LearnerPortal() {
     return `${String(Math.floor(safe / 3600)).padStart(2, "0")}:${String(Math.floor((safe % 3600) / 60)).padStart(2, "0")}`;
   }
 
-  async function serviceHours(action: "status" | "check_in" | "check_out") {
-    if (!student) return;
-    setServiceBusy(true);
-    const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", {
-      body: { action, student_id: student.student_id, phone: cleanPhone(student.phone || phone), notes: action === "check_in" ? serviceNotes : undefined },
-    });
-    setServiceBusy(false);
-    if (error || !data?.success) {
-      setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+  async function serviceHours(
+    action: "status" | "check_in" | "check_out",
+    studentOverride = student
+  ) {
+    if (!studentOverride) {
+      setMessage("❌ Please log in again before using service hours.");
       return;
     }
-    setService(data.service || null);
-    setServiceHistory(data.history || (data.service ? [data.service] : []));
-    if (action === "check_in") setServiceNotes("");
-    if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
+
+    setServiceBusy(true);
+    setMessage(action === "status" ? "Loading service hours..." : "Saving service-hours update...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", {
+        body: {
+          action,
+          student_id: studentOverride.student_id,
+          phone: cleanPhone(studentOverride.phone || phone),
+          notes: action === "check_in" ? serviceNotes : undefined,
+        },
+      });
+
+      if (error || !data?.success) {
+        setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+        return;
+      }
+
+      setService(data.service || null);
+      setServiceHistory(data.history || (data.service ? [data.service] : []));
+      if (action === "check_in") setServiceNotes("");
+      if (action !== "status") {
+        setMessage(action === "check_in" ? "✅ Check-in saved." : "✅ Check-out saved. Time recorded.");
+      } else {
+        setMessage("");
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Service-hours request failed.";
+      setMessage("❌ " + errorMessage);
+    } finally {
+      setServiceBusy(false);
+    }
   }
 
   async function handleLogin() {
@@ -215,11 +241,46 @@ export default function LearnerPortal() {
     setService(null);
     setServiceHistory([]);
     if (data.student.is_e8) {
-      setTimeout(() => void serviceHours("status"), 0);
+      setTimeout(() => void serviceHours("status", data.student), 0);
     }
     setMessage("✅ Login successful");
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const savedStudentId = sessionStorage.getItem("ega_student_id") || "";
+    const savedPhone = sessionStorage.getItem("ega_student_phone") || "";
+
+    if (!savedStudentId || !savedPhone) return;
+
+    setStudentId(savedStudentId.replace(/^EGA-2026-/i, "").replace(/\D/g, ""));
+    setPhone(savedPhone);
+    void handleLogin();
+  }, []);
+
+  useEffect(() => {
+    if (!service || service.ended_at) return;
+
+    const timer = setInterval(() => {
+      setService((currentService: any) => {
+        if (!currentService || currentService.ended_at) return currentService;
+
+        const elapsedSeconds = Math.max(
+          0,
+          Math.floor((Date.now() - new Date(currentService.started_at).getTime()) / 1000)
+        );
+
+        return {
+          ...currentService,
+          active_seconds: Math.max(Number(currentService.active_seconds || 0), elapsedSeconds),
+        };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [service]);
 
   function beginEditProfile() {
     if (!student) return;
