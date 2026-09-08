@@ -9,3 +9,8 @@ entrypoint = "./functions/service-hours-heartbeat/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/service-hours-heartbeat/*.html" ]
+
+[functions.service-hours-admin]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/service-hours-admin/index.ts"

@@ -5,6 +5,12 @@ import { verifyAssistantUser } from "../lib/assistantAuth";
 import { supabase } from "../lib/supabase";
 
 type Student = { student_id: string; name: string; email: string; phone: string; course: string };
+type ServiceSession = { active_seconds: number; required_seconds: number; extra_seconds: number; ended_at: string | null; approval_status: string };
+
+function formatServiceTime(seconds: number) {
+  const safe = Math.max(0, Number(seconds || 0));
+  return `${String(Math.floor(safe / 3600)).padStart(2, "0")}:${String(Math.floor((safe % 3600) / 60)).padStart(2, "0")}`;
+}
 
 export default function AssistantDashboard() {
   const [email, setEmail] = useState("");
@@ -23,6 +29,8 @@ export default function AssistantDashboard() {
   const [method, setMethod] = useState("Phone");
   const [outcome, setOutcome] = useState("");
   const [notes, setNotes] = useState("");
+  const [service, setService] = useState<ServiceSession | null>(null);
+  const [serviceBusy, setServiceBusy] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -70,7 +78,21 @@ export default function AssistantDashboard() {
     if (!check.isAssistant) { await supabase.auth.signOut(); setBusy(false); return setMessage("❌ " + check.error); }
     setAssistantId(check.userId); setAssistantName(check.fullName); setLoggedIn(true); setPassword("");
     await loadStudents();
+    await loadService("status");
   }
+
+  async function loadService(action: "status" | "check_in" | "check_out") {
+    setServiceBusy(true);
+    const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", { body: { action } });
+    setServiceBusy(false);
+    if (error || !data?.success) {
+      setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+      return;
+    }
+    setService(data.service || null);
+    if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
+  }
+  <View style={s.notice}><Text style={s.noticeTitle}>Service Hours</Text><Text>Required: 8:00 • Completed: {formatServiceTime(service?.active_seconds || 0)} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds || 28800) - (service?.active_seconds || 0)))} • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text><View style={s.row}><Pressable style={s.small} onPress={() => void loadService("check_in")} disabled={serviceBusy || !!service && !service.ended_at}><Text style={s.white}>Check In</Text></Pressable><Pressable style={s.logout} onPress={() => void loadService("check_out")} disabled={serviceBusy || !service || !!service.ended_at}><Text style={s.white}>Check Out</Text></Pressable></View><Text>{service ? `Approval: ${service.approval_status}` : "No session today"}</Text></View>
 
   function choose(s: Student) {
     setSelected(s); setEditName(s.name || ""); setEditEmail(s.email || ""); setEditPhone(s.phone || "");
@@ -115,7 +137,13 @@ export default function AssistantDashboard() {
     <Pressable style={s.back} onPress={() => void resetPassword()} disabled={busy}>
       <Text style={s.backText}>Forgot Password?</Text>
     </Pressable>
-    {message ? <Text style={s.message}>{message}</Text> : null}<Link href="/" asChild><Pressable style={s.back}><Text style={s.backText}>← Back to Home</Text></Pressable></Link>
+    {message ? <Text style={s.message}>{message}</Text> : null}<Link href="/service-hours-schedule" asChild>
+  <Pressable style={s.back}>
+    <Text style={s.backText}>📅 View Work Schedule</Text>
+  </Pressable>
+</Link>
+
+<Link href="/" asChild><Pressable style={s.back}><Text style={s.backText}>← Back to Home</Text></Pressable></Link>
   </View></ScrollView>;
 
   return <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">

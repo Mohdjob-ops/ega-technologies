@@ -103,6 +103,9 @@ export default function LearnerPortal() {
   const [quizResults, setQuizResults] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [service, setService] = useState<any>(null);
+  const [serviceHistory, setServiceHistory] = useState<any[]>([]);
+  const [serviceBusy, setServiceBusy] = useState(false);
 
   const [editingProfile, setEditingProfile] = useState(false);
   const [editPhone, setEditPhone] = useState("");
@@ -112,6 +115,27 @@ export default function LearnerPortal() {
 
   function cleanPhone(value: string) {
     return value.replace(/\D/g, "");
+  }
+
+  function formatServiceTime(seconds: number) {
+    const safe = Math.max(0, Number(seconds || 0));
+    return `${String(Math.floor(safe / 3600)).padStart(2, "0")}:${String(Math.floor((safe % 3600) / 60)).padStart(2, "0")}`;
+  }
+
+  async function serviceHours(action: "status" | "check_in" | "check_out") {
+    if (!student) return;
+    setServiceBusy(true);
+    const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", {
+      body: { action, student_id: student.student_id, phone: cleanPhone(student.phone || phone) },
+    });
+    setServiceBusy(false);
+    if (error || !data?.success) {
+      setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+      return;
+    }
+    setService(data.service || null);
+    setServiceHistory(data.history || (data.service ? [data.service] : []));
+    if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
   }
 
   async function handleLogin() {
@@ -186,6 +210,11 @@ export default function LearnerPortal() {
     setStudentId(studentIdDigits);
     setStudent(data.student);
     setQuizResults(data.quiz_results || []);
+    setService(null);
+    setServiceHistory([]);
+    if (data.student.is_e8) {
+      setTimeout(() => void serviceHours("status"), 0);
+    }
     setMessage("✅ Login successful");
     setLoading(false);
   }
@@ -498,6 +527,24 @@ export default function LearnerPortal() {
             )}
             {profileMessage ? <Text style={styles.message}>{profileMessage}</Text> : null}
           </View>
+
+          {student.is_e8 && (
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>E8 Service Hours</Text>
+              <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required: 08:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
+              <Text style={styles.text}>Approval: {service?.approval_status || "pending"}</Text>
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.startButton} onPress={() => void serviceHours("check_in")} disabled={serviceBusy || !!service && !service.ended_at}>
+                  <Text style={styles.buttonText}>Check In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.logoutButton} onPress={() => void serviceHours("check_out")} disabled={serviceBusy || !service || !!service.ended_at}>
+                  <Text style={styles.buttonText}>Check Out</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.cardTitle}>Session History</Text>
+              {serviceHistory.map((session) => <Text key={session.id} style={styles.text}>{session.service_date}: {formatServiceTime(session.active_seconds)} • {session.approval_status}</Text>)}
+            </View>
+          )}
 
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Payment Status</Text>
@@ -869,6 +916,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#003366",
     marginBottom: 18,
+  },
+
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginVertical: 12,
   },
 
   sectionDescription: {

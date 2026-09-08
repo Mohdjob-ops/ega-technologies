@@ -7,8 +7,10 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const ADMIN_REQUIRED_SECONDS = 8 * 60 * 60;
-const E8_REQUIRED_SECONDS = 4 * 60 * 60;
+function requiredSecondsFor(personType: ServiceIdentity["personType"]) {
+  if (personType === "e8") return 4 * 60 * 60;
+  return 8 * 60 * 60;
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -20,13 +22,26 @@ function json(body: unknown, status = 200) {
   });
 }
 
-function ethiopiaDate() {
-  return new Intl.DateTimeFormat("en-CA", {
+function ethiopiaParts(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Africa/Addis_Ababa",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date());
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  return Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+}
+
+function ethiopiaServiceDate(date = new Date()) {
+  const parts = ethiopiaParts(date);
+  const calendarDate = `${parts.year}-${parts.month}-${parts.day}`;
+  if (Number(parts.hour) >= 6) return calendarDate;
+
+  const previous = new Date(`${calendarDate}T00:00:00Z`);
+  previous.setUTCDate(previous.getUTCDate() - 1);
+  return previous.toISOString().slice(0, 10);
 }
 function cleanPhone(value: unknown) {
   let phone = String(value || "").replace(/\D/g, "");
@@ -39,7 +54,7 @@ function cleanPhone(value: unknown) {
 }
 
 type ServiceIdentity = {
-  personType: "admin" | "e8";
+  personType: "admin" | "assistant" | "e8";
   personId: string;
   requiredSeconds: number;
 };
@@ -59,7 +74,22 @@ async function identifyPerson(
     } = await supabase.auth.getUser(token);
 
     if (user?.id) {
-      const { data: admin } = await supabase
+      const { data: assistant } = await supabase
+      .from("assistant_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .eq("active", true)
+      .maybeSingle();
+
+    if (assistant) {
+      return {
+        personType: "assistant",
+        personId: user.id,
+        requiredSeconds: requiredSecondsFor("assistant"),
+      };
+    }
+
+    const { data: admin } = await supabase
         .from("admin_users")
         .select("user_id")
         .eq("user_id", user.id)
@@ -70,7 +100,7 @@ async function identifyPerson(
         return {
           personType: "admin",
           personId: user.id,
-          requiredSeconds: ADMIN_REQUIRED_SECONDS,
+          requiredSeconds: requiredSecondsFor("admin"),
         };
       }
     }
@@ -101,7 +131,7 @@ async function identifyPerson(
   return {
     personType: "e8",
     personId: student.student_id,
-    requiredSeconds: E8_REQUIRED_SECONDS,
+    requiredSeconds: requiredSecondsFor("e8"),
   };
 }
 Deno.serve(async (req) => {
@@ -144,15 +174,18 @@ Deno.serve(async (req) => {
 
     const now = new Date();
     const nowIso = now.toISOString();
-    const serviceDate = ethiopiaDate();
+    const serviceDate = ethiopiaServiceDate(now);
+    const isSunday =
+      new Date(`${serviceDate}T00:00:00Z`).getUTCDay() === 0;
 
+    const action = body?.action || "check_in";
     const { data: existing, error: loadError } = await supabase
       .from("service_hour_sessions")
       .select("*")
       .eq("person_type", identity.personType)
       .eq("person_id", identity.personId)
       .eq("service_date", serviceDate)
-      .maybeSingle();
+      .order("created_at", { ascending: false });
 
     if (loadError) {
       return json(
@@ -161,7 +194,17 @@ Deno.serve(async (req) => {
       );
     }
 
-    if (!existing) {
+    const openSession = (existing || []).find((session: any) => !session.ended_at);
+
+    if (action === "status") {
+      return json({ success: true, service: openSession || null, history: existing || [] });
+    }
+
+    if (action === "check_in") {
+      if (openSession) {
+        return json({ success: true, status: "already_checked_in", service: openSession });
+      }
+
       const { data: created, error: createError } = await supabase
         .from("service_hour_sessions")
         .insert({
@@ -173,6 +216,8 @@ Deno.serve(async (req) => {
           active_seconds: 0,
           required_seconds: identity.requiredSeconds,
           extra_seconds: 0,
+          approval_status: "pending",
+          notes: String(body?.notes || "").trim() || null,
         })
         .select()
         .single();
@@ -186,45 +231,41 @@ Deno.serve(async (req) => {
 
       return json({
         success: true,
-        status: "started",
+        status: "checked_in",
         service: created,
       });
     }
 
-    const lastActivity = new Date(existing.last_activity_at).getTime();
-    const elapsedSeconds = Math.max(
-      0,
-      Math.floor((now.getTime() - lastActivity) / 1000)
-    );
+    if (action !== "check_out") {
+      return json({ success: false, message: "Unknown service-hours action." }, 400);
+    }
 
-    // Only count recent activity. If more than 10 minutes passed,
-    // do not count the inactive gap.
-    const countedSeconds =
-      elapsedSeconds > 0 && elapsedSeconds <= 600
-        ? Math.min(elapsedSeconds, 120)
-        : 0;
+    if (!openSession) {
+      return json({ success: false, message: "No open service session to check out." }, 400);
+    }
 
-    const newActiveSeconds =
-      Number(existing.active_seconds || 0) + countedSeconds;
+    const elapsedSeconds = Math.max(0, Math.floor((now.getTime() - new Date(openSession.started_at).getTime()) / 1000));
+    const newActiveSeconds = Math.max(Number(openSession.active_seconds || 0), elapsedSeconds);
 
-    const requiredSeconds = identity.requiredSeconds;
+    const requiredSeconds = isSunday ? 0 : identity.requiredSeconds;
     const extraSeconds = Math.max(0, newActiveSeconds - requiredSeconds);
 
     const completedAt =
-      existing.completed_at ||
+      openSession.completed_at ||
       (newActiveSeconds >= requiredSeconds ? nowIso : null);
 
     const { data: updated, error: updateError } = await supabase
       .from("service_hour_sessions")
       .update({
         last_activity_at: nowIso,
+        ended_at: nowIso,
         active_seconds: newActiveSeconds,
         required_seconds: requiredSeconds,
         extra_seconds: extraSeconds,
         completed_at: completedAt,
         updated_at: nowIso,
       })
-      .eq("id", existing.id)
+      .eq("id", openSession.id)
       .select()
       .single();
 
@@ -237,8 +278,7 @@ Deno.serve(async (req) => {
 
     return json({
       success: true,
-      status:
-        newActiveSeconds >= requiredSeconds ? "completed" : "in_progress",
+      status: "checked_out",
       service: updated,
       remaining_seconds: Math.max(
         0,
