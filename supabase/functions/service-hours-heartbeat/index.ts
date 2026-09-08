@@ -43,6 +43,13 @@ function ethiopiaServiceDate(date = new Date()) {
   previous.setUTCDate(previous.getUTCDate() - 1);
   return previous.toISOString().slice(0, 10);
 }
+
+function serviceDayEnd(serviceDate: string) {
+  const nextDate = new Date(`${serviceDate}T00:00:00Z`);
+  nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+  return new Date(`${nextDate.toISOString().slice(0, 10)}T02:59:59.999Z`);
+}
+
 function cleanPhone(value: unknown) {
   let phone = String(value || "").replace(/\D/g, "");
 
@@ -177,6 +184,7 @@ Deno.serve(async (req) => {
     const serviceDate = ethiopiaServiceDate(now);
     const isSunday =
       new Date(`${serviceDate}T00:00:00Z`).getUTCDay() === 0;
+    const serviceRequiredSeconds = isSunday ? 0 : identity.requiredSeconds;
 
     const action = body?.action || "check_in";
     const { data: existing, error: loadError } = await supabase
@@ -184,7 +192,6 @@ Deno.serve(async (req) => {
       .select("*")
       .eq("person_type", identity.personType)
       .eq("person_id", identity.personId)
-      .eq("service_date", serviceDate)
       .order("created_at", { ascending: false });
 
     if (loadError) {
@@ -194,12 +201,39 @@ Deno.serve(async (req) => {
       );
     }
 
-    const openSession = (existing || []).find((session: any) => !session.ended_at);
+    let openSession = (existing || []).find((session: any) => !session.ended_at);
+
+    if (openSession && openSession.service_date !== serviceDate) {
+      const end = serviceDayEnd(openSession.service_date);
+      const activeSeconds = Math.max(
+        0,
+        Math.floor((end.getTime() - new Date(openSession.started_at).getTime()) / 1000),
+      );
+      const requiredSeconds = new Date(`${openSession.service_date}T00:00:00Z`).getUTCDay() === 0
+        ? 0
+        : identity.requiredSeconds;
+      const { data: closed } = await supabase
+        .from("service_hour_sessions")
+        .update({
+          ended_at: end.toISOString(),
+          last_activity_at: end.toISOString(),
+          active_seconds: activeSeconds,
+          required_seconds: requiredSeconds,
+          extra_seconds: Math.max(0, activeSeconds - requiredSeconds),
+          completed_at: activeSeconds >= requiredSeconds ? end.toISOString() : null,
+          updated_at: nowIso,
+        })
+        .eq("id", openSession.id)
+        .select()
+        .single();
+      openSession = null;
+      if (closed) existing?.unshift(closed);
+    }
 
     if (action === "status") {
       return json({
         success: true,
-        service: openSession || existing?.[0] || null,
+        service: openSession || existing?.find((session: any) => session.service_date === serviceDate) || null,
         history: existing || [],
       });
     }
@@ -223,7 +257,7 @@ Deno.serve(async (req) => {
           started_at: nowIso,
           last_activity_at: nowIso,
           active_seconds: 0,
-          required_seconds: identity.requiredSeconds,
+          required_seconds: serviceRequiredSeconds,
           extra_seconds: 0,
           approval_status: "pending",
           notes: notes || null,
@@ -253,10 +287,12 @@ Deno.serve(async (req) => {
       return json({ success: false, message: "No open service session to check out." }, 400);
     }
 
-    const elapsedSeconds = Math.max(0, Math.floor((now.getTime() - new Date(openSession.started_at).getTime()) / 1000));
+    const end = serviceDayEnd(openSession.service_date);
+    const effectiveNow = new Date(Math.min(now.getTime(), end.getTime()));
+    const elapsedSeconds = Math.max(0, Math.floor((effectiveNow.getTime() - new Date(openSession.started_at).getTime()) / 1000));
     const newActiveSeconds = Math.max(Number(openSession.active_seconds || 0), elapsedSeconds);
 
-    const requiredSeconds = isSunday ? 0 : identity.requiredSeconds;
+    const requiredSeconds = serviceRequiredSeconds;
     const extraSeconds = Math.max(0, newActiveSeconds - requiredSeconds);
 
     const completedAt =
@@ -267,7 +303,7 @@ Deno.serve(async (req) => {
       .from("service_hour_sessions")
       .update({
         last_activity_at: nowIso,
-        ended_at: nowIso,
+        ended_at: effectiveNow.toISOString(),
         active_seconds: newActiveSeconds,
         required_seconds: requiredSeconds,
         extra_seconds: extraSeconds,

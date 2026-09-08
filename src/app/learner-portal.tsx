@@ -533,7 +533,8 @@ export default function LearnerPortal() {
           {student.is_e8 && (
             <View style={styles.card}>
               <Text style={styles.cardTitle}>E8 Service Hours</Text>
-              <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required: 04:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
+              <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required Monday–Saturday: 04:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
+              <Text style={styles.text}>Start any time during the service day. The 6:00 AM Ethiopia boundary is not a mandatory check-in time; the service day ends at 5:59:59 AM the next morning.</Text>
               <Text style={styles.text}>Approval: {service?.approval_status || "pending"}</Text>
               <TextInput style={styles.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!service || !!service.ended_at} />
               <View style={styles.row}>

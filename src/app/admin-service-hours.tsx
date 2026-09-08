@@ -193,7 +193,7 @@ export default function AdminServiceHours() {
         <View>
           <Text style={styles.title}>Assistant & E8 Activity</Text>
           <Text style={styles.subtitle}>
-            8 hours Monday–Saturday • Sunday off
+            Start any time during the service day • Boundary 6:00 AM Ethiopia time • Ends 5:59:59 AM next morning
           </Text>
         </View>
 
