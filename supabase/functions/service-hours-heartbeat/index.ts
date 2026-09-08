@@ -197,7 +197,11 @@ Deno.serve(async (req) => {
     const openSession = (existing || []).find((session: any) => !session.ended_at);
 
     if (action === "status") {
-      return json({ success: true, service: openSession || null, history: existing || [] });
+      return json({
+        success: true,
+        service: openSession || existing?.[0] || null,
+        history: existing || [],
+      });
     }
 
     if (action === "check_in") {

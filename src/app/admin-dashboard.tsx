@@ -587,14 +587,6 @@ export default function AdminDashboard() {
         </Pressable>
       </Link>
 
-      <Link href="/admin-service-hours" asChild>
-        <Pressable style={styles.linkButton}>
-          <Text style={styles.linkText}>
-            ⏱ Assistant &amp; E8 Activity
-          </Text>
-        </Pressable>
-      </Link>
-
       <Link href="/fee-settings" asChild>
         <Pressable style={styles.linkButton}>
           <Text style={styles.linkText}>⚙️ Fee Settings</Text>

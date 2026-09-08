@@ -92,7 +92,6 @@ export default function AssistantDashboard() {
     setService(data.service || null);
     if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
   }
-  <View style={s.notice}><Text style={s.noticeTitle}>Service Hours</Text><Text>Required: 8:00 • Completed: {formatServiceTime(service?.active_seconds || 0)} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds || 28800) - (service?.active_seconds || 0)))} • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text><View style={s.row}><Pressable style={s.small} onPress={() => void loadService("check_in")} disabled={serviceBusy || !!service && !service.ended_at}><Text style={s.white}>Check In</Text></Pressable><Pressable style={s.logout} onPress={() => void loadService("check_out")} disabled={serviceBusy || !service || !!service.ended_at}><Text style={s.white}>Check Out</Text></Pressable></View><Text>{service ? `Approval: ${service.approval_status}` : "No session today"}</Text></View>
 
   function choose(s: Student) {
     setSelected(s); setEditName(s.name || ""); setEditEmail(s.email || ""); setEditPhone(s.phone || "");
@@ -149,6 +148,7 @@ export default function AssistantDashboard() {
   return <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
     <Text style={s.title}>EGA Assistant Dashboard</Text><Text style={s.subtitle}>Welcome, {assistantName || "Assistant"}</Text>
     <View style={s.notice}><Text style={s.noticeTitle}>Limited Access</Text><Text>Payments, fees, certificates and assessment retakes remain under owner control.</Text></View>
+    <View style={s.notice}><Text style={s.noticeTitle}>Service Hours</Text><Text>Required: 08:00 • Completed: {formatServiceTime(service?.active_seconds || 0)} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds || 28800) - (service?.active_seconds || 0)))} • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text><View style={s.row}><Pressable style={s.small} onPress={() => void loadService("check_in")} disabled={serviceBusy || !!service && !service.ended_at}><Text style={s.white}>Check In</Text></Pressable><Pressable style={s.logout} onPress={() => void loadService("check_out")} disabled={serviceBusy || !service || !!service.ended_at}><Text style={s.white}>Check Out</Text></Pressable></View><Text>{service ? `Approval: ${service.approval_status}` : "No session today"}</Text></View>
     <TextInput style={s.input} value={search} onChangeText={setSearch} placeholder="Search name, ID, phone or email" />
     <Pressable style={s.secondary} onPress={() => void loadStudents()}><Text style={s.secondaryText}>Refresh Students ({students.length})</Text></Pressable>
     {message ? <Text style={s.message}>{message}</Text> : null}{busy ? <ActivityIndicator size="large" color="#244394" /> : null}

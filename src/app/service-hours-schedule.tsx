@@ -23,10 +23,10 @@ export default function ServiceHoursSchedule() {
       <Text style={styles.readOnly}>🔒 Read-only schedule</Text>
 
       <View style={styles.summary}>
-        <Text style={styles.summaryTitle}>Shared weekly requirement</Text>
-        <Text style={styles.summaryText}>
-          8 hours each day • Monday–Saturday
-        </Text>
+        <Text style={styles.summaryTitle}>Weekly service requirements</Text>
+        <Text style={styles.summaryText}>Assistant Admin: 8 hours each day</Text>
+        <Text style={styles.summaryText}>E8 volunteers: 4 hours each day</Text>
+        <Text style={styles.summaryText}>Monday–Saturday</Text>
         <Text style={styles.summaryText}>
           Service day begins at 6:00 AM Ethiopia time
         </Text>
@@ -36,7 +36,7 @@ export default function ServiceHoursSchedule() {
         {DAYS.map((day) => (
           <View key={day} style={styles.row}>
             <Text style={styles.day}>{day}</Text>
-            <Text style={styles.hours}>8 hours</Text>
+            <Text style={styles.hours}>Assistant 8h • E8 4h</Text>
           </View>
         ))}
 
@@ -48,7 +48,7 @@ export default function ServiceHoursSchedule() {
 
       <View style={styles.notice}>
         <Text style={styles.noticeText}>
-          Activity beyond the required 8 hours is recorded as Extra Time.
+          Activity beyond each role's required hours is recorded as Extra Time.
         </Text>
         <Text style={styles.noticeText}>
           Sunday activity is optional and is recorded only as Extra Time.
