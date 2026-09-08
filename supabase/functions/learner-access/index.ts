@@ -117,6 +117,8 @@ Deno.serve(async (request) => {
             "name",
             "email",
             "phone",
+            "is_e8",
+            "is_archived",
             "course",
             "language",
             "fee",
@@ -167,6 +169,17 @@ Deno.serve(async (request) => {
             "Student ID or phone number is incorrect.",
         },
         401
+      );
+    }
+
+    if (student.is_archived === true) {
+      return jsonResponse(
+        {
+          success: false,
+          message:
+            "This student account is archived. Please contact EGA administration.",
+        },
+        403
       );
     }
 
