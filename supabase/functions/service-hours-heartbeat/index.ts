@@ -209,6 +209,11 @@ Deno.serve(async (req) => {
         return json({ success: true, status: "already_checked_in", service: openSession });
       }
 
+      const notes = String(body?.notes || "").trim();
+      if (notes.length > 2000) {
+        return json({ success: false, message: "Service notes must be 2,000 characters or fewer." }, 400);
+      }
+
       const { data: created, error: createError } = await supabase
         .from("service_hour_sessions")
         .insert({
@@ -221,7 +226,7 @@ Deno.serve(async (req) => {
           required_seconds: identity.requiredSeconds,
           extra_seconds: 0,
           approval_status: "pending",
-          notes: String(body?.notes || "").trim() || null,
+          notes: notes || null,
         })
         .select()
         .single();

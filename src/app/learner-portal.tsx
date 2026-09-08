@@ -106,6 +106,7 @@ export default function LearnerPortal() {
   const [service, setService] = useState<any>(null);
   const [serviceHistory, setServiceHistory] = useState<any[]>([]);
   const [serviceBusy, setServiceBusy] = useState(false);
+  const [serviceNotes, setServiceNotes] = useState("");
 
   const [editingProfile, setEditingProfile] = useState(false);
   const [editPhone, setEditPhone] = useState("");
@@ -126,7 +127,7 @@ export default function LearnerPortal() {
     if (!student) return;
     setServiceBusy(true);
     const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", {
-      body: { action, student_id: student.student_id, phone: cleanPhone(student.phone || phone) },
+      body: { action, student_id: student.student_id, phone: cleanPhone(student.phone || phone), notes: action === "check_in" ? serviceNotes : undefined },
     });
     setServiceBusy(false);
     if (error || !data?.success) {
@@ -135,6 +136,7 @@ export default function LearnerPortal() {
     }
     setService(data.service || null);
     setServiceHistory(data.history || (data.service ? [data.service] : []));
+    if (action === "check_in") setServiceNotes("");
     if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
   }
 
@@ -531,8 +533,9 @@ export default function LearnerPortal() {
           {student.is_e8 && (
             <View style={styles.card}>
               <Text style={styles.cardTitle}>E8 Service Hours</Text>
-              <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required: 08:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
+              <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required: 04:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
               <Text style={styles.text}>Approval: {service?.approval_status || "pending"}</Text>
+              <TextInput style={styles.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!service || !!service.ended_at} />
               <View style={styles.row}>
                 <TouchableOpacity style={styles.startButton} onPress={() => void serviceHours("check_in")} disabled={serviceBusy || !!service && !service.ended_at}>
                   <Text style={styles.buttonText}>Check In</Text>
@@ -541,8 +544,9 @@ export default function LearnerPortal() {
                   <Text style={styles.buttonText}>Check Out</Text>
                 </TouchableOpacity>
               </View>
+              {service?.notes ? <Text style={styles.text}>Notes: {service.notes}</Text> : null}
               <Text style={styles.cardTitle}>Session History</Text>
-              {serviceHistory.map((session) => <Text key={session.id} style={styles.text}>{session.service_date}: {formatServiceTime(session.active_seconds)} • {session.approval_status}</Text>)}
+              {serviceHistory.map((session) => <Text key={session.id} style={styles.text}>{session.service_date}: {formatServiceTime(session.active_seconds)} • {session.approval_status}{session.notes ? ` • ${session.notes}` : ""}</Text>)}
             </View>
           )}
 

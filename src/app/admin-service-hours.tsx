@@ -28,6 +28,8 @@ type RecordItem = {
   extra_seconds: number;
   completed_at: string | null;
   approval_status: "pending" | "approved" | "rejected";
+  notes: string | null;
+  approved_by: string | null;
   approved_at: string | null;
   name: string;
   email: string;
@@ -338,10 +340,16 @@ export default function AdminServiceHours() {
                         Last activity: {time(record.last_activity_at)}
                       </Text>
                       <Text>Check-out: {time(record.ended_at)}</Text>
+                      <Text>Notes: {record.notes || "No notes provided."}</Text>
 
                       <Text>
                         Approval: {record.approval_status}
                       </Text>
+                      {record.approved_at && (
+                        <Text>
+                          {record.approval_status === "approved" ? "Approved" : "Rejected"} by: {record.approved_by || "Main Admin"} at {time(record.approved_at)}
+                        </Text>
+                      )}
 
                       {record.ended_at && (
                             <View style={styles.actions}>
