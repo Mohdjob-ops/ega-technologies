@@ -596,7 +596,11 @@ export default function LearnerPortal() {
               <Text style={styles.cardTitle}>E8 Service Hours</Text>
               <Text style={styles.text}>Elapsed: {formatServiceTime(service?.active_seconds || 0)} • Required Monday–Saturday: 04:00 • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text>
               <Text style={styles.text}>Start any time during the service day. The 6:00 AM Ethiopia boundary is not a mandatory check-in time; the service day ends at 5:59:59 AM the next morning.</Text>
-              <Text style={styles.text}>Approval: {service?.approval_status || "pending"}</Text>
+              <Text style={styles.text}>
+                Approval: {service?.ended_at
+                  ? `Last session: ${service.approval_status || "pending"}`
+                  : service?.approval_status || "No active session"}
+              </Text>
               <TextInput style={styles.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!service || !!service.ended_at} />
               <View style={styles.row}>
                 <TouchableOpacity style={styles.startButton} onPress={() => void serviceHours("check_in")} disabled={serviceBusy || !!service && !service.ended_at}>

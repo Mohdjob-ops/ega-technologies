@@ -60,6 +60,15 @@ function cleanPhone(value: unknown) {
   return phone;
 }
 
+function cleanStudentId(value: unknown) {
+  const digits = String(value || "")
+    .trim()
+    .replace(/^EGA-2026-/i, "")
+    .replace(/\D/g, "");
+
+  return digits ? `EGA-2026-${digits}` : "";
+}
+
 type ServiceIdentity = {
   personType: "admin" | "assistant" | "e8";
   personId: string;
@@ -71,6 +80,38 @@ async function identifyPerson(
   supabase: any,
   body: any
 ): Promise<ServiceIdentity | null> {
+  const studentId = cleanStudentId(body?.student_id);
+  const phone = cleanPhone(body?.phone);
+
+  // Learner credentials must win over a stale Supabase admin session when
+  // the same browser switches from Main Admin back to the learner portal.
+  if (studentId || phone) {
+    if (!studentId || !phone) {
+      return null;
+    }
+
+    const { data: student } = await supabase
+      .from("students")
+      .select("student_id, phone, is_e8, is_archived")
+      .eq("student_id", studentId)
+      .maybeSingle();
+
+    if (
+      !student ||
+      student.is_archived === true ||
+      student.is_e8 !== true ||
+      cleanPhone(student.phone) !== phone
+    ) {
+      return null;
+    }
+
+    return {
+      personType: "e8",
+      personId: student.student_id,
+      requiredSeconds: requiredSecondsFor("e8"),
+    };
+  }
+
   const authHeader = req.headers.get("Authorization") || "";
 
   if (authHeader.startsWith("Bearer ")) {
@@ -113,33 +154,7 @@ async function identifyPerson(
     }
   }
 
-  const studentId = String(body?.student_id || "").trim();
-  const phone = cleanPhone(body?.phone);
-
-  if (!studentId || !phone) {
-    return null;
-  }
-
-  const { data: student } = await supabase
-    .from("students")
-    .select("student_id, phone, is_e8, is_archived")
-    .eq("student_id", studentId)
-    .maybeSingle();
-
-  if (
-    !student ||
-    student.is_archived === true ||
-    student.is_e8 !== true ||
-    cleanPhone(student.phone) !== phone
-  ) {
-    return null;
-  }
-
-  return {
-    personType: "e8",
-    personId: student.student_id,
-    requiredSeconds: requiredSecondsFor("e8"),
-  };
+  return null;
 }
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
