@@ -60,6 +60,20 @@ npm install
 npm run check:deploy
 ```
 
+## Finish work safely
+
+Before closing VS Code or shutting down the Mac, run:
+
+```bash
+npm run finish-work
+```
+
+This checks for uncommitted and unpushed Git changes, runs the TypeScript check,
+and reminds the operator to synchronize `main` and verify the official production
+URL, `https://ega-technologies.vercel.app`. Push completed changes to GitHub
+`main`; the connected Vercel project should deploy those completed commits
+automatically. Do not enable an automatic deployment loop for unfinished work,
+and do not install a shutdown hook. The command does not shut down the computer.
 For Vercel, import the repository and keep the committed settings:
 
 - Build command: `npm run build`
