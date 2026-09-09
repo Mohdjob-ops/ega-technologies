@@ -1,11 +1,11 @@
 import { Link } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { verifyAssistantUser } from "../lib/assistantAuth";
 import { supabase } from "../lib/supabase";
 
 type Student = { student_id: string; name: string; email: string; phone: string; course: string };
-type ServiceSession = { active_seconds: number; required_seconds: number; extra_seconds: number; ended_at: string | null; approval_status: string; notes: string | null };
+type ServiceSession = { active_seconds: number; required_seconds: number; extra_seconds: number; ended_at: string | null; completed_at: string | null; approval_status: string; notes: string | null; last_activity_at: string | null };
 
 function formatServiceTime(seconds: number) {
   const safe = Math.max(0, Number(seconds || 0));
@@ -32,6 +32,7 @@ export default function AssistantDashboard() {
   const [serviceNotes, setServiceNotes] = useState("");
   const [service, setService] = useState<ServiceSession | null>(null);
   const [serviceBusy, setServiceBusy] = useState(false);
+  const lastActivityAt = useRef(Date.now());
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -82,18 +83,35 @@ export default function AssistantDashboard() {
     await loadService("status");
   }
 
-  async function loadService(action: "status" | "check_in" | "check_out") {
+  async function loadService(action: "status" | "check_in" | "check_out" | "heartbeat") {
     setServiceBusy(true);
-    const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", { body: { action, notes: action === "check_in" ? serviceNotes : undefined } });
+    const { data, error } = await supabase.functions.invoke("service-hours-heartbeat", { body: { action, active_at: new Date(lastActivityAt.current).toISOString(), notes: action === "check_in" || action === "check_out" ? serviceNotes : undefined } });
     setServiceBusy(false);
     if (error || !data?.success) {
       setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
       return;
     }
     setService(data.service || null);
+    if (data.service?.notes && action === "status") setServiceNotes(data.service.notes);
     if (action === "check_in") setServiceNotes("");
-    if (action !== "status") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
+    if (action === "check_in" || action === "check_out") setMessage(action === "check_in" ? "✅ Checked in." : "✅ Checked out. Time recorded.");
   }
+
+  useEffect(() => {
+    if (!loggedIn || !service || service.ended_at || typeof document === "undefined" || typeof window === "undefined") return;
+    const markActive = () => { lastActivityAt.current = Date.now(); };
+    const activityEvents = ["keydown", "mousedown", "mousemove", "touchstart", "scroll"];
+    activityEvents.forEach((event) => document.addEventListener(event, markActive, { passive: true }));
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible" && Date.now() - lastActivityAt.current <= 45_000 && !serviceBusy) {
+        void loadService("heartbeat");
+      }
+    }, 15_000);
+    return () => {
+      activityEvents.forEach((event) => document.removeEventListener(event, markActive));
+      window.clearInterval(interval);
+    };
+  }, [loggedIn, service?.ended_at, serviceBusy]);
 
   function choose(s: Student) {
     setSelected(s); setEditName(s.name || ""); setEditEmail(s.email || ""); setEditPhone(s.phone || "");
@@ -150,7 +168,7 @@ export default function AssistantDashboard() {
   return <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
     <Text style={s.title}>EGA Assistant Dashboard</Text><Text style={s.subtitle}>Welcome, {assistantName || "Assistant"}</Text>
     <View style={s.notice}><Text style={s.noticeTitle}>Limited Access</Text><Text>Payments, fees, certificates and assessment retakes remain under owner control.</Text></View>
-    <View style={s.notice}><Text style={s.noticeTitle}>Service Hours</Text><Text>Required Monday–Saturday: 08:00 • Completed: {formatServiceTime(service?.active_seconds || 0)} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds || 28800) - (service?.active_seconds || 0)))} • Extra: {formatServiceTime(service?.extra_seconds || 0)}</Text><Text>Start any time during the service day. The 6:00 AM Ethiopia boundary is not a mandatory check-in time; the service day ends at 5:59:59 AM the next morning.</Text><TextInput style={s.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!service || !!service.ended_at} /><View style={s.row}><Pressable style={s.small} onPress={() => void loadService("check_in")} disabled={serviceBusy || !!service && !service.ended_at}><Text style={s.white}>Check In</Text></Pressable><Pressable style={s.logout} onPress={() => void loadService("check_out")} disabled={serviceBusy || !service || !!service.ended_at}><Text style={s.white}>Check Out</Text></Pressable></View><Text>{service ? `Approval: ${service.approval_status}` : "No session today"}</Text>{service?.notes ? <Text>Notes: {service.notes}</Text> : null}</View>
+    <View style={s.notice}><Text style={s.noticeTitle}>Service Hours</Text><Text>Required Monday–Saturday: 08:00 • Verified completed: {formatServiceTime(service?.active_seconds ?? 0)} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 28800) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text><Text>State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"} • Approval: {service?.approval_status || "pending"}</Text><Text>Last verified activity: {service?.last_activity_at ? new Date(service.last_activity_at).toLocaleTimeString() : "—"}</Text><Text>Start any time during the service day. The 6:00 AM Ethiopia boundary is not a mandatory check-in time; the service day ends at 5:59:59 AM the next morning.</Text><TextInput style={s.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!!service && !service.ended_at} /><View style={s.row}><Pressable style={s.small} onPress={() => void loadService("check_in")} disabled={serviceBusy || !!service && !service.ended_at}><Text style={s.white}>Check In</Text></Pressable><Pressable style={s.logout} onPress={() => void loadService("check_out")} disabled={serviceBusy || !service || !!service.ended_at}><Text style={s.white}>Check Out</Text></Pressable></View><Text>{service ? `Approval: ${service.approval_status}` : "No session today"}</Text>{service?.notes ? <Text>Notes: {service.notes}</Text> : null}</View>
     <TextInput style={s.input} value={search} onChangeText={setSearch} placeholder="Search name, ID, phone or email" />
     <Pressable style={s.secondary} onPress={() => void loadStudents()}><Text style={s.secondaryText}>Refresh Students ({students.length})</Text></Pressable>
     {message ? <Text style={s.message}>{message}</Text> : null}{busy ? <ActivityIndicator size="large" color="#244394" /> : null}

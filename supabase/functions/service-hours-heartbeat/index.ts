@@ -75,6 +75,23 @@ type ServiceIdentity = {
   requiredSeconds: number;
 };
 
+function dailySummary(sessions: any[], serviceDate: string, openSession: any) {
+  const today = sessions.filter((session) => session.service_date === serviceDate);
+  if (!today.length) return null;
+  const activeSeconds = today.reduce((total, session) => total + Number(session.active_seconds || 0), 0);
+  const requiredSeconds = Number(today[0]?.required_seconds || openSession?.required_seconds || 0);
+  const latest = [...today].sort((a, b) => String(b.started_at).localeCompare(String(a.started_at)))[0] || null;
+  return {
+    ...(latest || openSession || {}),
+    active_seconds: activeSeconds,
+    required_seconds: requiredSeconds,
+    extra_seconds: Math.max(0, activeSeconds - requiredSeconds),
+    completed_at: today.find((session) => session.completed_at)?.completed_at || null,
+    ended_at: openSession ? null : latest?.ended_at || null,
+    last_activity_at: today.reduce((latestActivity, session) => String(session.last_activity_at || "") > latestActivity ? String(session.last_activity_at || "") : latestActivity, "") || null,
+  };
+}
+
 async function identifyPerson(
   req: Request,
   supabase: any,
@@ -220,10 +237,6 @@ Deno.serve(async (req) => {
 
     if (openSession && openSession.service_date !== serviceDate) {
       const end = serviceDayEnd(openSession.service_date);
-      const activeSeconds = Math.max(
-        0,
-        Math.floor((end.getTime() - new Date(openSession.started_at).getTime()) / 1000),
-      );
       const requiredSeconds = new Date(`${openSession.service_date}T00:00:00Z`).getUTCDay() === 0
         ? 0
         : identity.requiredSeconds;
@@ -231,11 +244,8 @@ Deno.serve(async (req) => {
         .from("service_hour_sessions")
         .update({
           ended_at: end.toISOString(),
-          last_activity_at: end.toISOString(),
-          active_seconds: activeSeconds,
+          last_activity_at: openSession.last_active_at || openSession.last_activity_at,
           required_seconds: requiredSeconds,
-          extra_seconds: Math.max(0, activeSeconds - requiredSeconds),
-          completed_at: activeSeconds >= requiredSeconds ? end.toISOString() : null,
           updated_at: nowIso,
         })
         .eq("id", openSession.id)
@@ -248,9 +258,34 @@ Deno.serve(async (req) => {
     if (action === "status") {
       return json({
         success: true,
-        service: openSession || existing?.find((session: any) => session.service_date === serviceDate) || null,
+        service: dailySummary(existing || [], serviceDate, openSession),
         history: existing || [],
       });
+    }
+
+    if (action === "heartbeat") {
+      if (!openSession) {
+        return json({ success: false, message: "No open service session to update." }, 400);
+      }
+
+      const activeAt = new Date(String(body?.active_at || nowIso));
+      if (Number.isNaN(activeAt.getTime()) || now.getTime() - activeAt.getTime() > 45_000) {
+        return json({ success: true, status: "paused", service: openSession });
+      }
+
+      const { data: updated, error: heartbeatError } = await supabase.rpc("record_service_heartbeat", {
+        p_session_id: openSession.id,
+        p_heartbeat_at: nowIso,
+        p_active_at: activeAt.toISOString(),
+        p_max_interval_seconds: 30,
+      });
+
+      if (heartbeatError) {
+        return json({ success: false, message: "Unable to record active heartbeat." }, 500);
+      }
+
+      const refreshed = [...(existing || []).filter((session: any) => session.id !== updated.id), updated];
+      return json({ success: true, status: "active", service: dailySummary(refreshed, serviceDate, updated), history: refreshed });
     }
 
     if (action === "check_in") {
@@ -271,6 +306,8 @@ Deno.serve(async (req) => {
           service_date: serviceDate,
           started_at: nowIso,
           last_activity_at: nowIso,
+          last_heartbeat_at: nowIso,
+          last_active_at: nowIso,
           active_seconds: 0,
           required_seconds: serviceRequiredSeconds,
           extra_seconds: 0,
@@ -290,7 +327,8 @@ Deno.serve(async (req) => {
       return json({
         success: true,
         status: "checked_in",
-        service: created,
+        service: dailySummary([...(existing || []), created], serviceDate, created),
+        history: [created, ...(existing || [])],
       });
     }
 
@@ -304,8 +342,7 @@ Deno.serve(async (req) => {
 
     const end = serviceDayEnd(openSession.service_date);
     const effectiveNow = new Date(Math.min(now.getTime(), end.getTime()));
-    const elapsedSeconds = Math.max(0, Math.floor((effectiveNow.getTime() - new Date(openSession.started_at).getTime()) / 1000));
-    const newActiveSeconds = Math.max(Number(openSession.active_seconds || 0), elapsedSeconds);
+    const newActiveSeconds = Number(openSession.active_seconds || 0);
 
     const requiredSeconds = serviceRequiredSeconds;
     const extraSeconds = Math.max(0, newActiveSeconds - requiredSeconds);
@@ -314,15 +351,21 @@ Deno.serve(async (req) => {
       openSession.completed_at ||
       (newActiveSeconds >= requiredSeconds ? nowIso : null);
 
+    const checkoutNotes = String(body?.notes || "").trim();
+    if (checkoutNotes.length > 2000) {
+      return json({ success: false, message: "Service notes must be 2,000 characters or fewer." }, 400);
+    }
+
     const { data: updated, error: updateError } = await supabase
       .from("service_hour_sessions")
       .update({
-        last_activity_at: nowIso,
+        last_activity_at: openSession.last_active_at || openSession.last_activity_at,
         ended_at: effectiveNow.toISOString(),
         active_seconds: newActiveSeconds,
         required_seconds: requiredSeconds,
         extra_seconds: extraSeconds,
         completed_at: completedAt,
+        notes: checkoutNotes || openSession.notes || null,
         updated_at: nowIso,
       })
       .eq("id", openSession.id)
@@ -339,7 +382,8 @@ Deno.serve(async (req) => {
     return json({
       success: true,
       status: "checked_out",
-      service: updated,
+      service: dailySummary([...(existing || []).filter((session: any) => session.id !== updated.id), updated], serviceDate, null),
+      history: [...(existing || []).filter((session: any) => session.id !== updated.id), updated],
       remaining_seconds: Math.max(
         0,
         requiredSeconds - newActiveSeconds

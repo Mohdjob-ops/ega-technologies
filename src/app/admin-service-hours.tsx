@@ -31,6 +31,7 @@ type RecordItem = {
   notes: string | null;
   approved_by: string | null;
   approved_at: string | null;
+  rejection_reason: string | null;
   name: string;
   email: string;
 };
@@ -65,18 +66,24 @@ function time(value: string | null) {
 }
 
 function status(record: RecordItem) {
-  if (sunday(record.service_date)) return "Off Day";
+  if (sunday(record.service_date)) return "Extra Service";
   if (record.completed_at || record.active_seconds >= record.required_seconds) {
     return "Completed";
   }
-  if (record.active_seconds > 0) return "Working";
+  if (!record.ended_at) {
+    return record.last_activity_at && Date.now() - new Date(record.last_activity_at).getTime() <= 45_000
+      ? "Active"
+      : "Paused/Offline";
+  }
+  if (record.active_seconds > 0) return "Checked Out";
   return "Not Started";
 }
 
 function statusColour(value: string) {
   if (value === "Completed") return "#15803d";
-  if (value === "Working") return "#1d4ed8";
-  if (value === "Off Day") return "#7c3aed";
+  if (value === "Active") return "#1d4ed8";
+  if (value === "Paused/Offline") return "#b45309";
+  if (value === "Extra Service") return "#7c3aed";
   return "#b45309";
 }
 
@@ -91,6 +98,7 @@ export default function AdminServiceHours() {
   const [dateFilter, setDateFilter] = useState("");
   const [history, setHistory] = useState(false);
   const [expanded, setExpanded] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const today = ethiopiaToday();
 
@@ -147,7 +155,7 @@ export default function AdminServiceHours() {
 
     const { data, error } = await supabase.functions.invoke(
       "service-hours-admin",
-      { body: { action, sessionId: record.id } },
+      { body: { action, sessionId: record.id, rejectionReason: action === "reject" ? rejectionReason : undefined } },
     );
 
     if (error || !data?.success) {
@@ -161,6 +169,7 @@ export default function AdminServiceHours() {
           : "✅ E8 time rejected.",
       );
       setRecords(data.records || []);
+      setRejectionReason("");
     }
 
     setActionId("");
@@ -345,14 +354,22 @@ export default function AdminServiceHours() {
                       <Text>
                         Approval: {record.approval_status}
                       </Text>
+                      <Text>Requirement: {currentStatus === "Completed" ? "Completed" : "Not Yet Completed"}</Text>
+                      {record.rejection_reason && <Text>Rejection reason: {record.rejection_reason}</Text>}
                       {record.approved_at && (
                         <Text>
                           {record.approval_status === "approved" ? "Approved" : "Rejected"} by: {record.approved_by || "Main Admin"} at {time(record.approved_at)}
                         </Text>
                       )}
 
-                      {record.ended_at && (
+                          {record.ended_at && record.approval_status === "pending" && (
                             <View style={styles.actions}>
+                              <TextInput
+                                value={rejectionReason}
+                                onChangeText={setRejectionReason}
+                                placeholder="Rejection reason (required to reject)"
+                                style={styles.search}
+                              />
                               <Pressable
                                 disabled={actionId === record.id}
                                 onPress={() => decide(record, "approve")}
@@ -362,7 +379,7 @@ export default function AdminServiceHours() {
                               </Pressable>
 
                               <Pressable
-                                disabled={actionId === record.id}
+                                disabled={actionId === record.id || !rejectionReason.trim()}
                                 onPress={() => decide(record, "reject")}
                                 style={styles.reject}
                               >

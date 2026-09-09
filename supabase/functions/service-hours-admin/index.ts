@@ -71,10 +71,14 @@ Deno.serve(async (req) => {
 
 		if (body.action === "approve" || body.action === "reject") {
 			if (!body.sessionId) return json({ success: false, message: "Session ID is required." }, 400);
+			const rejectionReason = String(body.rejectionReason || "").trim();
+			if (body.action === "reject" && !rejectionReason) return json({ success: false, message: "A rejection reason is required." }, 400);
 			const { error } = await supabase
 				.from("service_hour_sessions")
-				.update({ approval_status: body.action === "approve" ? "approved" : "rejected", approved_by: adminId, approved_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+				.update({ approval_status: body.action === "approve" ? "approved" : "rejected", rejection_reason: body.action === "reject" ? rejectionReason : null, approved_by: adminId, approved_at: new Date().toISOString(), updated_at: new Date().toISOString() })
 				.eq("id", body.sessionId)
+				.eq("approval_status", "pending")
+				.not("ended_at", "is", null)
 				.in("person_type", ["assistant", "e8"]);
 			if (error) throw error;
 		}
