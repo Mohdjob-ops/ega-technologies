@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import * as Clipboard from "expo-clipboard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Animated,
   Image,
@@ -91,11 +91,11 @@ export default function PromoPreview() {
   const [contactStep, setContactStep] = useState(0);
   const [offerKind, setOfferKind] = useState<"ai" | "cyber">("ai");
 
-  const fade = useRef(new Animated.Value(1)).current;
-  const scale = useRef(new Animated.Value(1)).current;
+  const [fade] = useState(() => new Animated.Value(1));
+  const [scale] = useState(() => new Animated.Value(1));
 
-  const offerOpacity = useRef(new Animated.Value(0)).current;
-  const offerScale = useRef(new Animated.Value(0.35)).current;
+  const [offerOpacity] = useState(() => new Animated.Value(0));
+  const [offerScale] = useState(() => new Animated.Value(0.35));
 
   function animateTo(nextScene: number) {
     Animated.parallel([
