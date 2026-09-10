@@ -108,6 +108,7 @@ export default function LearnerPortal() {
   const [serviceBusy, setServiceBusy] = useState(false);
   const [serviceNotes, setServiceNotes] = useState("");
   const lastServiceActivityAt = useRef(Date.now());
+  const restoredSession = useRef(false);
 
   const [editingProfile, setEditingProfile] = useState(false);
   const [editPhone, setEditPhone] = useState("");
@@ -148,10 +149,19 @@ export default function LearnerPortal() {
       });
 
       if (error || !data?.success) {
-        setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+        if (action !== "status" || studentOverride.is_e8 === true) {
+          setMessage("❌ " + (data?.message || error?.message || "Service-hours request failed."));
+        } else {
+          setMessage("");
+        }
         return;
       }
 
+      if (action === "status" && studentOverride.is_e8 !== true) {
+        setStudent((currentStudent: any) => currentStudent?.student_id === studentOverride.student_id
+          ? { ...currentStudent, is_e8: true }
+          : currentStudent);
+      }
       setService(data.service || null);
       setServiceHistory(data.history || (data.service ? [data.service] : []));
       if (data.service?.notes && action === "status") setServiceNotes(data.service.notes);
@@ -259,12 +269,70 @@ export default function LearnerPortal() {
     setQuizResults(data.quiz_results || []);
     setService(null);
     setServiceHistory([]);
-    if (data.student.is_e8) {
-      setTimeout(() => void serviceHours("status", data.student), 0);
-    }
+    setTimeout(() => void serviceHours("status", data.student), 0);
     setMessage("✅ Login successful");
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (restoredSession.current || typeof window === "undefined") return;
+    restoredSession.current = true;
+
+    const storedStudentId = sessionStorage.getItem("ega_student_id") || "";
+    const storedPhone = cleanPhone(sessionStorage.getItem("ega_student_phone") || "");
+    const studentIdDigits = storedStudentId
+      .replace(/^EGA-2026-/i, "")
+      .replace(/\D/g, "");
+    const cleanStudentId = studentIdDigits
+      ? `EGA-2026-${studentIdDigits}`
+      : "";
+
+    if (!cleanStudentId || !storedPhone) return;
+
+    setLoading(true);
+    setMessage("Checking saved login...");
+
+    async function restoreLearner() {
+      try {
+        const { data, error } = await supabase.functions.invoke("learner-access", {
+          body: {
+            student_id: cleanStudentId,
+            phone: storedPhone,
+          },
+        });
+
+        if (error || !data?.success || !data?.student) {
+          sessionStorage.removeItem("ega_student_id");
+          sessionStorage.removeItem("ega_student_phone");
+          localStorage.removeItem("student_id");
+          setStudentId("");
+          setPhone("");
+          setMessage(data?.message || "❌ Saved learner login is no longer valid. Please log in again.");
+          return;
+        }
+
+        const validatedPhone = cleanPhone(data.student.phone || storedPhone);
+        sessionStorage.setItem("ega_student_id", data.student.student_id);
+        sessionStorage.setItem("ega_student_phone", validatedPhone);
+        localStorage.setItem("student_id", data.student.student_id);
+        setStudentId(studentIdDigits);
+        setPhone(validatedPhone);
+        setStudent(data.student);
+        setQuizResults(data.quiz_results || []);
+        setService(null);
+        setServiceHistory([]);
+        setMessage("✅ Login restored");
+        await serviceHours("status", data.student);
+      } catch (error) {
+        setMessage("❌ Unable to restore saved learner login. Please log in again.");
+        console.error("Learner session restore failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    void restoreLearner();
+  }, []);
 
   useEffect(() => {
     if (!service || service.ended_at) return;
@@ -608,7 +676,7 @@ export default function LearnerPortal() {
               <Text style={styles.text}>{service?.approval_status === "approved" ? "Approved completed" : "Recorded elapsed"}: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: 04:00 • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 14400) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
               <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
               <Text style={styles.text}>Last verified activity: {service?.last_activity_at ? new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Addis_Ababa", hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(new Date(service.last_activity_at)) : "—"}</Text>
-              <Text style={styles.text}>Calendar day: 12:00:00 AM–11:59:59 PM Ethiopia time. Sunday time is extra.</Text>
+              <Text style={styles.text}>Service day: 6:00:00 AM–5:59:59 AM the following day, Ethiopia time. Sunday time is extra.</Text>
               <Text style={styles.text}>
                 Approval: {service?.ended_at
                   ? `Last session: ${service.approval_status || "pending"}`
