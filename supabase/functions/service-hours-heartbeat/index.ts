@@ -36,18 +36,64 @@ function ethiopiaParts(date = new Date()) {
 
 function ethiopiaServiceDate(date = new Date()) {
   const parts = ethiopiaParts(date);
-  const calendarDate = `${parts.year}-${parts.month}-${parts.day}`;
-  if (Number(parts.hour) >= 6) return calendarDate;
+  if (Number(parts.hour) < 6) {
+    return addCalendarDays(`${parts.year}-${parts.month}-${parts.day}`, -1);
+  }
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
 
-  const previous = new Date(`${calendarDate}T00:00:00Z`);
-  previous.setUTCDate(previous.getUTCDate() - 1);
-  return previous.toISOString().slice(0, 10);
+function addCalendarDays(serviceDate: string, days: number) {
+  const date = new Date(`${serviceDate}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+function ethiopiaServiceDayStartUtc(serviceDate: string) {
+  return new Date(`${serviceDate}T03:00:00.000Z`);
 }
 
 function serviceDayEnd(serviceDate: string) {
-  const nextDate = new Date(`${serviceDate}T00:00:00Z`);
-  nextDate.setUTCDate(nextDate.getUTCDate() + 1);
-  return new Date(`${nextDate.toISOString().slice(0, 10)}T02:59:59.999Z`);
+  return ethiopiaServiceDayStartUtc(addCalendarDays(serviceDate, 1));
+}
+
+function isSunday(serviceDate: string) {
+  return new Date(`${serviceDate}T00:00:00Z`).getUTCDay() === 0;
+}
+
+function elapsedSeconds(startedAt: string, endedAt: string) {
+  return Math.max(
+    0,
+    Math.floor(
+      (new Date(endedAt).getTime() - new Date(startedAt).getTime()) / 1000,
+    ),
+  );
+}
+
+function splitByEthiopiaDay(startedAt: string, endedAt: string) {
+  const start = new Date(startedAt);
+  const end = new Date(endedAt);
+  const segments: Array<{
+    serviceDate: string;
+    startedAt: string;
+    endedAt: string;
+    activeSeconds: number;
+  }> = [];
+  let cursor = start;
+
+  while (cursor < end) {
+    const serviceDate = ethiopiaServiceDate(cursor);
+    const nextServiceDayStart = ethiopiaServiceDayStartUtc(addCalendarDays(serviceDate, 1));
+    const segmentEnd = new Date(Math.min(nextServiceDayStart.getTime(), end.getTime()));
+    segments.push({
+      serviceDate,
+      startedAt: cursor.toISOString(),
+      endedAt: segmentEnd.toISOString(),
+      activeSeconds: elapsedSeconds(cursor.toISOString(), segmentEnd.toISOString()),
+    });
+    cursor = segmentEnd;
+  }
+
+  return segments;
 }
 
 function cleanPhone(value: unknown) {
@@ -78,7 +124,8 @@ type ServiceIdentity = {
 function dailySummary(sessions: any[], serviceDate: string, openSession: any) {
   const today = sessions.filter((session) => session.service_date === serviceDate);
   if (!today.length) return null;
-  const activeSeconds = today.reduce((total, session) => total + Number(session.active_seconds || 0), 0);
+  const approved = today.filter((session) => session.approval_status === "approved");
+  const activeSeconds = approved.reduce((total, session) => total + Number(session.active_seconds || 0), 0);
   const requiredSeconds = Number(today[0]?.required_seconds || openSession?.required_seconds || 0);
   const latest = [...today].sort((a, b) => String(b.started_at).localeCompare(String(a.started_at)))[0] || null;
   return {
@@ -86,10 +133,18 @@ function dailySummary(sessions: any[], serviceDate: string, openSession: any) {
     active_seconds: activeSeconds,
     required_seconds: requiredSeconds,
     extra_seconds: Math.max(0, activeSeconds - requiredSeconds),
-    completed_at: today.find((session) => session.completed_at)?.completed_at || null,
+    completed_at: approved.find((session) => session.completed_at)?.completed_at || null,
     ended_at: openSession ? null : latest?.ended_at || null,
     last_activity_at: today.reduce((latestActivity, session) => String(session.last_activity_at || "") > latestActivity ? String(session.last_activity_at || "") : latestActivity, "") || null,
   };
+}
+
+function newestFirst(sessions: any[]) {
+  return [...sessions].sort((a, b) =>
+    String(b.started_at || b.created_at || "").localeCompare(
+      String(a.started_at || a.created_at || ""),
+    ),
+  );
 }
 
 async function identifyPerson(
@@ -214,9 +269,7 @@ Deno.serve(async (req) => {
     const now = new Date();
     const nowIso = now.toISOString();
     const serviceDate = ethiopiaServiceDate(now);
-    const isSunday =
-      new Date(`${serviceDate}T00:00:00Z`).getUTCDay() === 0;
-    const serviceRequiredSeconds = isSunday ? 0 : identity.requiredSeconds;
+    const serviceRequiredSeconds = isSunday(serviceDate) ? 0 : identity.requiredSeconds;
 
     const action = body?.action || "check_in";
     const { data: existing, error: loadError } = await supabase
@@ -237,13 +290,15 @@ Deno.serve(async (req) => {
 
     if (openSession && openSession.service_date !== serviceDate) {
       const end = serviceDayEnd(openSession.service_date);
-      const requiredSeconds = new Date(`${openSession.service_date}T00:00:00Z`).getUTCDay() === 0
+      const requiredSeconds = isSunday(openSession.service_date)
         ? 0
         : identity.requiredSeconds;
       const { data: closed } = await supabase
         .from("service_hour_sessions")
         .update({
           ended_at: end.toISOString(),
+          active_seconds: elapsedSeconds(openSession.started_at, end.toISOString()),
+          extra_seconds: Math.max(0, elapsedSeconds(openSession.started_at, end.toISOString()) - requiredSeconds),
           last_activity_at: openSession.last_active_at || openSession.last_activity_at,
           required_seconds: requiredSeconds,
           updated_at: nowIso,
@@ -251,15 +306,39 @@ Deno.serve(async (req) => {
         .eq("id", openSession.id)
         .select()
         .single();
-      openSession = null;
       if (closed) existing?.unshift(closed);
+      const nextServiceDate = serviceDate;
+      const nextRequiredSeconds = isSunday(nextServiceDate) ? 0 : identity.requiredSeconds;
+      const { data: continued, error: continueError } = await supabase
+        .from("service_hour_sessions")
+        .insert({
+          person_type: identity.personType,
+          person_id: identity.personId,
+          service_date: nextServiceDate,
+          started_at: end.toISOString(),
+          last_activity_at: openSession.last_active_at || openSession.last_activity_at,
+          last_heartbeat_at: nowIso,
+          last_active_at: openSession.last_active_at || openSession.last_activity_at,
+          active_seconds: 0,
+          required_seconds: nextRequiredSeconds,
+          extra_seconds: 0,
+          approval_status: "pending",
+          notes: openSession.notes || null,
+        })
+        .select()
+        .single();
+      if (continueError) {
+        return json({ success: false, message: "Unable to continue service hours across the calendar day." }, 500);
+      }
+      openSession = continued;
+      if (continued) existing?.unshift(continued);
     }
 
     if (action === "status") {
       return json({
         success: true,
         service: dailySummary(existing || [], serviceDate, openSession),
-        history: existing || [],
+        history: newestFirst(existing || []),
       });
     }
 
@@ -285,7 +364,7 @@ Deno.serve(async (req) => {
       }
 
       const refreshed = [...(existing || []).filter((session: any) => session.id !== updated.id), updated];
-      return json({ success: true, status: "active", service: dailySummary(refreshed, serviceDate, updated), history: refreshed });
+      return json({ success: true, status: "active", service: dailySummary(refreshed, serviceDate, updated), history: newestFirst(refreshed) });
     }
 
     if (action === "check_in") {
@@ -328,7 +407,7 @@ Deno.serve(async (req) => {
         success: true,
         status: "checked_in",
         service: dailySummary([...(existing || []), created], serviceDate, created),
-        history: [created, ...(existing || [])],
+        history: newestFirst([created, ...(existing || [])]),
       });
     }
 
@@ -340,16 +419,13 @@ Deno.serve(async (req) => {
       return json({ success: false, message: "No open service session to check out." }, 400);
     }
 
-    const end = serviceDayEnd(openSession.service_date);
-    const effectiveNow = new Date(Math.min(now.getTime(), end.getTime()));
-    const newActiveSeconds = Number(openSession.active_seconds || 0);
-
-    const requiredSeconds = serviceRequiredSeconds;
+    const effectiveNow = now;
+    const segments = splitByEthiopiaDay(openSession.started_at, effectiveNow.toISOString());
+    const firstSegment = segments[0];
+    const requiredSeconds = isSunday(firstSegment.serviceDate) ? 0 : identity.requiredSeconds;
+    const newActiveSeconds = firstSegment.activeSeconds;
     const extraSeconds = Math.max(0, newActiveSeconds - requiredSeconds);
-
-    const completedAt =
-      openSession.completed_at ||
-      (newActiveSeconds >= requiredSeconds ? nowIso : null);
+    const completedAt = newActiveSeconds >= requiredSeconds ? firstSegment.endedAt : null;
 
     const checkoutNotes = String(body?.notes || "").trim();
     if (checkoutNotes.length > 2000) {
@@ -360,11 +436,12 @@ Deno.serve(async (req) => {
       .from("service_hour_sessions")
       .update({
         last_activity_at: openSession.last_active_at || openSession.last_activity_at,
-        ended_at: effectiveNow.toISOString(),
+        ended_at: firstSegment.endedAt,
         active_seconds: newActiveSeconds,
         required_seconds: requiredSeconds,
         extra_seconds: extraSeconds,
         completed_at: completedAt,
+        service_date: firstSegment.serviceDate,
         notes: checkoutNotes || openSession.notes || null,
         updated_at: nowIso,
       })
@@ -379,11 +456,40 @@ Deno.serve(async (req) => {
       );
     }
 
+    const additionalSegments = segments.slice(1).map((segment) => {
+      const segmentRequiredSeconds = isSunday(segment.serviceDate) ? 0 : identity.requiredSeconds;
+      return {
+        person_type: identity.personType,
+        person_id: identity.personId,
+        service_date: segment.serviceDate,
+        started_at: segment.startedAt,
+        last_activity_at: openSession.last_active_at || openSession.last_activity_at,
+        ended_at: segment.endedAt,
+        active_seconds: segment.activeSeconds,
+        required_seconds: segmentRequiredSeconds,
+        extra_seconds: Math.max(0, segment.activeSeconds - segmentRequiredSeconds),
+        completed_at: segment.activeSeconds >= segmentRequiredSeconds ? segment.endedAt : null,
+        approval_status: "pending",
+        notes: checkoutNotes || openSession.notes || null,
+      };
+    });
+    let insertedSegments: any[] = [];
+    if (additionalSegments.length) {
+      const { data: inserted, error: insertError } = await supabase
+        .from("service_hour_sessions")
+        .insert(additionalSegments)
+        .select();
+      if (insertError) {
+        return json({ success: false, message: "Unable to split service hours across calendar days." }, 500);
+      }
+      insertedSegments = inserted || [];
+    }
+
     return json({
       success: true,
       status: "checked_out",
-      service: dailySummary([...(existing || []).filter((session: any) => session.id !== updated.id), updated], serviceDate, null),
-      history: [...(existing || []).filter((session: any) => session.id !== updated.id), updated],
+      service: dailySummary([...(existing || []).filter((session: any) => session.id !== updated.id), updated, ...insertedSegments], firstSegment.serviceDate, null),
+      history: newestFirst([updated, ...insertedSegments, ...(existing || []).filter((session: any) => session.id !== updated.id)]),
       remaining_seconds: Math.max(
         0,
         requiredSeconds - newActiveSeconds

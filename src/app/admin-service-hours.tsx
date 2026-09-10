@@ -34,6 +34,7 @@ type RecordItem = {
   rejection_reason: string | null;
   name: string;
   email: string;
+  phone: string;
 };
 
 function ethiopiaToday() {
@@ -53,7 +54,8 @@ function duration(seconds: number) {
   const safe = Math.max(0, Number(seconds || 0));
   const hours = Math.floor(safe / 3600);
   const minutes = Math.floor((safe % 3600) / 60);
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  const remainingSeconds = safe % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
 }
 
 function time(value: string | null) {
@@ -62,20 +64,36 @@ function time(value: string | null) {
     timeZone: "Africa/Addis_Ababa",
     hour: "numeric",
     minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
   }).format(new Date(value));
+}
+
+function elapsed(record: RecordItem) {
+  if (record.started_at && record.ended_at) {
+    return Math.max(
+      0,
+      Math.floor(
+        (new Date(record.ended_at).getTime() - new Date(record.started_at).getTime()) / 1000,
+      ),
+    );
+  }
+  return Math.max(0, Number(record.active_seconds || 0));
 }
 
 function status(record: RecordItem) {
   if (sunday(record.service_date)) return "Extra Service";
-  if (record.completed_at || record.active_seconds >= record.required_seconds) {
+  if (record.approval_status === "approved" && (record.completed_at || elapsed(record) >= record.required_seconds)) {
     return "Completed";
   }
+  if (record.approval_status === "rejected") return "Rejected";
+  if (record.ended_at && record.approval_status === "pending") return "Pending Approval";
   if (!record.ended_at) {
     return record.last_activity_at && Date.now() - new Date(record.last_activity_at).getTime() <= 45_000
       ? "Active"
       : "Paused/Offline";
   }
-  if (record.active_seconds > 0) return "Checked Out";
+  if (elapsed(record) > 0) return "Checked Out";
   return "Not Started";
 }
 
@@ -84,6 +102,8 @@ function statusColour(value: string) {
   if (value === "Active") return "#1d4ed8";
   if (value === "Paused/Offline") return "#b45309";
   if (value === "Extra Service") return "#7c3aed";
+  if (value === "Pending Approval") return "#b45309";
+  if (value === "Rejected") return "#b91c1c";
   return "#b45309";
 }
 
@@ -202,7 +222,7 @@ export default function AdminServiceHours() {
         <View>
           <Text style={styles.title}>Assistant & E8 Activity</Text>
           <Text style={styles.subtitle}>
-            Start any time during the service day • Boundary 6:00 AM Ethiopia time • Ends 5:59:59 AM next morning
+            Calendar day: 12:00:00 AM–11:59:59 PM Ethiopia time • E8 4h • Assistant Admin 8h, Monday–Saturday
           </Text>
         </View>
 
@@ -307,7 +327,7 @@ export default function AdminServiceHours() {
                     <View style={styles.metric}>
                       <Text style={styles.label}>Today</Text>
                       <Text style={styles.value}>
-                        {duration(record.active_seconds)}
+                        {duration(elapsed(record))}
                       </Text>
                     </View>
 
@@ -349,6 +369,8 @@ export default function AdminServiceHours() {
                         Last activity: {time(record.last_activity_at)}
                       </Text>
                       <Text>Check-out: {time(record.ended_at)}</Text>
+                      <Text>Elapsed: {duration(elapsed(record))}</Text>
+                      <Text>Phone: {record.phone || "—"}</Text>
                       <Text>Notes: {record.notes || "No notes provided."}</Text>
 
                       <Text>

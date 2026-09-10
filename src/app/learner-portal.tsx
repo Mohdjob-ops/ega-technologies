@@ -121,7 +121,7 @@ export default function LearnerPortal() {
 
   function formatServiceTime(seconds: number) {
     const safe = Math.max(0, Number(seconds || 0));
-    return `${String(Math.floor(safe / 3600)).padStart(2, "0")}:${String(Math.floor((safe % 3600) / 60)).padStart(2, "0")}`;
+    return `${String(Math.floor(safe / 3600)).padStart(2, "0")}:${String(Math.floor((safe % 3600) / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
   }
 
   async function serviceHours(
@@ -267,19 +267,6 @@ export default function LearnerPortal() {
   }
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const savedStudentId = sessionStorage.getItem("ega_student_id") || "";
-    const savedPhone = sessionStorage.getItem("ega_student_phone") || "";
-
-    if (!savedStudentId || !savedPhone) return;
-
-    setStudentId(savedStudentId.replace(/^EGA-2026-/i, "").replace(/\D/g, ""));
-    setPhone(savedPhone);
-    void handleLogin();
-  }, []);
-
-  useEffect(() => {
     if (!service || service.ended_at) return;
 
     const timer = setInterval(() => {
@@ -370,6 +357,11 @@ export default function LearnerPortal() {
     setStudentId("");
     setPhone("");
     setMessage("");
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("ega_student_id");
+      sessionStorage.removeItem("ega_student_phone");
+      localStorage.removeItem("student_id");
+    }
   }
 
   async function openAiLesson(path: string) {
@@ -613,10 +605,10 @@ export default function LearnerPortal() {
           {student.is_e8 && (
             <View style={styles.card}>
               <Text style={styles.cardTitle}>E8 Service Hours</Text>
-              <Text style={styles.text}>Verified completed: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: 04:00 • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 14400) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
+              <Text style={styles.text}>{service?.approval_status === "approved" ? "Approved completed" : "Recorded elapsed"}: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: 04:00 • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 14400) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
               <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
-              <Text style={styles.text}>Last verified activity: {service?.last_activity_at ? new Date(service.last_activity_at).toLocaleTimeString() : "—"}</Text>
-              <Text style={styles.text}>Start any time during the service day. The 6:00 AM Ethiopia boundary is not a mandatory check-in time; the service day ends at 5:59:59 AM the next morning.</Text>
+              <Text style={styles.text}>Last verified activity: {service?.last_activity_at ? new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Addis_Ababa", hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(new Date(service.last_activity_at)) : "—"}</Text>
+              <Text style={styles.text}>Calendar day: 12:00:00 AM–11:59:59 PM Ethiopia time. Sunday time is extra.</Text>
               <Text style={styles.text}>
                 Approval: {service?.ended_at
                   ? `Last session: ${service.approval_status || "pending"}`
