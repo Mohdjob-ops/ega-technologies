@@ -28,7 +28,7 @@ export default function ServiceHoursSchedule() {
         <Text style={styles.summaryText}>E8 volunteers: 4 hours each day</Text>
         <Text style={styles.summaryText}>Monday–Saturday</Text>
         <Text style={styles.summaryText}>
-          Service day boundary: 6:00 AM Ethiopia time
+          Service day: 6:00:00 AM–5:59:59 AM the following day, Ethiopia time
         </Text>
       </View>
 
@@ -48,10 +48,7 @@ export default function ServiceHoursSchedule() {
 
       <View style={styles.notice}>
         <Text style={styles.noticeText}>
-          You may start at any time during the service day; 6:00 AM is not a mandatory check-in time.
-        </Text>
-        <Text style={styles.noticeText}>
-          Each service day ends at 5:59:59 AM the following morning. Required hours must be completed before then.
+          Sunday time is extra. Sessions that cross 6:00:00 AM are split at the service-day boundary.
         </Text>
         <Text style={styles.noticeText}>
           Activity beyond each role's required hours is recorded as Extra Time.

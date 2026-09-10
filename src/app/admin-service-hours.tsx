@@ -81,9 +81,13 @@ function elapsed(record: RecordItem) {
   return Math.max(0, Number(record.active_seconds || 0));
 }
 
-function status(record: RecordItem) {
+function serviceDayKey(record: RecordItem) {
+  return `${record.person_type}:${record.person_id}:${record.service_date}`;
+}
+
+function status(record: RecordItem, approvedElapsedSeconds = elapsed(record)) {
   if (sunday(record.service_date)) return "Extra Service";
-  if (record.approval_status === "approved" && (record.completed_at || elapsed(record) >= record.required_seconds)) {
+  if (approvedElapsedSeconds >= Number(record.required_seconds || 0) && Number(record.required_seconds || 0) > 0) {
     return "Completed";
   }
   if (record.approval_status === "rejected") return "Rejected";
@@ -121,6 +125,30 @@ export default function AdminServiceHours() {
   const [rejectionReason, setRejectionReason] = useState("");
 
   const today = ethiopiaToday();
+
+  const approvedElapsedByDay = useMemo(() => {
+    const totals = new Map<string, number>();
+    records.forEach((record) => {
+      if (record.approval_status !== "approved") return;
+      const key = serviceDayKey(record);
+      totals.set(key, (totals.get(key) || 0) + elapsed(record));
+    });
+    return totals;
+  }, [records]);
+
+  function metrics(record: RecordItem) {
+    const required = Math.max(0, Number(record.required_seconds || 0));
+    const rowElapsed = elapsed(record);
+    const creditedElapsed = approvedElapsedByDay.get(serviceDayKey(record)) || 0;
+    return {
+      required,
+      elapsed: rowElapsed,
+      creditedElapsed,
+      remaining: Math.max(0, required - creditedElapsed),
+      extra: Math.max(0, creditedElapsed - required),
+      requirementCompleted: creditedElapsed >= required && required > 0,
+    };
+  }
 
   async function load() {
     setLoading(true);
@@ -222,7 +250,7 @@ export default function AdminServiceHours() {
         <View>
           <Text style={styles.title}>Assistant & E8 Activity</Text>
           <Text style={styles.subtitle}>
-            Calendar day: 12:00:00 AM–11:59:59 PM Ethiopia time • E8 4h • Assistant Admin 8h, Monday–Saturday
+            Service day: 6:00:00 AM–5:59:59 AM the following day, Ethiopia time • E8 4h • Assistant Admin 8h, Monday–Saturday
           </Text>
         </View>
 
@@ -305,7 +333,8 @@ export default function AdminServiceHours() {
 
           <View style={styles.list}>
             {visible.map((record) => {
-              const currentStatus = status(record);
+              const recordMetrics = metrics(record);
+              const currentStatus = status(record, recordMetrics.creditedElapsed);
               const isOpen = expanded === record.id;
               return (
                 <View key={record.id} style={styles.card}>
@@ -325,9 +354,9 @@ export default function AdminServiceHours() {
                     </View>
 
                     <View style={styles.metric}>
-                      <Text style={styles.label}>Today</Text>
+                      <Text style={styles.label}>Elapsed</Text>
                       <Text style={styles.value}>
-                        {duration(elapsed(record))}
+                        {duration(recordMetrics.elapsed)}
                       </Text>
                     </View>
 
@@ -339,9 +368,16 @@ export default function AdminServiceHours() {
                     </View>
 
                     <View style={styles.metric}>
+                      <Text style={styles.label}>Remaining</Text>
+                      <Text style={styles.value}>
+                        {duration(recordMetrics.remaining)}
+                      </Text>
+                    </View>
+
+                    <View style={styles.metric}>
                       <Text style={styles.label}>Extra</Text>
                       <Text style={styles.value}>
-                        {duration(record.extra_seconds)}
+                        {duration(recordMetrics.extra)}
                       </Text>
                     </View>
 
@@ -369,14 +405,18 @@ export default function AdminServiceHours() {
                         Last activity: {time(record.last_activity_at)}
                       </Text>
                       <Text>Check-out: {time(record.ended_at)}</Text>
-                      <Text>Elapsed: {duration(elapsed(record))}</Text>
+                      <Text>Required: {duration(recordMetrics.required)}</Text>
+                      <Text>Elapsed: {duration(recordMetrics.elapsed)}</Text>
+                      <Text>Remaining: {duration(recordMetrics.remaining)}</Text>
+                      <Text>Extra: {duration(recordMetrics.extra)}</Text>
+                      <Text>Approved accumulated: {duration(recordMetrics.creditedElapsed)}</Text>
                       <Text>Phone: {record.phone || "—"}</Text>
                       <Text>Notes: {record.notes || "No notes provided."}</Text>
 
                       <Text>
                         Approval: {record.approval_status}
                       </Text>
-                      <Text>Requirement: {currentStatus === "Completed" ? "Completed" : "Not Yet Completed"}</Text>
+                      <Text>Requirement: {recordMetrics.requirementCompleted ? "Completed" : "Not Yet Completed"}</Text>
                       {record.rejection_reason && <Text>Rejection reason: {record.rejection_reason}</Text>}
                       {record.approved_at && (
                         <Text>
