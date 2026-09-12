@@ -121,11 +121,15 @@ type ServiceIdentity = {
   requiredSeconds: number;
 };
 
-function dailySummary(sessions: any[], serviceDate: string, openSession: any) {
+function sessionElapsedSeconds(session: any, now = new Date()) {
+  if (session.ended_at) return elapsedSeconds(session.started_at, session.ended_at);
+  return elapsedSeconds(session.started_at, now.toISOString());
+}
+
+function dailySummary(sessions: any[], serviceDate: string, openSession: any, now = new Date()) {
   const today = sessions.filter((session) => session.service_date === serviceDate);
   if (!today.length) return null;
-  const approved = today.filter((session) => session.approval_status === "approved");
-  const activeSeconds = approved.reduce((total, session) => total + Number(session.active_seconds || 0), 0);
+  const activeSeconds = today.reduce((total, session) => total + sessionElapsedSeconds(session, now), 0);
   const requiredSeconds = Number(today[0]?.required_seconds || openSession?.required_seconds || 0);
   const latest = [...today].sort((a, b) => String(b.started_at).localeCompare(String(a.started_at)))[0] || null;
   return {
@@ -133,7 +137,7 @@ function dailySummary(sessions: any[], serviceDate: string, openSession: any) {
     active_seconds: activeSeconds,
     required_seconds: requiredSeconds,
     extra_seconds: Math.max(0, activeSeconds - requiredSeconds),
-    completed_at: approved.find((session) => session.completed_at)?.completed_at || null,
+    completed_at: today.filter((session) => session.ended_at).find((session) => session.completed_at)?.completed_at || null,
     ended_at: openSession ? null : latest?.ended_at || null,
     last_activity_at: today.reduce((latestActivity, session) => String(session.last_activity_at || "") > latestActivity ? String(session.last_activity_at || "") : latestActivity, "") || null,
   };
@@ -271,7 +275,10 @@ Deno.serve(async (req) => {
     const serviceDate = ethiopiaServiceDate(now);
     const serviceRequiredSeconds = isSunday(serviceDate) ? 0 : identity.requiredSeconds;
 
-    const action = body?.action || "check_in";
+    const action = body?.action;
+    if (!['status', 'check_in', 'check_out', 'heartbeat'].includes(action)) {
+      return json({ success: false, message: "A valid service-hours action is required." }, 400);
+    }
     const { data: existing, error: loadError } = await supabase
       .from("service_hour_sessions")
       .select("*")
@@ -288,7 +295,7 @@ Deno.serve(async (req) => {
 
     let openSession = (existing || []).find((session: any) => !session.ended_at);
 
-    if (openSession && openSession.service_date !== serviceDate) {
+    if (action === "check_in" && openSession && openSession.service_date !== serviceDate) {
       const end = serviceDayEnd(openSession.service_date);
       const requiredSeconds = isSunday(openSession.service_date)
         ? 0
@@ -347,10 +354,14 @@ Deno.serve(async (req) => {
         return json({ success: false, message: "No open service session to update." }, 400);
       }
 
-      const activeAt = new Date(String(body?.active_at || nowIso));
-      if (Number.isNaN(activeAt.getTime()) || now.getTime() - activeAt.getTime() > 45_000) {
-        return json({ success: true, status: "paused", service: openSession });
-      }
+      const suppliedActiveAt = new Date(String(body?.active_at || nowIso));
+      // A heartbeat proves the page is connected again. Do not credit the
+      // offline gap, but let this request reactivate the open session.
+      const activeAt = Number.isNaN(suppliedActiveAt.getTime()) ||
+        suppliedActiveAt.getTime() > now.getTime() ||
+        now.getTime() - suppliedActiveAt.getTime() > 45_000
+        ? now
+        : suppliedActiveAt;
 
       const { data: updated, error: heartbeatError } = await supabase.rpc("record_service_heartbeat", {
         p_session_id: openSession.id,
@@ -369,7 +380,12 @@ Deno.serve(async (req) => {
 
     if (action === "check_in") {
       if (openSession) {
-        return json({ success: true, status: "already_checked_in", service: openSession });
+        return json({
+          success: true,
+          status: "already_checked_in",
+          service: dailySummary(existing || [], serviceDate, openSession),
+          history: newestFirst(existing || []),
+        });
       }
 
       const notes = String(body?.notes || "").trim();

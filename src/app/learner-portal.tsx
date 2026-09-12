@@ -106,8 +106,13 @@ export default function LearnerPortal() {
   const [service, setService] = useState<any>(null);
   const [serviceHistory, setServiceHistory] = useState<any[]>([]);
   const [serviceBusy, setServiceBusy] = useState(false);
+  const [serviceOnline, setServiceOnline] = useState(() =>
+    typeof navigator === "undefined" ? true : navigator.onLine,
+  );
   const [serviceNotes, setServiceNotes] = useState("");
   const lastServiceActivityAt = useRef(Date.now());
+  const latestServiceRequest = useRef(0);
+  const serviceBusyRef = useRef(false);
   const restoredSession = useRef(false);
 
   const [editingProfile, setEditingProfile] = useState(false);
@@ -134,7 +139,9 @@ export default function LearnerPortal() {
       return;
     }
 
+    const requestId = ++latestServiceRequest.current;
     setServiceBusy(true);
+    serviceBusyRef.current = true;
     setMessage(action === "status" ? "Loading service hours..." : "Saving service-hours update...");
 
     try {
@@ -157,6 +164,20 @@ export default function LearnerPortal() {
         return;
       }
 
+      if (requestId !== latestServiceRequest.current) return;
+
+      const returnedActivityAt = data.service?.last_activity_at
+        ? new Date(data.service.last_activity_at).getTime()
+        : 0;
+      if (returnedActivityAt > lastServiceActivityAt.current) {
+        lastServiceActivityAt.current = returnedActivityAt;
+      }
+
+      setServiceOnline(
+        typeof document === "undefined" ||
+        (document.visibilityState === "visible" &&
+          (typeof navigator === "undefined" || navigator.onLine)),
+      );
       if (action === "status" && studentOverride.is_e8 !== true) {
         setStudent((currentStudent: any) => currentStudent?.student_id === studentOverride.student_id
           ? { ...currentStudent, is_e8: true }
@@ -173,27 +194,71 @@ export default function LearnerPortal() {
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Service-hours request failed.";
+      if (action === "heartbeat") setServiceOnline(false);
       setMessage("❌ " + errorMessage);
     } finally {
       setServiceBusy(false);
+      serviceBusyRef.current = false;
     }
+  }
+
+  function handleCheckIn() {
+    if (serviceBusyRef.current || (service && !service.ended_at)) return;
+    void serviceHours("check_in");
   }
 
   useEffect(() => {
     if (!student?.is_e8 || !service || service.ended_at || typeof document === "undefined") return;
-    const markActive = () => { lastServiceActivityAt.current = Date.now(); };
-    const activityEvents = ["keydown", "mousedown", "mousemove", "touchstart", "scroll"];
-    activityEvents.forEach((event) => document.addEventListener(event, markActive, { passive: true }));
-    const interval = window.setInterval(() => {
-      if (document.visibilityState === "visible" && Date.now() - lastServiceActivityAt.current <= 45_000 && !serviceBusy) {
+
+    const markActivity = () => {
+      if (document.visibilityState === "visible" &&
+          (typeof navigator === "undefined" || navigator.onLine)) {
+        lastServiceActivityAt.current = Date.now();
+      }
+    };
+    const updateConnection = () => {
+      const isVisible = document.visibilityState === "visible";
+      const isOnline = typeof navigator === "undefined" || navigator.onLine;
+      setServiceOnline(isVisible && isOnline);
+
+      if (
+        isVisible &&
+        isOnline &&
+        Date.now() - lastServiceActivityAt.current <= 45_000 &&
+        !serviceBusyRef.current
+      ) {
         void serviceHours("heartbeat");
       }
-    }, 15_000);
+    };
+
+    const activityEvents = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+    ];
+    activityEvents.forEach((event) => {
+      document.addEventListener(event, markActivity, { passive: true });
+    });
+    document.addEventListener("visibilitychange", updateConnection);
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
+    window.addEventListener("focus", updateConnection);
+
+    updateConnection();
+    const interval = window.setInterval(updateConnection, 15_000);
     return () => {
-      activityEvents.forEach((event) => document.removeEventListener(event, markActive));
+      activityEvents.forEach((event) => {
+        document.removeEventListener(event, markActivity);
+      });
+      document.removeEventListener("visibilitychange", updateConnection);
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
+      window.removeEventListener("focus", updateConnection);
       window.clearInterval(interval);
     };
-  }, [service?.ended_at, serviceBusy, student?.is_e8]);
+  }, [service?.id, service?.ended_at, student?.is_e8]);
 
   async function handleLogin() {
     if (loading) return;
@@ -269,8 +334,11 @@ export default function LearnerPortal() {
     setQuizResults(data.quiz_results || []);
     setService(null);
     setServiceHistory([]);
-    setTimeout(() => void serviceHours("status", data.student), 0);
     setMessage("✅ Login successful");
+    lastServiceActivityAt.current = Date.now();
+    await serviceHours("status", data.student);
+    lastServiceActivityAt.current = Date.now();
+    await serviceHours("heartbeat", data.student);
     setLoading(false);
   }
 
@@ -322,7 +390,10 @@ export default function LearnerPortal() {
         setService(null);
         setServiceHistory([]);
         setMessage("✅ Login restored");
+        lastServiceActivityAt.current = Date.now();
         await serviceHours("status", data.student);
+        lastServiceActivityAt.current = Date.now();
+        await serviceHours("heartbeat", data.student);
       } catch (error) {
         setMessage("❌ Unable to restore saved learner login. Please log in again.");
         console.error("Learner session restore failed:", error);
@@ -674,7 +745,7 @@ export default function LearnerPortal() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>E8 Service Hours</Text>
               <Text style={styles.text}>{service?.approval_status === "approved" ? "Approved completed" : "Recorded elapsed"}: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: 04:00 • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 14400) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
-              <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
+              <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (serviceOnline && service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active/Online" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
               <Text style={styles.text}>Last verified activity: {service?.last_activity_at ? new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Addis_Ababa", hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(new Date(service.last_activity_at)) : "—"}</Text>
               <Text style={styles.text}>Service day: 6:00:00 AM–5:59:59 AM the following day, Ethiopia time. Sunday time is extra.</Text>
               <Text style={styles.text}>
@@ -684,7 +755,7 @@ export default function LearnerPortal() {
               </Text>
               <TextInput style={styles.input} value={serviceNotes} onChangeText={setServiceNotes} placeholder="Service notes for Main Admin (optional)" multiline maxLength={2000} editable={!!service && !service.ended_at} />
               <View style={styles.row}>
-                <TouchableOpacity style={styles.startButton} onPress={() => void serviceHours("check_in")} disabled={serviceBusy || !!service && !service.ended_at}>
+                <TouchableOpacity style={styles.startButton} onPress={handleCheckIn} disabled={serviceBusy || !!service && !service.ended_at}>
                   <Text style={styles.buttonText}>Check In</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.logoutButton} onPress={() => void serviceHours("check_out")} disabled={serviceBusy || !service || !!service.ended_at}>
