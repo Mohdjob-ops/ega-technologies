@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lesson 15: Using Inline Chat in the Terminal | EGA</title>
+
+  <style>
+    :root {
+      --navy: #07182f;
+      --blue: #1457a8;
+      --gold: #f4b400;
+      --green: #0b8f68;
+      --red: #c93636;
+      --purple: #7048c8;
+      --border: #dce4ef;
+      --shadow: 0 18px 45px rgba(7, 24, 47, .11);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: #25354a;
+      background: #f3f6fb;
+      font-family: Inter, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    .topbar {
+      color: white;
+      background: var(--navy);
+    }
+
+    .topbar-inner {
+      width: min(1100px, calc(100% - 30px));
+      min-height: 70px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      border: 2px solid white;
+      border-radius: 50%;
+      font-weight: 900;
+    }
+
+    .brand strong,
+    .brand small {
+      display: block;
+    }
+
+    .brand small {
+      color: #cbd8ea;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .lesson-label {
+      color: #d8e4f4;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hero {
+      padding: 75px 20px 68px;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(244,180,0,.25), transparent 27%),
+        linear-gradient(135deg, #06162b, #0b2c59 55%, #1457a8);
+      text-align: center;
+    }
+
+    .hero-inner {
+      width: min(900px, 100%);
+      margin: auto;
+    }
+
+    .pill,
+    .section-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      padding: 8px 17px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 999px;
+    }
+
+    .hero h1 {
+      margin: 22px auto 15px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: auto;
+      color: #dceafd;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .course-name {
+      margin-top: 23px;
+      color: #ffe39a;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1000px, calc(100% - 30px));
+      margin: -27px auto 0;
+      padding-bottom: 65px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .card,
+    .navigation {
+      margin-bottom: 22px;
+      padding: clamp(23px, 5vw, 40px);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .navigation {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .button {
+      min-height: 46px;
+      padding: 11px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: var(--navy);
+      border-radius: 11px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .button:hover {
+      background: var(--blue);
+    }
+
+    .button.portal {
+      color: var(--navy);
+      background: var(--gold);
+    }
+
+    .section-label {
+      margin-bottom: 9px;
+      color: var(--blue);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      color: var(--navy);
+      font-size: clamp(25px, 4vw, 34px);
+      line-height: 1.22;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    li {
+      margin: 9px 0;
+    }
+
+    .lead {
+      color: #34445a;
+      font-size: 18px;
+    }
+
+    .info {
+      margin: 20px 0;
+      padding: 17px 19px;
+      background: #edf4ff;
+      border-left: 5px solid var(--blue);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .objectives,
+    .chat-types {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    .objective,
+    .chat-type,
+    .workflow-step {
+      padding: 18px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .objective,
+    .workflow-step {
+      display: flex;
+      gap: 13px;
+    }
+
+    .chat-type {
+      border-top: 5px solid var(--purple);
+    }
+
+    .number {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: white;
+      background: var(--blue);
+      border-radius: 11px;
+      font-weight: 900;
+    }
+
+    .objective strong,
+    .chat-type strong,
+    .workflow-step strong {
+      display: block;
+      color: var(--navy);
+    }
+
+    .technical {
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .technical:first-of-type {
+      margin-top: 8px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .technical-title {
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .workflow {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .workflow-step {
+      border-left: 5px solid var(--blue);
+    }
+
+    .prompt {
+      margin-top: 22px;
+      padding: 21px;
+      color: #dcecff;
+      background: #07182f;
+      border-radius: 14px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .prompt strong {
+      display: block;
+      color: var(--gold);
+    }
+
+    .summary { border-top: 6px solid var(--blue); }
+    .somali-farsamo { display: none; }
+    .rules { border-top: 6px solid var(--green); }
+    .mistakes { border-top: 6px solid var(--red); }
+    .quiz { border-top: 6px solid var(--purple); }
+
+    .mistake,
+    .question {
+      margin: 16px 0;
+      padding: 18px;
+      border-radius: 14px;
+    }
+
+    .mistake {
+      background: #fff0f0;
+      border: 1px solid #ffc9c9;
+    }
+
+    .mistake strong {
+      color: var(--red);
+    }
+
+    .question {
+      background: #faf9ff;
+      border: 1px solid #ded8ff;
+    }
+
+    .question-title {
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .option {
+      margin: 8px 0;
+      padding: 9px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    details {
+      margin-top: 20px;
+      background: #e9f8f2;
+      border: 1px solid #a9e8ce;
+      border-radius: 13px;
+    }
+
+    summary {
+      padding: 17px 19px;
+      color: #065f46;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .answers {
+      padding: 0 20px 18px;
+    }
+
+    .remember {
+      color: #e3eefb;
+      background: linear-gradient(135deg, var(--navy), #123e79);
+      border: 0;
+    }
+
+    .remember h2 {
+      color: white;
+    }
+
+    .remember strong {
+      color: #ffe29a;
+    }
+
+    footer {
+      padding: 30px 20px;
+      color: #c4d2e4;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    footer strong,
+    footer span {
+      display: block;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    footer span {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .lesson-label,
+      .brand small {
+        display: none;
+      }
+
+      .navigation {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .objectives,
+      .chat-types {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+  <script defer src="/ai-lessons/somali-help-translation.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/learner-portal">
+        <div class="logo">EGA</div>
+        <div>
+          <strong>Elmi Guray Academy</strong>
+          <small>Knowledge • Integrity • Opportunity</small>
+        </div>
+      </a>
+      <div class="lesson-label">AI Developer Course · Lesson 15</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="pill">Lesson 15</span>
+      <h1>Using Inline Chat in the Terminal</h1>
+      <p>
+        Learn how to use GitHub Copilot inside Visual Studio Code’s integrated
+        terminal to generate command-line suggestions.
+      </p>
+      <div class="course-name">EGA AI Developer Course</div>
+    </div>
+  </section>
+
+  <main>
+    <nav class="navigation">
+      <a class="button" href="/ai-lessons/lesson-14-using-inline-and-quick-chat.html">
+        ← Previous Lesson
+      </a>
+      <a class="button portal" href="/learner-portal">Learner Portal</a>
+    </nav>
+
+    <section class="card">
+      <span class="section-label">Introduction</span>
+      <h2><span class="sht" tabindex="0" data-so="Caawinta AI ee Gudaha Terminal-ka">AI Assistance Inside the Terminal</span></h2>
+
+      <p class="lead">
+        <span class="sht" tabindex="0" data-so="Visual Studio Code wuxuu leeyahay terminal ku dhex jira oo lagu fuliyo tilmaamaha khadka amarka iyada oo aan tafatiraha laga bixin.">Visual Studio Code includes an integrated terminal for running
+        command-line instructions without leaving the editor.
+        </span>
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="GitHub Copilot Inline Chat wuxuu kaa caawin karaa inuu codsi luuqad dabiici ah u beddelo amar terminal oo suuragal ah.">GitHub Copilot Inline Chat can help translate a natural-language
+        request into a possible terminal command.
+        </span>
+      </p>
+
+      <div class="info">
+  <strong><span class="sht" tabindex="0" data-so="Ogeysiis Muhiim ah (IN):">Important Note (IN):</span></strong> <span class="sht" tabindex="0" data-so="Si taxaddar leh u baro casharkan ka hor hawsha ama imtixaanka. Diiradda saar fikradaha waaweyn, ku celceli tallaabooyinka, oo taageero codso haddii wax kuu caddaan waayaan.">Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</span>
+</div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Learning Objectives</span>
+      <h2><span class="sht" tabindex="0" data-so="Waxa Aad Baran Doonto">What You Will Learn</span></h2>
+
+      <div class="objectives">
+        <div class="objective">
+          <span class="number">1</span>
+          <div>
+            <strong><span class="sht" tabindex="0" data-so="Fur terminal-ka">Open the terminal</span></strong>
+            <span class="sht" tabindex="0" data-so="Ka hel terminal-ka ku dhex jira Visual Studio Code.">Find Visual Studio Code’s integrated terminal.</span>
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">2</span>
+          <div>
+            <strong><span class="sht" tabindex="0" data-so="Fur Inline Chat">Open Inline Chat</span></strong>
+            <span class="sht" tabindex="0" data-so="Isticmaal menu-ga terminal-ka ama furaha gaaban ee muuqda.">Use the terminal menu or displayed shortcut.</span>
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">3</span>
+          <div>
+            <strong><span class="sht" tabindex="0" data-so="Codso Amar">Request a command</span></strong>
+            <span class="sht" tabindex="0" data-so="Si cad u sharax hawsha terminal-ka loo baahan yahay.">Describe the required terminal task clearly.</span>
+          </div>
+        </div>
+
+        <div class="objective">
+          <span class="number">4</span>
+          <div>
+            <strong><span class="sht" tabindex="0" data-so="Si Ammaan ah Dib u Eeg">Review safely</span></strong>
+            <span class="sht" tabindex="0" data-so="Faham amarka ka hor intaadan fulin.">Understand a command before executing it.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Technical Lesson</span>
+      <h2><span class="sht" tabindex="0" data-so="Inline Chat-ka Terminal-ka">Terminal Inline Chat</span></h2>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">1</span>
+          <h3><span class="sht" tabindex="0" data-so="Waa Maxay Terminal-ka Ku Dhex Jira?">What Is the Integrated Terminal?</span></h3>
+        </div>
+
+        <p>
+          <span class="sht" tabindex="0" data-so="Terminal-ka ku dhex jira waa qayb khadka amarka ah oo lagu dhex dhisay Visual Studio Code. Wuxuu u oggolaanayaa horumariyeyaasha inay fuliyaan amarro mashruuc iyaga oo faylasha koodhka weli muuqdaan.">The integrated terminal is a command-line area built into Visual
+          Studio Code. It lets developers run project commands while keeping
+          their source files visible.
+          </span>
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">2</span>
+          <h3><span class="sht" tabindex="0" data-so="Furista Inline Chat-ka Terminal-ka">Opening Terminal Inline Chat</span></h3>
+        </div>
+
+        <ol>
+          <li><span class="sht" tabindex="0" data-so="Mashruucaaga ku fur Visual Studio Code.">Open your project in Visual Studio Code.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Fur terminal-ka ku dhex jira.">Open the integrated terminal.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Midig ku dhufo gudaha aagga terminal-ka.">Right-click inside the terminal area.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Dooro <strong>Open Inline Chat</strong>.">Select <strong>Open Inline Chat</strong>.</span></li>
+        </ol>
+
+        <p>
+          <span class="sht" tabindex="0" data-so="Waxaad sidoo kale isticmaali kartaa furaha gaaban ee Visual Studio Code muujiyo. Furayaashu way ku kala duwanaan karaan nidaamka hawlgalka iyo nooca tafatiraha.">You may also use the keyboard shortcut displayed by Visual Studio
+          Code. Shortcuts can differ by operating system and editor version.
+          </span>
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">3</span>
+          <h3><span class="sht" tabindex="0" data-so="Codsashada Amar">Requesting a Command</span></h3>
+        </div>
+
+        <p>
+          <span class="sht" tabindex="0" data-so="Si cad u sharax waxa aad rabto inaad qabato. Copilot markaas wuxuu soo jeedin karaa amar ku habboon terminal-ka firfircoon.">Describe what you want to accomplish in clear language. Copilot can
+          then suggest a suitable command for the active terminal.
+          </span>
+        </p>
+
+        <div class="prompt">
+          <strong><span class="sht" tabindex="0" data-so="Tusaale Codsi">Example request</span></strong>
+          Show me the command that checks this Expo project for TypeScript
+          errors without changing any files.
+        </div>
+
+        <p>
+          <span class="sht" tabindex="0" data-so="Soo-jeedin ku habboon waxay noqon kartaa npx tsc --noEmit, laakiin amarka weli waa in dib loo eego ka hor inta aan la fulin.">A suitable suggestion may be
+          <code>npx tsc --noEmit</code>, but the command must still be reviewed
+          before it is executed.</span>
+        </p>
+      </div>
+
+      <div class="technical">
+        <div class="technical-title">
+          <span class="number">4</span>
+          <h3><span class="sht" tabindex="0" data-so="Dib u Eeg Ka Hor Fulinta">Review Before Running</span></h3>
+        </div>
+
+        <ul>
+          <li><span class="sht" tabindex="0" data-so="Si taxaddar leh u akhri amarka oo dhan.">Read the complete command carefully.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Faham faylasha ama adeegyada uu saamayn karo.">Understand which files or services it may affect.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Hubi waddooyinka, ikhtiyaarrada, iyo doodaha amarka.">Check paths, options, and command arguments.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Ka taxaddar amarrada rakibidda iyo kuwa maamulaha.">Be cautious with installation and administrator commands.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Ha fulin amarro wax burburinaya oo aadan fahmin.">Do not execute destructive commands you do not understand.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-label">Practical Workflow</span>
+      <h2><span class="sht" tabindex="0" data-so="Soo Saar Amar Mashruuc oo Ammaan ah">Generate a Safe Project Command</span></h2>
+
+      <div class="workflow">
+        <div class="workflow-step">
+          <span class="number">1</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Fur mashruuca">Open the project</span></strong> <span class="sht" tabindex="0" data-so="Visual Studio Code ka bilow galka mashruuca ee saxda ah.">Start Visual Studio Code in the correct project folder.</span></div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">2</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Fur Terminal">Open Terminal</span></strong> <span class="sht" tabindex="0" data-so="Fur terminal-ka ku dhex jira Visual Studio Code.">Open Visual Studio Code’s integrated terminal.</span></div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">3</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Fur Inline Chat">Open Inline Chat</span></strong> <span class="sht" tabindex="0" data-so="Midig ku dhufo oo dooro Open Inline Chat.">Right-click and choose Open Inline Chat.</span></div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">4</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Sharax hawsha">Describe the task</span></strong> <span class="sht" tabindex="0" data-so="Codso amar sax ah oo aan wax burburinayn.">Ask for a precise, non-destructive command.</span></div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">5</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Dib u eeg soo-jeedinta">Review the suggestion</span></strong> <span class="sht" tabindex="0" data-so="Xaqiiji ujeeddadiisa, waddadiisa, iyo ikhtiyaarradiisa.">Confirm its purpose, path, and options.</span></div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="number">6</span>
+          <div><strong><span class="sht" tabindex="0" data-so="Fuli oo baadh">Run and inspect</span></strong> <span class="sht" tabindex="0" data-so="Fuli keliya markaad fahamto, dabadeedna akhri natiijada.">Execute only after understanding it, then read the output.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card summary">
+      <span class="section-label">English Technical Summary</span>
+      <h2><span class="sht" tabindex="0" data-so="Soo-koobid Farsamo">Technical Summary</span></h2>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Copilot Inline Chat waxaa laga heli karaa gudaha terminal-ka ku dhex jira.">Copilot Inline Chat is available inside the integrated terminal.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Wuxuu codsiyada luuqadda dabiiciga ah u rogi karaa amarro la soo jeediyay.">It can convert natural-language requests into suggested commands.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ka fur menu-ga midig-gujinta terminal-ka ama furaha gaaban.">Open it through the terminal’s right-click menu or shortcut.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Furayaasha gaagaabani way ku kala duwanaan karaan nidaamyada iyo noocyada.">Shortcuts may differ between systems and versions.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dib u eeg oo faham amar kasta ka hor fulintiisa.">Review and understand every command before executing it.</span></li>
+      </ul>
+    </section>
+
+    <section class="card somali-farsamo" lang="so">
+      <span class="section-label">Somali Farsamo</span>
+      <h2>Soo Koobid Farsamo</h2>
+
+      <p>
+        GitHub Copilot Inline Chat waxaa laga isticmaali karaa terminal-ka ku
+        dhex jira Visual Studio Code.
+      </p>
+
+      <ul>
+        <li>Midig ku dhufo terminal-ka oo dooro Open Inline Chat.</li>
+        <li>Si cad u sharax amarka aad u baahan tahay.</li>
+        <li>Hubi amarka ka hor intaadan fulin.</li>
+        <li>Ha fulin amar wax burburin kara oo aadan fahmin.</li>
+      </ul>
+    </section>
+
+    <section class="card rules">
+      <span class="section-label">Rules</span>
+      <h2><span class="sht" tabindex="0" data-so="Xeerarka Badbaadada Terminal-ka">Terminal Safety Rules</span></h2>
+
+      <ol>
+        <li><span class="sht" tabindex="0" data-so="Xaqiiji in terminal-ku ku jiro galka mashruuca ee saxda ah.">Confirm that the terminal is in the correct project directory.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Copilot weydiiso hal hawl oo cad markiiba.">Ask Copilot for one clear task at a time.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Faham amar kasta ka hor fulintiisa.">Understand every command before running it.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Si taxaddar leh u baadh waddooyinka faylasha iyo ikhtiyaarrada amarka.">Inspect file paths and command options carefully.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Weligaa chat-ka ha gelin furaha sirta ah, token, ama furayaal gaar ah.">Never paste passwords, tokens, or private keys into chat.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ka fogow amarro wax burburinaya ilaa aad si buuxda u fahanto saamayntooda.">Avoid destructive commands unless their effect is fully understood.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Akhri natiijada terminal-ka ka hor intaadan sii wadin.">Read the terminal output before continuing.</span></li>
+      </ol>
+    </section>
+
+    <section class="card mistakes">
+      <span class="section-label">Common Mistakes</span>
+      <h2><span class="sht" tabindex="0" data-so="Khaladaadka Laga Fogaado">Mistakes to Avoid</span></h2>
+
+      <div class="mistake">
+        <strong><span class="sht" tabindex="0" data-so="Fulinta Amar Adigoon Akhrin">Running a command without reading it</span></strong>
+        <p><span class="sht" tabindex="0" data-so="Amar la soo jeediyay wuxuu noqon karaa mid khaldan ama aan mashruuca ku habboonayn.">A suggested command can be incorrect or unsuitable for the project.</span></p>
+      </div>
+
+      <div class="mistake">
+        <strong><span class="sht" tabindex="0" data-so="Adeegsiga Gal Khaldan">Using the wrong directory</span></strong>
+        <p><span class="sht" tabindex="0" data-so="Amar sax ahi wuu fashilmi karaa ama wuxuu saamayn karaa gal mashruuc oo khaldan.">A correct command may fail or affect the wrong project folder.</span></p>
+      </div>
+
+      <div class="mistake">
+        <strong><span class="sht" tabindex="0" data-so="Iska Indho-tirka Ikhtiyaarrada Amarka">Ignoring command options</span></strong>
+        <p><span class="sht" tabindex="0" data-so="Ikhtiyaarradu si weyn ayay u beddeli karaan waxa amarku qabto.">Options can substantially change what a command does.</span></p>
+      </div>
+
+      <div class="mistake">
+        <strong><span class="sht" tabindex="0" data-so="Wadaagista Siraha">Sharing secrets</span></strong>
+        <p><span class="sht" tabindex="0" data-so="Weligaa ha bixin furaha sirta ah, token-ka gelitaanka, ama furayaasha gaarka ah ee API.">Never provide passwords, access tokens, or private API keys.</span></p>
+      </div>
+    </section>
+
+    <section class="card quiz">
+      <span class="section-label">Knowledge Check</span>
+      <h2><span class="sht" tabindex="0" data-so="Su'aalo Doorashooyin Badan leh">Multiple-Choice Questions</span></h2>
+
+      <div class="question">
+        <div class="question-title"><span class="sht" tabindex="0" data-so="1. Xaggee laga isticmaalaa Inline Chat-ka terminal-ka?">1. Where is terminal Inline Chat used?</span></div>
+        <div class="option"><span class="sht" tabindex="0" data-so="A. Terminal-ka ku dhex jira Visual Studio Code">A. Visual Studio Code’s integrated terminal</span></div>
+        <div class="option">B. The phone camera</div>
+        <div class="option">C. A printed document</div>
+        <div class="option">D. The lock screen</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title"><span class="sht" tabindex="0" data-so="2. Sidee ayaad uga furi kartaa terminal-ka?">2. How can you open it from the terminal?</span></div>
+        <div class="option"><span class="sht" tabindex="0" data-so="A. Midig ku dhufo oo dooro Open Inline Chat">A. Right-click and select Open Inline Chat</span></div>
+        <div class="option">B. Delete the terminal</div>
+        <div class="option">C. Close the project</div>
+        <div class="option">D. Restart the computer</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title"><span class="sht" tabindex="0" data-so="3. Maxaa la sameeyaa ka hor fulinta amar la soo jeediyay?">3. What should happen before running a suggested command?</span></div>
+        <div class="option"><span class="sht" tabindex="0" data-so="A. Dib u eeg oo faham">A. Review and understand it</span></div>
+        <div class="option">B. Publish it immediately</div>
+        <div class="option">C. Share your password</div>
+        <div class="option">D. Delete the project</div>
+      </div>
+
+      <div class="question">
+        <div class="question-title"><span class="sht" tabindex="0" data-so="4. Xogtee ayay tahay inay gaar ahaato?">4. What information must remain private?</span></div>
+        <div class="option"><span class="sht" tabindex="0" data-so="A. Furayaasha sirta ah iyo furayaasha API">A. Passwords and API keys</span></div>
+        <div class="option">B. A public HTML element</div>
+        <div class="option">C. A general programming question</div>
+        <div class="option">D. A course title</div>
+      </div>
+
+      <details>
+        <summary><span class="sht" tabindex="0" data-so="Fur Jawaabaha Saxda ah">Open Answer Key</span></summary>
+        <div class="answers">
+          <ol>
+            <li><strong>A</strong> — It works inside the integrated terminal.</li>
+            <li><strong>A</strong> — Use the terminal’s right-click menu.</li>
+            <li><strong>A</strong> — Commands must be reviewed before execution.</li>
+            <li><strong>A</strong> — Passwords and API keys must remain private.</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <section class="card remember">
+      <span class="section-label" style="color:#ffe29a">Remember</span>
+      <h2><span class="sht" tabindex="0" data-so="Qodobbada Muhiimka ah">Important Points</span></h2>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Adeegso luuqad dabiici ah: si cad u sharax hawsha terminal-ka."><strong>Use natural language:</strong> clearly describe the terminal task.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Hubi galka: xaqiiji inaad ku jirto mashruuca saxda ah."><strong>Check the directory:</strong> confirm you are in the correct project.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Copilot wuxuu soo jeediyaa oo keliya: adiga ayaa go'aaminaya inaad amarka fuliso."><strong>Copilot only suggests:</strong> you decide whether to run the command.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ilaali xogta xasaasiga ah: waligaa ha shaacin furayaasha sirta ah."><strong>Protect sensitive data:</strong> never expose passwords or keys.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Badbaadadu waa mudnaanta koowaad: ha fulin amarro aadan fahmin."><strong>Safety comes first:</strong> do not run commands you do not understand.</span></li>
+      </ul>
+    </section>
+
+    <nav class="navigation">
+      <a class="button" href="/ai-lessons/lesson-14-using-inline-and-quick-chat.html">
+        ← Previous Lesson
+      </a>
+      <a class="button portal" href="/learner-portal">Learner Portal</a>
+    </nav>
+  </main>
+
+  <footer>
+    <strong>Elmi Guray Academy</strong>
+    <span>Knowledge • Integrity • Opportunity</span>
+  </footer>
+</body>
+</html>

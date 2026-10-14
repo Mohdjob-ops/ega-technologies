@@ -244,6 +244,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+<link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+<script defer src="/ai-lessons/somali-help-translation.js"></script>
 </head>
 
 <body>
@@ -318,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <nav class="ega-lesson-nav">
     <a href="/ai-lessons/lesson-08-github-copilot-for-ai-developers.html">← Previous</a>
     <a class="ega-home" href="/learner-portal">🏠 Learner Portal</a>
-    <span class="ega-disabled">Next →</span>
+    <a href="/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html">Next →</a>
 </nav>
 <!-- EGA LESSON NAVIGATION END -->
 
@@ -404,12 +408,13 @@ document.addEventListener("DOMContentLoaded", function () {
     <hr>
 
     <main>
+        <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
         <section id="listen" class="ega-audio-reader"><h2>Lesson Audio</h2><p>Listen to Lesson 9 in English. Click any transcript line to continue from that point.</p><div class="ega-sticky-player"><audio controls preload="metadata" data-transcript="EGA-AI-Lesson-09-English.vtt"><source src="EGA-AI-Lesson-09-English.mp3" type="audio/mpeg">Your browser does not support the audio player.</audio></div><div class="ega-transcript" aria-label="Synchronized Lesson 9 transcript"><p class="ega-transcript-status">Loading synchronized transcript…</p></div><script defer src="/ai-lessons/audio-transcript.js"></script></section>
 
         <section>
 
             <h2>
-                Lesson Introduction
+                <span class="sht" tabindex="0" data-so="Hordhaca Casharka">Lesson Introduction</span>
             </h2>
 
             <p>
@@ -418,17 +423,19 @@ document.addEventListener("DOMContentLoaded", function () {
             </p>
 
             <p>
-                In this lesson, we will focus more closely on how Copilot
+                <span class="sht" tabindex="0" data-so="Casharkan, waxaan si dhow u eegi doonaa sida Copilot uga mid noqdo deegaanka shaqada horumariyaha, sida loo helo, sababta xaqiijinta akoonku ugu baahan tahay, iyo sababta ay muhiim u tahay in la fahmo xaddidaadaha rukumada ka hor ku tiirsanaanta badan ee qalabka AI.">In this lesson, we will focus more closely on how Copilot
                 becomes part of a developer's working environment,
                 how developers access it, why account authentication is
                 required, and why subscription limits should be understood
                 before depending heavily on AI coding tools.
+                </span>
             </p>
 
             <p>
-                We will use Visual Studio Code as our main example because
+                <span class="sht" tabindex="0" data-so="Waxaan tusaalaha ugu weyn u adeegsan doonaa Visual Studio Code sababtoo ah waa deegaan caadi ah oo lagu barto horumarinta software-ka ee AI caawiso.">We will use Visual Studio Code as our main example because
                 it provides a common environment for learning AI-assisted
                 software development.
+                </span>
             </p>
 
         </section>
@@ -438,22 +445,24 @@ document.addEventListener("DOMContentLoaded", function () {
         <section>
 
             <h2>
-                Learning Objectives
+                <span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">Learning Objectives</span>
             </h2>
 
             <p>
-                By the end of this lesson, you should be able to:
+                <span class="sht" tabindex="0" data-so="Dhammaadka casharkan, waa inaad awoodi doontaa inaad:">By the end of this lesson, you should be able to:</span>
             </p>
 
             <ul>
                 <li>
-                    Explain how GitHub Copilot connects to a development
+                    <span class="sht" tabindex="0" data-so="Sharaxdo sida GitHub Copilot ugu xidhmo deegaan horumarineed.">Explain how GitHub Copilot connects to a development
                     environment.
+                    </span>
                 </li>
 
                 <li>
-                    Understand the difference between an editor and an
+                    <span class="sht" tabindex="0" data-so="Fahanto farqiga u dhexeeya tafatire iyo kordhin.">Understand the difference between an editor and an
                     extension.
+                    </span>
                 </li>
 
                 <li>
@@ -461,20 +470,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 </li>
 
                 <li>
-                    Understand why a GitHub account is required.
+                    <span class="sht" tabindex="0" data-so="Fahanto sababta akoon GitHub loogu baahan yahay.">Understand why a GitHub account is required.</span>
                 </li>
 
                 <li>
-                    Understand why AI coding services may have usage plans
+                    <span class="sht" tabindex="0" data-so="Fahanto sababta adeegyada koodh-qorista AI u yeelan karaan qorshayaal iyo xaddidaado isticmaal.">Understand why AI coding services may have usage plans
                     and limits.
+                    </span>
                 </li>
 
                 <li>
-                    Recognize that pricing and plan details may change.
+                    <span class="sht" tabindex="0" data-so="Aqoonsato in qiimaha iyo faahfaahinta qorshuhu isbeddeli karaan.">Recognize that pricing and plan details may change.</span>
                 </li>
 
                 <li>
-                    Understand the basic Copilot setup workflow.
+                    <span class="sht" tabindex="0" data-so="Fahanto hab-socodka aasaasiga ah ee dejinta Copilot.">Understand the basic Copilot setup workflow.</span>
                 </li>
             </ul>
 
@@ -485,21 +495,23 @@ document.addEventListener("DOMContentLoaded", function () {
         <section id="english">
 
             <h2>
-                Technical Explanation — English
+                <span class="sht" tabindex="0" data-so="Sharaxaad Farsamo — Ingiriisi">Technical Explanation — English</span>
             </h2>
 
             <h3>
-                1. Copilot Inside the Development Environment
+                <span class="sht" tabindex="0" data-so="1. Copilot Gudaha Deegaanka Horumarinta">1. Copilot Inside the Development Environment</span>
             </h3>
 
             <p>
-                GitHub Copilot adds AI-assisted development capabilities
+                <span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu ku daraa awoodaha horumarinta ay AI caawiso deegaanada koodh-qorista ee la taageero.">GitHub Copilot adds AI-assisted development capabilities
                 to supported coding environments.
+                </span>
             </p>
 
             <p>
-                Depending on the editor or IDE, Copilot may be available
+                <span class="sht" tabindex="0" data-so="Iyadoo ku xidhan tafatiraha ama IDE-ga, Copilot waxaa lagu heli karaa kordhin, isku-dar, ama sifo ku dhex jirta.">Depending on the editor or IDE, Copilot may be available
                 through an extension, integration, or built-in feature.
+                </span>
             </p>
 
             <p>
@@ -508,12 +520,13 @@ document.addEventListener("DOMContentLoaded", function () {
             </p>
 
             <h3>
-                2. What Is an Extension?
+                <span class="sht" tabindex="0" data-so="2. Waa Maxay Kordhin (Extension)?">2. What Is an Extension?</span>
             </h3>
 
             <p>
-                An extension is an additional software component that adds
+                <span class="sht" tabindex="0" data-so="Kordhintu waa qayb software oo dheeraad ah oo awood cusub ku darta barnaamij hore u jiray.">An extension is an additional software component that adds
                 new capabilities to an existing application.
+                </span>
             </p>
 
             <p>
@@ -529,17 +542,19 @@ document.addEventListener("DOMContentLoaded", function () {
             </ul>
 
             <p>
-                An extension does not normally replace the editor.
+                <span class="sht" tabindex="0" data-so="Kordhintu caadi ahaan ma beddesho tafatiraha; waxay ku dartaa hawl-qabad cusub.">An extension does not normally replace the editor.
                 Instead, it adds functionality to it.
+                </span>
             </p>
 
             <h3>
-                3. Main AI Capabilities
+                <span class="sht" tabindex="0" data-so="3. Awoodaha Ugu Muhiimsan ee AI">3. Main AI Capabilities</span>
             </h3>
 
             <p>
-                A Copilot-enabled development environment may provide
+                <span class="sht" tabindex="0" data-so="Deegaan horumarineed oo Copilot ku jira wuxuu bixin karaa dhowr nooc oo caawimo AI ah.">A Copilot-enabled development environment may provide
                 several forms of AI assistance.
+                </span>
             </p>
 
             <table>
@@ -600,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </table>
 
             <h3>
-                4. Code Completion
+                <span class="sht" tabindex="0" data-so="4. Dhammaystirka Koodhka">4. Code Completion</span>
             </h3>
 
             <p>
@@ -618,16 +633,17 @@ document.addEventListener("DOMContentLoaded", function () {
 }</code></pre>
 
             <p>
-                This is called a code suggestion or code completion.
+                <span class="sht" tabindex="0" data-so="Tan waxaa loo yaqaan soo-jeedin koodh ama dhammaystirka koodhka.">This is called a code suggestion or code completion.</span>
             </p>
 
             <p>
-                You should still understand the suggestion before
+                <span class="sht" tabindex="0" data-so="Weli waa inaad fahantaa soo-jeedinta ka hor intaadan aqbalin.">You should still understand the suggestion before
                 accepting it.
+                </span>
             </p>
 
             <h3>
-                5. Code Generation
+                <span class="sht" tabindex="0" data-so="5. Soo-saarista Koodhka">5. Code Generation</span>
             </h3>
 
             <p>
@@ -651,7 +667,7 @@ whether a quiz score is 70 or higher.</code></pre>
 }</code></pre>
 
             <h3>
-                6. AI Chat
+                <span class="sht" tabindex="0" data-so="6. Wada-sheekaysiga AI">6. AI Chat</span>
             </h3>
 
             <p>
@@ -674,7 +690,7 @@ Write tests for this function.
 Explain the difference between let and const.</code></pre>
 
             <h3>
-                7. AI Agents
+                <span class="sht" tabindex="0" data-so="7. Wakiillada AI">7. AI Agents</span>
             </h3>
 
             <p>
@@ -697,13 +713,14 @@ check the existing project structure,
 and explain the files you changed.</code></pre>
 
             <p>
-                This type of assistance can be powerful, but the developer
+                <span class="sht" tabindex="0" data-so="Caawimadan waxay noqon kartaa mid awood badan, laakiin horumariyuhu waa inuu dib u eego ficillada muhiimka ah ka hor inta uusan ku kalsoonaan natiijada kama dambaysta ah.">This type of assistance can be powerful, but the developer
                 should review important actions before trusting the final
                 result.
+                </span>
             </p>
 
             <h3>
-                8. GitHub Account and Sign-In
+                <span class="sht" tabindex="0" data-so="8. Akoonka GitHub iyo Gelitaanka">8. GitHub Account and Sign-In</span>
             </h3>
 
             <p>
@@ -711,13 +728,15 @@ and explain the files you changed.</code></pre>
             </p>
 
             <p>
-                Therefore, the developer normally needs to authenticate
+                <span class="sht" tabindex="0" data-so="Sidaas darteed, horumariyuhu caadi ahaan waa inuu ku xaqiijiyaa akoon GitHub ka hor isticmaalka sifooyinka Copilot.">Therefore, the developer normally needs to authenticate
                 with a GitHub account before using Copilot features.
+                </span>
             </p>
 
             <p>
-                Authentication means proving to the service which account
+                <span class="sht" tabindex="0" data-so="Xaqiijinta aqoonsigu waxay adeegga u caddaynaysaa akoonka aad isticmaalayso.">Authentication means proving to the service which account
                 you are using.
+                </span>
             </p>
 
             <p>
@@ -751,12 +770,13 @@ and explain the files you changed.</code></pre>
             </ol>
 
             <h3>
-                9. Plans, Usage Limits, and Cost
+                <span class="sht" tabindex="0" data-so="9. Qorshayaasha, Xaddidaadaha Isticmaalka, iyo Kharashka">9. Plans, Usage Limits, and Cost</span>
             </h3>
 
             <p>
-                AI coding services can have different access plans and
+                <span class="sht" tabindex="0" data-so="Adeegyada koodh-qorista AI waxay yeelan karaan qorshayaal gelitaan iyo xaddidaado isticmaal oo kala duwan.">AI coding services can have different access plans and
                 usage limits.
+                </span>
             </p>
 
             <p>
@@ -765,8 +785,9 @@ and explain the files you changed.</code></pre>
             </p>
 
             <p>
-                The exact names, prices, limits, and available features
+                <span class="sht" tabindex="0" data-so="Magacyada saxda ah, qiimaha, xaddidaadaha, iyo astaamaha la heli karo way isbeddeli karaan waqti ka dib.">The exact names, prices, limits, and available features
                 can change over time.
+                </span>
             </p>
 
             <p>
@@ -776,13 +797,14 @@ and explain the files you changed.</code></pre>
 
             <blockquote>
                 <strong>
-                    Always check the current official service information
+                    <span class="sht" tabindex="0" data-so="Had iyo jeer hubi xogta rasmiga ah ee adeegga ee hadda jirta ka hor intaadan lacag ka bixin qalab horumarineed oo AI ah.">Always check the current official service information
                     before paying for an AI development tool.
+                    </span>
                 </strong>
             </blockquote>
 
             <h3>
-                10. Usage Planning
+                <span class="sht" tabindex="0" data-so="10. Qorshaynta Isticmaalka">10. Usage Planning</span>
             </h3>
 
             <p>
@@ -1067,29 +1089,30 @@ and explain the files you changed.</code></pre>
         <section id="practical">
 
             <h2>
-                Practical Setup Example
+                <span class="sht" tabindex="0" data-so="Tusaale Wax-ku-ool ah oo Dejinta">Practical Setup Example</span>
             </h2>
 
             <p>
-                A beginner developer can think of Copilot setup as this
+                <span class="sht" tabindex="0" data-so="Horumariye bilow ah wuxuu dejinta Copilot u qaadan karaa hab-socodkan:">A beginner developer can think of Copilot setup as this
                 workflow:
+                </span>
             </p>
 
             <ol>
                 <li>
-                    Install or open Visual Studio Code.
+                    <span class="sht" tabindex="0" data-so="Ku rakib ama fur Visual Studio Code.">Install or open Visual Studio Code.</span>
                 </li>
 
                 <li>
-                    Locate GitHub Copilot in the editor.
+                    <span class="sht" tabindex="0" data-so="Ka hel GitHub Copilot tafatiraha dhexdiisa.">Locate GitHub Copilot in the editor.</span>
                 </li>
 
                 <li>
-                    Sign in with the correct GitHub account.
+                    <span class="sht" tabindex="0" data-so="Ku gal akoonka GitHub ee saxda ah.">Sign in with the correct GitHub account.</span>
                 </li>
 
                 <li>
-                    Confirm your available Copilot access.
+                    <span class="sht" tabindex="0" data-so="Xaqiiji helitaanka Copilot ee kuu diyaar ah.">Confirm your available Copilot access.</span>
                 </li>
 
                 <li>
@@ -1101,7 +1124,7 @@ and explain the files you changed.</code></pre>
                 </li>
 
                 <li>
-                    Review every suggestion before accepting it.
+                    <span class="sht" tabindex="0" data-so="Dib u eeg soo-jeedin kasta ka hor intaadan aqbalin.">Review every suggestion before accepting it.</span>
                 </li>
             </ol>
 
@@ -1175,24 +1198,24 @@ for Elmi Guray Academy.</code></pre>
         <section>
 
             <h2>
-                Important Rules
+                <span class="sht" tabindex="0" data-so="Xeerar Muhiim ah">Important Rules</span>
             </h2>
 
             <ul>
                 <li>
-                    Use your own GitHub account.
+                    <span class="sht" tabindex="0" data-so="Adeegso akoonkaaga GitHub.">Use your own GitHub account.</span>
                 </li>
 
                 <li>
-                    Never share your account password.
+                    <span class="sht" tabindex="0" data-so="Weligaa ha wadaagin furaha sirta ah ee akoonkaaga.">Never share your account password.</span>
                 </li>
 
                 <li>
-                    Understand what an extension is before installing it.
+                    <span class="sht" tabindex="0" data-so="Faham waxa kordhin tahay ka hor intaadan rakibin.">Understand what an extension is before installing it.</span>
                 </li>
 
                 <li>
-                    Review permissions requested by development tools.
+                    <span class="sht" tabindex="0" data-so="Dib u eeg oggolaanshaha ay codsadaan qalabka horumarintu.">Review permissions requested by development tools.</span>
                 </li>
 
                 <li>
@@ -1201,7 +1224,7 @@ for Elmi Guray Academy.</code></pre>
                 </li>
 
                 <li>
-                    Check current official plan information before paying.
+                    <span class="sht" tabindex="0" data-so="Hubi xogta rasmiga ah ee qorshaha hadda jirta ka hor bixinta lacagta.">Check current official plan information before paying.</span>
                 </li>
 
                 <li>
@@ -1209,7 +1232,7 @@ for Elmi Guray Academy.</code></pre>
                 </li>
 
                 <li>
-                    Test AI-generated code before using it in production.
+                    <span class="sht" tabindex="0" data-so="Tijaabi koodhka AI soo saartay ka hor isticmaalka wax-soo-saarka.">Test AI-generated code before using it in production.</span>
                 </li>
             </ul>
 
@@ -1220,32 +1243,32 @@ for Elmi Guray Academy.</code></pre>
         <section>
 
             <h2>
-                Common Beginner Mistakes
+                <span class="sht" tabindex="0" data-so="Khaladaadka Caanka ah ee Bilowga">Common Beginner Mistakes</span>
             </h2>
 
             <ul>
                 <li>
-                    Assuming Copilot replaces Visual Studio Code.
+                    <span class="sht" tabindex="0" data-so="In loo qaato in Copilot beddelayo Visual Studio Code.">Assuming Copilot replaces Visual Studio Code.</span>
                 </li>
 
                 <li>
-                    Confusing an extension with the editor itself.
+                    <span class="sht" tabindex="0" data-so="In kordhin lagu khaldo tafatiraha laftiisa.">Confusing an extension with the editor itself.</span>
                 </li>
 
                 <li>
-                    Signing in with the wrong GitHub account.
+                    <span class="sht" tabindex="0" data-so="Ku gelidda akoon GitHub oo khaldan.">Signing in with the wrong GitHub account.</span>
                 </li>
 
                 <li>
-                    Forgetting that usage limits may exist.
+                    <span class="sht" tabindex="0" data-so="Illowga in xaddidaado isticmaal jiri karaan.">Forgetting that usage limits may exist.</span>
                 </li>
 
                 <li>
-                    Assuming pricing never changes.
+                    <span class="sht" tabindex="0" data-so="In loo qaato in qiimuhu aanu marnaba isbeddelin.">Assuming pricing never changes.</span>
                 </li>
 
                 <li>
-                    Accepting every AI suggestion automatically.
+                    <span class="sht" tabindex="0" data-so="Si otomaatig ah u aqbalidda soo-jeedin kasta oo AI ah.">Accepting every AI suggestion automatically.</span>
                 </li>
 
                 <li>
@@ -1261,7 +1284,7 @@ for Elmi Guray Academy.</code></pre>
         <section id="test">
 
             <h2>
-                Lesson Test — Multiple Choice
+                <span class="sht" tabindex="0" data-so="Imtixaanka Casharka — Doorashooyin Badan">Lesson Test — Multiple Choice</span>
             </h2>
 
             <form>
@@ -1269,12 +1292,12 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        1. What does an extension normally do?
+                        <span class="sht" tabindex="0" data-so="1. Maxay kordhintu caadi ahaan qabataa?">1. What does an extension normally do?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test1" value="a">
-                        Adds capabilities to an existing application
+                        <span class="sht" tabindex="0" data-so="Waxay awood cusub ku darta barnaamij jira">Adds capabilities to an existing application</span>
                     </label>
 
                     <br>
@@ -1296,12 +1319,12 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        2. Why is GitHub sign-in important for Copilot?
+                        <span class="sht" tabindex="0" data-so="2. Maxay gelitaanka GitHub muhiim ugu tahay Copilot?">2. Why is GitHub sign-in important for Copilot?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test2" value="a">
-                        It authenticates the account using the service
+                        <span class="sht" tabindex="0" data-so="Waxay xaqiijisaa akoonka adeegga isticmaalaya">It authenticates the account using the service</span>
                     </label>
 
                     <br>
@@ -1323,12 +1346,12 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        3. Which is a Copilot-style AI capability?
+                        <span class="sht" tabindex="0" data-so="3. Kee ayaa ah awood AI oo Copilot leeyahay?">3. Which is a Copilot-style AI capability?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test3" value="a">
-                        Code completion
+                        <span class="sht" tabindex="0" data-so="Dhammaystirka koodhka">Code completion</span>
                     </label>
 
                     <br>
@@ -1350,13 +1373,13 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        4. What should you remember about AI subscription
-                        prices?
+                        <span class="sht" tabindex="0" data-so="4. Maxaad ka xasuusanaysaa qiimaha rukumada AI?">4. What should you remember about AI subscription
+                        prices?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test4" value="a">
-                        They can change
+                        <span class="sht" tabindex="0" data-so="Way isbeddeli karaan">They can change</span>
                     </label>
 
                     <br>
@@ -1378,13 +1401,13 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        5. What should happen before accepting AI-generated
-                        code?
+                        <span class="sht" tabindex="0" data-so="5. Maxaa la sameeyaa ka hor aqbalidda koodh AI soo saartay?">5. What should happen before accepting AI-generated
+                        code?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test5" value="a">
-                        Review and understand it
+                        <span class="sht" tabindex="0" data-so="Dib u eeg oo faham">Review and understand it</span>
                     </label>
 
                     <br>
@@ -1412,7 +1435,7 @@ for Elmi Guray Academy.</code></pre>
         <section>
 
             <h2>
-                Test Answer Key
+                <span class="sht" tabindex="0" data-so="Jawaabaha Imtixaanka">Test Answer Key</span>
             </h2>
 
             <ol>
@@ -1430,7 +1453,7 @@ for Elmi Guray Academy.</code></pre>
         <section id="quiz">
 
             <h2>
-                Lesson 9 Quiz — Multiple Choice
+                <span class="sht" tabindex="0" data-so="Imtixaanka Casharka 9 — Doorashooyin Badan">Lesson 9 Quiz — Multiple Choice</span>
             </h2>
 
             <form>
@@ -1438,8 +1461,9 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        1. Which development environment are we using as
+                        <span class="sht" tabindex="0" data-so="1. Deegaankee horumarineed ayaan tusaalaha ugu weyn u adeegsanaynaa?">1. Which development environment are we using as
                         the main example?
+                        </span>
                     </legend>
 
                     <label>
@@ -1473,12 +1497,12 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        2. Which capability predicts code while you type?
+                        <span class="sht" tabindex="0" data-so="2. Awooddee saadaalisa koodhka inta aad qorayso?">2. Which capability predicts code while you type?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz2" value="a">
-                        Code completion
+                        <span class="sht" tabindex="0" data-so="Dhammaystirka koodhka">Code completion</span>
                     </label>
 
                     <br>
@@ -1507,13 +1531,14 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        3. What lets a developer ask natural-language
+                        <span class="sht" tabindex="0" data-so="3. Maxaa horumariyaha u oggolaanaya inuu su'aalo ku saabsan koodhka ku weydiiyo luuqad dabiici ah?">3. What lets a developer ask natural-language
                         questions about code?
+                        </span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz3" value="a">
-                        AI Chat
+                        <span class="sht" tabindex="0" data-so="Wada-sheekaysiga AI">AI Chat</span>
                     </label>
 
                     <br>
@@ -1542,13 +1567,14 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        4. Why should developers check current official
+                        <span class="sht" tabindex="0" data-so="4. Maxay horumariyeyaashu u hubinayaan xogta rasmiga ah ee qiimaha ee hadda jirta?">4. Why should developers check current official
                         pricing information?
+                        </span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz4" value="a">
-                        Plans and prices may change
+                        <span class="sht" tabindex="0" data-so="Qorshayaasha iyo qiimuhu way isbeddeli karaan">Plans and prices may change</span>
                     </label>
 
                     <br>
@@ -1577,12 +1603,12 @@ for Elmi Guray Academy.</code></pre>
                 <fieldset>
 
                     <legend>
-                        5. What is authentication?
+                        <span class="sht" tabindex="0" data-so="5. Waa maxay xaqiijinta aqoonsigu?">5. What is authentication?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz5" value="a">
-                        Confirming the identity or account using a service
+                        <span class="sht" tabindex="0" data-so="Xaqiijinta aqoonsiga ama akoonka adeeg la isticmaalayo">Confirming the identity or account using a service</span>
                     </label>
 
                     <br>
@@ -1609,7 +1635,7 @@ for Elmi Guray Academy.</code></pre>
                 </fieldset>
 
                 <button type="submit">
-                    Submit Quiz
+                    <span class="sht" tabindex="0" data-so="Gudbi Imtixaanka">Submit Quiz</span>
                 </button>
 
             </form>
@@ -1621,7 +1647,7 @@ for Elmi Guray Academy.</code></pre>
         <section>
 
             <h2>
-                Quiz Answer Key
+                <span class="sht" tabindex="0" data-so="Jawaabaha Imtixaanka">Quiz Answer Key</span>
             </h2>
 
             <ol>
@@ -1641,13 +1667,14 @@ for Elmi Guray Academy.</code></pre>
         <section id="remember">
 
             <h2>
-                Remember
+                <span class="sht" tabindex="0" data-so="Xusuusnow">Remember</span>
             </h2>
 
             <p>
                 <strong>
-                    GitHub Copilot adds AI assistance to supported
+                    <span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu caawimo AI ku daraa deegaanada horumarinta ee la taageero.">GitHub Copilot adds AI assistance to supported
                     development environments.<br><br>
+                    </span>
 
                     An extension adds capabilities to an existing
                     application.<br><br>
@@ -1658,17 +1685,20 @@ for Elmi Guray Academy.</code></pre>
                     GitHub account authentication is normally required to
                     access the service.<br><br>
 
-                    AI coding services may have access plans and usage
+                    <span class="sht" tabindex="0" data-so="Adeegyada koodh-qorista AI waxay yeelan karaan qorshayaal gelitaan iyo xaddidaado isticmaal.">AI coding services may have access plans and usage
                     limits.<br><br>
+                    </span>
 
-                    Plan names, prices, limits, and features can change
+                    <span class="sht" tabindex="0" data-so="Magacyada qorshayaasha, qiimaha, xaddidaadaha, iyo astaamuhu way isbeddeli karaan waqti ka dib.">Plan names, prices, limits, and features can change
                     over time.<br><br>
+                    </span>
 
                     Check current official information before purchasing a
                     subscription.<br><br>
 
-                    The Developer remains responsible for reviewing and
+                    <span class="sht" tabindex="0" data-so="Horumariyaha ayaa masuul ka ah dib-u-eegista iyo tijaabinta koodhka AI soo saartay.">The Developer remains responsible for reviewing and
                     testing AI-generated code.
+                    </span>
                 </strong>
             </p>
 
@@ -1721,7 +1751,7 @@ for Elmi Guray Academy.</code></pre>
 <nav class="ega-lesson-nav">
     <a href="/ai-lessons/lesson-08-github-copilot-for-ai-developers.html">← Previous</a>
     <a class="ega-home" href="/learner-portal">🏠 Learner Portal</a>
-    <span class="ega-disabled">Next →</span>
+    <a href="/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html">Next →</a>
 </nav>
 <!-- EGA LESSON NAVIGATION END -->
 

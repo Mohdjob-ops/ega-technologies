@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="EGA AI Developer Course Lesson 11: Creating and Adding AI Images with Copilot in PowerPoint."
+  >
+
+  <title>
+    Lesson 11: Creating and Adding AI Images with Copilot in PowerPoint
+  </title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eef3ff;
+      color: #1e293b;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+      line-height: 1.7;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 22px 60px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin: 14px auto 24px;
+      width: 100%;
+    }
+
+    .nav a {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      background: #003366;
+      color: white;
+      min-width: 170px;
+      min-height: 46px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .hero,
+    .section {
+      width: 100%;
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      margin: 0 auto 22px;
+      box-shadow: 0 5px 18px rgba(0, 51, 102, 0.08);
+      overflow: hidden;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .lesson-number {
+      color: #2563eb;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      color: #003366;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.2;
+      margin: 12px auto 16px;
+      max-width: 760px;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    h2 {
+      color: #003366;
+      font-size: 27px;
+      line-height: 1.3;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      color: #0f4c81;
+      margin-bottom: 8px;
+    }
+
+    p,
+    li {
+      font-size: 18px;
+    }
+
+    ul,
+    ol {
+      padding-left: 26px;
+    }
+
+    .goal {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      padding: 15px 18px;
+      border-radius: 10px;
+    }
+
+    .somali {
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    .important {
+      background: #fff7ed;
+      border-left: 5px solid #f97316;
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    code {
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+    }
+
+    .example-output {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 16px;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 17px;
+    }
+
+    .question {
+      margin: 22px 0;
+      padding: 18px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #dbeafe;
+    }
+
+    .answer-key {
+      background: #ecfdf5;
+      border: 1px solid #86efac;
+    }
+
+    .remember {
+      font-size: 20px;
+      font-weight: 700;
+      color: #003366;
+      text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      color: #64748b;
+      margin-top: 30px;
+      font-size: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 16px 12px 45px;
+      }
+
+      .hero,
+      .section {
+        padding: 20px 16px;
+        border-radius: 14px;
+      }
+
+      h1 {
+        font-size: 29px;
+        line-height: 1.2;
+      }
+
+      h2 {
+        font-size: 23px;
+      }
+
+      p,
+      li {
+        font-size: 17px;
+      }
+
+      .nav {
+        gap: 8px;
+      }
+
+      .nav a {
+        min-width: 145px;
+        min-height: 44px;
+        font-size: 15px;
+        padding: 10px 12px;
+      }
+    }
+  </style>
+
+  <!-- EGA: Somali version temporarily disabled -->
+  <style>
+    .somali-section {
+      display: none !important;
+    }
+  </style>
+
+  <link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+  <link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+  <script defer src="/ai-lessons/somali-help-translation.js"></script>
+</head>
+
+<body>
+  <main class="page">
+
+    <nav class="nav">
+      <a href="/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html">
+        ← Previous
+      </a>
+
+      <a href="/learner-portal">
+        🎓 Learner Portal
+      </a>
+      <a href="/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html">
+        Next →
+      </a>
+    </nav>
+
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
+    <section class="hero">
+      <div class="lesson-number">
+        EGA AI DEVELOPER COURSE — LESSON 11
+      </div>
+
+      <h1>
+        Creating and Adding AI Images with Copilot in PowerPoint
+      </h1>
+
+      <p>
+        Learn how to create AI-generated images using Microsoft Copilot,
+        add them to PowerPoint, improve unclear results, and choose an
+        effective slide design.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">🎯 Learning Objectives</span></h2>
+
+      <div class="goal">
+        <span class="sht" tabindex="0" data-so="Dhammaadka casharkan, waa inaad awoodi doontaa inaad:">By the end of this lesson, you should be able to:</span>
+      </div>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Ka fur Copilot gudaha PowerPoint.">Open Copilot inside PowerPoint.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Copilot weydiiso inuu sawir u abuuro slide.">Ask Copilot to generate an image for a slide.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Qor codsiyo cad oo sawirrada AI lagu abuuro.">Write clear prompts for AI-generated images.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Hagaaji codsiga marka natiijada koowaad aanay ku habboonayn.">Improve a prompt when the first result is unsuitable.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Isticmaal PowerPoint Designer si aad u hagaajiso qaabka slide-ka.">Use PowerPoint Designer to improve the slide layout.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Copilot-ka webka ku samee sawirro kale.">Create alternative images using Copilot on the web.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Kaydi oo geli sawirrada AI ee PowerPoint.">Save and insert AI-generated images into PowerPoint.</span></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="1. Sawirro ku Abuurista Copilot">1. Creating Images with Copilot</span></h2>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Microsoft Copilot wuxuu samayn karaa wax ka badan helidda iyo gelinta sawir hore u jiray. Wuxuu sharaxaad qoran ka abuuri karaa sawir cusub.">Microsoft Copilot can do more than find and insert an existing
+        picture. It can create a new image from a written description.
+        </span>
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Tani way caawin kartaa marka slide-ku leeyahay sawir yar, aan caddayn, aan soo jiidasho lahayn, ama aan khusayn.">This can help when a slide has a small, unclear, unattractive, or
+        unrelated image.
+        </span>
+      </p>
+
+      <p>
+        For example, a slide discussing local restaurant competition should
+        use an image that clearly represents a restaurant or café. A small
+        unrelated picture may not communicate the intended message.
+      </p>
+
+      <div class="important">
+        <span class="sht" tabindex="0" data-so="Copilot waxa laga yaabaa inuusan codsi kasta si sax ah u fahmin isku-dayga koowaad. Dib u eeg natiijada oo hagaaji codsiga marka loo baahdo.">Copilot may not understand every request correctly on the first
+        attempt. Review the result and improve the prompt when necessary.
+        </span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="2. Ka Furista Copilot Gudaha PowerPoint">2. Opening Copilot in PowerPoint</span></h2>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Fur bandhigga PowerPoint oo dooro slide-ka u baahan sawir.">Open the PowerPoint presentation and select the slide that needs an
+        image.
+        </span>
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Copilot ka fur barta qalabka PowerPoint. Badanaa wuxuu ka muuqdaa guddi ku yaal dhinaca midig ee daaqadda PowerPoint.">Open Copilot from the PowerPoint toolbar. Copilot normally appears
+        in a panel on the right side of the PowerPoint window.</span>
+      </p>
+
+      <p>
+        You can choose one of Copilot's prepared editing prompts or type
+        your own instruction directly.
+      </p>
+
+      <div class="important">
+        <span class="sht" tabindex="0" data-so="Microsoft si joogto ah ayuu u cusboonaysiiyaa PowerPoint iyo Copilot. Magacyada iyo meelaha badhamadu way isbeddeli karaan, laakiin habka guud ee sawir-samayntu wuu la mid ahaanayaa.">Microsoft regularly updates PowerPoint and Copilot. Button names and
+        locations may change, but the general image-generation process remains
+        similar.</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="3. Ka Saarista Sawir Aan Ku Habboonayn">3. Removing an Unsuitable Image</span></h2>
+
+      <p>
+        Before generating a new picture, review the image already on the
+        slide.
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Haddii sawirku aad u yar yahay, aanu xirfad u muuqan, ama aanu waafaqsanayn ujeeddada slide-ka, dooro oo tirtir.">If it is too small, does not look professional, or does not match the
+        slide's purpose, select and delete it.
+        </span>
+      </p>
+
+      <p>
+        Removing the unsuitable image creates space for Copilot to add the
+        new image and allows PowerPoint Designer to suggest a cleaner layout.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="4. Copilot oo La Weydiiyo inuu Sawir Ku Daro">4. Asking Copilot to Add an Image</span></h2>
+
+      <p>
+        In the Copilot panel, select an editing prompt for adding an image or
+        type the request yourself.
+      </p>
+
+      <p>
+        A simple prompt could be:
+      </p>
+
+      <pre><code>Add an image of a vegetarian restaurant.</code></pre>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Copilot wuxuu isku dayi doonaa inuu fahmo codsiga oo abuuro sawir ku habboon.">Copilot will try to interpret the request and create an appropriate
+        picture.
+        </span>
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Hase yeeshee, tilmaantani waa mid ballaadhan. Copilot wuxuu abuuri karaa miis cunto, saxan khudradeed, ama qayb makhaayad ah halkii uu ka muujin lahaa makhaayadda oo dhan.">However, this instruction is broad. Copilot might generate a dining
+        table, a vegetarian dish, or part of a restaurant instead of showing
+        the complete restaurant.
+        </span>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="5. Marka Copilot Si Khaldan u Fahmo">5. When Copilot Misunderstands</span></h2>
+
+      <p>
+        Sometimes Copilot creates an attractive image that does not completely
+        match the intended request.
+      </p>
+
+      <p>
+        For example, instead of creating a restaurant exterior, it may create
+        an image of a table or a vegetarian meal.
+      </p>
+
+      <p>
+        The unexpected picture may still be useful on another slide. You can
+        keep it for later and ask Copilot to try again.
+      </p>
+
+      <div class="important">
+        <span class="sht" tabindex="0" data-so="Natiijo lama filaan ahi mar walba macnaheedu ma aha in sifadu fashilantay. Codsiga keliya ayaa laga yaabaa inuu u baahdo faahfaahin dheeraad ah.">An unexpected result does not always mean the feature failed. The
+        prompt may simply need more detail.
+        </span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="6. Qorista Codsi Sawir oo Ka Wanaagsan">6. Writing a Better Image Prompt</span></h2>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Codsi sawir oo wanaagsan waa inuu sharxaa:">A strong image prompt should explain:</span>
+      </p>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Mawduuca ugu weyn">The main subject</span></li>
+        <li><span class="sht" tabindex="0" data-so="Meesha laga eegayo">The viewing position</span></li>
+        <li><span class="sht" tabindex="0" data-so="Goobta">The setting</span></li>
+        <li><span class="sht" tabindex="0" data-so="Habka muuqaalka">The visual style</span></li>
+        <li><span class="sht" tabindex="0" data-so="Isticmaalka loogu talagalay">The intended use</span></li>
+      </ul>
+
+      <p>
+        A clearer prompt would be:
+      </p>
+
+      <pre><code>Add an image of a modern vegetarian café viewed from the street.</code></pre>
+
+      <p>
+        An even stronger presentation prompt would be:
+      </p>
+
+      <pre><code>Create a wide, realistic image of a welcoming vegetarian café viewed from across the street, with the entrance and sign visible, natural daylight, and space on the left for slide text.</code></pre>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Tani waxay Copilot siinaysaa xog cad oo ku saabsan mawduuca loo baahan yahay, meesha laga eegayo, iftiinka, habaynta sawirka, iyo ujeeddada.">This gives Copilot clearer information about the required subject,
+        viewpoint, lighting, composition, and purpose.
+        </span>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="7. Adeegsiga PowerPoint Designer">7. Using PowerPoint Designer</span></h2>
+
+      <p>
+        After Copilot inserts an image, PowerPoint Designer may display
+        alternative slide designs.
+      </p>
+
+      <p>
+        Designer can suggest different arrangements for:
+      </p>
+
+      <ul>
+        <li>The generated image</li>
+        <li>The slide title</li>
+        <li>The supporting text</li>
+        <li>The slide background and shapes</li>
+      </ul>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Dooro qaab ilaalinaya khusaynta sawirka kana dhigaya qoraalka slide-ka mid si fudud loo akhriyi karo.">Choose a layout that keeps the image relevant and makes the slide text
+        easy to read.
+        </span>
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Waxaad sidoo kale gacanta ku beddeli kartaa cabbirka ama goyn kartaa sawirka. Ha kala bixin sababtoo ah taasi waxay dhaawacdaa saamigiisa dabiiciga ah.">You can also resize or crop the image manually. Avoid stretching it
+        because stretching damages its natural proportions.
+        </span>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="8. Sawirro ku Abuurista Copilot-ka Webka">8. Creating Images with Copilot on the Web</span></h2>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Haddii Copilot-ka PowerPoint ku jira aanu abuurin sawirka aad u baahan tahay, waxaad adeegsan kartaa Copilot-ka webka.">If Copilot inside PowerPoint does not create the image you need, you
+        can use Copilot on the web.
+        </span>
+      </p>
+
+      <p>
+        Type an image-generation request such as:
+      </p>
+
+      <pre><code>Create an image of a café viewed from the street in an Impressionist painting style.</code></pre>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Copilot wuxuu bixin karaa sawirro badan. Fur ikhtiyaarrada jira oo dooro midka ugu taageeraya bandhiggaaga.">Copilot may provide several images. Open the available options and
+        choose the one that best supports your presentation.
+        </span>
+      </p>
+
+      <p>
+        An Impressionist image may contain soft details, blended colors, and
+        visible painting-like textures. A photo style will appear more
+        realistic, while a digital or 3D style will have a different visual
+        appearance.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="9. Kaydinta iyo Gelinta Sawirka">9. Saving and Inserting the Image</span></h2>
+
+      <p>
+        When you find a suitable image in Copilot on the web, save it to your
+        device.
+      </p>
+
+      <p>
+        <span class="sht" tabindex="0" data-so="Ku noqo PowerPoint oo raac tallaabooyinkan:">Return to PowerPoint and follow these steps:</span>
+      </p>
+
+      <ol>
+        <li><span class="sht" tabindex="0" data-so="Fur slide-ka loo baahan yahay.">Open the required slide.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dooro tab-ka <strong>Insert</strong>.">Select the <strong>Insert</strong> tab.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dooro <strong>Pictures</strong>.">Select <strong>Pictures</strong>.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dooro sawirka AI ee la kaydiyay.">Choose the saved AI-generated image.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Sawirka geli slide-ka.">Insert the image into the slide.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Si taxaddar leh u beddel cabbirka, u jar, oo meel dhig.">Resize, crop, and position it carefully.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Xaqiiji in qoraalka slide-ku weli la akhriyi karo.">Confirm that the slide text remains readable.</span></li>
+      </ol>
+
+      <div class="important">
+        <span class="sht" tabindex="0" data-so="Waxaad sawirka si toos ah ugu abuuri kartaa PowerPoint ama si gooni ah uga abuuri kartaa Copilot-ka webka kadibna si caadi ah u gelin kartaa.">You can create an image directly inside PowerPoint or generate it
+        separately with Copilot on the web and insert it normally.
+        </span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="10. Hab-socod Wax-ku-ool ah">10. Practical Workflow</span></h2>
+
+      <ol>
+        <li>Open the PowerPoint presentation.</li>
+        <li>Select the slide that needs improvement.</li>
+        <li>Remove the unsuitable image.</li>
+        <li>Open Copilot.</li>
+        <li>Request an AI-generated image.</li>
+        <li><span class="sht" tabindex="0" data-so="Si taxaddar leh u eeg natiijada.">Review the result carefully.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dib u qor codsiga haddii natiijadu aanay ku habboonayn.">Rewrite the prompt if the result is unsuitable.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Isticmaal Copilot-ka webka marka loo baahdo.">Try Copilot on the web when necessary.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Kaydi oo geli sawirka ugu fiican.">Save and insert the best image.</span></li>
+        <li>Use Designer or manual formatting to improve the layout.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="11. Soo-koobid Farsamo oo Ingiriisi ah">11. English Technical Summary</span></h2>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Copilot wuxuu sawirro ka abuuri karaa sharaxaad qoran.">Copilot can create images from written descriptions.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Wuxuu sawirrada la soo saaray si toos ah ugu dari karaa slide-yada PowerPoint.">It can add generated images directly to PowerPoint slides.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Codsiyo aan caddayn waxay keeni karaan natiijooyin lama filaan ah.">Vague prompts may produce unexpected results.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Codsiyo cad waxay qeexaan mawduuca, meesha laga eegayo, goobta, iyo qaabka.">Clear prompts describe the subject, viewpoint, setting, and style.</span></li>
+        <li><span class="sht" tabindex="0" data-so="PowerPoint Designer wuxuu soo jeedin karaa qaabab slide oo hagaagsan.">PowerPoint Designer can suggest improved slide layouts.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Copilot-ka webku wuxuu bixiyaa hab kale oo sawir lagu abuuro.">Copilot on the web provides another image-generation method.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Sawirrada AI ee la kaydiyay waxaa lagu dari karaa Insert iyo Pictures.">Saved AI images can be added through Insert and Pictures.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Sawirka ugu dambeeya waa inuu taageeraa farriinta slide-ka.">The final image should support the slide's message.</span></li>
+      </ul>
+    </section>
+
+    <section class="section somali-section">
+      <h2>12. Somali Farsamo</h2>
+
+      <div class="somali">
+        <p>
+          Microsoft Copilot wuxuu qoraal aad siiso ka samayn karaa sawir
+          cusub, kadibna sawirkaas ayuu ku dari karaa PowerPoint.
+        </p>
+
+        <p>
+          Haddii sawirka slide-ka ku jira uu yar yahay ama uusan la xiriirin
+          mawduuca, waad tirtiri kartaa kadibna Copilot ayaad ka codsan kartaa
+          sawir cusub.
+        </p>
+
+        <p>
+          Haddii Copilot uusan si fiican u fahmin codsiga koowaad, prompt-ka
+          faahfaahi oo mar kale isku day.
+        </p>
+
+        <pre><code>Samee sawir ballaaran oo dhab u eg oo muujinaya maqaaxi khudradeed oo waddada laga eegayo.</code></pre>
+
+        <p>
+          Waxaad sidoo kale sawirka ku samayn kartaa Copilot-ka webka, kaydin
+          kartaa, kadibna PowerPoint kaga dari kartaa Insert iyo Pictures.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="13. Xeerarka Sawirrada AI Soo Saarto">13. Rules for AI-Generated Images</span></h2>
+
+      <ol>
+        <li><span class="sht" tabindex="0" data-so="Qor codsiyo cad oo gaar ah.">Write clear and specific prompts.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Sharax meesha laga eegayo.">Explain the required viewpoint.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dooro qaab waafaqsan bandhigga.">Choose a style that matches the presentation.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dib u eeg sawir kasta ka hor isticmaalka.">Review every image before using it.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ha aqbalin sawir aan khusayn sababta oo keliya inuu qurux badan yahay.">Do not accept an irrelevant image because it looks attractive.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Qoraalka slide-ka ka dhig mid la akhriyi karo.">Keep slide text readable.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ha kala bixin ama qalloocin sawirka.">Do not stretch or distort the image.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Codsiyada ha ku darin xog qarsoodi ah.">Do not include confidential information in prompts.</span></li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="14. Khaladaadka Caanka ah">14. Common Mistakes</span></h2>
+
+      <ul>
+        <li><span class="sht" tabindex="0" data-so="Adeegsiga codsi aan caddayn sida 'makhaayad ku dar.'">Using a vague prompt such as “add a restaurant.”</span></li>
+        <li><span class="sht" tabindex="0" data-so="Aqbalaadda sawirka koowaad adigoon dib u eegin.">Accepting the first image without reviewing it.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ku guuldarraysiga sharaxaadda meesha sawirka laga eegayo.">Failing to describe the required viewing position.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Adeegsiga qaab sawir oo aan waafaqsanayn bandhigga.">Using an image style that does not match the presentation.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Kala bixinta ama qalloocinta sawirka.">Stretching or distorting the image.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Qoraalka oo la dul dhigo qayb mashquul badan oo sawirka ah.">Placing text over a busy part of the picture.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Adeegsiga sawir qurux badan oo aan farriinta slide-ka taageerayn.">Using an attractive image that does not support the slide.</span></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="15. Hawlgal Tababar oo Doorashooyin Badan leh">15. Multiple-Choice Practice Activity</span></h2>
+
+      <div class="question">
+        <strong><span class="sht" tabindex="0" data-so="1. Maxay Copilot sawirrada PowerPoint ku samayn kartaa?">1. What can Copilot do with images in PowerPoint?</span></strong>
+
+        <p>A. Only delete images</p>
+        <p><span class="sht" tabindex="0" data-so="B. Sawirro ka abuur tilmaamo qoran">B. Create images from written instructions</span></p>
+        <p>C. Only change slide numbers</p>
+        <p>D. Only print presentations</p>
+      </div>
+
+      <div class="question">
+        <strong><span class="sht" tabindex="0" data-so="2. Maxaad samaynaysaa haddii sawirka koowaad aanu ku habboonayn?">2. What should you do if the first image is unsuitable?</span></strong>
+
+        <p>A. Delete the presentation</p>
+        <p><span class="sht" tabindex="0" data-so="B. Hagaaji codsiga oo mar kale isku day">B. Improve the prompt and try again</span></p>
+        <p>C. Accept it immediately</p>
+        <p>D. Remove all slide text</p>
+      </div>
+
+      <div class="question">
+        <strong><span class="sht" tabindex="0" data-so="3. Codsigee ayaa ugu cad?">3. Which prompt is clearest?</span></strong>
+
+        <p>A. Add something</p>
+        <p>B. Make a picture</p>
+        <p><span class="sht" tabindex="0" data-so="C. Samee sawir dhab u eg oo maqaaxi khudradeed ah oo waddada laga eegayo">C. Create a realistic vegetarian café viewed from the street</span></p>
+        <p>D. Restaurant</p>
+      </div>
+
+      <div class="question">
+        <strong><span class="sht" tabindex="0" data-so="4. Maxay PowerPoint Designer kaa caawin kartaa?">4. What can PowerPoint Designer help with?</span></strong>
+
+        <p><span class="sht" tabindex="0" data-so="A. Soo-jeedinta qaababka slide-ka">A. Suggesting slide layouts</span></p>
+        <p>B. Purchasing a computer</p>
+        <p>C. Creating a bank account</p>
+        <p>D. Deleting the presentation</p>
+      </div>
+
+      <div class="question">
+        <strong><span class="sht" tabindex="0" data-so="5. Waa maxay hab kale oo sawir lagu abuuro?">5. What is another image-generation method?</span></strong>
+
+        <p><span class="sht" tabindex="0" data-so="A. Isticmaal Copilot-ka webka oo geli sawirka la kaydiyay">A. Use Copilot on the web and insert the saved image</span></p>
+        <p>B. Remove the entire slide</p>
+        <p>C. Disable PowerPoint</p>
+        <p>D. Convert the slide to a spreadsheet</p>
+      </div>
+    </section>
+
+    <section class="section answer-key">
+      <h2><span class="sht" tabindex="0" data-so="16. Jawaabaha Saxda ah">16. Answer Key</span></h2>
+
+      <ol>
+        <li><strong>B</strong> — Create images from written instructions.</li>
+        <li><strong>B</strong> — Improve the prompt and try again.</li>
+        <li><strong>C</strong> — Create a realistic vegetarian café viewed from the street.</li>
+        <li><strong>A</strong> — Suggesting slide layouts.</li>
+        <li><strong>A</strong> — Use Copilot on the web and insert the saved image.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2><span class="sht" tabindex="0" data-so="17. Xusuusnow">17. Remember</span></h2>
+
+      <p class="remember">
+        <span class="sht" tabindex="0" data-so="Copilot wuxuu abuuri karaa sawirro waxtar u leh bandhigga, laakiin natiijooyinka ugu fiican waxay ka yimaadaan codsiyo cad, dib-u-eegis taxaddar leh, hagaajin soo noqnoqota, iyo naqshad PowerPoint oo fikir leh.">Copilot can create useful presentation images, but the best results
+        come from clear prompts, careful review, repeated improvement, and
+        thoughtful PowerPoint design.
+        </span>
+      </p>
+    </section>
+
+    <nav class="nav">
+      <a href="/ai-lessons/lesson-10-github-copilot-features-and-ai-powered-code-completion.html">
+        ← Previous Lesson
+      </a>
+
+      <a href="/learner-portal">
+        🎓 Learner Portal
+      </a>
+      <a href="/ai-lessons/lesson-12-creating-powerpoint-from-existing-file.html">
+        Next →
+      </a>
+    </nav>
+
+    <div class="footer">
+      Elmi Guray Academy — KNOWLEDGE • INTEGRITY • OPPORTUNITY
+    </div>
+
+  </main>
+</body>
+</html>

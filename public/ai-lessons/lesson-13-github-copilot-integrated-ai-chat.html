@@ -494,6 +494,8 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+  <script defer src="/ai-lessons/somali-help-translation.js"></script>
 </head>
 
 <body>
@@ -535,65 +537,72 @@
       <a class="button portal" href="/learner-portal">
         Learner Portal
       </a>
+      <a class="button" href="/ai-lessons/lesson-14-using-inline-and-quick-chat.html">
+        Next Lesson
+      </a>
     </nav>
 
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
     <section class="card">
       <span class="section-label">Introduction</span>
-      <h2>Beyond AI Code Completion</h2>
+      <h2><span class="sht" tabindex="0" data-so="Ka Gudub Dhammaystirka Koodhka AI">Beyond AI Code Completion</span></h2>
 
       <p class="lead">
-        GitHub Copilot can predict and complete code while you type. Its
+        <span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu saadaalin karaa oo dhammaystiri karaa koodhka inta aad qorayso. Wada-sheekaysigiisa AI ee ku dhex jira wuxuu bixiyaa hab wada sheekaysi ah oo AI loola shaqeeyo gudaha Visual Studio Code.">GitHub Copilot can predict and complete code while you type. Its
         integrated AI chat provides a conversational way to work with
         artificial intelligence inside Visual Studio Code.
+        </span>
       </p>
 
       <p>
-        Copilot Chat lets developers ask questions, request explanations,
+        <span class="sht" tabindex="0" data-so="Copilot Chat wuxuu u oggolaanayaa horumariyeyaasha inay su'aalo weydiiyaan, sharaxaad codsadaan, khaladaad baaraan, koodh ka doodaan, horumarinna qorsheeyaan iyaga oo aan ka bixin deegaanka horumarinta.">Copilot Chat lets developers ask questions, request explanations,
         investigate errors, discuss code, and plan improvements without
         leaving the development environment.
+        </span>
       </p>
 
       <div class="info">
-        <strong>Main idea:</strong> Code completion suggests code while you
+        <strong><span class="sht" tabindex="0" data-so="Fikradda Ugu Muhiimsan:">Main idea:</span></strong> <span class="sht" tabindex="0" data-so="Dhammaystirka koodhku wuxuu soo jeediyaa koodh inta aad qorayso. Copilot Chat wuxuu ka jawaabaa su'aalaha iyo tilmaamaha luuqadda dabiiciga ah.">Code completion suggests code while you
         type. Copilot Chat responds to natural-language questions and
         instructions.
+        </span>
       </div>
     </section>
 
     <section class="card">
       <span class="section-label">Learning Objectives</span>
-      <h2>What You Will Learn</h2>
+      <h2><span class="sht" tabindex="0" data-so="Waxa Aad Baran Doonto">What You Will Learn</span></h2>
 
       <div class="objectives">
         <div class="objective">
           <span class="number">1</span>
           <div>
-            <strong>Identify chat types</strong>
-            Recognize standard chat, inline chat, and quick chat.
+            <strong><span class="sht" tabindex="0" data-so="Aqoonso Noocyada Wada-sheekaysiga">Identify chat types</span></strong>
+            <span class="sht" tabindex="0" data-so="Kala garo wada-sheekaysiga caadiga ah, inline chat, iyo quick chat.">Recognize standard chat, inline chat, and quick chat.</span>
           </div>
         </div>
 
         <div class="objective">
           <span class="number">2</span>
           <div>
-            <strong>Open Copilot Chat</strong>
-            Use the Copilot button, menu, or available shortcut.
+            <strong><span class="sht" tabindex="0" data-so="Fur Copilot Chat">Open Copilot Chat</span></strong>
+            <span class="sht" tabindex="0" data-so="Isticmaal badhanka Copilot, menu-ga, ama furaha gaaban ee la heli karo.">Use the Copilot button, menu, or available shortcut.</span>
           </div>
         </div>
 
         <div class="objective">
           <span class="number">3</span>
           <div>
-            <strong>Choose a location</strong>
-            Use the sidebar, editor area, or a separate window.
+            <strong><span class="sht" tabindex="0" data-so="Dooro Meel">Choose a location</span></strong>
+            <span class="sht" tabindex="0" data-so="Isticmaal dhinaca, qaybta tafatiraha, ama daaqad gaar ah.">Use the sidebar, editor area, or a separate window.</span>
           </div>
         </div>
 
         <div class="objective">
           <span class="number">4</span>
           <div>
-            <strong>Organize the workspace</strong>
-            Select a layout that supports comfortable development.
+            <strong><span class="sht" tabindex="0" data-so="Habee Goobta Shaqada">Organize the workspace</span></strong>
+            <span class="sht" tabindex="0" data-so="Dooro qaab taageeraya horumarin raaxo leh.">Select a layout that supports comfortable development.</span>
           </div>
         </div>
       </div>
@@ -606,50 +615,54 @@
       <div class="technical">
         <div class="technical-title">
           <span class="number">1</span>
-          <h3>What Is Integrated AI Chat?</h3>
+          <h3><span class="sht" tabindex="0" data-so="Waa Maxay Wada-sheekaysiga AI ee Ku Dhex Jira?">What Is Integrated AI Chat?</span></h3>
         </div>
 
         <p>
-          Integrated AI chat is a conversational interface inside the
+          <span class="sht" tabindex="0" data-so="Wada-sheekaysiga AI ee ku dhex jira waa is-dhexgal wada sheekaysi ah oo ku jira deegaanka horumarinta. Wuxuu horumariyeyaasha u oggolaanayaa inay GitHub Copilot la xidhiidhaan iyaga oo aan furin bog AI oo gooni ah.">Integrated AI chat is a conversational interface inside the
           development environment. It allows developers to communicate with
           GitHub Copilot without opening a separate AI website.
+          </span>
         </p>
 
         <ul>
-          <li>Ask for explanations of unfamiliar code.</li>
-          <li>Request help understanding errors.</li>
-          <li>Plan features before modifying a project.</li>
-          <li>Ask for suggestions to improve existing code.</li>
-          <li>Learn about programming languages and tools.</li>
+          <li><span class="sht" tabindex="0" data-so="Codso sharaxaadda koodh aanad aqoon.">Ask for explanations of unfamiliar code.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Codso caawimo fahamka khaladaadka.">Request help understanding errors.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Qorshee sifooyin ka hor wax ka beddelka mashruuca.">Plan features before modifying a project.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Weydii soo-jeedinno lagu hagaajinayo koodhka jira.">Ask for suggestions to improve existing code.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Baro luuqadaha barnaamij-samaynta iyo qalabka.">Learn about programming languages and tools.</span></li>
         </ul>
       </div>
 
       <div class="technical">
         <div class="technical-title">
           <span class="number">2</span>
-          <h3>Three Copilot Chat Experiences</h3>
+          <h3><span class="sht" tabindex="0" data-so="Saddexda Nooc ee Copilot Chat">Three Copilot Chat Experiences</span></h3>
         </div>
 
         <div class="chat-types">
           <div class="chat-type">
             <div class="chat-icon">💬</div>
-            <strong>Standard Chat</strong>
-            A full conversation for connected technical questions and longer
+            <strong><span class="sht" tabindex="0" data-so="Wada-sheekaysi Caadi ah">Standard Chat</span></strong>
+            <span class="sht" tabindex="0" data-so="Wada sheekaysi buuxa oo loogu talagalay su'aalo farsamo oo isku xidhan iyo jawaabo AI oo dheer.">A full conversation for connected technical questions and longer
             AI responses.
+            </span>
           </div>
 
           <div class="chat-type">
             <div class="chat-icon">⌨️</div>
-            <strong>Inline Chat</strong>
-            Opens close to the code and works well with the current file or
+            <strong><span class="sht" tabindex="0" data-so="Wada-sheekaysi Inline ah">Inline Chat</span></strong>
+            <span class="sht" tabindex="0" data-so="Wuxuu ka furmaa meel u dhow koodhka wuxuuna ku fiican yahay faylka hadda jira ama koodhka la doortay.">Opens close to the code and works well with the current file or
             selected code.
+            </span>
           </div>
 
           <div class="chat-type">
             <div class="chat-icon">⚡</div>
-            <strong>Quick Chat</strong>
-            A compact interface for short questions that do not require a
+            <strong><span class="sht" tabindex="0" data-so="Wada-sheekaysi Degdeg ah">Quick Chat</span></strong>
+            <span class="sht" tabindex="0" data-so="Is-dhexgal kooban oo loogu talagalay su'aalo gaaban oo aan u baahnayn guddi joogto ah.">A compact interface for short questions that do not require a
             permanent panel.
+            </span>
           </div>
         </div>
 
@@ -685,51 +698,55 @@
       <div class="technical">
         <div class="technical-title">
           <span class="number">3</span>
-          <h3>Opening Standard Copilot Chat</h3>
+          <h3><span class="sht" tabindex="0" data-so="Furista Wada-sheekaysiga Caadiga ah ee Copilot">Opening Standard Copilot Chat</span></h3>
         </div>
 
         <ol>
-          <li>Open Visual Studio Code.</li>
-          <li>Confirm GitHub Copilot is installed and active.</li>
-          <li>Select the Copilot or chat button near the top.</li>
-          <li>Choose <strong>Open Chat</strong>.</li>
-          <li>Enter a clear technical question or request.</li>
+          <li><span class="sht" tabindex="0" data-so="Fur Visual Studio Code.">Open Visual Studio Code.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Xaqiiji in GitHub Copilot la rakibay oo shaqaynayo.">Confirm GitHub Copilot is installed and active.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Dooro badhanka Copilot ama chat ee kore.">Select the Copilot or chat button near the top.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Dooro <strong>Open Chat</strong>.">Choose <strong>Open Chat</strong>.</span></li>
+          <li><span class="sht" tabindex="0" data-so="Geli su'aal ama codsi farsamo oo cad.">Enter a clear technical question or request.</span></li>
         </ol>
 
         <p>
-          Visual Studio Code may display a keyboard shortcut beside the
+          <span class="sht" tabindex="0" data-so="Visual Studio Code wuxuu amarka agtiisa ku muujin karaa furaha gaaban ee kiiboodhka. Furayaashu way ku kala duwanaan karaan nidaamka hawlgalka iyo nooca.">Visual Studio Code may display a keyboard shortcut beside the
           command. Shortcuts can differ by operating system and version.
+          </span>
         </p>
       </div>
 
       <div class="technical">
         <div class="technical-title">
           <span class="number">4</span>
-          <h3>Using the Secondary Sidebar</h3>
+          <h3><span class="sht" tabindex="0" data-so="Adeegsiga Dhinaca Labaad">Using the Secondary Sidebar</span></h3>
         </div>
 
         <p>
-          Standard Copilot Chat commonly opens in the secondary sidebar. This
+          <span class="sht" tabindex="0" data-so="Copilot Chat-ka caadiga ahi badanaa wuxuu ka furmaa dhinaca labaad. Tani waxay wada sheekaysiga ku haysaa agta tafatiraha weyn si aad isla waqtigaas u akhrido koodhka oo ula xidhiidho Copilot.">Standard Copilot Chat commonly opens in the secondary sidebar. This
           keeps the conversation beside the main editor so you can read code
           and communicate with Copilot at the same time.
+          </span>
         </p>
 
         <p>
-          Hide the secondary sidebar when you need more coding space and
+          <span class="sht" tabindex="0" data-so="Qari dhinaca labaad markaad u baahan tahay meel koodh-qoris oo dheeraad ah, dibna u fur markaad rabto inaad wada sheekaysiga sii wadato.">Hide the secondary sidebar when you need more coding space and
           reopen it when you want to continue the conversation.
+          </span>
         </p>
       </div>
 
       <div class="technical">
         <div class="technical-title">
           <span class="number">5</span>
-          <h3>Opening Chat in a Separate Window</h3>
+          <h3><span class="sht" tabindex="0" data-so="Ka Furista Chat Daaqad Gaar ah">Opening Chat in a Separate Window</span></h3>
         </div>
 
         <p>
-          Copilot Chat can be detached from Visual Studio Code and opened in a
+          <span class="sht" tabindex="0" data-so="Copilot Chat waa laga goyn karaa Visual Studio Code waxaana laga furi karaa daaqad gaar ah. Tani gaar ahaan way waxtar leedahay marka laba kormeerayaal la isticmaalayo.">Copilot Chat can be detached from Visual Studio Code and opened in a
           separate window. This is particularly useful when working with two
           monitors.
+          </span>
         </p>
 
         <p>
@@ -741,7 +758,7 @@
       <div class="technical">
         <div class="technical-title">
           <span class="number">6</span>
-          <h3>Moving Chat into the Editor Area</h3>
+          <h3><span class="sht" tabindex="0" data-so="U Wareejinta Chat-ka Qaybta Tafatiraha">Moving Chat into the Editor Area</span></h3>
         </div>
 
         <p>
@@ -757,21 +774,23 @@
         </ul>
 
         <div class="info">
-          There is no single correct layout. Choose the arrangement that best
+          <span class="sht" tabindex="0" data-so="Hal qaab oo keliya oo sax ahi ma jiro. Dooro habaynta ugu habboon cabbirka shaashaddaada, kormeerayaasha, iyo hawsha horumarinta.">There is no single correct layout. Choose the arrangement that best
           matches your screen size, monitors, and development task.
+          </span>
         </div>
       </div>
 
       <div class="technical">
         <div class="technical-title">
           <span class="number">7</span>
-          <h3>Chat and AI Agents</h3>
+          <h3><span class="sht" tabindex="0" data-so="Chat iyo Wakiillada AI">Chat and AI Agents</span></h3>
         </div>
 
         <p>
-          Standard Copilot Chat can support advanced workflows, including AI
+          <span class="sht" tabindex="0" data-so="Copilot Chat-ka caadiga ahi wuxuu taageeri karaa hab-socodyo horumarsan, oo ay ku jiraan wakiillada AI. Wakiilku wuxuu qaban karaa hawlo ka ballaadhan dhammaystirka koodhka fudud.">Standard Copilot Chat can support advanced workflows, including AI
           agents. An agent may work on broader tasks than simple code
           completion.
+          </span>
         </p>
 
         <p>
@@ -783,7 +802,7 @@
 
     <section class="card">
       <span class="section-label">Practical Workflow</span>
-      <h2>Open and Organize Copilot Chat</h2>
+      <h2><span class="sht" tabindex="0" data-so="Fur oo Habee Copilot Chat">Open and Organize Copilot Chat</span></h2>
 
       <div class="workflow">
         <div class="workflow-step">
@@ -813,8 +832,8 @@
         <div class="workflow-step">
           <span class="number">4</span>
           <div>
-            <strong>Ask a clear question</strong>
-            Describe the task, relevant file, and desired result.
+            <strong><span class="sht" tabindex="0" data-so="Weydii Su'aal Cad">Ask a clear question</span></strong>
+            <span class="sht" tabindex="0" data-so="Sharax hawsha, faylka khuseeya, iyo natiijada la doonayo.">Describe the task, relevant file, and desired result.</span>
           </div>
         </div>
 
@@ -829,14 +848,14 @@
         <div class="workflow-step">
           <span class="number">6</span>
           <div>
-            <strong>Select your preferred layout</strong>
-            Keep the arrangement that provides enough room for code and chat.
+            <strong><span class="sht" tabindex="0" data-so="Dooro Qaabka Aad Doorbidayso">Select your preferred layout</span></strong>
+            <span class="sht" tabindex="0" data-so="Hay habaynta siinaysa meel ku filan koodhka iyo wada sheekaysiga.">Keep the arrangement that provides enough room for code and chat.</span>
           </div>
         </div>
       </div>
 
       <div class="prompt">
-        <strong>Example Copilot Chat request</strong>
+        <strong><span class="sht" tabindex="0" data-so="Tusaale Codsi Copilot Chat">Example Copilot Chat request</span></strong>
         Explain this HTML file in simple steps. Identify its main sections,
         point out accessibility problems, and suggest improvements without
         changing the design.
@@ -845,16 +864,16 @@
 
     <section class="card summary">
       <span class="section-label">English Technical Summary</span>
-      <h2>Technical Summary</h2>
+      <h2><span class="sht" tabindex="0" data-so="Soo-koobid Farsamo">Technical Summary</span></h2>
 
       <ul>
-        <li>GitHub Copilot provides code completion and integrated chat.</li>
-        <li>Visual Studio Code offers standard, inline, and quick chat.</li>
-        <li>Standard chat commonly opens in the secondary sidebar.</li>
-        <li>Chat can move into the editor or a separate window.</li>
-        <li>A separate window is useful with multiple monitors.</li>
-        <li>The best location depends on the developer’s workflow.</li>
-        <li>All AI responses must be reviewed and tested.</li>
+        <li><span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu bixiyaa dhammaystirka koodhka iyo wada sheekaysi ku dhex jira.">GitHub Copilot provides code completion and integrated chat.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Visual Studio Code wuxuu bixiyaa chat caadi ah, inline ah, iyo degdeg ah.">Visual Studio Code offers standard, inline, and quick chat.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Chat-ka caadiga ahi badanaa wuxuu ka furmaa dhinaca labaad.">Standard chat commonly opens in the secondary sidebar.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Chat-ka waxaa loo wareejin karaa tafatiraha ama daaqad gaar ah.">Chat can move into the editor or a separate window.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Daaqad gaar ahi waxay waxtar leedahay marka la haysto kormeerayaal badan.">A separate window is useful with multiple monitors.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Meesha ugu fiican waxay ku xidhan tahay hab-socodka horumariyaha.">The best location depends on the developer’s workflow.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dhammaan jawaabaha AI waa in dib loo eego oo la tijaabiyo.">All AI responses must be reviewed and tested.</span></li>
       </ul>
     </section>
 
@@ -878,16 +897,16 @@
 
     <section class="card rules">
       <span class="section-label">Rules</span>
-      <h2>Rules for Using Copilot Chat</h2>
+      <h2><span class="sht" tabindex="0" data-so="Xeerarka Adeegsiga Copilot Chat">Rules for Using Copilot Chat</span></h2>
 
       <ol>
-        <li>Describe the task and expected result clearly.</li>
-        <li>Never assume every Copilot response is correct.</li>
-        <li>Read and understand suggested code before accepting it.</li>
-        <li>Test changes in a safe development environment.</li>
-        <li>Never share passwords, keys, or private student information.</li>
-        <li>Divide large requests into smaller, verifiable tasks.</li>
-        <li>Remember that shortcuts vary by system and version.</li>
+        <li><span class="sht" tabindex="0" data-so="Si cad u sharax hawsha iyo natiijada la filayo.">Describe the task and expected result clearly.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Weligaa ha u qaadan in jawaab kasta oo Copilot bixiyo sax tahay.">Never assume every Copilot response is correct.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Akhri oo faham koodhka la soo jeediyay ka hor aqbalidda.">Read and understand suggested code before accepting it.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Isbeddellada ku tijaabi deegaan horumarineed oo ammaan ah.">Test changes in a safe development environment.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Weligaa ha wadaagin furayaasha sirta ah ama xogta gaarka ah ee ardayda.">Never share passwords, keys, or private student information.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Codsiyada waaweyn u qaybi hawlo yaryar oo la xaqiijin karo.">Divide large requests into smaller, verifiable tasks.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Xasuusnow in furayaasha gaagaabani ku kala duwanaan karaan nidaamka iyo nooca.">Remember that shortcuts vary by system and version.</span></li>
       </ol>
     </section>
 
@@ -896,91 +915,93 @@
       <h2>Mistakes to Avoid</h2>
 
       <div class="mistake">
-        <strong>Confusing completion with chat</strong>
+        <strong><span class="sht" tabindex="0" data-so="Isku Khaldinta Dhammaystirka iyo Chat-ka">Confusing completion with chat</span></strong>
         <p>
-          Completion predicts code while you type. Chat responds to questions
+          <span class="sht" tabindex="0" data-so="Dhammaystirku wuxuu saadaaliyaa koodhka inta aad qorayso. Chat-ku wuxuu ka jawaabaa su'aalaha iyo tilmaamaha.">Completion predicts code while you type. Chat responds to questions
           and instructions.
+          </span>
         </p>
       </div>
 
       <div class="mistake">
-        <strong>Using an unclear request</strong>
+        <strong><span class="sht" tabindex="0" data-so="Adeegsiga Codsi Aan Caddayn">Using an unclear request</span></strong>
         <p>
-          “Fix it” provides too little context. Explain the problem and
+          <span class="sht" tabindex="0" data-so="'Hagaaji' macne guud oo aad u yar ayay bixisaa. Sharax dhibaatada iyo natiijada la filayo.">“Fix it” provides too little context. Explain the problem and
           expected result.
+          </span>
         </p>
       </div>
 
       <div class="mistake">
-        <strong>Believing the sidebar is the only location</strong>
+        <strong><span class="sht" tabindex="0" data-so="In Loo Qaato in Dhinacu Yahay Meesha Keliya">Believing the sidebar is the only location</span></strong>
         <p>Chat can be moved into the editor or a separate window.</p>
       </div>
 
       <div class="mistake">
-        <strong>Accepting answers without testing</strong>
+        <strong><span class="sht" tabindex="0" data-so="Aqbalaadda Jawaabaha Iyadoo Aan La Tijaabin">Accepting answers without testing</span></strong>
         <p>Copilot can produce incomplete or incorrect suggestions.</p>
       </div>
 
       <div class="mistake">
-        <strong>Sharing sensitive information</strong>
+        <strong><span class="sht" tabindex="0" data-so="Wadaagista Xog Xasaasi ah">Sharing sensitive information</span></strong>
         <p>Never include passwords, private keys, or personal information.</p>
       </div>
     </section>
 
     <section class="card quiz">
       <span class="section-label">Knowledge Check</span>
-      <h2>Multiple-Choice Questions</h2>
+      <h2><span class="sht" tabindex="0" data-so="Su'aalo Doorashooyin Badan leh">Multiple-Choice Questions</span></h2>
 
       <div class="question">
-        <div class="question-title">1. What is a main purpose of Copilot Chat?</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="1. Waa maxay ujeeddo muhiim ah oo Copilot Chat leeyahay?">1. What is a main purpose of Copilot Chat?</span></div>
         <div class="option">A. Replace the operating system</div>
-        <div class="option">B. Communicate with AI inside the development environment</div>
+        <div class="option"><span class="sht" tabindex="0" data-so="B. AI kula xidhiidh gudaha deegaanka horumarinta">B. Communicate with AI inside the development environment</span></div>
         <div class="option">C. Delete project files</div>
         <div class="option">D. Disable Visual Studio Code</div>
       </div>
 
       <div class="question">
-        <div class="question-title">2. Where does standard chat commonly open?</div>
-        <div class="option">A. Secondary sidebar</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="2. Xaggee ayuu chat-ka caadiga ahi badanaa ka furmaa?">2. Where does standard chat commonly open?</span></div>
+        <div class="option"><span class="sht" tabindex="0" data-so="A. Dhinaca labaad">A. Secondary sidebar</span></div>
         <div class="option">B. Computer lock screen</div>
         <div class="option">C. Printed document</div>
         <div class="option">D. Phone settings</div>
       </div>
 
       <div class="question">
-        <div class="question-title">3. Which chat works close to the current code?</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="3. Noocee chat ah ayaa ka shaqeeya meel u dhow koodhka hadda jira?">3. Which chat works close to the current code?</span></div>
         <div class="option">A. Email chat</div>
-        <div class="option">B. Inline Chat</div>
+        <div class="option"><span class="sht" tabindex="0" data-so="B. Inline Chat">B. Inline Chat</span></div>
         <div class="option">C. Video chat</div>
         <div class="option">D. Browser history</div>
       </div>
 
       <div class="question">
-        <div class="question-title">4. Why use a separate chat window?</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="4. Maxaa loo isticmaalaa daaqad chat oo gaar ah?">4. Why use a separate chat window?</span></div>
         <div class="option">A. To uninstall the editor</div>
-        <div class="option">B. To use chat on another monitor</div>
+        <div class="option"><span class="sht" tabindex="0" data-so="B. Si chat looga isticmaalo kormeere kale">B. To use chat on another monitor</span></div>
         <div class="option">C. To disable the project</div>
         <div class="option">D. To remove the keyboard</div>
       </div>
 
       <div class="question">
-        <div class="question-title">5. What should you do with AI-generated code?</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="5. Maxaad ku samaynaysaa koodhka AI soo saartay?">5. What should you do with AI-generated code?</span></div>
         <div class="option">A. Publish it immediately</div>
         <div class="option">B. Accept it without reading</div>
-        <div class="option">C. Review, understand, and test it</div>
+        <div class="option"><span class="sht" tabindex="0" data-so="C. Dib u eeg, faham, oo tijaabi">C. Review, understand, and test it</span></div>
         <div class="option">D. Delete the project</div>
       </div>
 
       <div class="question">
-        <div class="question-title">6. Which information must not be included in chat?</div>
+        <div class="question-title"><span class="sht" tabindex="0" data-so="6. Xogtee ayaan lagu darin chat-ka?">6. Which information must not be included in chat?</span></div>
         <div class="option">A. A general HTML question</div>
         <div class="option">B. A public function name</div>
-        <div class="option">C. A password or secret API key</div>
+        <div class="option"><span class="sht" tabindex="0" data-so="C. Furaha sirta ah ama fure API oo qarsoon">C. A password or secret API key</span></div>
         <div class="option">D. A description of a layout</div>
       </div>
 
       <details>
-        <summary>Open Answer Key</summary>
+        <summary><span class="sht" tabindex="0" data-so="Fur Jawaabaha Saxda ah">Open Answer Key</span></summary>
         <div class="answers">
           <ol>
             <li><strong>B</strong> — Chat provides AI conversation inside the editor.</li>
@@ -996,28 +1017,32 @@
 
     <section class="card remember">
       <span class="section-label" style="color:#ffe29a">Remember</span>
-      <h2>Important Points</h2>
+      <h2><span class="sht" tabindex="0" data-so="Qodobbada Muhiimka ah">Important Points</span></h2>
 
       <ul>
         <li>
-          <strong>Copilot Chat is conversational:</strong> ask questions using
+          <span class="sht" tabindex="0" data-so="Copilot Chat waa wada-sheekaysi: su'aalo ku weydii luuqad dabiici ah."><strong>Copilot Chat is conversational:</strong> ask questions using
           natural language.
+          </span>
         </li>
         <li>
-          <strong>You control the layout:</strong> use the sidebar, editor, or
+          <span class="sht" tabindex="0" data-so="Adiga ayaa xukuma qaabka: isticmaal dhinaca, tafatiraha, ama daaqad gaar ah."><strong>You control the layout:</strong> use the sidebar, editor, or
           a separate window.
+          </span>
         </li>
         <li>
           <strong>Chat types have different purposes:</strong> standard,
           inline, and quick chat are not identical.
         </li>
         <li>
-          <strong>Clear instructions produce better assistance:</strong>
+          <span class="sht" tabindex="0" data-so="Tilmaamo cad waxay keenaan caawimo wanaagsan: bixi macne guud iyo natiijada la doonayo."><strong>Clear instructions produce better assistance:</strong>
           provide context and the desired result.
+          </span>
         </li>
         <li>
-          <strong>You remain responsible:</strong> review and test all
+          <span class="sht" tabindex="0" data-so="Adiga ayaa weli masuul ah: dib u eeg oo tijaabi dhammaan soo-jeedinnada."><strong>You remain responsible:</strong> review and test all
           suggestions.
+          </span>
         </li>
       </ul>
     </section>
@@ -1029,6 +1054,9 @@
 
       <a class="button portal" href="/learner-portal">
         Learner Portal
+      </a>
+      <a class="button" href="/ai-lessons/lesson-14-using-inline-and-quick-chat.html">
+        Next Lesson
       </a>
     </nav>
   </main>

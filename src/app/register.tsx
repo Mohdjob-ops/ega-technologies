@@ -1,8 +1,7 @@
 import emailjs from "@emailjs/browser";
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,25 +17,8 @@ const STUDENT_TEMPLATE_ID = "template_9se77eg";
 const PUBLIC_KEY = "eGuNf2PLEmedxzflY";
 
 const COURSE_OPTIONS = [
-  "Artificial Intelligence & Generative AI",
-  "Web Development",
-  "Software Development & Programming",
-  "Data Analytics & Data Science",
-  "Cybersecurity",
-  "Cloud Computing & DevOps",
-  "UI/UX & Digital Product Design",
-  "Digital Marketing & Social Media",
-  "Business Administration & Management",
-  "Accounting & Financial Management",
-  "Entrepreneurship & Small Business Management",
-  "Human Resources Management",
-  "Project Management",
-  "Leadership & Organizational Management",
-  "Healthcare Administration & Management",
-  "Health Information & Medical Records",
-  "Digital Health & Healthcare Technology",
-  "Public Health Fundamentals",
-  "Computer & Digital Skills - Beginner",
+  "Artificial Intelligence",
+  "Web Developer",
 ];
 
 const MAX_STUDENT_ID_ATTEMPTS = 8;
@@ -48,49 +30,32 @@ const START_DATE_ANNOUNCEMENT =
 const PAYMENT_ANNOUNCEMENT =
   "The full course fee is due on the student's registration date.";
 
-const REFERRAL_ANNOUNCEMENT =
-  "EGA Referral Reward: For the 3,000 Birr monthly plan, the referring student earns 150 Birr after every completed 10 days of verified qualifying attendance: 150 Birr after 10 days, 300 Birr cumulative after 20 days, and 450 Birr cumulative after 30 days. For the $15 USD English/International monthly plan, the reward is $0.75 after 10 days, $1.50 cumulative after 20 days, and $2.25 cumulative after 30 days. Rewards require confirmed payment and verified attendance. Each 10-day milestone can be credited only once.";
-
 export default function RegisterPage() {
+  const messageRef = useRef<View | null>(null);
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [referralStudentId, setReferralStudentId] = useState("");
-  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-  const [customCourse, setCustomCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
-  const [referralDetailsOpen, setReferralDetailsOpen] = useState(false);
-  const [cybersecurityDetailsOpen, setCybersecurityDetailsOpen] = useState(false);
 
   const [fee, setFee] = useState("3000");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function toggleCourse(course: string) {
-    setSelectedCourses((current) => {
-      const alreadySelected = current.includes(course);
+  useEffect(() => {
+    if (!message) {
+      return;
+    }
 
-      if (
-        course === "Cybersecurity" &&
-        !alreadySelected
-      ) {
-        setCybersecurityDetailsOpen(true);
+    const timer = setTimeout(() => {
+      const node = messageRef.current as any;
+      if (typeof node?.scrollIntoView === "function") {
+        node.scrollIntoView({ behavior: "smooth", block: "start" });
       }
+    }, 100);
 
-      return alreadySelected
-        ? current.filter((item) => item !== course)
-        : [...current, course];
-    });
-  }
-
-  function getSelectedCourses() {
-    const typedCourse = customCourse.trim();
-
-    return [
-      ...selectedCourses,
-      ...(typedCourse ? [typedCourse] : []),
-    ].join(", ");
-  }
+    return () => clearTimeout(timer);
+  }, [message]);
 
   useEffect(() => {
     loadSettings();
@@ -141,10 +106,6 @@ export default function RegisterPage() {
     return amount.toLocaleString() + " Birr";
   }
 
-  function normalizePhone(value: string) {
-    return value.replace(/\D/g, "");
-  }
-
   function isValidEmail(value: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
@@ -169,9 +130,9 @@ export default function RegisterPage() {
       "log_registration_attempt",
       {
         p_full_name: fullName.trim(),
-        p_phone: normalizePhone(phone),
+        p_phone: phone.replace(/[\s-]/g, ""),
         p_email: email.trim().toLowerCase(),
-        p_course: getSelectedCourses() || "Not selected",
+        p_course: selectedCourse.trim() || "Not selected",
         p_status: status,
         p_status_message: statusMessage,
         p_student_id: studentId || null,
@@ -239,11 +200,22 @@ export default function RegisterPage() {
       return;
     }
 
+    const phoneDigits = phone.replace(/[\s-]/g, "");
+    const isValidPhone = /^0\d{9}$/.test(phoneDigits);
+
+    if (!isValidPhone) {
+      await stopWithMessage(
+        "validation_failed",
+        "Please enter a valid phone number."
+      );
+      return;
+    }
+
     if (
       !fullName.trim() ||
       !phone.trim() ||
       !email.trim() ||
-      !getSelectedCourses()
+      !selectedCourse.trim()
     ) {
       await stopWithMessage(
         "validation_failed",
@@ -253,24 +225,14 @@ export default function RegisterPage() {
     }
 
     const cleanName = formatName(fullName);
-    const cleanPhone = normalizePhone(phone);
     const cleanEmail = email.trim().toLowerCase();
-    const cleanReferralStudentId = referralStudentId.trim().toUpperCase();
-    const cleanCourse = getSelectedCourses();
+    const cleanCourse = selectedCourse.trim();
     const courseFee = Number(fee || 0);
 
     if (cleanName.split(" ").length < 2) {
       await stopWithMessage(
         "validation_failed",
         "⚠️ Please enter your full name.\n⚠️ Fadlan geli magacaaga oo buuxa."
-      );
-      return;
-    }
-
-    if (cleanPhone.length < 9) {
-      await stopWithMessage(
-        "validation_failed",
-        "⚠️ Please enter a valid phone number.\n⚠️ Fadlan geli lambar taleefan oo sax ah."
       );
       return;
     }
@@ -294,26 +256,6 @@ export default function RegisterPage() {
       return;
     }
 
-    let verifiedReferrer: any = null;
-
-    if (cleanReferralStudentId) {
-      const { data: referrer, error: referrerError } =
-        await supabase
-          .from("students")
-          .select("student_id, name, email, phone")
-          .eq("student_id", cleanReferralStudentId)
-          .maybeSingle();
-
-      if (referrerError || !referrer) {
-        setMessage(
-  "❌ Referral Student ID was not found.\n❌ Student ID-ga ardayga ku soo gudbiyey lama helin."
-);
-        return;
-      }
-
-      verifiedReferrer = referrer;
-    }
-
     setLoading(true);
     setMessage("⏳ Registering student...\n⏳ Ardayga waa la diiwaangelinayaa...");
 
@@ -329,7 +271,7 @@ export default function RegisterPage() {
       .from("students")
       .select("student_id, name, phone, email")
       .or(
-        `phone.eq.${cleanPhone},email.eq.${cleanEmail}`
+        `phone.eq.${phoneDigits},email.eq.${cleanEmail}`
       )
       .limit(1)
       .maybeSingle();
@@ -354,7 +296,7 @@ export default function RegisterPage() {
     if (existingStudent) {
       setLoading(false);
 
-      if (existingStudent.phone === cleanPhone) {
+      if (existingStudent.phone === phoneDigits) {
         const statusMessage =
           `❌ This phone number is already registered.` +
           `\n\nStudent: ${existingStudent.name}` +
@@ -397,7 +339,7 @@ export default function RegisterPage() {
     const { studentId, error } =
       await insertStudentWithUniqueId({
         name: cleanName,
-        phone: cleanPhone,
+        phone: phoneDigits,
         email: cleanEmail,
         language: "English",
         course: cleanCourse,
@@ -408,7 +350,6 @@ export default function RegisterPage() {
         payment_method: "Not Selected",
         payment_reference: "Not Provided",
         paid_at: null,
-        referred_by_student_id: verifiedReferrer?.student_id || null,
       });
 
     if (error) {
@@ -431,7 +372,7 @@ export default function RegisterPage() {
       await supabase.from("transactions").insert({
         student_id: studentId,
         student_name: cleanName,
-        phone: cleanPhone,
+        phone: phoneDigits,
         email: cleanEmail,
         course: cleanCourse,
         amount: courseFee,
@@ -461,7 +402,7 @@ export default function RegisterPage() {
       full_name: cleanName,
       student_name: cleanName,
       student_email: cleanEmail,
-      student_phone: cleanPhone,
+      student_phone: phoneDigits,
       student_id: studentId,
       student_course: cleanCourse,
 
@@ -476,15 +417,9 @@ export default function RegisterPage() {
       payment_announcement:
         PAYMENT_ANNOUNCEMENT,
 
-      referral_reward:
-        "Birr plan: 150 Birr every completed 10 qualifying days, maximum 450 Birr per month. USD plan: $0.75 every completed 10 qualifying days, maximum $2.25 per month.",
-      referral_announcement:
-        REFERRAL_ANNOUNCEMENT,
-
       registration_information:
         `${START_DATE_ANNOUNCEMENT}\n\n` +
-        `${PAYMENT_ANNOUNCEMENT}\n\n` +
-        `${REFERRAL_ANNOUNCEMENT}`,
+        PAYMENT_ANNOUNCEMENT,
 
       logo_url:
         "https://dummyimage.com/160x60/12306d/ffffff.png&text=EGA",
@@ -496,7 +431,7 @@ export default function RegisterPage() {
       to_email: "i.gennex2026@gmail.com",
       name: cleanName,
       from_name: cleanName,
-      phone: cleanPhone,
+      phone: phoneDigits,
       course: cleanCourse,
     };
 
@@ -506,7 +441,7 @@ export default function RegisterPage() {
       to_email: cleanEmail,
       name: cleanName,
       from_name: "EGA Technologies",
-      phone: cleanPhone,
+      phone: phoneDigits,
       course: cleanCourse,
     };
 
@@ -547,7 +482,7 @@ export default function RegisterPage() {
         `✅ Registration Successful!` +
         `\n\nStudent: ${cleanName}` +
         `\nStudent ID: ${studentId}` +
-        `\nPhone: ${cleanPhone}` +
+        `\nPhone: ${phoneDigits}` +
         `\nCourse Fee: ${formatFee(fee)}` +
         `\nPayment Status: Pending` +
         `\n\nThe course starting date will be announced later by the administrator.` +
@@ -636,20 +571,18 @@ export default function RegisterPage() {
           </TouchableOpacity>
         </Link>
 
+        {message ? (
+          <View ref={messageRef} style={styles.messageBox}>
+            <Text style={styles.message}>{message}</Text>
+          </View>
+        ) : null}
+
         <TextInput
           style={styles.input}
           value={fullName}
           onChangeText={setFullName}
           placeholder="Enter your full name"
           autoCapitalize="words"
-        />
-
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Enter your phone number"
-          keyboardType="phone-pad"
         />
 
         <TextInput
@@ -662,178 +595,47 @@ export default function RegisterPage() {
           autoCorrect={false}
         />
 
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="Enter your phone number"
+          keyboardType="phone-pad"
+        />
+
+        <Text style={styles.label}>Select Course *</Text>
         <TouchableOpacity
-          onPress={() => setCourseDropdownOpen((current) => !current)}
+          onPress={() => setCourseDropdownOpen((open) => !open)}
           activeOpacity={0.8}
           accessibilityRole="button"
-          accessibilityLabel="Select course"
-          style={{
-            minHeight: 52,
-            borderWidth: 1,
-            borderColor: "#cbd5e1",
-            borderRadius: 10,
-            paddingHorizontal: 14,
-            paddingVertical: 14,
-            backgroundColor: "#ffffff",
-            marginBottom: courseDropdownOpen ? 8 : 16,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          accessibilityLabel={`Course: ${selectedCourse || "Select a course"}`}
+          accessibilityState={{ expanded: courseDropdownOpen }}
+          style={styles.courseDropdown}
         >
-          <Text
-            style={{
-              color: selectedCourses.length ? "#0f172a" : "#64748b",
-              flex: 1,
-              paddingRight: 10,
-            }}
-            numberOfLines={1}
-          >
-            {selectedCourses.length
-              ? `${selectedCourses.length} course${
-                  selectedCourses.length === 1 ? "" : "s"
-                } selected`
-              : "Select Course(s) *"}
+          <Text style={styles.courseDropdownText}>
+            {selectedCourse || "Select a course"}
           </Text>
-
-          <Text style={{ color: "#334155", fontSize: 16 }}>
+          <Text style={styles.courseDropdownText}>
             {courseDropdownOpen ? "▲" : "▼"}
           </Text>
         </TouchableOpacity>
 
         {courseDropdownOpen ? (
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#cbd5e1",
-              borderRadius: 10,
-              backgroundColor: "#ffffff",
-              padding: 8,
-              marginBottom: 14,
-            }}
-          >
-            {COURSE_OPTIONS.map((course) => {
-              const selected = selectedCourses.includes(course);
-
-              return (
-                <TouchableOpacity
-                  key={course}
-                  onPress={() => toggleCourse(course)}
-                  activeOpacity={0.75}
-                  style={{
-                    minHeight: 46,
-                    paddingVertical: 11,
-                    paddingHorizontal: 10,
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#e2e8f0",
-                    backgroundColor: selected ? "#eff6ff" : "#ffffff",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      width: 28,
-                      color: "#12306d",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {selected ? "✓" : ""}
-                  </Text>
-
-                  <Text
-                    style={{
-                      flex: 1,
-                      color: selected ? "#12306d" : "#334155",
-                      fontWeight: selected ? "700" : "500",
-                    }}
-                  >
-                    {course}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-
-            <TouchableOpacity
-              onPress={() => setCourseDropdownOpen(false)}
-              style={{
-                marginTop: 8,
-                backgroundColor: "#12306d",
-                borderRadius: 8,
-                paddingVertical: 12,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "#ffffff", fontWeight: "700" }}>
-                Done
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ) : null}
-
-        <TextInput
-          style={styles.input}
-          value={customCourse}
-          onChangeText={setCustomCourse}
-          placeholder="Other course (optional)"
-          autoCapitalize="words"
-        />
-
-        {getSelectedCourses() ? (
-          <Text
-            style={{
-              color: "#166534",
-              marginTop: -6,
-              marginBottom: 16,
-              lineHeight: 20,
-            }}
-          >
-            ✓ {getSelectedCourses()}
-          </Text>
-        ) : null}
-
-        <TextInput
-          style={styles.input}
-          value={referralStudentId}
-          onChangeText={setReferralStudentId}
-          placeholder="Referral Student ID (optional)"
-          autoCapitalize="characters"
-          autoCorrect={false}
-        />
-
-        <Text style={styles.referralHelpText}>
-          If another EGA student referred you, enter their Student ID here.
-        </Text>
-
-        <TouchableOpacity
-          onPress={() => setReferralDetailsOpen(true)}
-          accessibilityRole="button"
-          accessibilityLabel="View referral reward details"
-          style={{
-            borderWidth: 1,
-            borderColor: "#12306d",
-            borderRadius: 10,
-            paddingVertical: 11,
-            paddingHorizontal: 14,
-            marginBottom: 16,
-            alignItems: "center",
-            backgroundColor: "#eff6ff",
-          }}
-        >
-          <Text
-            style={{
-              color: "#12306d",
-              fontWeight: "700",
-              fontSize: 15,
-            }}
-          >
-            🎁 Referral Reward Details
-          </Text>
-        </TouchableOpacity>
-
-        {message ? (
-          <View style={styles.messageBox}>
-            <Text style={styles.message}>{message}</Text>
+          <View style={styles.courseDropdownMenu}>
+            {COURSE_OPTIONS.map((course) => (
+              <TouchableOpacity
+                key={course}
+                onPress={() => {
+                  setSelectedCourse(course);
+                  setCourseDropdownOpen(false);
+                }}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                style={styles.courseDropdownOption}
+              >
+                <Text style={styles.courseDropdownText}>{course}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         ) : null}
 
@@ -872,270 +674,6 @@ export default function RegisterPage() {
           </Text>
         </View>
 
-        <Modal
-          visible={cybersecurityDetailsOpen}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setCybersecurityDetailsOpen(false)}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(15, 23, 42, 0.62)",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 18,
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-                maxWidth: 560,
-                backgroundColor: "#ffffff",
-                borderRadius: 18,
-                overflow: "hidden",
-              }}
-            >
-              <ScrollView
-                contentContainerStyle={{
-                  padding: 22,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: "800",
-                    color: "#12306d",
-                    textAlign: "center",
-                    marginBottom: 6,
-                  }}
-                >
-                  🔐 CEGA Cybersecurity Course
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#166534",
-                    fontSize: 17,
-                    fontWeight: "800",
-                    textAlign: "center",
-                    marginBottom: 20,
-                  }}
-                >
-                  Registration Now Open
-                </Text>
-
-                <View
-                  style={{
-                    backgroundColor: "#eff6ff",
-                    borderWidth: 1,
-                    borderColor: "#bfdbfe",
-                    borderRadius: 12,
-                    padding: 16,
-                    marginBottom: 18,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#1e3a8a",
-                      fontSize: 16,
-                      lineHeight: 29,
-                      fontWeight: "600",
-                    }}
-                  >
-                    📅 Registration: September 5–30, 2026{"\n"}
-                    🚀 Course Starts: October 1, 2026{"\n"}
-                    💳 Course Fee: 3,000 Birr{"\n"}
-                    🏁 Course Ends: May 31, 2027
-                  </Text>
-                </View>
-
-                <Text
-                  style={{
-                    color: "#334155",
-                    lineHeight: 23,
-                    textAlign: "center",
-                    marginBottom: 20,
-                  }}
-                >
-                  Learn practical cybersecurity skills and prepare for
-                  opportunities in the growing global technology industry.
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => setCybersecurityDetailsOpen(false)}
-                  style={{
-                    backgroundColor: "#12306d",
-                    borderRadius: 10,
-                    paddingVertical: 13,
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#ffffff",
-                      fontSize: 16,
-                      fontWeight: "800",
-                    }}
-                  >
-                    OK — Continue Registration
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          visible={referralDetailsOpen}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setReferralDetailsOpen(false)}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(15, 23, 42, 0.58)",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 18,
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-                maxWidth: 600,
-                maxHeight: "88%",
-                backgroundColor: "#ffffff",
-                borderRadius: 16,
-                overflow: "hidden",
-              }}
-            >
-              <ScrollView
-                contentContainerStyle={{
-                  padding: 20,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 21,
-                    fontWeight: "800",
-                    color: "#12306d",
-                    marginBottom: 6,
-                  }}
-                >
-                  🌍 EGA Student Referral Reward
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#475569",
-                    marginBottom: 18,
-                    lineHeight: 21,
-                  }}
-                >
-                  Refer another student to register and earn rewards after
-                  payment and attendance are verified.
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "800",
-                    color: "#12306d",
-                    marginBottom: 10,
-                  }}
-                >
-                  🇪🇹 3,000 Birr Monthly Plan
-                </Text>
-
-                <Text style={{ color: "#334155", lineHeight: 26 }}>
-                  ✅ 10 verified days → 150 Birr{"\n"}
-                  ✅ 20 verified days → 300 Birr cumulative{"\n"}
-                  ✅ 30 verified days → 450 Birr cumulative maximum
-                </Text>
-
-                <View
-                  style={{
-                    height: 1,
-                    backgroundColor: "#e2e8f0",
-                    marginVertical: 18,
-                  }}
-                />
-
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "800",
-                    color: "#12306d",
-                    marginBottom: 10,
-                  }}
-                >
-                  🌍 English / International — $15 USD Monthly Plan
-                </Text>
-
-                <Text style={{ color: "#334155", lineHeight: 26 }}>
-                  ✅ 10 verified days → $0.75{"\n"}
-                  ✅ 20 verified days → $1.50 cumulative{"\n"}
-                  ✅ 30 verified days → $2.25 cumulative maximum
-                </Text>
-
-                <View
-                  style={{
-                    backgroundColor: "#f0fdf4",
-                    borderWidth: 1,
-                    borderColor: "#bbf7d0",
-                    borderRadius: 10,
-                    padding: 12,
-                    marginTop: 18,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#166534",
-                      lineHeight: 21,
-                      fontWeight: "600",
-                    }}
-                  >
-                    ✅ Rewards require confirmed payment and verified
-                    attendance. Each 10-day milestone can be rewarded only once.
-
-                    {"\n\n"}
-                    <Text style={{ color: "#dc2626", fontWeight: "700" }}>
-                      ⚠️ Important: EGA Administration reserves the right to modify,
-                      suspend, or discontinue the Referral Reward Program when necessary.
-                      Any change will be communicated to students and applied in
-                      accordance with EGA policies.
-                    </Text>
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => setReferralDetailsOpen(false)}
-                  accessibilityRole="button"
-                  accessibilityLabel="Close referral reward details"
-                  style={{
-                    backgroundColor: "#12306d",
-                    borderRadius: 10,
-                    paddingVertical: 13,
-                    marginTop: 20,
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#ffffff",
-                      fontWeight: "800",
-                      fontSize: 16,
-                    }}
-                  >
-                    Close
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ScrollView>
   );
@@ -1227,113 +765,41 @@ const styles = StyleSheet.create({
     color: "#334155",
     lineHeight: 24,
   },
-  rewardBox: {
-    backgroundColor: "#fff7ed",
-    borderWidth: 1,
-    borderColor: "#fdba74",
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 18,
-  },
-  rewardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#9a3412",
-    marginBottom: 8,
-  },
-
-  referralCardsRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-    marginBottom: 20,
-  },
-
-  referralCard: {
-    flexGrow: 1,
-    flexBasis: 420,
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 18,
-  },
-
-  somaliReferralCard: {
-    backgroundColor: "#f4fbf3",
-    borderColor: "#b7ddb1",
-  },
-
-  englishReferralCard: {
-    backgroundColor: "#f3f8ff",
-    borderColor: "#b8d4ff",
-  },
-
-  somaliReferralTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#166534",
-    lineHeight: 30,
-  },
-
-  englishReferralTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1d4ed8",
-    lineHeight: 30,
-  },
-
-  referralLanguage: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#475569",
-    marginTop: 4,
-    marginBottom: 14,
-  },
-
-  referralIntro: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#1f2937",
-  },
-
-  referralDivider: {
-    height: 1,
-    backgroundColor: "#cbd5e1",
-    marginVertical: 14,
-  },
-
-  referralPlanTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#12306d",
-    marginBottom: 8,
-    lineHeight: 26,
-  },
-
-  referralLine: {
-    fontSize: 16,
-    color: "#1f2937",
-    lineHeight: 25,
-    marginBottom: 6,
-  },
-
-  referralNote: {
-    fontSize: 15,
-    color: "#334155",
-    lineHeight: 23,
-    fontWeight: "600",
-  },
-  rewardText: {
-    fontSize: 16,
-    color: "#7c2d12",
-    lineHeight: 24,
-    marginBottom: 5,
-  },
   label: {
     fontSize: 17,
     fontWeight: "bold",
     color: "#12306d",
     marginBottom: 8,
     marginTop: 12,
+  },
+  courseDropdown: {
+    minHeight: 50,
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    backgroundColor: "#ffffff",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  courseDropdownText: {
+    color: "#334155",
+    fontSize: 16,
+  },
+  courseDropdownMenu: {
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 10,
+    marginBottom: 10,
+    overflow: "hidden",
+  },
+  courseDropdownOption: {
+    minHeight: 48,
+    paddingHorizontal: 14,
+    backgroundColor: "#ffffff",
+    justifyContent: "center",
   },
   input: {
     backgroundColor: "#ffffff",
@@ -1343,12 +809,6 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 18,
     marginBottom: 8,
-  },
-  referralHelpText: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: "#475569",
-    marginTop: 4,
   },
   messageBox: {
     backgroundColor: "#f0fdf4",

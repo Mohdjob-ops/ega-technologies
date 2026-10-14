@@ -682,6 +682,8 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+  <script defer src="/ai-lessons/somali-help-translation.js"></script>
 </head>
 
 <body>
@@ -701,17 +703,18 @@
 
   <main class="page-shell">
     <nav class="lesson-nav" aria-label="Lesson navigation">
-      <a class="nav-button" href="/ai-lessons/lesson-11-copilot-creating-images-in-powerpoint.html">
+      <a class="nav-button" href="/ai-lessons/lesson-11-creating-and-adding-ai-images-with-copilot-in-powerpoint.html">
         ← Previous Lesson
       </a>
       <a class="nav-button portal" href="/learner-portal">
         Learner Portal
       </a>
-      <a class="nav-button" href="/learner-portal">
-        Course Lessons
+      <a class="nav-button" href="/ai-lessons/lesson-13-github-copilot-integrated-ai-chat.html">
+        Next Lesson
       </a>
     </nav>
 
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
     <section class="hero">
       <span class="lesson-label">EGA AI Developer Course • Lesson 12</span>
       <h1>Creating a PowerPoint from an Existing File</h1>
@@ -733,52 +736,55 @@
 
     <section class="content-card accent-blue">
       <div class="section-kicker">Introduction</div>
-      <h2>Build from Work You Already Have</h2>
+      <h2><span class="sht" tabindex="0" data-so="Ka Dhis Shaqada Aad Hore u Haysatay">Build from Work You Already Have</span></h2>
 
       <p>
-        Creating a presentation from a blank page can be useful, but many
+        <span class="sht" tabindex="0" data-so="In bandhig laga bilaabo bog madhan la sameeyo way waxtar yeelan kartaa, laakiin bandhigyo badan oo xirfadeed waxay ka bilaabmaan xog hore u jirta. Waxaa laga yaabaa inaad Word ku haysato qorshe ganacsi, Excel-na xog maaliyadeed, ama faylal mashruuc oo ku jira OneDrive ama SharePoint.">Creating a presentation from a blank page can be useful, but many
         professional presentations begin with information that already exists.
         You may have a completed business plan in Word, financial information
         in Excel, or project files stored in OneDrive or SharePoint.
+        </span>
       </p>
 
       <p>
-        Microsoft Copilot for PowerPoint can use those files as source
+        <span class="sht" tabindex="0" data-so="Microsoft Copilot for PowerPoint wuxuu faylashaas u adeegsan karaa xog asal ah. Wuxuu aqoonsan karaa mawduucyada muhiimka ah, diyaarin karaa dulmar, samayn karaa slide-yo, soo jeedin karaa qaabab, kuna dari karaa muuqaallo khuseeya. Tani waxay yarayn kartaa wakhtiga gacanta loogu koobiyeeyo loona habeeyo xogta.">Microsoft Copilot for PowerPoint can use those files as source
         material. It can identify important topics, produce an outline, create
         slides, suggest layouts, and add relevant visual elements. This can
         reduce the time spent copying and formatting information manually.
+        </span>
       </p>
 
       <div class="warning">
-        <strong>Important:</strong> Copilot accelerates the first draft. It does
+        <strong><span class="sht" tabindex="0" data-so="Muhiim:">Important:</span></strong> <span class="sht" tabindex="0" data-so="Copilot wuxuu dedejiyaa qabyo-qoraalka koowaad, balse ma dammaanad qaado in slide kasta sax yahay, cusub yahay, khuseeyo, ama ku habboon yahay dhagaystayaasha.">Copilot accelerates the first draft. It does
         not guarantee that every slide is accurate, current, relevant, or
         suitable for your audience.
+        </span>
       </div>
     </section>
 
     <section class="content-card accent-green">
       <div class="section-kicker">Learning Objectives</div>
-      <h2>By the End of This Lesson</h2>
+      <h2><span class="sht" tabindex="0" data-so="Dhammaadka Casharkan">By the End of This Lesson</span></h2>
 
       <div class="objectives">
         <div class="objective">
           <span class="objective-number">1</span>
-          <p>Explain how Copilot uses an existing Microsoft 365 file.</p>
+          <p><span class="sht" tabindex="0" data-so="Sharax sida Copilot u isticmaalo fayl Microsoft 365 ah oo hore u jiray.">Explain how Copilot uses an existing Microsoft 365 file.</span></p>
         </div>
 
         <div class="objective">
           <span class="objective-number">2</span>
-          <p>Create a PowerPoint draft from a Word document.</p>
+          <p><span class="sht" tabindex="0" data-so="Ka samee qabyo PowerPoint dukumeenti Word ah.">Create a PowerPoint draft from a Word document.</span></p>
         </div>
 
         <div class="objective">
           <span class="objective-number">3</span>
-          <p>Add instructions for tone, audience, purpose, and call to action.</p>
+          <p><span class="sht" tabindex="0" data-so="Ku dar tilmaamo ku saabsan codka, dhagaystayaasha, ujeeddada, iyo baaqa ficilka.">Add instructions for tone, audience, purpose, and call to action.</span></p>
         </div>
 
         <div class="objective">
           <span class="objective-number">4</span>
-          <p>Review generated slides against the original source file.</p>
+          <p><span class="sht" tabindex="0" data-so="Slide-yada la soo saaray la barbar dhig faylka asalka ah.">Review generated slides against the original source file.</span></p>
         </div>
 
         <div class="objective">
@@ -795,13 +801,14 @@
 
     <section class="content-card accent-blue">
       <div class="section-kicker">Technical Section 1</div>
-      <h2>How File-Based Presentation Generation Works</h2>
+      <h2><span class="sht" tabindex="0" data-so="Sida Abuurista Bandhig Fayl ku Salaysan u Shaqayso">How File-Based Presentation Generation Works</span></h2>
 
       <p>
-        When you ask Copilot to create a presentation from a file, Copilot
+        <span class="sht" tabindex="0" data-so="Markaad Copilot ka codsato inuu fayl ka abuuro bandhig, wuxuu falanqeeyaa isha la doortay oo qaab-dhismeedkeeda u beddelaa bandhig la soo jeediyay. Cinwaannadu waxay noqon karaan cinwaannada slide-yada, faqraduhuna qodobo, jadwalladuna slide-yo muuqaal ama jadwal ah.">When you ask Copilot to create a presentation from a file, Copilot
         analyzes the selected source and converts its structure into a proposed
         slide deck. Headings may become slide titles, paragraphs may become
         bullet points, and tables may become visual or tabular slides.
+        </span>
       </p>
 
       <div class="concept-grid">
@@ -809,8 +816,9 @@
           <div class="icon">📄</div>
           <h3>Source File</h3>
           <p>
-            A Word document, Excel workbook, or supported file containing the
+            <span class="sht" tabindex="0" data-so="Dukumeenti Word, buug-shaqo Excel, ama fayl la taageero oo haya xaqiiqooyinka iyo fikradaha bandhigga.">A Word document, Excel workbook, or supported file containing the
             facts and ideas for the presentation.
+            </span>
           </p>
         </article>
 
@@ -818,8 +826,9 @@
           <div class="icon">✨</div>
           <h3>Copilot Processing</h3>
           <p>
-            Copilot identifies topics, summarizes content, and proposes a
+            <span class="sht" tabindex="0" data-so="Copilot wuxuu aqoonsadaa mawduucyada, soo koobaa nuxurka, wuxuuna soo jeediyaa qaab-dhismeedka bandhigga.">Copilot identifies topics, summarizes content, and proposes a
             presentation structure.
+            </span>
           </p>
         </article>
 
@@ -827,27 +836,30 @@
           <div class="icon">📊</div>
           <h3>PowerPoint Draft</h3>
           <p>
-            PowerPoint receives editable slides that you can verify, redesign,
+            <span class="sht" tabindex="0" data-so="PowerPoint wuxuu helaa slide-yo la tafatiri karo oo aad xaqiijin karto, dib u naqshadayn karto, dib u habayn karto, ama tirtiri karto.">PowerPoint receives editable slides that you can verify, redesign,
             reorganize, or delete.
+            </span>
           </p>
         </article>
       </div>
 
       <div class="note">
-        <strong>Microsoft environment requirement:</strong> The source file
+        <strong><span class="sht" tabindex="0" data-so="Shuruudda deegaanka Microsoft:">Microsoft environment requirement:</span></strong> <span class="sht" tabindex="0" data-so="Faylka asalku caadi ahaan waa inuu ka muuqan karaa deegaankaaga Microsoft 365, sida OneDrive ama SharePoint, si Copilot u helo una isticmaalo.">The source file
         normally needs to be accessible through your Microsoft 365 environment,
         such as OneDrive or SharePoint, so Copilot can locate and use it.
+        </span>
       </div>
     </section>
 
     <section class="content-card accent-purple">
       <div class="section-kicker">Technical Section 2</div>
-      <h2>Prepare the Source Before Generating Slides</h2>
+      <h2><span class="sht" tabindex="0" data-so="Diyaari Faylka Asalka ah Ka Hor Abuurista Slide-yada">Prepare the Source Before Generating Slides</span></h2>
 
       <p>
-        The quality of a generated presentation depends heavily on the quality
+        <span class="sht" tabindex="0" data-so="Tayada bandhigga la soo saaray waxay si weyn ugu xidhan tahay tayada isha. Dukumeenti aan dhammaystirnayn ama duugoobay wuxuu soo saari karaa bandhig aan dhammaystirnayn ama duugoobay.">The quality of a generated presentation depends heavily on the quality
         of its source. An unfinished or outdated document can produce an
         unfinished or outdated presentation.
+        </span>
       </p>
 
       <h3>Before using the file, check that it has:</h3>
@@ -870,7 +882,7 @@
 
     <section class="content-card accent-blue">
       <div class="section-kicker">Technical Section 3</div>
-      <h2>Create the Presentation from a File</h2>
+      <h2><span class="sht" tabindex="0" data-so="Ka Abuur Bandhig Fayl">Create the Presentation from a File</span></h2>
 
       <div class="steps">
         <article class="step">
@@ -890,34 +902,38 @@
         </article>
 
         <article class="step">
-          <h3>Locate the Source</h3>
+          <h3><span class="sht" tabindex="0" data-so="Raadi Faylka Asalka ah">Locate the Source</span></h3>
           <p>
-            Search for the document stored in OneDrive or SharePoint. Verify
+            <span class="sht" tabindex="0" data-so="Ka raadi dukumeentiga OneDrive ama SharePoint. Xaqiiji magaca faylka iyo noociisa ka hor doorashada.">Search for the document stored in OneDrive or SharePoint. Verify
             its filename and version before selecting it.
+            </span>
           </p>
         </article>
 
         <article class="step">
-          <h3>Add Specific Instructions</h3>
+          <h3><span class="sht" tabindex="0" data-so="Ku Dar Tilmaamo Gaar ah">Add Specific Instructions</span></h3>
           <p>
-            Describe the intended audience, presentation tone, purpose, length,
+            <span class="sht" tabindex="0" data-so="Sharax dhagaystayaasha loogu talagalay, codka bandhigga, ujeeddada, dhererka, iyo baaqa ficilka la doonayo.">Describe the intended audience, presentation tone, purpose, length,
             and desired call to action.
+            </span>
           </p>
         </article>
 
         <article class="step">
-          <h3>Review the Proposed Outline</h3>
+          <h3><span class="sht" tabindex="0" data-so="Dib u Eeg Dulmarka La Soo Jeediyay">Review the Proposed Outline</span></h3>
           <p>
-            Examine the outline before treating it as final. Look for missing,
+            <span class="sht" tabindex="0" data-so="Baadh dulmarka ka hor intaadan kama dambays u qaadan. Raadi mawduucyo maqan, soo noqnoqda, duugoobay, ama aan khusayn.">Examine the outline before treating it as final. Look for missing,
             repeated, outdated, or irrelevant topics.
+            </span>
           </p>
         </article>
 
         <article class="step">
-          <h3>Generate and Inspect the Slides</h3>
+          <h3><span class="sht" tabindex="0" data-so="Abuur oo Baadh Slide-yada">Generate and Inspect the Slides</span></h3>
           <p>
-            Allow Copilot to produce the deck, then compare every important
+            <span class="sht" tabindex="0" data-so="Copilot u oggolow inuu sameeyo bandhigga, dabadeed slide kasta oo muhiim ah la barbar dhig isha asalka ah.">Allow Copilot to produce the deck, then compare every important
             slide with the original source.
+            </span>
           </p>
         </article>
       </div>
@@ -925,11 +941,12 @@
 
     <section class="content-card accent-gold">
       <div class="section-kicker">Technical Section 4</div>
-      <h2>Give Copilot Better Instructions</h2>
+      <h2><span class="sht" tabindex="0" data-so="Copilot Sii Tilmaamo Ka Wanaagsan">Give Copilot Better Instructions</span></h2>
 
       <p>
-        Selecting the source file is only the beginning. A useful prompt tells
+        <span class="sht" tabindex="0" data-so="Doorashada faylka asalka ahi waa bilow keliya. Codsi waxtar leh wuxuu Copilot u sheegaa waxa bandhiggu u baahan yahay inuu qabto.">Selecting the source file is only the beginning. A useful prompt tells
         Copilot what the presentation must accomplish.
+        </span>
       </p>
 
       <h3>Example: investor or bank presentation</h3>
@@ -944,7 +961,7 @@
         supported by the source document.
       </div>
 
-      <h3>A strong instruction usually identifies:</h3>
+      <h3><span class="sht" tabindex="0" data-so="Tilmaan wanaagsan badanaa waxay qeexdaa:">A strong instruction usually identifies:</span></h3>
 
       <table class="comparison">
         <thead>
@@ -956,17 +973,17 @@
         </thead>
         <tbody>
           <tr>
-            <td>Audience</td>
+            <td><span class="sht" tabindex="0" data-so="Dhagaystayaasha">Audience</span></td>
             <td>Who will view the deck?</td>
             <td>Bank lending team</td>
           </tr>
           <tr>
-            <td>Purpose</td>
+            <td><span class="sht" tabindex="0" data-so="Ujeeddada">Purpose</span></td>
             <td>What should the presentation achieve?</td>
             <td>Support a loan request</td>
           </tr>
           <tr>
-            <td>Tone</td>
+            <td><span class="sht" tabindex="0" data-so="Codka">Tone</span></td>
             <td>How should it sound?</td>
             <td>Professional and confident</td>
           </tr>
@@ -976,7 +993,7 @@
             <td>Market, operations, and financial projections</td>
           </tr>
           <tr>
-            <td>Call to action</td>
+            <td><span class="sht" tabindex="0" data-so="Baaq ficil">Call to action</span></td>
             <td>What should the audience do next?</td>
             <td>Approve or discuss the requested financing</td>
           </tr>
@@ -986,30 +1003,32 @@
 
     <section class="content-card accent-red">
       <div class="section-kicker">Technical Section 5</div>
-      <h2>Verify the Generated Presentation</h2>
+      <h2><span class="sht" tabindex="0" data-so="Xaqiiji Bandhigga La Soo Saaray">Verify the Generated Presentation</span></h2>
 
       <p>
-        Copilot may use content from the wrong version of a document, retain an
+        <span class="sht" tabindex="0" data-so="Copilot wuxuu adeegsan karaa nuxur ka yimid nooc dukumeenti oo khaldan, hayn karaa fikrad aad rabtay in la saaro, dooran karaa sawir aan ku habboonayn, ama samayn karaa slide-yo soo noqnoqda. Sidaas darteed xaqiijinta bini'aadamku waa lama huraan.">Copilot may use content from the wrong version of a document, retain an
         idea you intended to remove, choose an unsuitable image, or create
         duplicate slides. Human verification is therefore mandatory.
+        </span>
       </p>
 
       <h3>Perform a source-to-slide review:</h3>
 
       <ol>
-        <li>Open the original document beside the presentation.</li>
-        <li>Compare target audiences, names, dates, and financial figures.</li>
-        <li>Check that tables were transferred correctly.</li>
-        <li>Remove content that does not support the presentation goal.</li>
-        <li>Replace generic or inaccurate images.</li>
-        <li>Confirm that the conclusion includes the intended call to action.</li>
-        <li>Check that the deck does not claim unsupported facts.</li>
+        <li><span class="sht" tabindex="0" data-so="Dukumeentiga asalka ah ag dhig bandhigga.">Open the original document beside the presentation.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Isbarbardhig dhagaystayaasha la beegsanayo, magacyada, taariikhaha, iyo tirooyinka maaliyadeed.">Compare target audiences, names, dates, and financial figures.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Hubi in jadwallada si sax ah loo wareejiyay.">Check that tables were transferred correctly.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ka saar nuxurka aan taageerayn yoolka bandhigga.">Remove content that does not support the presentation goal.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Beddel sawirrada guud ama aan saxda ahayn.">Replace generic or inaccurate images.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Xaqiiji in gunaanadku ku jiro baaqa ficil ee la doonayo.">Confirm that the conclusion includes the intended call to action.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Hubi in bandhiggu aanu sheegan xaqiiqooyin aan ishu taageerayn.">Check that the deck does not claim unsupported facts.</span></li>
       </ol>
 
       <div class="warning">
-        <strong>Source-grounded does not mean error-free.</strong> Copilot may
+        <strong><span class="sht" tabindex="0" data-so="Isha ku salaysnaantu macnaheedu ma aha khalad la'aan.">Source-grounded does not mean error-free.</span></strong> <span class="sht" tabindex="0" data-so="Copilot wuxuu ku celin karaa khalad hore ugu jiray isha ama si khaldan u fahmi karaa xidhiidhka qaybaha.">Copilot may
         reproduce an error already present in the source or misunderstand the
         relationship between sections.
+        </span>
       </div>
     </section>
 
@@ -1207,50 +1226,50 @@
 
     <section class="content-card accent-green">
       <div class="section-kicker">Rules</div>
-      <h2>Rules for Responsible Use</h2>
+      <h2><span class="sht" tabindex="0" data-so="Xeerarka Adeegsiga Masuulka ah">Rules for Responsible Use</span></h2>
 
       <div class="rules-list">
         <div class="rule">
-          Use the latest reviewed and approved source file.
+          <span class="sht" tabindex="0" data-so="Isticmaal faylka asalka ah ee ugu dambeeyay, dib loo eegay, lana ansixiyay.">Use the latest reviewed and approved source file.</span>
         </div>
         <div class="rule">
-          Verify important claims and numbers against the original document.
+          <span class="sht" tabindex="0" data-so="Sheegashooyinka iyo tirooyinka muhiimka ah ka xaqiiji dukumeentiga asalka ah.">Verify important claims and numbers against the original document.</span>
         </div>
         <div class="rule">
-          Tell Copilot the audience, purpose, tone, and desired call to action.
+          <span class="sht" tabindex="0" data-so="Copilot u sheeg dhagaystayaasha, ujeeddada, codka, iyo baaqa ficilka la doonayo.">Tell Copilot the audience, purpose, tone, and desired call to action.</span>
         </div>
         <div class="rule">
-          Remove irrelevant or duplicate slides before presenting.
+          <span class="sht" tabindex="0" data-so="Ka saar slide-yada aan khusayn ama soo noqnoqda ka hor bandhigga.">Remove irrelevant or duplicate slides before presenting.</span>
         </div>
         <div class="rule">
-          Replace generic images with accurate and legally usable visuals.
+          <span class="sht" tabindex="0" data-so="Sawirrada guud ku beddel muuqaallo sax ah oo sharci ahaan la isticmaali karo.">Replace generic images with accurate and legally usable visuals.</span>
         </div>
         <div class="rule">
-          Keep confidential documents within approved organizational systems.
+          <span class="sht" tabindex="0" data-so="Dukumeentiyada qarsoon ku hay nidaamyada ururka ee la ansixiyay.">Keep confidential documents within approved organizational systems.</span>
         </div>
         <div class="rule">
-          Treat Copilot output as an editable draft, not a finished authority.
+          <span class="sht" tabindex="0" data-so="Natiijada Copilot u qaado qabyo la tafatiri karo, ee ha u qaadan wax kama dambays ah oo la hubo.">Treat Copilot output as an editable draft, not a finished authority.</span>
         </div>
         <div class="rule">
-          Practice and understand the presentation before delivering it.
+          <span class="sht" tabindex="0" data-so="Ku celceli oo faham bandhigga ka hor intaadan jeedin.">Practice and understand the presentation before delivering it.</span>
         </div>
       </div>
     </section>
 
     <section class="content-card accent-red">
       <div class="section-kicker">Common Mistakes</div>
-      <h2>Mistakes to Avoid</h2>
+      <h2><span class="sht" tabindex="0" data-so="Khaladaadka Laga Fogaado">Mistakes to Avoid</span></h2>
 
       <div class="mistakes-list">
         <div class="mistake">
-          Selecting an older or incomplete version of the source document.
+          <span class="sht" tabindex="0" data-so="Doorashada nooc duug ah ama aan dhammaystirnayn oo dukumeentiga asalka ah.">Selecting an older or incomplete version of the source document.</span>
         </div>
         <div class="mistake">
           Assuming Copilot will automatically understand which content was
           abandoned.
         </div>
         <div class="mistake">
-          Presenting AI-generated financial figures without verification.
+          <span class="sht" tabindex="0" data-so="Soo bandhigista tirooyin maaliyadeed oo AI soo saartay iyada oo aan la xaqiijin.">Presenting AI-generated financial figures without verification.</span>
         </div>
         <div class="mistake">
           Keeping every generated slide even when some slides are repeated.
@@ -1263,7 +1282,7 @@
           Using a vague prompt that does not identify the audience or purpose.
         </div>
         <div class="mistake">
-          Forgetting to include a clear call to action.
+          <span class="sht" tabindex="0" data-so="Illowga in lagu daro baaq ficil oo cad.">Forgetting to include a clear call to action.</span>
         </div>
         <div class="mistake">
           Spending no time rehearsing because Copilot created the deck quickly.
@@ -1273,13 +1292,13 @@
 
     <section class="content-card accent-purple">
       <div class="section-kicker">Knowledge Check</div>
-      <h2>Multiple-Choice Questions</h2>
+      <h2><span class="sht" tabindex="0" data-so="Su'aalo Doorashooyin Badan leh">Multiple-Choice Questions</span></h2>
 
       <article class="quiz-question">
-        <h3>1. Why should the source document be finalized first?</h3>
+        <h3><span class="sht" tabindex="0" data-so="1. Maxaa dukumeentiga asalka ah marka hore loo dhammeystirayaa?">1. Why should the source document be finalized first?</span></h3>
         <ol type="A">
           <li>PowerPoint cannot open incomplete files.</li>
-          <li>Copilot may reproduce outdated or incorrect source content.</li>
+          <li><span class="sht" tabindex="0" data-so="Copilot wuxuu soo saari karaa nuxur duugoobay ama khaldan oo ku jira isha.">Copilot may reproduce outdated or incorrect source content.</span></li>
           <li>Copilot only accepts PDF files.</li>
           <li>A final document guarantees perfect slide design.</li>
         </ol>
@@ -1296,9 +1315,9 @@
       </article>
 
       <article class="quiz-question">
-        <h3>3. What should a strong generation prompt include?</h3>
+        <h3><span class="sht" tabindex="0" data-so="3. Maxaa ku jira codsi-abuuris wanaagsan?">3. What should a strong generation prompt include?</span></h3>
         <ol type="A">
-          <li>Audience, purpose, tone, focus, and call to action</li>
+          <li><span class="sht" tabindex="0" data-so="Dhagaystayaasha, ujeeddada, codka, diiradda, iyo baaqa ficilka">Audience, purpose, tone, focus, and call to action</span></li>
           <li>Only the presentation filename</li>
           <li>Only a color choice</li>
           <li>The presenter’s password</li>
@@ -1306,11 +1325,11 @@
       </article>
 
       <article class="quiz-question">
-        <h3>4. What should you do immediately after generation?</h3>
+        <h3><span class="sht" tabindex="0" data-so="4. Maxaad samaynaysaa isla marka bandhigga la soo saaro?">4. What should you do immediately after generation?</span></h3>
         <ol type="A">
           <li>Send the deck without opening it.</li>
           <li>Delete the original source.</li>
-          <li>Compare important slides with the source document.</li>
+          <li><span class="sht" tabindex="0" data-so="Slide-yada muhiimka ah la barbar dhig dukumeentiga asalka ah.">Compare important slides with the source document.</span></li>
           <li>Convert every slide into an image.</li>
         </ol>
       </article>
@@ -1346,17 +1365,17 @@
       </article>
 
       <article class="quiz-question">
-        <h3>8. What is the best description of Copilot’s output?</h3>
+        <h3><span class="sht" tabindex="0" data-so="8. Waa maxay sharaxaadda ugu habboon ee natiijada Copilot?">8. What is the best description of Copilot’s output?</span></h3>
         <ol type="A">
           <li>A legally approved final document</li>
-          <li>An editable first draft requiring human review</li>
+          <li><span class="sht" tabindex="0" data-so="Qabyo-qoraal koowaad oo la tafatiri karo una baahan dib-u-eegis bini'aadam">An editable first draft requiring human review</span></li>
           <li>A presentation that cannot be changed</li>
           <li>A guaranteed source of accurate financial advice</li>
         </ol>
       </article>
 
       <details>
-        <summary>Open Answer Key</summary>
+        <summary><span class="sht" tabindex="0" data-so="Fur Jawaabaha Saxda ah">Open Answer Key</span></summary>
         <div class="answer-content">
           <p><strong>1. B</strong> — Errors or outdated ideas in the source may appear in the deck.</p>
           <p><strong>2. C</strong> — Copilot needs access through the connected Microsoft 365 environment.</p>
@@ -1372,33 +1391,34 @@
 
     <section class="content-card remember">
       <div class="section-kicker" style="color:#ffe7a5;">Remember</div>
-      <h2>Start with Existing Knowledge, Then Improve It</h2>
+      <h2><span class="sht" tabindex="0" data-so="Ka Bilow Aqoonta Jirta, Kadibna Hagaaji">Start with Existing Knowledge, Then Improve It</span></h2>
 
       <p>
-        Copilot’s greatest productivity benefit is not only creating content
+        <span class="sht" tabindex="0" data-so="Faa'iidada wax-soo-saar ee ugu weyn ee Copilot ma aha oo keliya abuurista nuxur bog madhan. Wuxuu isku xidhi karaa shaqada hore ugu kaydsan deegaankaaga Microsoft oo u beddeli karaa qaab cusub.">Copilot’s greatest productivity benefit is not only creating content
         from a blank page. It can also connect the work already stored in your
         Microsoft environment and transform that material into a new format.
+        </span>
       </p>
 
       <ul>
-        <li>A reliable presentation begins with a reliable source.</li>
-        <li>Choose the correct file and clearly define the audience.</li>
+        <li><span class="sht" tabindex="0" data-so="Bandhig la isku hallayn karo wuxuu ka bilaabmaa il la isku hallayn karo.">A reliable presentation begins with a reliable source.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Dooro faylka saxda ah oo si cad u qeex dhagaystayaasha.">Choose the correct file and clearly define the audience.</span></li>
         <li>Use Copilot for structure and speed, then apply human judgment.</li>
-        <li>Check every important statement, table, image, and number.</li>
-        <li>Make the call to action clear.</li>
+        <li><span class="sht" tabindex="0" data-so="Hubi hadal kasta oo muhiim ah, jadwal, sawir, iyo tiro.">Check every important statement, table, image, and number.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Baaq ficilka ka dhig mid cad.">Make the call to action clear.</span></li>
         <li>Use the time saved to improve and practice your presentation.</li>
       </ul>
     </section>
 
     <nav class="lesson-nav" aria-label="Bottom lesson navigation">
-      <a class="nav-button" href="/ai-lessons/lesson-11-copilot-creating-images-in-powerpoint.html">
+      <a class="nav-button" href="/ai-lessons/lesson-11-creating-and-adding-ai-images-with-copilot-in-powerpoint.html">
         ← Previous Lesson
       </a>
       <a class="nav-button portal" href="/learner-portal">
         Learner Portal
       </a>
-      <a class="nav-button" href="/learner-portal">
-        Course Lessons
+      <a class="nav-button" href="/ai-lessons/lesson-13-github-copilot-integrated-ai-chat.html">
+        Next Lesson
       </a>
     </nav>
   </main>

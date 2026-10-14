@@ -1,0 +1,16 @@
+.sht { cursor: help; }
+.somali-translation-popup {
+  position: fixed;
+  z-index: 1000;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 9px 12px;
+  color: #172033;
+  background: #fff;
+  border: 1px solid #d5dfec;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(24, 46, 84, .18);
+  font: 14px/1.45 Arial, Helvetica, sans-serif;
+  text-align: left;
+  pointer-events: none;
+}
+.somali-translation-popup[hidden] { display: none; }

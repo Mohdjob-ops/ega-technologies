@@ -1,0 +1,154 @@
+.ega-layout-page {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fff !important;
+  color: #172033;
+  font: 17px/1.7 Arial, Helvetica, sans-serif;
+}
+
+.ega-layout-legacy-header,
+.ega-layout-legacy-top-nav,
+.ega-layout-legacy-section-nav,
+.ega-layout-legacy-back {
+  display: none !important;
+}
+
+.ega-layout-nav,
+.ega-course-header,
+.ega-layout-note,
+.ega-layout-page main {
+  width: min(100% - 32px, 960px);
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.ega-layout-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f5f8fc;
+  border: 1px solid #d5dfec;
+  border-radius: 12px;
+}
+
+.ega-layout-nav a,
+.ega-layout-nav span {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 10px;
+  border-radius: 9px;
+  color: #fff;
+  background: #0b3b82;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.ega-layout-nav .ega-layout-portal { background: #16813b; }
+.ega-layout-nav .ega-layout-disabled { color: #777; background: #e4e4e4; }
+
+.ega-course-header {
+  padding: 20px 0 24px;
+  text-align: center;
+}
+
+.ega-course-header .ega-layout-logo {
+  width: 170px;
+  height: 170px;
+  display: block;
+  margin: 0 auto 18px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .13);
+}
+
+.ega-course-header h1 {
+  margin: 0 0 8px;
+  color: #0b3b82;
+  font-size: 2.8rem;
+  line-height: 1.15;
+}
+
+.ega-course-header .ega-layout-lesson-title {
+  margin: 0 0 12px;
+  color: #172033;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ega-course-header .ega-layout-author { margin: 8px auto 0; }
+
+.ega-layout-section-nav {
+  max-width: 680px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 24px auto 0;
+}
+
+.ega-layout-section-nav a {
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px;
+  color: #0b3b82;
+  background: #fff;
+  border: 1px solid #a9bdd9;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+
+.ega-layout-section-nav a:hover,
+.ega-layout-section-nav a:focus-visible { color: #fff; background: #0b3b82; }
+
+.ega-layout-nav a:focus-visible,
+.ega-layout-section-nav a:focus-visible { outline: 3px solid #f0ad28; outline-offset: 3px; }
+
+.ega-layout-note {
+  margin-top: 0;
+  margin-bottom: 24px;
+  padding: 18px 22px;
+  color: #3c3217;
+  background: #fff8df;
+  border: 1px solid #e6cf82;
+  border-left: 5px solid #bd8b16;
+  border-radius: 8px;
+}
+
+.ega-layout-note strong { display: block; margin-bottom: 4px; color: #76540a; }
+.ega-layout-page main { max-width: 960px !important; }
+
+@media (max-width: 600px) {
+  .ega-layout-page { font-size: 16px; }
+  .ega-layout-nav { gap: 5px; padding: 7px; }
+  .ega-layout-nav a, .ega-layout-nav span { min-height: 46px; padding: 8px 5px; font-size: 12px; }
+  .ega-course-header { padding-top: 16px; }
+  .ega-course-header h1 { font-size: 2.1rem; }
+  .ega-course-header .ega-layout-lesson-title { font-size: 1.2rem; }
+  .ega-course-header .ega-layout-logo { width: 140px; height: 140px; }
+  .ega-layout-section-nav { gap: 7px; margin-top: 20px; }
+  .ega-layout-section-nav a { min-height: 46px; padding: 8px 5px; font-size: 13px; }
+  .ega-layout-note { padding: 15px 16px; }
+  .ega-layout-page section { padding: 20px; }
+}
+
+@media (max-width: 380px) {
+  .ega-layout-section-nav { grid-template-columns: 1fr; max-width: 280px; }
+}

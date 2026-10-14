@@ -244,6 +244,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+<link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+<script defer src="/ai-lessons/somali-help-translation.js"></script>
 </head>
 
 <body>
@@ -404,24 +408,27 @@ document.addEventListener("DOMContentLoaded", function () {
     <hr>
 
     <main>
+        <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
         <section id="listen" class="ega-audio-reader"><h2>Lesson Audio</h2><p>Listen to Lesson 8 in English. Click any transcript line to continue from that point.</p><div class="ega-sticky-player"><audio controls preload="metadata" data-transcript="EGA-AI-Lesson-08-English.vtt"><source src="EGA-AI-Lesson-08-English.mp3" type="audio/mpeg">Your browser does not support the audio player.</audio></div><div class="ega-transcript" aria-label="Synchronized Lesson 8 transcript"><p class="ega-transcript-status">Loading synchronized transcript…</p></div><script defer src="/ai-lessons/audio-transcript.js"></script></section>
 
         <section>
 
             <h2>
-                Lesson Introduction
+                <span class="sht" tabindex="0" data-so="Hordhaca Casharka">Lesson Introduction</span>
             </h2>
 
             <p>
-                GitHub Copilot is an AI-powered coding assistant that can
+                <span class="sht" tabindex="0" data-so="GitHub Copilot waa kaaliye koodh-qoris oo ku shaqeeya AI, wuxuuna si toos ah uga dhex shaqayn karaa deegaanada horumarinta sida Visual Studio Code.">GitHub Copilot is an AI-powered coding assistant that can
                 work directly inside development environments such as
                 Visual Studio Code.
+                </span>
             </p>
 
             <p>
-                It can help developers generate code, explain code,
+                <span class="sht" tabindex="0" data-so="Wuxuu horumariyeyaasha ka caawin karaa soo saarista koodh, sharaxaadda koodhka, fahamka khaladaadka, soo-jeedinta hagaajin, samaynta tijaabooyin, iyo hawlo horumarineed oo waaweyn.">It can help developers generate code, explain code,
                 understand errors, suggest improvements, create tests,
                 and assist with larger development tasks.
+                </span>
             </p>
 
         </section>
@@ -431,18 +438,18 @@ document.addEventListener("DOMContentLoaded", function () {
         <section>
 
             <h2>
-                Learning Objectives
+                <span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">Learning Objectives</span>
             </h2>
 
             <ul>
-                <li>Explain what GitHub Copilot is.</li>
-                <li>Understand how AI works inside a development environment.</li>
-                <li>Understand code suggestions.</li>
-                <li>Understand Copilot Chat.</li>
-                <li>Understand context.</li>
-                <li>Understand agentic capabilities.</li>
-                <li>Understand configuration and permissions.</li>
-                <li>Review AI-generated code responsibly.</li>
+                <li><span class="sht" tabindex="0" data-so="Sharax waxa GitHub Copilot yahay.">Explain what GitHub Copilot is.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham sida AI uga shaqeeyo gudaha deegaanka horumarinta.">Understand how AI works inside a development environment.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham soo-jeedinta koodhka.">Understand code suggestions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham Copilot Chat.">Understand Copilot Chat.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham macnaha guud.">Understand context.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham awoodaha agentic.">Understand agentic capabilities.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham habaynta iyo oggolaanshaha.">Understand configuration and permissions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Si masuuliyad leh u dib u eeg koodhka AI soo saartay.">Review AI-generated code responsibly.</span></li>
             </ul>
 
         </section>
@@ -452,43 +459,45 @@ document.addEventListener("DOMContentLoaded", function () {
         <section id="english">
 
             <h2>
-                Technical Explanation — English
+                <span class="sht" tabindex="0" data-so="Sharaxaad Farsamo — Ingiriisi">Technical Explanation — English</span>
             </h2>
 
             <h3>
-                What Is GitHub Copilot?
+                <span class="sht" tabindex="0" data-so="Waa Maxay GitHub Copilot?">What Is GitHub Copilot?</span>
             </h3>
 
             <p>
-                GitHub Copilot is an Artificial Intelligence coding
+                <span class="sht" tabindex="0" data-so="GitHub Copilot waa kaaliye koodh-qoris oo sirdoon macmal ah, loona sameeyay inuu taageero horumariyeyaasha software-ka.">GitHub Copilot is an Artificial Intelligence coding
                 assistant designed to support software developers.
+                </span>
             </p>
 
             <p>
-                It can work close to the files and code that the developer
+                <span class="sht" tabindex="0" data-so="Wuxuu si dhow ula shaqayn karaa faylasha iyo koodhka uu horumariyuhu hadda tafatirayo.">It can work close to the files and code that the developer
                 is already editing.
+                </span>
             </p>
 
             <p>
-                It may assist with:
+                <span class="sht" tabindex="0" data-so="Wuxuu ka caawin karaa:">It may assist with:</span>
             </p>
 
             <ul>
-                <li>Code completion.</li>
-                <li>Code generation.</li>
-                <li>Code explanation.</li>
-                <li>Debugging suggestions.</li>
-                <li>Refactoring.</li>
-                <li>Writing tests.</li>
-                <li>Understanding unfamiliar code.</li>
+                <li><span class="sht" tabindex="0" data-so="Dhammaystirka koodhka.">Code completion.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Soo saarista koodhka.">Code generation.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Sharaxaadda koodhka.">Code explanation.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Soo-jeedinta cillad-saxidda.">Debugging suggestions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Dib-u-habaynta koodhka.">Refactoring.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Qorista tijaabooyinka.">Writing tests.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Fahamka koodh aan la aqoon.">Understanding unfamiliar code.</span></li>
             </ul>
 
             <h3>
-                What Is an IDE?
+                <span class="sht" tabindex="0" data-so="Waa Maxay IDE?">What Is an IDE?</span>
             </h3>
 
             <p>
-                IDE means:
+                <span class="sht" tabindex="0" data-so="IDE waxay ka dhigan tahay:">IDE means:</span>
             </p>
 
             <blockquote>
@@ -498,17 +507,18 @@ document.addEventListener("DOMContentLoaded", function () {
             </blockquote>
 
             <p>
-                It is software used to write, edit, test, debug, and
+                <span class="sht" tabindex="0" data-so="Waa software loo isticmaalo qorista, tafatirka, tijaabinta, cillad-saxidda, iyo maaraynta koodhka.">It is software used to write, edit, test, debug, and
                 manage code.
+                </span>
             </p>
 
             <p>
-                Visual Studio Code is widely used by developers and can
-                support AI coding tools.
+                <span class="sht" tabindex="0" data-so="Visual Studio Code waxaa si ballaaran u isticmaala horumariyeyaasha, wuxuuna taageeri karaa qalabka koodh-qorista AI.">Visual Studio Code is widely used by developers and can
+                support AI coding tools.</span>
             </p>
 
             <h3>
-                Code Suggestions
+                <span class="sht" tabindex="0" data-so="Soo-jeedinta Koodhka">Code Suggestions</span>
             </h3>
 
             <pre><code>function calculateTotal(price, quantity) {
@@ -516,17 +526,19 @@ document.addEventListener("DOMContentLoaded", function () {
 }</code></pre>
 
             <p>
-                A suggestion is not proof that the code is correct.
+                <span class="sht" tabindex="0" data-so="Soo-jeedin ma caddaynayso in koodhku sax yahay. Horumariyuhu waa inuu dib u eego oo tijaabiyo.">A suggestion is not proof that the code is correct.
                 The developer must review and test it.
+                </span>
             </p>
 
             <h3>
-                Copilot Chat
+                <span class="sht" tabindex="0" data-so="Copilot Chat">Copilot Chat</span>
             </h3>
 
             <p>
-                Copilot Chat allows a developer to ask programming
+                <span class="sht" tabindex="0" data-so="Copilot Chat wuxuu horumariyaha u oggolaanayaa inuu su'aalo barnaamij-samayn ku weydiiyo luuqad dabiici ah.">Copilot Chat allows a developer to ask programming
                 questions using natural language.
+                </span>
             </p>
 
             <pre><code>Explain this function.
@@ -540,34 +552,36 @@ Explain this error message.
 Write tests for this code.</code></pre>
 
             <h3>
-                Context
+                <span class="sht" tabindex="0" data-so="Macnaha Guud">Context</span>
             </h3>
 
             <p>
-                Context is the information available to the AI when it
+                <span class="sht" tabindex="0" data-so="Macnaha guud waa xogta AI-ga u diyaar ah marka uu jawaab soo saarayo.">Context is the information available to the AI when it
                 generates an answer.
+                </span>
             </p>
 
             <ul>
-                <li>Your prompt.</li>
-                <li>The current file.</li>
-                <li>Selected code.</li>
-                <li>Error messages.</li>
-                <li>Nearby functions.</li>
-                <li>Related project files.</li>
+                <li><span class="sht" tabindex="0" data-so="Tilmaantaada.">Your prompt.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faylka hadda jira.">The current file.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Koodhka la xushay.">Selected code.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Farriimaha khaladka.">Error messages.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Functions-ka u dhow.">Nearby functions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faylalka mashruuca ee la xiriira.">Related project files.</span></li>
             </ul>
 
             <p>
-                Better context normally produces more relevant assistance.
+                <span class="sht" tabindex="0" data-so="Macne guud oo wanaagsan badanaa wuxuu soo saaraa caawimo ku habboon.">Better context normally produces more relevant assistance.</span>
             </p>
 
             <h3>
-                Agentic Capabilities
+                <span class="sht" tabindex="0" data-so="Awoodaha Agentic">Agentic Capabilities</span>
             </h3>
 
             <p>
-                Agentic AI can attempt several connected actions toward
+                <span class="sht" tabindex="0" data-so="AI-ga agentic wuxuu isku dayi karaa dhowr tallaabo oo isku xidhan si uu u gaadho hal yool horumarineed.">Agentic AI can attempt several connected actions toward
                 one development goal.
+                </span>
             </p>
 
             <pre><code>Create a contact form,
@@ -575,25 +589,26 @@ add validation,
 and explain the changes.</code></pre>
 
             <p>
-                The developer still remains responsible for reviewing
+                <span class="sht" tabindex="0" data-so="Horumariyaha ayaa weli masuul ka ah dib-u-eegista isbeddellada muhiimka ah.">The developer still remains responsible for reviewing
                 important changes.
+                </span>
             </p>
 
             <h3>
-                Configuration
+                <span class="sht" tabindex="0" data-so="Habaynta">Configuration</span>
             </h3>
 
             <p>
-                AI coding tools may contain settings that control:
+                <span class="sht" tabindex="0" data-so="Qalabka koodh-qorista AI wuxuu yeelan karaa dejimo xakameeya:">AI coding tools may contain settings that control:</span>
             </p>
 
             <ul>
-                <li>Code suggestions.</li>
-                <li>Supported languages.</li>
-                <li>Chat behavior.</li>
-                <li>Project context.</li>
-                <li>Permissions.</li>
-                <li>Available tools or actions.</li>
+                <li><span class="sht" tabindex="0" data-so="Soo-jeedinta koodhka.">Code suggestions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Luuqadaha la taageero.">Supported languages.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Habdhaqanka chat-ka.">Chat behavior.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Macnaha guud ee mashruuca.">Project context.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Oggolaanshaha.">Permissions.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Qalabka ama ficillada la heli karo.">Available tools or actions.</span></li>
             </ul>
 
         </section>
@@ -758,18 +773,18 @@ and explain the changes.</code></pre>
         <section>
 
             <h2>
-                Important Rules
+                <span class="sht" tabindex="0" data-so="Xeerar Muhiim ah">Important Rules</span>
             </h2>
 
             <ul>
-                <li>Use AI as an assistant.</li>
-                <li>Review generated code.</li>
-                <li>Understand important code before using it.</li>
-                <li>Test generated code.</li>
-                <li>Give AI useful context.</li>
-                <li>Never casually share passwords or secret keys.</li>
-                <li>Review agentic actions before accepting them.</li>
-                <li>Keep developing your own programming skills.</li>
+                <li><span class="sht" tabindex="0" data-so="AI u isticmaal kaaliye ahaan.">Use AI as an assistant.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Dib u eeg koodhka la soo saaray.">Review generated code.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Faham koodhka muhiimka ah ka hor intaadan adeegsan.">Understand important code before using it.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Tijaabi koodhka la soo saaray.">Test generated code.</span></li>
+                <li><span class="sht" tabindex="0" data-so="AI sii macne guud oo waxtar leh.">Give AI useful context.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Weligaa si fudud ha u wadaagin furayaasha sirta ah ama furayaasha gaarka ah.">Never casually share passwords or secret keys.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Dib u eeg ficillada agent-ka ka hor intaadan aqbalin.">Review agentic actions before accepting them.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Sii horumari xirfadahaaga barnaamij-samaynta.">Keep developing your own programming skills.</span></li>
             </ul>
 
         </section>
@@ -779,17 +794,17 @@ and explain the changes.</code></pre>
         <section>
 
             <h2>
-                Common Beginner Mistakes
+                <span class="sht" tabindex="0" data-so="Khaladaadka Caanka ah ee Bilowga">Common Beginner Mistakes</span>
             </h2>
 
             <ul>
-                <li>Copying AI-generated code without reading it.</li>
-                <li>Assuming AI-generated code must be correct.</li>
-                <li>Giving vague prompts.</li>
-                <li>Providing too little context.</li>
-                <li>Ignoring error messages.</li>
-                <li>Sharing secret keys.</li>
-                <li>Publishing generated code without testing.</li>
+                <li><span class="sht" tabindex="0" data-so="Koobiyeynta koodh AI soo saaray adigoon akhrin.">Copying AI-generated code without reading it.</span></li>
+                <li><span class="sht" tabindex="0" data-so="In loo qaato in koodh AI soo saaray uu khasab sax yahay.">Assuming AI-generated code must be correct.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Bixinta codsiyo aan caddayn.">Giving vague prompts.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Bixinta macne guud oo aad u yar.">Providing too little context.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Iska indho-tirka farriimaha khaladka.">Ignoring error messages.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Wadaagista furayaasha gaarka ah.">Sharing secret keys.</span></li>
+                <li><span class="sht" tabindex="0" data-so="Daabicista koodhka la soo saaray adigoon tijaabin.">Publishing generated code without testing.</span></li>
             </ul>
 
         </section>
@@ -799,19 +814,19 @@ and explain the changes.</code></pre>
         <section id="test">
 
             <h2>
-                Lesson Test — Multiple Choice
+                <span class="sht" tabindex="0" data-so="Imtixaanka Casharka — Doorashooyin Badan">Lesson Test — Multiple Choice</span>
             </h2>
 
             <form>
 
                 <fieldset>
                     <legend>
-                        1. What is GitHub Copilot?
+                        <span class="sht" tabindex="0" data-so="1. Waa maxay GitHub Copilot?">1. What is GitHub Copilot?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test1">
-                        An AI coding assistant
+                        <span class="sht" tabindex="0" data-so="Kaaliye koodh-qoris oo AI ah">An AI coding assistant</span>
                     </label>
 
                     <br>
@@ -831,12 +846,12 @@ and explain the changes.</code></pre>
 
                 <fieldset>
                     <legend>
-                        2. What does IDE mean?
+                        <span class="sht" tabindex="0" data-so="2. Maxay ka dhigan tahay IDE?">2. What does IDE mean?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test2">
-                        Integrated Development Environment
+                        <span class="sht" tabindex="0" data-so="Deegaan Horumarineed oo Isku-dhafan">Integrated Development Environment</span>
                     </label>
 
                     <br>
@@ -856,12 +871,12 @@ and explain the changes.</code></pre>
 
                 <fieldset>
                     <legend>
-                        3. What should a developer do with generated code?
+                        <span class="sht" tabindex="0" data-so="3. Maxay tahay inuu horumariyuhu ku sameeyo koodhka la soo saaray?">3. What should a developer do with generated code?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="test3">
-                        Review and test it
+                        <span class="sht" tabindex="0" data-so="Dib u eeg oo tijaabi">Review and test it</span>
                     </label>
 
                     <br>
@@ -888,7 +903,7 @@ and explain the changes.</code></pre>
         <section>
 
             <h2>
-                Test Answer Key
+                <span class="sht" tabindex="0" data-so="Jawaabaha Imtixaanka">Test Answer Key</span>
             </h2>
 
             <ol>
@@ -904,14 +919,14 @@ and explain the changes.</code></pre>
         <section id="quiz">
 
             <h2>
-                Lesson 8 Quiz — Multiple Choice
+                <span class="sht" tabindex="0" data-so="Imtixaanka Casharka 8 — Doorashooyin Badan">Lesson 8 Quiz — Multiple Choice</span>
             </h2>
 
             <form>
 
                 <fieldset>
                     <legend>
-                        1. Which tool is an AI coding assistant?
+                        <span class="sht" tabindex="0" data-so="1. Qalabkee ayaa ah kaaliye koodh-qoris oo AI ah?">1. Which tool is an AI coding assistant?</span>
                     </legend>
 
                     <label>
@@ -936,12 +951,12 @@ and explain the changes.</code></pre>
 
                 <fieldset>
                     <legend>
-                        2. Which application is commonly used for coding?
+                        <span class="sht" tabindex="0" data-so="2. Barnaamijkee ayaa badanaa koodh-qorista loo isticmaalaa?">2. Which application is commonly used for coding?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz2">
-                        Visual Studio Code
+                        <span class="sht" tabindex="0" data-so="Visual Studio Code">Visual Studio Code</span>
                     </label>
 
                     <br>
@@ -961,12 +976,12 @@ and explain the changes.</code></pre>
 
                 <fieldset>
                     <legend>
-                        3. What can Copilot Chat help explain?
+                        <span class="sht" tabindex="0" data-so="3. Maxay Copilot Chat ka caawin kartaa sharaxaadda?">3. What can Copilot Chat help explain?</span>
                     </legend>
 
                     <label>
                         <input type="radio" name="quiz3">
-                        Code and programming errors
+                        <span class="sht" tabindex="0" data-so="Koodhka iyo khaladaadka barnaamij-samaynta">Code and programming errors</span>
                     </label>
 
                     <br>
@@ -985,7 +1000,7 @@ and explain the changes.</code></pre>
                 </fieldset>
 
                 <button type="submit">
-                    Submit Quiz
+                    <span class="sht" tabindex="0" data-so="Gudbi Imtixaanka">Submit Quiz</span>
                 </button>
 
             </form>
@@ -997,7 +1012,7 @@ and explain the changes.</code></pre>
         <section>
 
             <h2>
-                Quiz Answer Key
+                <span class="sht" tabindex="0" data-so="Jawaabaha Imtixaanka">Quiz Answer Key</span>
             </h2>
 
             <ol>
@@ -1013,33 +1028,33 @@ and explain the changes.</code></pre>
         <section id="remember">
 
             <h2>
-                Remember
+                <span class="sht" tabindex="0" data-so="Xusuusnow">Remember</span>
             </h2>
 
             <p>
                 <strong>
-                    GitHub Copilot is an AI coding assistant.<br><br>
+                    <span class="sht" tabindex="0" data-so="GitHub Copilot waa kaaliye koodh-qoris oo AI ah.">GitHub Copilot is an AI coding assistant.</span><br><br>
 
                     It can work inside Visual Studio Code and other
                     supported development environments.<br><br>
 
-                    Copilot can suggest, generate, and explain code.<br><br>
+                    <span class="sht" tabindex="0" data-so="Copilot wuxuu soo jeedin, abuuri, oo sharxi karaa koodh.">Copilot can suggest, generate, and explain code.</span><br><br>
 
                     Copilot Chat lets developers ask questions using
                     natural language.<br><br>
 
-                    Context helps AI understand the task.<br><br>
+                    <span class="sht" tabindex="0" data-so="Macnaha guud wuxuu AI ka caawiyaa fahamka hawsha.">Context helps AI understand the task.</span><br><br>
 
                     Agentic AI can attempt several connected development
                     steps.<br><br>
 
-                    AI-generated code can still contain mistakes.<br><br>
+                    <span class="sht" tabindex="0" data-so="Koodhka AI soo saaro weli khaladaad ayuu yeelan karaa.">AI-generated code can still contain mistakes.</span><br><br>
 
                     Never blindly accept generated code.<br><br>
 
                     Never casually share secret keys or passwords.<br><br>
 
-                    The Developer remains responsible.<br><br>
+                    <span class="sht" tabindex="0" data-so="Horumariyaha ayaa weli masuul ah.">The Developer remains responsible.</span><br><br>
 
                     Generate → Review → Understand → Test → Improve.
                 </strong>

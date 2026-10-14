@@ -178,11 +178,6 @@ export default function LearnerPortal() {
         (document.visibilityState === "visible" &&
           (typeof navigator === "undefined" || navigator.onLine)),
       );
-      if (action === "status" && studentOverride.is_e8 !== true) {
-        setStudent((currentStudent: any) => currentStudent?.student_id === studentOverride.student_id
-          ? { ...currentStudent, is_e8: true }
-          : currentStudent);
-      }
       setService(data.service || null);
       setServiceHistory(data.history || (data.service ? [data.service] : []));
       if (data.service?.notes && action === "status") setServiceNotes(data.service.notes);
@@ -204,11 +199,12 @@ export default function LearnerPortal() {
 
   function handleCheckIn() {
     if (serviceBusyRef.current || (service && !service.ended_at)) return;
+    lastServiceActivityAt.current = Date.now();
     void serviceHours("check_in");
   }
 
   useEffect(() => {
-    if (!student?.is_e8 || !service || service.ended_at || typeof document === "undefined") return;
+    if (!(student?.is_e8 || student?.person_type === "assistant") || !service || service.ended_at || typeof document === "undefined") return;
 
     const markActivity = () => {
       if (document.visibilityState === "visible" &&
@@ -258,7 +254,7 @@ export default function LearnerPortal() {
       window.removeEventListener("focus", updateConnection);
       window.clearInterval(interval);
     };
-  }, [service?.id, service?.ended_at, student?.is_e8]);
+  }, [service?.id, service?.ended_at, student?.is_e8, student?.person_type]);
 
   async function handleLogin() {
     if (loading) return;
@@ -335,10 +331,9 @@ export default function LearnerPortal() {
     setService(null);
     setServiceHistory([]);
     setMessage("✅ Login successful");
-    lastServiceActivityAt.current = Date.now();
+    lastServiceActivityAt.current = 0;
     await serviceHours("status", data.student);
-    lastServiceActivityAt.current = Date.now();
-    await serviceHours("heartbeat", data.student);
+    lastServiceActivityAt.current = 0;
     setLoading(false);
   }
 
@@ -390,10 +385,9 @@ export default function LearnerPortal() {
         setService(null);
         setServiceHistory([]);
         setMessage("✅ Login restored");
-        lastServiceActivityAt.current = Date.now();
+        lastServiceActivityAt.current = 0;
         await serviceHours("status", data.student);
-        lastServiceActivityAt.current = Date.now();
-        await serviceHours("heartbeat", data.student);
+        lastServiceActivityAt.current = 0;
       } catch (error) {
         setMessage("❌ Unable to restore saved learner login. Please log in again.");
         console.error("Learner session restore failed:", error);
@@ -741,11 +735,11 @@ export default function LearnerPortal() {
             {profileMessage ? <Text style={styles.message}>{profileMessage}</Text> : null}
           </View>
 
-          {student.is_e8 && (
+          {(student.is_e8 || student.person_type === "assistant") && (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>E8 Service Hours</Text>
-              <Text style={styles.text}>{service?.approval_status === "approved" ? "Approved completed" : "Recorded elapsed"}: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: 04:00 • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? 14400) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
-              <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? (serviceOnline && service.last_activity_at && Date.now() - new Date(service.last_activity_at).getTime() <= 45_000 ? "Active/Online" : "Paused/Offline") : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
+              <Text style={styles.cardTitle}>{student.person_type === "assistant" ? "Assistant Admin Service Hours" : "E8 Service Hours"}</Text>
+              <Text style={styles.text}>{service?.approval_status === "approved" ? "Approved completed" : "Recorded elapsed"}: {formatServiceTime(service?.active_seconds ?? 0)} • Required Monday–Saturday: {formatServiceTime(service?.required_seconds ?? (student.person_type === "assistant" ? 28800 : 14400))} • Remaining: {formatServiceTime(Math.max(0, (service?.required_seconds ?? (student.person_type === "assistant" ? 28800 : 14400)) - (service?.active_seconds ?? 0)))} • Extra: {formatServiceTime(service?.extra_seconds ?? 0)}</Text>
+              <Text style={styles.text}>Requirement: {service?.completed_at ? "Completed" : service?.active_seconds ? "In Progress" : "Not Started"} • State: {service?.completed_at ? "Completed" : service && !service.ended_at ? "Checked In" : service?.active_seconds ? "Checked Out" : "Not Started"}</Text>
               <Text style={styles.text}>Last verified activity: {service?.last_activity_at ? new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Addis_Ababa", hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(new Date(service.last_activity_at)) : "—"}</Text>
               <Text style={styles.text}>Service day: 6:00:00 AM–5:59:59 AM the following day, Ethiopia time. Sunday time is extra.</Text>
               <Text style={styles.text}>

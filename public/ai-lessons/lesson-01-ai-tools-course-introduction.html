@@ -6,13 +6,152 @@
 <meta name="description" content="Lesson 1 of the Elmi Guray Academy AI Tools for Developers course.">
 <title>Lesson 1 - AI Tools Course Introduction</title>
 <style>
-:root{--blue:#0b3b82;--bright:#1557d6;--green:#16813b;--ink:#172033;--line:#d5dfec;--surface:#f5f8fc}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font:17px/1.7 Arial,Helvetica,sans-serif}a{color:var(--bright)}
-.ega-lesson-nav{width:min(100% - 32px,960px);margin:18px auto;display:flex;gap:8px;padding:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.ega-lesson-nav a,.ega-lesson-nav span{flex:1;min-height:50px;display:flex;align-items:center;justify-content:center;padding:10px 8px;border-radius:9px;text-align:center;font-size:15px;font-weight:700;text-decoration:none}.ega-lesson-nav a{background:var(--blue);color:#fff}.ega-lesson-nav .ega-home{background:var(--green)}.ega-lesson-nav .ega-disabled{background:#e4e4e4;color:#777}
-.ega-restored-lesson-back{position:fixed;top:14px;left:14px;z-index:99999;display:inline-flex;gap:8px;align-items:center;padding:8px 13px;background:rgba(255,255,255,.97);color:var(--bright);border:2px solid var(--bright);border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-header,main,footer{width:min(100% - 32px,960px);margin:auto}header{padding:48px 0 24px;text-align:center}.ega-official-logo{width:190px;height:190px;display:block;margin:0 auto 22px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.13)}h1{margin-bottom:8px;color:var(--blue);font-size:clamp(2rem,5vw,3.2rem);line-height:1.15}h2{margin-top:0;color:var(--blue);line-height:1.25}h3{color:#174b99}.course-name{color:var(--green);font-size:1.2rem;font-weight:700}
-section{margin:28px 0;padding:28px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(24,46,84,.06)}.intro-card{background:linear-gradient(135deg,#eef5ff,#f3fff5)}.key-message{padding:18px;background:#eef8f1;border-left:5px solid var(--green);border-radius:8px}table{width:100%;border-collapse:collapse}th,td{padding:12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface);color:var(--blue)}fieldset{margin:0 0 22px;padding:18px;border:1px solid var(--line);border-radius:10px}legend{padding:0 7px;font-weight:700}label{display:inline-block;margin:5px 0}button{padding:12px 20px;background:var(--green);color:#fff;border:0;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}footer{padding:18px 0 48px;text-align:center;color:#566176}
-@media(max-width:600px){body{font-size:16px}section{padding:20px}.ega-official-logo{width:150px;height:150px}.ega-restored-lesson-back{top:8px;left:8px;padding:6px 10px;font-size:12px}.ega-lesson-nav{gap:5px;padding:7px}.ega-lesson-nav a,.ega-lesson-nav span{font-size:12px;padding:9px 5px}table{display:block;overflow-x:auto}}
+:root {
+  --blue: #0b3b82;
+  --bright: #1557d6;
+  --green: #16813b;
+  --ink: #172033;
+  --line: #d5dfec;
+  --surface: #f5f8fc;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #fff; color: var(--ink); font: 17px/1.7 Arial, Helvetica, sans-serif; }
+a { color: var(--bright); }
+.ega-lesson-nav {
+  width: min(100% - 32px, 960px);
+  margin: 14px auto 20px;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.ega-lesson-nav a, .ega-lesson-nav span {
+  flex: 1;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.ega-lesson-nav a { background: var(--blue); color: #fff; }
+.ega-lesson-nav .ega-home { background: var(--green); }
+.ega-lesson-nav .ega-disabled { background: #e4e4e4; color: #777; }
+.ega-restored-lesson-back {
+  width: fit-content;
+  margin: 16px auto 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 14px;
+  background: #fff;
+  color: var(--bright);
+  border: 2px solid var(--bright);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+header, main, footer { width: min(100% - 32px, 960px); margin: auto; }
+header { padding: 24px 0 20px; text-align: center; }
+.ega-official-logo {
+  width: 170px;
+  height: 170px;
+  display: block;
+  margin: 0 auto 18px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .13);
+}
+h1 { margin: 0 0 8px; color: var(--blue); font-size: 2.8rem; line-height: 1.15; }
+h2 { margin-top: 0; color: var(--blue); line-height: 1.25; }
+h3 { color: #174b99; }
+.lesson-title { margin: 0 0 12px; color: var(--ink); font-size: 1.45rem; font-weight: 700; line-height: 1.35; }
+.ega-section-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 680px;
+  margin: 24px auto 0;
+}
+.ega-section-nav a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  color: var(--blue);
+  background: #fff;
+  border: 1px solid #a9bdd9;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.ega-section-nav a:hover, .ega-section-nav a:focus-visible { color: #fff; background: var(--blue); border-color: var(--blue); }
+.ega-section-nav a:focus-visible, .ega-restored-lesson-back:focus-visible, .ega-lesson-nav a:focus-visible { outline: 3px solid #f0ad28; outline-offset: 3px; }
+.ega-important-note {
+  margin: 0 0 24px;
+  padding: 18px 22px;
+  color: #3c3217;
+  background: #fff8df;
+  border: 1px solid #e6cf82;
+  border-left: 5px solid #bd8b16;
+  border-radius: 8px;
+}
+.ega-important-note strong { display: block; margin-bottom: 4px; color: #76540a; }
+section { margin: 28px 0; padding: 28px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 4px 16px rgba(24, 46, 84, .06); }
+.intro-card { background: linear-gradient(135deg, #eef5ff, #f3fff5); }
+.key-message { padding: 18px; background: #eef8f1; border-left: 5px solid var(--green); border-radius: 8px; }
+.sht { cursor: help; }
+.somali-translation-popup {
+  position: fixed;
+  z-index: 1000;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 9px 12px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(24, 46, 84, .18);
+  font: 14px/1.45 Arial, Helvetica, sans-serif;
+  text-align: left;
+  pointer-events: none;
+}
+.somali-translation-popup[hidden] { display: none; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { background: var(--surface); color: var(--blue); }
+fieldset { margin: 0 0 22px; padding: 18px; border: 1px solid var(--line); border-radius: 10px; }
+legend { padding: 0 7px; font-weight: 700; }
+label { display: inline-block; margin: 5px 0; }
+button { padding: 12px 20px; background: var(--green); color: #fff; border: 0; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+footer { padding: 18px 0 48px; text-align: center; color: #566176; }
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  header, main, footer { width: min(100% - 28px, 960px); }
+  header { padding-top: 18px; }
+  h1 { font-size: 2.1rem; }
+  .lesson-title { font-size: 1.2rem; }
+  .ega-official-logo { width: 140px; height: 140px; }
+  .ega-lesson-nav { gap: 5px; padding: 7px; }
+  .ega-lesson-nav a, .ega-lesson-nav span { min-height: 46px; padding: 8px 5px; font-size: 12px; }
+  .ega-section-nav { gap: 7px; margin-top: 20px; }
+  .ega-section-nav a { min-height: 46px; padding: 8px 5px; font-size: 13px; }
+  .ega-important-note { padding: 15px 16px; }
+  section { padding: 20px; }
+  table { display: block; overflow-x: auto; }
+}
 </style>
 
 <!-- EGA: Somali version temporarily disabled -->
@@ -75,66 +214,146 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
 </head>
 <body id="top">
-<nav class="ega-lesson-nav" aria-label="Lesson navigation"><span class="ega-disabled">← Previous</span><a class="ega-home" href="/learner-portal">🏠 Learner Portal</a><a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html">Next →</a></nav>
-<a href="/learner-portal" class="ega-restored-lesson-back" aria-label="Back to Learner Portal"><span aria-hidden="true">←</span><span>Back to Learner Portal</span></a>
+<a href="/learner-portal" class="ega-restored-lesson-back" aria-label="Back to Learner Portal"><span aria-hidden="true">←</span><span class="sht" tabindex="0" data-so="Ku noqo bogga ardayga">Back to Learner Portal</span></a>
+<nav class="ega-lesson-nav" aria-label="Lesson navigation"><span class="ega-disabled"><span class="sht" tabindex="0" data-so="Casharkii hore">← Previous</span></span><a class="ega-home" href="/learner-portal">🏠 <span class="sht" tabindex="0" data-so="Bogga Ardayga">Learner Portal</span></a><a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html"><span class="sht" tabindex="0" data-so="Kan xiga">Next →</span></a></nav>
 <header>
 <img class="ega-official-logo" src="../ega-logo.png" alt="Elmi Guray Academy logo">
-<h1>Lesson 1 — AI Tools Course Introduction</h1><p class="course-name">AI Tools for Developers</p>
-<p>Created by <strong>Mohammed Elmi Issak</strong><br>Founder &amp; President, Elmi Guray Academy</p>
-<nav aria-label="Lesson sections"><a href="#english">English</a> | <a href="#somali">Somali</a> | <a href="#guided-learning">Guided Learning</a> | <a href="#activity">Activity</a></nav>
+<h1><span class="sht" tabindex="0" data-so="Koorsada Horumariyeyaasha AI ee EGA">EGA AI Developer Course</span></h1><p class="lesson-title"><span class="sht" tabindex="0" data-so="Casharka 1: Hordhaca Qalabka AI">Lesson 1: AI Tools Course Introduction</span></p>
+<p><span class="sht" tabindex="0" data-so="Waxaa sameeyay">Created by</span> <strong><span class="sht" tabindex="0" data-so="Maxamed Cilmi Isxaaq">Mohammed Elmi Issak</span></strong><br><span class="sht" tabindex="0" data-so="Aasaasaha iyo Madaxweynaha, Akadeemiyadda Elmi Guray">Founder &amp; President, Elmi Guray Academy</span></p>
+<nav class="ega-section-nav" aria-label="Lesson sections"><a href="#english"><span class="sht" tabindex="0" data-so="Ingiriisi">English</span></a><a href="#guided-learning"><span class="sht" tabindex="0" data-so="Barasho Hagitaan leh">Guided Learning</span></a><a href="#activity"><span class="sht" tabindex="0" data-so="Hawlgal">Activity</span></a></nav>
 </header>
 <main>
-<section class="intro-card" id="english"><h2>Welcome to AI Tools for Developers</h2>
-<p>Artificial intelligence is changing how developers plan, write, review, explain, and improve software. This course introduces the tools and working habits that help developers use AI responsibly and effectively.</p>
-<p>You do not need to know every AI product before starting. You do need curiosity, basic programming knowledge, and a willingness to check the work that an AI tool produces.</p>
-<p class="key-message"><strong>Main idea:</strong> AI is a development assistant. The developer remains responsible for understanding the problem, choosing the approach, reviewing the output, and testing the final result.</p></section>
+<aside class="ega-important-note" aria-label="Important note"><strong><span class="sht" tabindex="0" data-so="Ogeysiis Muhiim ah (IN):">Important Note (IN):</span></strong> <span class="sht" tabindex="0" data-so="Si taxaddar leh u baro casharkan ka hor intaadan u gudbin hawsha ama imtixaanka gaaban.">Study this lesson carefully before moving to the activity or quiz.</span> <span class="sht" tabindex="0" data-so="Diiradda saar fikradaha waaweyn, ku celceli tallaabooyinka, oo taageero codso haddii wax kuu caddaan waayaan.">Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</span></aside>
+<section class="intro-card" id="english"><h2><span class="sht" tabindex="0" data-so="Ku soo dhowow Qalabka AI ee Horumariyeyaasha">Welcome to AI Tools for Developers</span></h2>
+<p><span class="sht" tabindex="0" data-so="Sirdoonka macmalka ahi wuxuu beddelayaa sida horumariyeyaashu u qorsheeyaan, u qoraan, u eegaan, u sharxaan, una hagaajiyaan barnaamijyada.">Artificial intelligence is changing how developers plan, write, review, explain, and improve software.</span> <span class="sht" tabindex="0" data-so="Koorsadani waxay soo bandhigaysaa qalabka iyo hab-dhaqannada shaqo ee ka caawiya horumariyeyaasha inay AI u adeegsadaan si masuuliyad leh oo waxtar leh.">This course introduces the tools and working habits that help developers use AI responsibly and effectively.</span></p>
+<p><span class="sht" tabindex="0" data-so="Uma baahnid inaad taqaan dhammaan badeecooyinka AI ka hor intaadan bilaabin.">You do not need to know every AI product before starting.</span> <span class="sht" tabindex="0" data-so="Waxaad u baahan tahay xiise, aqoon aasaasi ah oo barnaamij-samaynta ah, iyo diyaar u ahaanshaha inaad hubiso shaqada uu qalabka AI soo saaro.">You do need curiosity, basic programming knowledge, and a willingness to check the work that an AI tool produces.</span></p>
+<p class="key-message"><strong><span class="sht" tabindex="0" data-so="Fikradda ugu muhiimsan:">Main idea:</span></strong> <span class="sht" tabindex="0" data-so="AI waa kaaliye horumarineed.">AI is a development assistant.</span> <span class="sht" tabindex="0" data-so="Horumariyuhu weli wuxuu masuul ka yahay fahamka dhibaatada, doorashada habka, dib-u-eegista natiijada, iyo tijaabinta natiijada ugu dambaysa.">The developer remains responsible for understanding the problem, choosing the approach, reviewing the output, and testing the final result.</span></p></section>
 <section id="listen" class="ega-audio-reader"><h2>Lesson Audio</h2>
 <p>Listen to Lesson 1 in English. Click any transcript line to continue from that point.</p>
 <div class="ega-sticky-player"><audio controls preload="metadata" data-transcript="EGA-AI-Lesson-01-English.vtt"><source src="EGA-AI-Lesson-01-English.mp3" type="audio/mpeg">Your browser does not support the audio player.</audio></div>
 <div class="ega-transcript" aria-label="Synchronized Lesson 1 transcript"><p class="ega-transcript-status">Loading synchronized transcript…</p></div>
 <script defer src="/ai-lessons/audio-transcript.js"></script></section>
-<section><h2>What Is an AI Tool?</h2>
-<p>An AI tool is software that uses trained models to respond to instructions, recognize patterns, generate content, or assist with decisions. In development work, an AI tool may suggest code, explain an error, summarize a file, create a test, or help organize a plan.</p>
-<p>AI tools do not understand a project in the same way a human developer does. Their answers are predictions based on the information and context available to them. A confident answer can still be incomplete or wrong.</p></section>
-<section><h2>How AI Can Support a Developer</h2><table><thead><tr><th>Task</th><th>Possible AI support</th><th>Developer responsibility</th></tr></thead><tbody>
-<tr><td>Planning</td><td>Break a feature into smaller steps</td><td>Confirm the plan matches the real goal</td></tr>
-<tr><td>Learning</td><td>Explain a concept or unfamiliar code</td><td>Compare the explanation with trusted evidence</td></tr>
-<tr><td>Coding</td><td>Suggest a function, component, or test</td><td>Read, adapt, and test every change</td></tr>
-<tr><td>Debugging</td><td>Interpret an error and suggest causes</td><td>Reproduce the problem and verify the diagnosis</td></tr>
-<tr><td>Documentation</td><td>Draft instructions or summaries</td><td>Check accuracy and fit the writing to the project</td></tr>
+<section><h2><span class="sht" tabindex="0" data-so="Waa maxay Qalabka AI?">What Is an AI Tool?</span></h2>
+<p><span class="sht" tabindex="0" data-so="Qalabka AI waa barnaamij adeegsada moodallo la tababaray si uu uga jawaabo tilmaamaha, u aqoonsado qaabab, u abuuro nuxur, ama uga caawiyo go'aan-qaadashada.">An AI tool is software that uses trained models to respond to instructions, recognize patterns, generate content, or assist with decisions.</span> <span class="sht" tabindex="0" data-so="Shaqada horumarinta, qalabka AI wuxuu soo jeedin karaa koodh, sharxi karaa khalad, soo koobi karaa fayl, abuuri karaa tijaabo, ama kaa caawin karaa habaynta qorshe.">In development work, an AI tool may suggest code, explain an error, summarize a file, create a test, or help organize a plan.</span></p>
+<p><span class="sht" tabindex="0" data-so="Qalabka AI mashruuca uma fahmo sida uu u fahmo horumariye bini'aadam ahi.">AI tools do not understand a project in the same way a human developer does.</span> <span class="sht" tabindex="0" data-so="Jawaabahoodu waa saadaallo ku salaysan xogta iyo macnaha guud ee ay heli karaan.">Their answers are predictions based on the information and context available to them.</span> <span class="sht" tabindex="0" data-so="Jawaab kalsooni leh weli waxay noqon kartaa mid aan dhammaystirnayn ama khaldan.">A confident answer can still be incomplete or wrong.</span></p></section>
+<section><h2><span class="sht" tabindex="0" data-so="Sida AI u Taageeri Karo Horumariye">How AI Can Support a Developer</span></h2><table><thead><tr><th><span class="sht" tabindex="0" data-so="Hawl">Task</span></th><th><span class="sht" tabindex="0" data-so="Taageerada suurtagalka ah ee AI">Possible AI support</span></th><th><span class="sht" tabindex="0" data-so="Masuuliyadda horumariyaha">Developer responsibility</span></th></tr></thead><tbody>
+<tr><td><span class="sht" tabindex="0" data-so="Qorshayn">Planning</span></td><td><span class="sht" tabindex="0" data-so="Muuqaal u kala qaybi tallaabooyin yaryar">Break a feature into smaller steps</span></td><td><span class="sht" tabindex="0" data-so="Xaqiiji in qorshuhu waafaqsan yahay yoolka dhabta ah">Confirm the plan matches the real goal</span></td></tr>
+<tr><td><span class="sht" tabindex="0" data-so="Barasho">Learning</span></td><td><span class="sht" tabindex="0" data-so="Sharax fikrad ama koodh aadan aqoon">Explain a concept or unfamiliar code</span></td><td><span class="sht" tabindex="0" data-so="Sharaxaadda la barbar dhig caddayn lagu kalsoon yahay">Compare the explanation with trusted evidence</span></td></tr>
+<tr><td><span class="sht" tabindex="0" data-so="Koodh-qorid">Coding</span></td><td><span class="sht" tabindex="0" data-so="Soo jeedi hawl, qayb, ama tijaabo">Suggest a function, component, or test</span></td><td><span class="sht" tabindex="0" data-so="Akhri, waafaji, oo tijaabi isbeddel kasta">Read, adapt, and test every change</span></td></tr>
+<tr><td><span class="sht" tabindex="0" data-so="Cillad-saxid">Debugging</span></td><td><span class="sht" tabindex="0" data-so="Fasir khalad oo soo jeedi sababaha">Interpret an error and suggest causes</span></td><td><span class="sht" tabindex="0" data-so="Dib u soo saar dhibaatada oo xaqiiji ogaanshaha">Reproduce the problem and verify the diagnosis</span></td></tr>
+<tr><td><span class="sht" tabindex="0" data-so="Dukumeenti">Documentation</span></td><td><span class="sht" tabindex="0" data-so="Qor qabyo tilmaamo ama soo koobid">Draft instructions or summaries</span></td><td><span class="sht" tabindex="0" data-so="Hubi saxnaanta iyo ku habboonaanta qoraalka mashruuca">Check accuracy and fit the writing to the project</span></td></tr>
 </tbody></table></section>
-<section><h2>AI Assistance Is Not Automatic Correctness</h2>
-<p>AI-generated output can contain outdated methods, unsafe code, invented details, or changes that do not fit the existing project. It may also solve a different problem from the one the developer intended.</p>
-<h3>Before accepting an AI suggestion</h3><ol><li>Read the entire suggestion.</li><li>Confirm what files and behavior it changes.</li><li>Check that it follows the project requirements.</li><li>Look for privacy, security, and reliability risks.</li><li>Test the result in a safe environment.</li><li>Keep or revert the change based on evidence.</li></ol></section>
-<section><h2>The Human–AI Working Cycle</h2><ol>
-<li><strong>Define:</strong> State the real problem and desired result.</li><li><strong>Provide context:</strong> Share relevant requirements, code, constraints, and examples.</li><li><strong>Request:</strong> Ask for one clear, focused outcome.</li><li><strong>Review:</strong> Examine the response instead of accepting it automatically.</li><li><strong>Test:</strong> Use evidence to determine whether the result works.</li><li><strong>Improve:</strong> Correct the request or solution and repeat when necessary.</li></ol>
-<p>This cycle is more valuable than trying to find one “perfect” prompt. Productive AI-assisted development is an iterative process.</p></section>
-<section><h2>Safe and Responsible Use</h2><ul>
-<li>Do not paste passwords, private keys, payment details, or confidential personal data into an AI tool.</li><li>Respect licenses, ownership, and project or organization rules.</li><li>Do not claim generated work is verified until you have reviewed and tested it.</li><li>Use trusted documentation and real project evidence when accuracy matters.</li><li>Ask for human review when a decision has serious financial, legal, medical, security, or safety consequences.</li></ul></section>
+<section><h2><span class="sht" tabindex="0" data-so="Caawinta AI Macnaheedu Maaha Saxnaan Toos ah">AI Assistance Is Not Automatic Correctness</span></h2>
+<p><span class="sht" tabindex="0" data-so="Natiijada AI soo saarto waxay ka koobnaan kartaa habab duugoobay, koodh aan ammaan ahayn, faahfaahin la alifay, ama isbeddello aan ku habboonayn mashruuca jira.">AI-generated output can contain outdated methods, unsafe code, invented details, or changes that do not fit the existing project.</span> <span class="sht" tabindex="0" data-so="Waxay sidoo kale xallin kartaa dhibaato ka duwan tii horumariyuhu damacsanaa.">It may also solve a different problem from the one the developer intended.</span></p>
+<h3><span class="sht" tabindex="0" data-so="Ka hor intaadan aqbalin soo-jeedin AI">Before accepting an AI suggestion</span></h3><ol><li><span class="sht" tabindex="0" data-so="Akhri soo-jeedinta oo dhan.">Read the entire suggestion.</span></li><li><span class="sht" tabindex="0" data-so="Xaqiiji faylasha iyo hab-dhaqanka ay beddelayso.">Confirm what files and behavior it changes.</span></li><li><span class="sht" tabindex="0" data-so="Hubi inay raacayso shuruudaha mashruuca.">Check that it follows the project requirements.</span></li><li><span class="sht" tabindex="0" data-so="Ka fiirso khataraha asturnaanta, amniga, iyo isku-halaynta.">Look for privacy, security, and reliability risks.</span></li><li><span class="sht" tabindex="0" data-so="Natiijada ku tijaabi deegaan ammaan ah.">Test the result in a safe environment.</span></li><li><span class="sht" tabindex="0" data-so="Hay ama ka noqo isbeddelka adigoo ku salaynaya caddayn.">Keep or revert the change based on evidence.</span></li></ol></section>
+<section><h2><span class="sht" tabindex="0" data-so="Habka Shaqo ee Bini'aadamka iyo AI">The Human–AI Working Cycle</span></h2><ol>
+<li><strong><span class="sht" tabindex="0" data-so="Qeex: ">Define:</span></strong> <span class="sht" tabindex="0" data-so="Sheeg dhibaatada dhabta ah iyo natiijada la doonayo.">State the real problem and desired result.</span></li><li><strong><span class="sht" tabindex="0" data-so="Bixi macnaha guud: ">Provide context:</span></strong> <span class="sht" tabindex="0" data-so="La wadaag shuruudaha, koodhka, xaddidaadaha, iyo tusaalooyinka khuseeya.">Share relevant requirements, code, constraints, and examples.</span></li><li><strong><span class="sht" tabindex="0" data-so="Codso: ">Request:</span></strong> <span class="sht" tabindex="0" data-so="Weydii hal natiijo oo cad oo diiradda saaran.">Ask for one clear, focused outcome.</span></li><li><strong><span class="sht" tabindex="0" data-so="Dib u eeg: ">Review:</span></strong> <span class="sht" tabindex="0" data-so="Baadh jawaabta halkii aad si toos ah u aqbali lahayd.">Examine the response instead of accepting it automatically.</span></li><li><strong><span class="sht" tabindex="0" data-so="Tijaabi: ">Test:</span></strong> <span class="sht" tabindex="0" data-so="Adeegso caddayn si aad u go'aamiso in natiijadu shaqaynayso.">Use evidence to determine whether the result works.</span></li><li><strong><span class="sht" tabindex="0" data-so="Hagaaji: ">Improve:</span></strong> <span class="sht" tabindex="0" data-so="Sax codsiga ama xalka oo ku celi marka loo baahdo.">Correct the request or solution and repeat when necessary.</span></li></ol>
+<p><span class="sht" tabindex="0" data-so="Habkani wuu ka waxtar badan yahay isku dayga helitaanka hal amar oo 'kaamil ah'.">This cycle is more valuable than trying to find one “perfect” prompt.</span> <span class="sht" tabindex="0" data-so="Horumarin waxtar leh oo AI lagu kaashado waa hannaan soo noqnoqda.">Productive AI-assisted development is an iterative process.</span></p></section>
+<section><h2><span class="sht" tabindex="0" data-so="Adeegsi Ammaan ah oo Masuuliyad leh">Safe and Responsible Use</span></h2><ul>
+<li><span class="sht" tabindex="0" data-so="Ha ku dhejin qalabka AI furaha sirta ah, furayaasha gaarka ah, faahfaahinta lacag-bixinta, ama xogta shakhsiga ah ee qarsoodiga ah.">Do not paste passwords, private keys, payment details, or confidential personal data into an AI tool.</span></li><li><span class="sht" tabindex="0" data-so="Ixtiraam ruqsadaha, lahaanshaha, iyo xeerarka mashruuca ama ururka.">Respect licenses, ownership, and project or organization rules.</span></li><li><span class="sht" tabindex="0" data-so="Ha sheegan in shaqada la soo saaray la xaqiijiyay ilaa aad dib u eegto oo tijaabiso.">Do not claim generated work is verified until you have reviewed and tested it.</span></li><li><span class="sht" tabindex="0" data-so="Adeegso dukumeenti lagu kalsoon yahay iyo caddayn mashruuc oo dhab ah marka saxnaantu muhiim tahay.">Use trusted documentation and real project evidence when accuracy matters.</span></li><li><span class="sht" tabindex="0" data-so="Codso dib-u-eegis bini'aadan marka go'aanku leeyahay cawaaqib dhaqaale, sharci, caafimaad, amni, ama badbaado oo culus.">Ask for human review when a decision has serious financial, legal, medical, security, or safety consequences.</span></li></ul></section>
 <section id="somali"><h2>Sharaxaad — Somali</h2>
 <p>Sirdoonka macmalka ah wuxuu horumariyaha ka caawin karaa qorshaynta, qorista, sharaxaadda, hubinta, iyo hagaajinta koodhka. Qalabku waa kaaliye; ma beddelayo aqoonta, go’aanka, iyo masuuliyadda horumariyaha.</p>
 <p>Jawaabta AI mar walba sax ma aha. Waxay noqon kartaa mid dhammaystirnayn, duugoobay, ama aan ku habboonayn mashruuca. Sidaas darteed horumariyuhu waa inuu akhriyaa, fahmaa, tijaabiyaa, kadibna go’aansadaa inuu isticmaalo iyo in kale.</p>
 <h3>Habka shaqada</h3><ol><li>Si cad u qeex dhibaatada.</li><li>Bixi macluumaadka iyo xeerarka muhiimka ah.</li><li>Weydii codsi kooban oo cad.</li><li>Dib u eeg jawaabta AI.</li><li>Tijaabi natiijada.</li><li>Sax oo ku celi habka haddii loo baahdo.</li></ol>
 <p class="key-message"><strong>Fariinta muhiimka ah:</strong> AI waa kaaliye horumarineed. Horumariyaha ayaa weli masuul ka ah tayada, amniga, iyo saxnaanta natiijada.</p></section>
-<section id="guided-learning"><h2>Guided Learning Activity</h2>
-<p>Imagine that a login form shows an error after the user presses “Sign in.” Compare these two requests:</p>
-<p><strong>Weak request:</strong> “Fix my code.”</p><p><strong>Useful request:</strong> “The login form submits in Chrome, but the page displays ‘Unauthorized.’ Here is the error message and form-handling function. Explain the likely cause first. Do not change payment or registration code.”</p>
-<h3>Why is the second request stronger?</h3><ul><li>It describes the observed behavior.</li><li>It supplies relevant context.</li><li>It asks for diagnosis before modification.</li><li>It places a clear boundary around unrelated code.</li></ul>
-<p>Write one practice request using four parts: <strong>goal, context, boundaries, and desired output</strong>.</p></section>
-<section id="activity"><h2>Multiple-Choice Practice Activity</h2><form>
-<fieldset><legend>1. What is the developer’s role when using AI?</legend><label><input type="radio" name="q1" value="a"> Accept every suggestion immediately</label><br><label><input type="radio" name="q1" value="b"> Review, understand, and test the result</label><br><label><input type="radio" name="q1" value="c"> Give all decisions to the AI tool</label></fieldset>
-<fieldset><legend>2. Why can an AI answer be wrong?</legend><label><input type="radio" name="q2" value="a"> AI output is a prediction and may lack correct context</label><br><label><input type="radio" name="q2" value="b"> Computers cannot display text</label><br><label><input type="radio" name="q2" value="c"> Developers cannot ask questions</label></fieldset>
-<fieldset><legend>3. Which information should not be pasted into an AI tool?</legend><label><input type="radio" name="q3" value="a"> A public HTML example</label><br><label><input type="radio" name="q3" value="b"> A general programming question</label><br><label><input type="radio" name="q3" value="c"> Passwords and private keys</label></fieldset>
-<fieldset><legend>4. What makes an AI request more useful?</legend><label><input type="radio" name="q4" value="a"> Removing all project context</label><br><label><input type="radio" name="q4" value="b"> A clear goal, relevant context, and boundaries</label><br><label><input type="radio" name="q4" value="c"> Many unrelated changes at once</label></fieldset>
-<fieldset><legend>5. What should happen after reviewing an AI-generated change?</legend><label><input type="radio" name="q5" value="a"> Test the result using evidence</label><br><label><input type="radio" name="q5" value="b"> Publish it without testing</label><br><label><input type="radio" name="q5" value="c"> Delete the project</label></fieldset>
-<button type="submit">Submit Answers</button></form></section>
-<section><h2>Answer Key</h2><ol><li>B — Review, understand, and test the result.</li><li>A — AI output is a prediction and may lack correct context.</li><li>C — Passwords and private keys must remain private.</li><li>B — A clear goal, relevant context, and boundaries make a request more useful.</li><li>A — Test the result using evidence.</li></ol></section>
-<section><h2>Lesson Summary</h2><ul><li>AI tools can support planning, learning, coding, debugging, and documentation.</li><li>AI output can be incomplete or incorrect.</li><li>The developer remains responsible for review, testing, safety, and final decisions.</li><li>Good requests include a clear goal, relevant context, useful boundaries, and a desired output.</li><li>Never expose passwords, private keys, or confidential information.</li></ul><p><strong>Next:</strong> Continue to Lesson 2 to learn what to expect from the full AI Developer course.</p></section>
+<section id="guided-learning"><h2><span class="sht" tabindex="0" data-so="Hawlgal Barasho Hagitaan leh">Guided Learning Activity</span></h2>
+<p><span class="sht" tabindex="0" data-so="Ka soo qaad in foomka gelitaanku muujiyo khalad marka isticmaaluhu riixo 'Sign in'.">Imagine that a login form shows an error after the user presses “Sign in.”</span> <span class="sht" tabindex="0" data-so="Is barbar dhig labadan codsi:">Compare these two requests:</span></p>
+<p><strong><span class="sht" tabindex="0" data-so="Codsi daciif ah:">Weak request:</span></strong> <span class="sht" tabindex="0" data-so="'Koodhkayga hagaaji.'">“Fix my code.”</span></p>
+<p><strong><span class="sht" tabindex="0" data-so="Codsi waxtar leh:">Useful request:</span></strong> <span class="sht" tabindex="0" data-so="'Foomka gelitaanku Chrome ayuu gudbiyaa, laakiin boggu wuxuu muujinayaa 'Unauthorized.'">“The login form submits in Chrome, but the page displays ‘Unauthorized.’</span> <span class="sht" tabindex="0" data-so="Waa kan farriinta khaladka iyo hawsha maaraynta foomka.">Here is the error message and form-handling function.</span> <span class="sht" tabindex="0" data-so="Marka hore sharax sababta u badan.">Explain the likely cause first.</span> <span class="sht" tabindex="0" data-so="Ha beddelin koodhka lacag-bixinta ama diiwaangelinta.">Do not change payment or registration code.”</span></p>
+<h3><span class="sht" tabindex="0" data-so="Maxaa ka dhigaya codsiga labaad mid ka xoog badan?">Why is the second request stronger?</span></h3><ul><li><span class="sht" tabindex="0" data-so="Wuxuu qeexayaa hab-dhaqanka la arkay.">It describes the observed behavior.</span></li><li><span class="sht" tabindex="0" data-so="Wuxuu bixiyaa macnaha guud ee khuseeya.">It supplies relevant context.</span></li><li><span class="sht" tabindex="0" data-so="Wuxuu codsanayaa ogaanshaha sababta ka hor wax-ka-beddelka.">It asks for diagnosis before modification.</span></li><li><span class="sht" tabindex="0" data-so="Wuxuu xad cad u samaynayaa koodhka aan khusayn.">It places a clear boundary around unrelated code.</span></li></ul>
+<p><span class="sht" tabindex="0" data-so="Qor hal codsi tababar ah adigoo adeegsanaya afar qaybood: yool, macnaha guud, xuduudaha, iyo natiijada la doonayo.">Write one practice request using four parts: <strong>goal, context, boundaries, and desired output</strong>.</span></p></section>
+<section id="activity"><h2><span class="sht" tabindex="0" data-so="Hawlgal Tababar oo Doorashooyin Badan leh">Multiple-Choice Practice Activity</span></h2><form>
+<fieldset><legend><span class="sht" tabindex="0" data-so="1. Waa maxay doorka horumariyaha marka uu adeegsanayo AI?">1. What is the developer’s role when using AI?</span></legend><label><input type="radio" name="q1" value="a"> <span class="sht" tabindex="0" data-so="Aqbal soo-jeedin kasta isla markiiba">Accept every suggestion immediately</span></label><br><label><input type="radio" name="q1" value="b"> <span class="sht" tabindex="0" data-so="Dib u eeg, faham, oo tijaabi natiijada">Review, understand, and test the result</span></label><br><label><input type="radio" name="q1" value="c"> <span class="sht" tabindex="0" data-so="Dhammaan go'aannada u daa qalabka AI">Give all decisions to the AI tool</span></label></fieldset>
+<fieldset><legend><span class="sht" tabindex="0" data-so="2. Maxay jawaabta AI u noqon kartaa mid khaldan?">2. Why can an AI answer be wrong?</span></legend><label><input type="radio" name="q2" value="a"> <span class="sht" tabindex="0" data-so="Natiijada AI waa saadaal waxaana dhici karta in macnaha guud ee saxda ahi ka maqnaado">AI output is a prediction and may lack correct context</span></label><br><label><input type="radio" name="q2" value="b"> <span class="sht" tabindex="0" data-so="Kombiyuutarradu ma soo bandhigi karaan qoraal">Computers cannot display text</span></label><br><label><input type="radio" name="q2" value="c"> <span class="sht" tabindex="0" data-so="Horumariyeyaashu su'aalo ma weydiin karaan">Developers cannot ask questions</span></label></fieldset>
+<fieldset><legend><span class="sht" tabindex="0" data-so="3. Macluumaadkee ayay tahay inaan lagu dhejin qalabka AI?">3. Which information should not be pasted into an AI tool?</span></legend><label><input type="radio" name="q3" value="a"> <span class="sht" tabindex="0" data-so="Tusaale HTML oo dadweyne">A public HTML example</span></label><br><label><input type="radio" name="q3" value="b"> <span class="sht" tabindex="0" data-so="Su'aal guud oo ku saabsan barnaamij-samaynta">A general programming question</span></label><br><label><input type="radio" name="q3" value="c"> <span class="sht" tabindex="0" data-so="Furayaasha sirta ah iyo furayaasha gaarka ah">Passwords and private keys</span></label></fieldset>
+<fieldset><legend><span class="sht" tabindex="0" data-so="4. Maxaa codsiga AI ka dhigaya mid waxtar badan?">4. What makes an AI request more useful?</span></legend><label><input type="radio" name="q4" value="a"> <span class="sht" tabindex="0" data-so="Ka saar dhammaan macnaha guud ee mashruuca">Removing all project context</span></label><br><label><input type="radio" name="q4" value="b"> <span class="sht" tabindex="0" data-so="Yool cad, macnaha guud ee khuseeya, iyo xuduudo">A clear goal, relevant context, and boundaries</span></label><br><label><input type="radio" name="q4" value="c"> <span class="sht" tabindex="0" data-so="Isbeddello badan oo aan xiriir lahayn hal mar">Many unrelated changes at once</span></label></fieldset>
+<fieldset><legend><span class="sht" tabindex="0" data-so="5. Maxaa la sameeyaa ka dib marka dib loo eego isbeddel AI soo saaray?">5. What should happen after reviewing an AI-generated change?</span></legend><label><input type="radio" name="q5" value="a"> <span class="sht" tabindex="0" data-so="Natiijada ku tijaabi caddayn">Test the result using evidence</span></label><br><label><input type="radio" name="q5" value="b"> <span class="sht" tabindex="0" data-so="Daabac adigoon tijaabin">Publish it without testing</span></label><br><label><input type="radio" name="q5" value="c"> <span class="sht" tabindex="0" data-so="Mashruuca tirtir">Delete the project</span></label></fieldset>
+<button type="submit"><span class="sht" tabindex="0" data-so="Gudbi Jawaabaha">Submit Answers</span></button></form></section>
+<section><h2><span class="sht" tabindex="0" data-so="Jawaabaha Saxda ah">Answer Key</span></h2><ol><li><span class="sht" tabindex="0" data-so="B — Dib u eeg, faham, oo tijaabi natiijada.">B — Review, understand, and test the result.</span></li><li><span class="sht" tabindex="0" data-so="A — Natiijada AI waa saadaal waxaana dhici karta in macnaha guud ee saxda ahi ka maqnaado.">A — AI output is a prediction and may lack correct context.</span></li><li><span class="sht" tabindex="0" data-so="C — Furayaasha sirta ah iyo furayaasha gaarka ahi waa inay ahaadaan kuwo qarsoodi ah.">C — Passwords and private keys must remain private.</span></li><li><span class="sht" tabindex="0" data-so="B — Yool cad, macnaha guud ee khuseeya, iyo xuduudo ayaa codsiga ka dhigaya mid waxtar badan.">B — A clear goal, relevant context, and boundaries make a request more useful.</span></li><li><span class="sht" tabindex="0" data-so="A — Natiijada ku tijaabi caddayn.">A — Test the result using evidence.</span></li></ol></section>
+<section><h2><span class="sht" tabindex="0" data-so="Soo-koobidda Casharka">Lesson Summary</span></h2><ul><li><span class="sht" tabindex="0" data-so="Qalabka AI wuxuu taageeri karaa qorshaynta, barashada, koodh-qorista, cillad-saxidda, iyo dukumeentiyada.">AI tools can support planning, learning, coding, debugging, and documentation.</span></li><li><span class="sht" tabindex="0" data-so="Natiijada AI way noqon kartaa mid aan dhammaystirnayn ama khaldan.">AI output can be incomplete or incorrect.</span></li><li><span class="sht" tabindex="0" data-so="Horumariyaha ayaa masuul ka ah dib-u-eegista, tijaabinta, badbaadada, iyo go'aannada ugu dambeeya.">The developer remains responsible for review, testing, safety, and final decisions.</span></li><li><span class="sht" tabindex="0" data-so="Codsiyada wanaagsan waxay ka kooban yihiin yool cad, macnaha guud ee khuseeya, xuduudo waxtar leh, iyo natiijo la doonayo.">Good requests include a clear goal, relevant context, useful boundaries, and a desired output.</span></li><li><span class="sht" tabindex="0" data-so="Weligaa ha faafin furayaasha sirta ah, furayaasha gaarka ah, ama macluumaadka qarsoodiga ah.">Never expose passwords, private keys, or confidential information.</span></li></ul><p><strong><span class="sht" tabindex="0" data-so="Kan xiga:">Next:</span></strong> <span class="sht" tabindex="0" data-so="U gudub Casharka 2 si aad u barato waxa laga filayo koorsada buuxda ee Horumariyaha AI.">Continue to Lesson 2 to learn what to expect from the full AI Developer course.</span></p></section>
 </main>
-<nav class="ega-lesson-nav" aria-label="Lesson navigation"><span class="ega-disabled">← Previous</span><a class="ega-home" href="/learner-portal">🏠 Learner Portal</a><a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html">Next →</a></nav>
-<footer><p><strong>Elmi Guray Academy</strong><br>AI Tools for Developers — Lesson 1</p><p><a href="#top">Return to top</a></p></footer>
+<nav class="ega-lesson-nav" aria-label="Lesson navigation"><span class="ega-disabled"><span class="sht" tabindex="0" data-so="Casharkii hore">← Previous</span></span><a class="ega-home" href="/learner-portal">🏠 <span class="sht" tabindex="0" data-so="Bogga Ardayga">Learner Portal</span></a><a href="/ai-lessons/lesson-02-what-to-expect-from-the-ai-developer-course.html"><span class="sht" tabindex="0" data-so="Kan xiga">Next →</span></a></nav>
+<footer><p><strong><span class="sht" tabindex="0" data-so="Akadeemiyadda Elmi Guray">Elmi Guray Academy</span></strong><br><span class="sht" tabindex="0" data-so="Qalabka AI ee Horumariyeyaasha — Casharka 1">AI Tools for Developers — Lesson 1</span></p><p><a href="#top"><span class="sht" tabindex="0" data-so="Ku noqo bilowga">Return to top</span></a></p></footer>
+<script>
+(function () {
+  const targets = document.querySelectorAll(".sht[data-so]");
+  if (!targets.length) return;
+
+  const popup = document.createElement("div");
+  popup.className = "somali-translation-popup";
+  popup.id = "somali-translation-popup";
+  popup.setAttribute("role", "tooltip");
+  popup.hidden = true;
+  document.body.appendChild(popup);
+
+  let activeTarget = null;
+  let lastPointerType = "";
+
+  function closePopup() {
+    if (activeTarget) activeTarget.removeAttribute("aria-describedby");
+    activeTarget = null;
+    popup.hidden = true;
+  }
+
+  function showPopup(target) {
+    if (activeTarget && activeTarget !== target) closePopup();
+    activeTarget = target;
+    popup.textContent = target.dataset.so;
+    popup.hidden = false;
+    target.setAttribute("aria-describedby", popup.id);
+
+    const targetRect = target.getBoundingClientRect();
+    const popupRect = popup.getBoundingClientRect();
+    const maxLeft = window.innerWidth - popupRect.width - 12;
+    const left = Math.max(12, Math.min(targetRect.left + (targetRect.width - popupRect.width) / 2, maxLeft));
+    let top = targetRect.bottom + 8;
+    if (top + popupRect.height > window.innerHeight - 12) {
+      top = targetRect.top - popupRect.height - 8;
+    }
+    popup.style.left = left + "px";
+    popup.style.top = Math.max(12, top) + "px";
+  }
+
+  targets.forEach(function (target) {
+    target.addEventListener("pointerdown", function (event) {
+      lastPointerType = event.pointerType;
+    });
+    target.addEventListener("mouseenter", function () {
+      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) showPopup(target);
+    });
+    target.addEventListener("mouseleave", function () {
+      if (activeTarget === target && window.matchMedia("(hover: hover) and (pointer: fine)").matches) closePopup();
+    });
+    target.addEventListener("focus", function () {
+      if (lastPointerType !== "touch") showPopup(target);
+    });
+    target.addEventListener("blur", function () {
+      if (activeTarget === target) closePopup();
+    });
+    target.addEventListener("click", function () {
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        if (activeTarget === target) closePopup();
+        else showPopup(target);
+      }
+    });
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closePopup();
+    else lastPointerType = "keyboard";
+  });
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".sht")) closePopup();
+  });
+  window.addEventListener("resize", function () {
+    if (activeTarget) showPopup(activeTarget);
+  });
+})();
+</script>
 <script src="/ai-lessons/practice-activity.js"></script>
 </body>
 </html>

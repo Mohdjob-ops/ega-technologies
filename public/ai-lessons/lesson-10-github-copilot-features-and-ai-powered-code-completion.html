@@ -296,6 +296,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+<link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+<script defer src="/ai-lessons/somali-help-translation.js"></script>
 </head>
 
 <body>
@@ -309,8 +313,12 @@ document.addEventListener("DOMContentLoaded", function () {
       <a href="/learner-portal">
         🎓 Learner Portal
       </a>
+      <a href="/ai-lessons/lesson-11-creating-and-adding-ai-images-with-copilot-in-powerpoint.html">
+        Next →
+      </a>
     </nav>
 
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
     <section class="hero">
       <div class="lesson-number">
         EGA AI DEVELOPER COURSE — LESSON 10
@@ -327,31 +335,32 @@ document.addEventListener("DOMContentLoaded", function () {
     </section>
 
     <section class="section">
-      <h2>🎯 Learning Objectives</h2>
+      <h2><span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">🎯 Learning Objectives</span></h2>
 
       <div class="goal">
-        By the end of this lesson, you should be able to:
+        <span class="sht" tabindex="0" data-so="Dhammaadka casharkan, waa inaad awoodi doontaa inaad:">By the end of this lesson, you should be able to:</span>
       </div>
 
       <ul>
-        <li>Explain AI-powered code completion.</li>
-        <li>Accept Copilot suggestions with the Tab key.</li>
-        <li>Understand Next Edit Suggestions.</li>
-        <li>View alternative AI suggestions.</li>
-        <li>Accept only part of a suggestion when needed.</li>
-        <li>Use comments as simple prompts for Copilot.</li>
-        <li>Turn Copilot suggestions on or off.</li>
+        <li><span class="sht" tabindex="0" data-so="Sharaxdo dhammaystirka koodhka ee AI ku shaqeeyo.">Explain AI-powered code completion.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ku aqbasho soo-jeedinnada Copilot furaha Tab.">Accept Copilot suggestions with the Tab key.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Fahanto soo-jeedinnada tafatirka xiga.">Understand Next Edit Suggestions.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Arag soo-jeedinno kale oo AI ah.">View alternative AI suggestions.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Aqbasho qayb keliya oo soo-jeedin ah marka loo baahdo.">Accept only part of a suggestion when needed.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Faallooyinka ugu isticmaasho codsiyo fudud oo Copilot ah.">Use comments as simple prompts for Copilot.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Daar ama damiso soo-jeedinnada Copilot.">Turn Copilot suggestions on or off.</span></li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>1. What Does GitHub Copilot Give Us?</h2>
+      <h2><span class="sht" tabindex="0" data-so="1. Maxay GitHub Copilot Inoo Qabataa?">1. What Does GitHub Copilot Give Us?</span></h2>
 
       <p>
-        GitHub Copilot is more than a tool that completes a single line of
+        <span class="sht" tabindex="0" data-so="GitHub Copilot waa ka badan yahay qalab dhammaystira hal sadar oo koodh ah. Wuxuu caawin karaa inta aad qorayso, saadaalin karaa isbeddello mashruuca meel kale ah, soo jeedin karaa xalal kala duwan, wuxuuna koodh ka abuuri karaa faallooyin luuqad dabiici ah.">GitHub Copilot is more than a tool that completes a single line of
         code. It can assist while you type, predict likely changes elsewhere
         in your project, suggest different solutions, and generate code from
         natural-language comments.
+        </span>
       </p>
 
       <p>
@@ -362,14 +371,16 @@ document.addEventListener("DOMContentLoaded", function () {
       </p>
 
       <div class="important">
+        <span class="sht" tabindex="0" data-so="Soo-jeedinnada Copilot waa soo-jeedinno oo keliya. Horumariyaha ayaa masuul ka ah dib-u-eegista, tijaabinta, iyo go'aaminta in la aqbalo.">
         Copilot suggestions are suggestions only. The developer remains
         responsible for reviewing, testing, and deciding whether to accept
         them.
+        </span>
       </div>
     </section>
 
     <section class="section">
-      <h2>2. AI-Powered Autocompletion</h2>
+      <h2><span class="sht" tabindex="0" data-so="2. Dhammaystirka Otoomaatiga ah ee AI ku Shaqeeyo">2. AI-Powered Autocompletion</span></h2>
 
       <p>
         Imagine you begin writing a Python variable:
@@ -378,12 +389,13 @@ document.addEventListener("DOMContentLoaded", function () {
       <pre><code>name =</code></pre>
 
       <p>
-        Copilot may automatically display a possible value or completion.
+        <span class="sht" tabindex="0" data-so="Copilot wuxuu si otomaatig ah u muujin karaa qiime ama dhammaystir suuragal ah. Soo-jeedinta badanaa waxay ku muuqataa qoraal khafiif ah ka hor intaadan aqbalin.">Copilot may automatically display a possible value or completion.
         The suggestion is normally shown in lighter text before you accept it.
+        </span>
       </p>
 
       <p>
-        If the suggestion is useful, you can usually press:
+        <span class="sht" tabindex="0" data-so="Haddii soo-jeedintu waxtar leedahay, badanaa waxaad riixi kartaa:">If the suggestion is useful, you can usually press:</span>
       </p>
 
       <pre><code>Tab</code></pre>
@@ -393,22 +405,25 @@ document.addEventListener("DOMContentLoaded", function () {
       </p>
 
       <p>
-        If you do not like the suggestion, you can ignore it and continue
+        <span class="sht" tabindex="0" data-so="Haddii aadan jeclayn soo-jeedinta, iska indho-tir oo sii wad qorista koodhkaaga.">If you do not like the suggestion, you can ignore it and continue
         typing your own code.
+        </span>
       </p>
     </section>
 
     <section class="section">
-      <h2>3. Copilot Can Predict More Than One Line</h2>
+      <h2><span class="sht" tabindex="0" data-so="3. Copilot Wuxuu Saadaalin Karaa Wax Ka Badan Hal Sadar">3. Copilot Can Predict More Than One Line</span></h2>
 
       <p>
-        Modern GitHub Copilot can also make
+        <span class="sht" tabindex="0" data-so="GitHub Copilot-ka casriga ahi wuxuu sidoo kale soo jeedin karaa tafatirrada xiga.">Modern GitHub Copilot can also make
         <strong>Next Edit Suggestions</strong>.
+        </span>
       </p>
 
       <p>
-        This means that after you change one part of your code, Copilot may
+        <span class="sht" tabindex="0" data-so="Tani waxay ka dhigan tahay in markaad beddesho qayb koodhkaaga ka mid ah, Copilot laga yaabo inuu saadaaliyo isbeddel kale oo aad meel kale samayn karto.">This means that after you change one part of your code, Copilot may
         predict another change that you are likely to make somewhere else.
+        </span>
       </p>
 
       <p>
@@ -428,11 +443,12 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
     </section>
 
     <section class="section">
-      <h2>4. Next Edit Suggestions</h2>
+      <h2><span class="sht" tabindex="0" data-so="4. Soo-jeedinnada Tafatirka Xiga">4. Next Edit Suggestions</span></h2>
 
       <p>
-        Next Edit Suggestions try to anticipate what you are likely to edit
+        <span class="sht" tabindex="0" data-so="Soo-jeedinnada tafatirka xiga waxay isku dayaan inay saadaaliyaan waxa aad u badan tahay inaad tafatirto ka dib isbeddelka hadda jira.">Next Edit Suggestions try to anticipate what you are likely to edit
         after your current change.
+        </span>
       </p>
 
       <p>
@@ -454,7 +470,7 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
     </section>
 
     <section class="section">
-      <h2>5. Turning Suggestions On or Off</h2>
+      <h2><span class="sht" tabindex="0" data-so="5. Daarista ama Daminta Soo-jeedinnada">5. Turning Suggestions On or Off</span></h2>
 
       <p>
         GitHub Copilot does not have to remain active everywhere.
@@ -474,18 +490,21 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
       </ul>
 
       <div class="important">
+        <span class="sht" tabindex="0" data-so="Magacyada saxda ah ee menu-yadu way isbeddeli karaan marka GitHub Copilot iyo Visual Studio Code la cusboonaysiiyo. Diiradda saar fahamka astaanta halkii aad xafidi lahayd meesha badhan gaar ahi yaal.">
         The exact menu names may change as GitHub Copilot and Visual Studio
         Code are updated. Focus on understanding the feature rather than
         memorizing one button location.
+        </span>
       </div>
     </section>
 
     <section class="section">
-      <h2>6. Viewing Alternative Suggestions</h2>
+      <h2><span class="sht" tabindex="0" data-so="6. Daawashada Soo-jeedinno Kale">6. Viewing Alternative Suggestions</span></h2>
 
       <p>
-        You do not always have to accept the first suggestion Copilot gives
+        <span class="sht" tabindex="0" data-so="Mar walba khasab ma aha inaad aqbasho soo-jeedinta ugu horreysa ee Copilot bixiyo.">You do not always have to accept the first suggestion Copilot gives
         you.
+        </span>
       </p>
 
       <p>
@@ -511,17 +530,19 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
 }</code></pre>
 
       <p>
-        You can inspect available alternatives and choose the one that best
+        <span class="sht" tabindex="0" data-so="Waad baari kartaa ikhtiyaarrada kale ee jira oo dooran kartaa midka ugu habboon ujeeddadaada.">You can inspect available alternatives and choose the one that best
         matches your intention.
+        </span>
       </p>
     </section>
 
     <section class="section">
-      <h2>7. Accepting Only Part of a Suggestion</h2>
+      <h2><span class="sht" tabindex="0" data-so="7. Aqbalaadda Qayb Keliya oo Soo-jeedin ah">7. Accepting Only Part of a Suggestion</span></h2>
 
       <p>
-        Sometimes an AI suggestion is partly correct but contains more code
+        <span class="sht" tabindex="0" data-so="Mararka qaarkood soo-jeedinta AI qayb ahaan way saxan tahay, balse waxay ka kooban tahay koodh ka badan intaad rabto.">Sometimes an AI suggestion is partly correct but contains more code
         than you want.
+        </span>
       </p>
 
       <p>
@@ -535,17 +556,20 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
       </p>
 
       <div class="important">
+        <span class="sht" tabindex="0" data-so="Horumariye wanaagsan si otomaatig ah uma aqbalo soo-jeedinno. Marka hore akhri koodhka la soo jeediyay.">
         A good developer does not accept suggestions automatically. Read the
         proposed code first.
+        </span>
       </div>
     </section>
 
     <section class="section">
-      <h2>8. Using Comments as Prompts</h2>
+      <h2><span class="sht" tabindex="0" data-so="8. Faallooyinka oo Codsiyo Loo Adeegsado">8. Using Comments as Prompts</span></h2>
 
       <p>
-        One particularly useful Copilot technique is writing a comment that
+        <span class="sht" tabindex="0" data-so="Hab Copilot oo gaar ahaan waxtar leh waa qorista faallo sharxaysa waxa aad rabto.">One particularly useful Copilot technique is writing a comment that
         describes what you want.
+        </span>
       </p>
 
       <p>
@@ -562,7 +586,7 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
     return first + second</code></pre>
 
       <p>
-        The comment works like a small natural-language prompt.
+        <span class="sht" tabindex="0" data-so="Faalladu waxay u shaqaysaa sida codsi yar oo luuqad dabiici ah ku qoran.">The comment works like a small natural-language prompt.</span>
       </p>
 
       <p>
@@ -573,11 +597,12 @@ full_name = combine_names("Ayan", "Ali")</code></pre>
     </section>
 
     <section class="section">
-      <h2>9. Practical Example</h2>
+      <h2><span class="sht" tabindex="0" data-so="9. Tusaale Wax-ku-ool ah">9. Practical Example</span></h2>
 
       <p>
-        Suppose you want a function that creates a student's full name.
+        <span class="sht" tabindex="0" data-so="Ka soo qaad inaad rabto hawl abuurta magaca buuxa ee arday. Ku bilow faallo cad:">Suppose you want a function that creates a student's full name.
         Start with a clear comment:
+        </span>
       </p>
 
       <pre><code># Function that combines first name and last name</code></pre>
@@ -600,19 +625,19 @@ print(student)</code></pre>
     </section>
 
     <section class="section">
-      <h2>10. English Technical Summary</h2>
+      <h2><span class="sht" tabindex="0" data-so="10. Soo-koobid Farsamo oo Ingiriisi ah">10. English Technical Summary</span></h2>
 
       <ul>
         <li>
-          GitHub Copilot provides AI-powered code completion.
+          <span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu bixiyaa dhammaystirka koodhka ee AI ku shaqeeyo.">GitHub Copilot provides AI-powered code completion.</span>
         </li>
 
         <li>
-          Tab can be used to accept many inline suggestions.
+          <span class="sht" tabindex="0" data-so="Furaha Tab waxaa loo adeegsan karaa aqbalidda soo-jeedinno badan oo sadar dhexdiisa ah.">Tab can be used to accept many inline suggestions.</span>
         </li>
 
         <li>
-          Next Edit Suggestions can predict related changes elsewhere.
+          <span class="sht" tabindex="0" data-so="Soo-jeedinnada tafatirka xiga waxay saadaalin karaan isbeddello xiriir leh oo meelo kale ah.">Next Edit Suggestions can predict related changes elsewhere.</span>
         </li>
 
         <li>
@@ -620,15 +645,15 @@ print(student)</code></pre>
         </li>
 
         <li>
-          Developers can sometimes accept suggestions piece by piece.
+          <span class="sht" tabindex="0" data-so="Horumariyeyaashu mararka qaarkood waxay soo-jeedinta u aqbali karaan qayb-qayb.">Developers can sometimes accept suggestions piece by piece.</span>
         </li>
 
         <li>
-          Natural-language comments can act as prompts for code generation.
+          <span class="sht" tabindex="0" data-so="Faallooyinka luuqadda dabiiciga ahi waxay noqon karaan codsiyo lagu soo saaro koodh.">Natural-language comments can act as prompts for code generation.</span>
         </li>
 
         <li>
-          Copilot suggestions should always be reviewed and tested.
+          <span class="sht" tabindex="0" data-so="Soo-jeedinnada Copilot waa in mar walba dib loo eego oo la tijaabiyo.">Copilot suggestions should always be reviewed and tested.</span>
         </li>
       </ul>
     </section>
@@ -678,28 +703,28 @@ print(student)</code></pre>
     </section>
 
     <section class="section">
-      <h2>12. Rules for Using Copilot</h2>
+      <h2><span class="sht" tabindex="0" data-so="12. Xeerarka Adeegsiga Copilot">12. Rules for Using Copilot</span></h2>
 
       <ol>
-        <li>Read every important suggestion before accepting it.</li>
-        <li>Understand what generated code does.</li>
-        <li>Test generated code.</li>
-        <li>Do not paste passwords, secret keys, or private data into prompts.</li>
-        <li>Use AI to assist learning, not replace understanding.</li>
-        <li>Change or reject suggestions that do not match your goal.</li>
+        <li><span class="sht" tabindex="0" data-so="Akhri soo-jeedin kasta oo muhiim ah ka hor intaadan aqbalin.">Read every important suggestion before accepting it.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Faham waxa koodhka la soo saaray qabto.">Understand what generated code does.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Tijaabi koodhka la soo saaray.">Test generated code.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Ha gelin furayaasha sirta ah ama xogta gaarka ah codsiyada.">Do not paste passwords, secret keys, or private data into prompts.</span></li>
+        <li><span class="sht" tabindex="0" data-so="AI u isticmaal taageeridda waxbarashada, ee ha u adeegsan beddelka fahamka.">Use AI to assist learning, not replace understanding.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Beddel ama diid soo-jeedinno aan waafaqsanayn yoolkaaga.">Change or reject suggestions that do not match your goal.</span></li>
       </ol>
     </section>
 
     <section class="section">
-      <h2>13. Common Mistakes</h2>
+      <h2><span class="sht" tabindex="0" data-so="13. Khaladaadka Caanka ah">13. Common Mistakes</span></h2>
 
       <ul>
         <li>
-          Accepting every suggestion without reading it.
+          <span class="sht" tabindex="0" data-so="Aqbalaadda soo-jeedin kasta adigoon akhrin.">Accepting every suggestion without reading it.</span>
         </li>
 
         <li>
-          Assuming Copilot-generated code is always correct.
+          <span class="sht" tabindex="0" data-so="In loo qaato in koodhka Copilot soo saaray mar walba sax yahay.">Assuming Copilot-generated code is always correct.</span>
         </li>
 
         <li>
@@ -707,11 +732,11 @@ print(student)</code></pre>
         </li>
 
         <li>
-          Forgetting to test generated code.
+          <span class="sht" tabindex="0" data-so="Illowga tijaabinta koodhka la soo saaray.">Forgetting to test generated code.</span>
         </li>
 
         <li>
-          Sharing sensitive information unnecessarily.
+          <span class="sht" tabindex="0" data-so="Wadaagista xog xasaasi ah iyada oo aan loo baahnayn.">Sharing sensitive information unnecessarily.</span>
         </li>
 
         <li>
@@ -722,54 +747,54 @@ print(student)</code></pre>
     </section>
 
     <section class="section">
-      <h2>14. Multiple-Choice Practice Activity</h2>
+      <h2><span class="sht" tabindex="0" data-so="14. Hawlgal Tababar oo Doorashooyin Badan leh">14. Multiple-Choice Practice Activity</span></h2>
 
       <div class="question">
-        <strong>1. What does AI-powered autocompletion do?</strong>
+        <strong><span class="sht" tabindex="0" data-so="1. Maxay qabataa dhammaystirka otomaatiga ah ee AI ku shaqeeyo?">1. What does AI-powered autocompletion do?</span></strong>
 
         <p>A. Deletes the project automatically</p>
-        <p>B. Predicts and suggests code while you type</p>
+        <p><span class="sht" tabindex="0" data-so="B. Wuxuu saadaaliyaa oo soo jeediyaa koodh inta aad qorayso">B. Predicts and suggests code while you type</span></p>
         <p>C. Turns Python into HTML</p>
         <p>D. Publishes the website automatically</p>
       </div>
 
       <div class="question">
-        <strong>2. Which key commonly accepts an inline Copilot suggestion?</strong>
+        <strong><span class="sht" tabindex="0" data-so="2. Furaha kee ayaa badanaa lagu aqbalaa soo-jeedin Copilot oo sadar dhexdiisa ah?">2. Which key commonly accepts an inline Copilot suggestion?</span></strong>
 
         <p>A. Escape</p>
         <p>B. Shift</p>
-        <p>C. Tab</p>
+        <p><span class="sht" tabindex="0" data-so="C. Tab">C. Tab</span></p>
         <p>D. Caps Lock</p>
       </div>
 
       <div class="question">
-        <strong>3. What are Next Edit Suggestions?</strong>
+        <strong><span class="sht" tabindex="0" data-so="3. Waa maxay soo-jeedinnada tafatirka xiga?">3. What are Next Edit Suggestions?</span></strong>
 
-        <p>A. Suggestions for likely related edits after your current change</p>
+        <p><span class="sht" tabindex="0" data-so="A. Soo-jeedinno isbeddello xiriir leh oo suuragal ah ka dib isbeddelka hadda jira">A. Suggestions for likely related edits after your current change</span></p>
         <p>B. Suggestions for buying a new computer</p>
         <p>C. Automatic GitHub account creation</p>
         <p>D. Database backups</p>
       </div>
 
       <div class="question">
-        <strong>4. Can a code comment work like a prompt for Copilot?</strong>
+        <strong><span class="sht" tabindex="0" data-so="4. Faallo koodh ma u shaqayn kartaa sida codsi Copilot ah?">4. Can a code comment work like a prompt for Copilot?</span></strong>
 
         <p>A. Yes</p>
         <p>B. No</p>
       </div>
 
       <div class="question">
-        <strong>5. What should you do before using generated code?</strong>
+        <strong><span class="sht" tabindex="0" data-so="5. Maxaad samaynaysaa ka hor isticmaalka koodh la soo saaray?">5. What should you do before using generated code?</span></strong>
 
         <p>A. Accept everything immediately</p>
-        <p>B. Review, understand, and test it</p>
+        <p><span class="sht" tabindex="0" data-so="B. Dib u eeg, faham, oo tijaabi">B. Review, understand, and test it</span></p>
         <p>C. Delete the entire project</p>
         <p>D. Disable your keyboard</p>
       </div>
     </section>
 
     <section class="section answer-key">
-      <h2>15. Answer Key</h2>
+      <h2><span class="sht" tabindex="0" data-so="15. Jawaabaha Saxda ah">15. Answer Key</span></h2>
 
       <ol>
         <li><strong>B</strong> — Predicts and suggests code while you type.</li>
@@ -781,12 +806,13 @@ print(student)</code></pre>
     </section>
 
     <section class="section">
-      <h2>16. Remember</h2>
+      <h2><span class="sht" tabindex="0" data-so="16. Xusuusnow">16. Remember</span></h2>
 
       <p class="remember">
-        GitHub Copilot is most useful when you remain the developer:
+        <span class="sht" tabindex="0" data-so="GitHub Copilot wuxuu ugu waxtar badan yahay marka aad adigu horumariyaha ahaato: sharax waxa aad rabto, baadh soo-jeedinta, faham, oo go'aanso inay koodhkaaga ku habboon tahay.">GitHub Copilot is most useful when you remain the developer:
         describe what you want, examine the suggestion, understand it,
         and decide whether it belongs in your code.
+        </span>
       </p>
     </section>
 
@@ -797,6 +823,9 @@ print(student)</code></pre>
 
       <a href="/learner-portal">
         🎓 Learner Portal
+      </a>
+      <a href="/ai-lessons/lesson-11-creating-and-adding-ai-images-with-copilot-in-powerpoint.html">
+        Next →
       </a>
     </nav>
 

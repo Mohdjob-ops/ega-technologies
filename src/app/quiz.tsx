@@ -1,6 +1,8 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -42,9 +44,9 @@ const questions = [
     question: "What is the main purpose of AI tools for developers?",
     options: [
       "To assist developers with tasks such as coding, learning, and problem solving",
-      "To remove the need to understand programming",
-      "To replace every programming language",
-      "To guarantee that all generated code is correct",
+      "To use AI tools to draft routine code that needs only a quick syntax check",
+      "To handle routine coding and debugging with little developer direction",
+      "To recommend implementations based on examples without requiring testing",
     ],
     answer:
       "To assist developers with tasks such as coding, learning, and problem solving",
@@ -56,10 +58,10 @@ const questions = [
     question:
       "What should a student expect from an AI developer course?",
     options: [
+      "To learn workflows where AI drafts most solutions and students mainly review the output",
       "To learn how to use AI tools while still understanding and reviewing the work",
-      "To copy every AI answer without checking it",
-      "To avoid practicing programming",
-      "To use only one AI tool forever",
+      "To build programming skills independently before using AI for any course task",
+      "To rely on AI tools for implementation and study concepts only when questions arise",
     ],
     answer:
       "To learn how to use AI tools while still understanding and reviewing the work",
@@ -71,10 +73,10 @@ const questions = [
     question:
       "Which statement best describes the role of modern AI developer tools?",
     options: [
+      "Most tools focus on code generation after a developer selects a complete implementation",
+      "AI tools with similar prompts generally provide equivalent assistance regardless of focus",
       "Different tools may help with coding, explanations, debugging, research, or workflow",
-      "Every AI tool performs exactly the same job",
-      "AI developer tools work only with HTML",
-      "AI tools can be used only by large companies",
+      "Developer tools are most useful for teams with dedicated AI infrastructure",
     ],
     answer:
       "Different tools may help with coding, explanations, debugging, research, or workflow",
@@ -86,10 +88,10 @@ const questions = [
     question:
       "Why can the result from an AI tool change even when a similar prompt is used?",
     options: [
+      "A repeated request returns the same result unless the source code changes",
+      "The service standardizes similar prompts to the same response after the first run",
+      "Model updates affect available features but not the content it generates",
       "AI systems and models can change, and generated responses are not always identical",
-      "Computers are unable to repeat any task",
-      "Programming languages change every minute",
-      "The keyboard automatically changes the prompt",
     ],
     answer:
       "AI systems and models can change, and generated responses are not always identical",
@@ -101,10 +103,10 @@ const questions = [
     question:
       "What is a sensible approach to the cost of AI tools?",
     options: [
+      "Choose a plan from its advertised price and expect its usage limits to stay stable",
       "Check current plans and features because prices and limits can change",
-      "Assume every AI tool will always be free",
-      "Assume the most expensive tool is always best",
-      "Ignore usage limits completely",
+      "Compare subscription prices while treating the included features as equivalent",
+      "Select a higher tier to avoid tracking usage across different services",
     ],
     answer:
       "Check current plans and features because prices and limits can change",
@@ -116,10 +118,10 @@ const questions = [
     question:
       "Why is it useful to understand categories of AI tools?",
     options: [
+      "It helps compare providers by subscription price rather than the task at hand",
+      "It identifies one tool that can replace most parts of the development workflow",
       "It helps you choose a tool that matches the task you need to perform",
-      "It guarantees every generated answer is correct",
-      "It removes the need to learn coding",
-      "It means you must use every available AI tool",
+      "It groups tools by brand so each can be used in roughly the same way",
     ],
     answer:
       "It helps you choose a tool that matches the task you need to perform",
@@ -130,10 +132,10 @@ const questions = [
     lesson: "Lesson 6",
     question: "What is prompt engineering?",
     options: [
+      "Selecting model settings while leaving the request itself broadly unchanged",
+      "Adding as much background as possible, even when details are unrelated to the task",
+      "Using examples as the main instructions and leaving the intended outcome implicit",
       "Designing clearer instructions and questions to guide an AI system",
-      "Installing a new computer processor",
-      "Deleting all context before asking AI a question",
-      "Publishing a website automatically",
     ],
     answer:
       "Designing clearer instructions and questions to guide an AI system",
@@ -146,9 +148,9 @@ const questions = [
       "Why is context useful when working with an AI assistant?",
     options: [
       "It gives the AI relevant background needed to produce a more useful response",
-      "It guarantees the AI can never make an error",
-      "It prevents the user from giving instructions",
-      "It automatically converts every response into code",
+      "It lets the assistant infer project requirements even when key constraints are omitted",
+      "It reduces the need to state a goal because project details determine the requested task",
+      "It is most effective when it includes the full project history for every request",
     ],
     answer:
       "It gives the AI relevant background needed to produce a more useful response",
@@ -160,10 +162,10 @@ const questions = [
     question:
       "What is one important benefit of learning with a developer community?",
     options: [
+      "Members can exchange tool recommendations, making formal feedback on work less necessary",
+      "Experienced members can take on difficult tasks while others follow their approach",
+      "Shared conventions can replace the need to compare different technical solutions",
       "Students can share knowledge, ask questions, and learn from other people's experience",
-      "Students never need to practice by themselves",
-      "Community members automatically write every project",
-      "A community guarantees employment",
     ],
     answer:
       "Students can share knowledge, ask questions, and learn from other people's experience",
@@ -174,10 +176,10 @@ const questions = [
     lesson: "Lesson 8",
     question: "What is GitHub Copilot primarily designed to do?",
     options: [
+      "Use AI to manage repository history and coordinate review of proposed code changes",
+      "Generate and run complete applications from a brief description",
       "Provide AI-assisted help while developers write and work with code",
-      "Replace GitHub with a different website",
-      "Operate only as a database",
-      "Automatically purchase software",
+      "Provide AI explanations from documentation without supporting the active coding workflow",
     ],
     answer:
       "Provide AI-assisted help while developers write and work with code",
@@ -190,9 +192,9 @@ const questions = [
       "Should a developer automatically trust every GitHub Copilot suggestion?",
     options: [
       "No, suggestions should be reviewed, understood, and tested",
-      "Yes, every Copilot suggestion is guaranteed to be correct",
-      "Yes, but only for long programs",
-      "No, because Copilot cannot suggest code",
+      "Usually, if a suggestion fits the current code and passes a quick visual check",
+      "Only when the suggestion is limited to a small function or familiar pattern",
+      "Not until the suggestion compiles, since that confirms its behavior is sound",
     ],
     answer:
       "No, suggestions should be reviewed, understood, and tested",
@@ -204,10 +206,10 @@ const questions = [
     question:
       "Before using GitHub Copilot, what should a learner confirm?",
     options: [
+      "That a GitHub account and editor are ready, with Copilot access to be checked later",
       "That Copilot access and the required editor or setup are available",
-      "That every project already contains AI-generated code",
-      "That the computer has no internet browser",
-      "That GitHub has been removed",
+      "That the project uses a supported framework before enabling Copilot suggestions",
+      "That account-synced settings will configure Copilot across the learner's editors",
     ],
     answer:
       "That Copilot access and the required editor or setup are available",
@@ -220,10 +222,10 @@ const questions = [
     question:
       "What should a developer do with an AI-powered code-completion suggestion?",
     options: [
+      "Accept it when it matches the surrounding style and produces no syntax errors",
+      "Check the changed lines and rely on existing tests for the rest of the behavior",
+      "Use it for familiar patterns and review it more closely only when the code is new",
       "Review, understand, and test it before accepting it",
-      "Accept it automatically without reading it",
-      "Assume it is secure because AI generated it",
-      "Delete the entire project before using it",
     ],
     answer:
       "Review, understand, and test it before accepting it",
@@ -236,9 +238,9 @@ const questions = [
       "What should you do after Copilot creates or suggests an image for a PowerPoint presentation?",
     options: [
       "Review whether the image is accurate, appropriate, and relevant to the slide",
-      "Assume every generated image is perfect",
-      "Remove all text from the presentation",
-      "Publish the image without checking it",
+      "Check the image's visual quality and use it if it fits the presentation style",
+      "Review the layout and resolution, then rely on the prompt for factual accuracy",
+      "Compare it with nearby slides and keep it when its subject appears consistent",
     ],
     answer:
       "Review whether the image is accurate, appropriate, and relevant to the slide",
@@ -250,10 +252,10 @@ const questions = [
     question:
       "When using Copilot to create a PowerPoint from an existing file, what is important?",
     options: [
+      "Choose a presentation theme first and use the existing file as optional reference material",
       "Use a clear source file and review the generated presentation for accuracy",
-      "Delete the source file before Copilot reads it",
-      "Assume Copilot will understand an empty document",
-      "Skip reviewing the generated slides",
+      "Provide the complete source and let the tool infer missing audience or purpose details",
+      "Treat an orderly source file as proof that the generated slide order and claims are accurate",
     ],
     answer:
       "Use a clear source file and review the generated presentation for accuracy",
@@ -265,10 +267,10 @@ const questions = [
     question:
       "What is a key benefit of GitHub Copilot integrated AI Chat?",
     options: [
+      "It draws on general chat history without needing access to open project files",
+      "It summarizes project files but does not use them to inform follow-up code questions",
       "It can provide assistance using the context of the developer's project and code",
-      "It guarantees that every answer contains no errors",
-      "It replaces the need to understand the project",
-      "It works only when no project is open",
+      "It applies suggested changes in the background so developers can focus on review",
     ],
     answer:
       "It can provide assistance using the context of the developer's project and code",
@@ -280,10 +282,10 @@ const questions = [
     question:
       "What is a practical use of Inline Chat in Visual Studio Code?",
     options: [
+      "Using Quick Chat to generate a targeted edit without working beside the active code",
+      "Starting a separate conversation for broad project questions outside the current code",
       "Requesting focused help or changes near the code currently being edited",
-      "Replacing the computer operating system",
-      "Purchasing a GitHub subscription automatically",
-      "Deleting every file in the workspace",
+      "Asking for a broad workspace rewrite and accepting all proposed changes together",
     ],
     answer:
       "Requesting focused help or changes near the code currently being edited",
@@ -295,10 +297,10 @@ const questions = [
     question:
       "What must you do before running a terminal command suggested by Copilot?",
     options: [
+      "Run it in the project terminal and inspect the output for unexpected errors",
+      "Check the command name and rely on the shell to reject unsafe arguments",
+      "Review the command's purpose, then use it if it matches the requested task",
       "Read and understand the complete command and confirm its effects",
-      "Run it immediately without reviewing it",
-      "Share passwords and API keys with the chat",
-      "Assume every suggested command is safe",
     ],
     answer:
       "Read and understand the complete command and confirm its effects",
@@ -683,12 +685,12 @@ export default function AILessonsAssessment() {
 
     if (!autoSubmit) {
       const unfinishedQuestions = questions
-        .map((_, index) => (!questionStates[index]?.locked ? index + 1 : null))
+        .map((_, index) => (!questionStates[index]?.selected ? index + 1 : null))
         .filter((number): number is number => number !== null);
 
       if (unfinishedQuestions.length > 0) {
         setMessage(
-          `⚠️ Finish question${unfinishedQuestions.length > 1 ? "s" : ""}: ${unfinishedQuestions.join(", ")}. After one wrong answer, read the hint and make one final attempt.`
+          `⚠️ Answer question${unfinishedQuestions.length > 1 ? "s" : ""}: ${unfinishedQuestions.join(", ")} before submitting your assessment.`
         );
         return;
       }
@@ -806,6 +808,61 @@ export default function AILessonsAssessment() {
         ? `🎉 ${student.name}, you passed the AI assessment. Score: ${score}/${total} (${percentage}%). This assessment is now locked.`
         : `📘 ${student.name}, your score is ${score}/${total} (${percentage}%). You did not pass. This assessment is now locked; contact EGA Admin if another attempt is required.`
     );
+  }
+
+  function stopAssessment() {
+    const confirmationMessage =
+      "Are you sure you want to stop this assessment? Your result will not be submitted.";
+
+    if (Platform.OS === "web") {
+      if (typeof window === "undefined" || !window.confirm(confirmationMessage)) {
+        return;
+      }
+
+      void confirmStopAssessment();
+      return;
+    }
+
+    Alert.alert("Stop Assessment", confirmationMessage, [
+      { text: "Cancel", style: "cancel" },
+      { text: "Stop Test", style: "destructive", onPress: confirmStopAssessment },
+    ]);
+  }
+
+  async function confirmStopAssessment() {
+    if (!attempt || saving || submitted) {
+      return;
+    }
+
+    const activeAttempt = attempt;
+    setSaving(true);
+    setStarted(false);
+
+    const { error } = await supabase
+      .from("ai_quiz_attempts")
+      .update({
+        status: "Cancelled by Student",
+        submitted_at: new Date().toISOString(),
+      })
+      .eq("id", activeAttempt.id)
+      .eq("status", "In Progress");
+
+    if (error) {
+      setStarted(true);
+      setSaving(false);
+      setMessage("❌ The assessment could not be stopped: " + error.message);
+      return;
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(`ega_ai_assessment_state_${activeAttempt.id}`);
+    }
+
+    setAttempt(null);
+    setQuestionStates(emptyQuestionStates());
+    setSecondsLeft(TEST_SECONDS);
+    setSaving(false);
+    router.replace("/learner-portal");
   }
 
   const timerUrgent = secondsLeft <= 300;
@@ -1014,6 +1071,14 @@ export default function AILessonsAssessment() {
                 : "Submit Final Assessment"}
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.stopButton}
+            disabled={saving}
+            onPress={stopAssessment}
+          >
+            <Text style={styles.stopButtonText}>Stop Test</Text>
+          </TouchableOpacity>
         </>
       )}
 
@@ -1212,7 +1277,6 @@ const styles = StyleSheet.create({
   },
 
   option: {
-    backgroundColor: "#f1f5f9",
     borderWidth: 2,
     borderColor: "transparent",
     padding: 14,
@@ -1287,6 +1351,23 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     marginTop: 8,
+  },
+
+  stopButton: {
+    backgroundColor: "#ffffff",
+    padding: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#94a3b8",
+  },
+
+  stopButtonText: {
+    color: "#334155",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 
   portalButton: {

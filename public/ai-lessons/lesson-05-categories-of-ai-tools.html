@@ -538,6 +538,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+<link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+<script defer src="/ai-lessons/somali-help-translation.js"></script>
+
+
 </head>
 
 <body>
@@ -673,9 +679,10 @@ document.addEventListener("DOMContentLoaded", function () {
   </nav>
 
   <main>
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
     <section id="listen" class="ega-audio-reader"><h2>Lesson Audio</h2><p>Listen to Lesson 5 in English. Click any transcript line to continue from that point.</p><div class="ega-sticky-player"><audio controls preload="metadata" data-transcript="EGA-AI-Lesson-05-English.vtt"><source src="EGA-AI-Lesson-05-English.mp3" type="audio/mpeg">Your browser does not support the audio player.</audio></div><div class="ega-transcript" aria-label="Synchronized Lesson 5 transcript"><p class="ega-transcript-status">Loading synchronized transcript…</p></div><script defer src="/ai-lessons/audio-transcript.js"></script></section>
     <section id="overview">
-      <h2>Lesson Overview</h2>
+      <h2><span class="sht" tabindex="0" data-so="Dulmarka Casharka">Lesson Overview</span></h2>
 
       <div class="lesson-info">
         <article class="info-card">
@@ -699,260 +706,282 @@ document.addEventListener("DOMContentLoaded", function () {
         </article>
       </div>
 
-      <h3>Learning Objectives</h3>
+      <h3><span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">Learning Objectives</span></h3>
 
       <p>
-        By the end of this lesson, you should be able to:
+        <span class="sht" tabindex="0" data-so="Dhammaadka casharkan, waa inaad awood u yeelataa inaad:">By the end of this lesson, you should be able to:</span>
       </p>
 
       <ul class="objective-list">
         <li>
-          Identify four important categories of AI tools
+          <span class="sht" tabindex="0" data-so="Aqoonsato afar qaybood oo muhiim ah oo qalabka AI ah oo horumariyeyaashu isticmaalaan.">Identify four important categories of AI tools
           used by developers.
+          </span>
         </li>
 
         <li>
-          Explain the difference between an external
+          <span class="sht" tabindex="0" data-so="Sharaxdo farqiga u dhexeeya chatbot AI oo dibadda ah iyo qalab koodh-qoris oo mashruuca garanaya.">Explain the difference between an external
           AI chatbot and a project-aware coding tool.
+          </span>
         </li>
 
         <li>
-          Explain how intelligent code completion works.
+          <span class="sht" tabindex="0" data-so="Sharaxdo sida dhammaystirka koodhka caqliga leh u shaqeeyo.">Explain how intelligent code completion works.</span>
         </li>
 
         <li>
-          Describe what coding agents can do across
+          <span class="sht" tabindex="0" data-so="Sharaxdo waxa wakiillada koodh-qoristu ka qaban karaan faylal badan oo mashruuca ah.">Describe what coding agents can do across
           multiple project files.
+          </span>
         </li>
 
         <li>
-          Explain how AI code-review tools support
+          <span class="sht" tabindex="0" data-so="Sharaxdo sida qalabka dib-u-eegista koodhka AI u taageero dib-u-eegayaasha bini'aadamka.">Explain how AI code-review tools support
           human reviewers.
+          </span>
         </li>
 
         <li>
-          Select an appropriate AI tool for a specific
+          <span class="sht" tabindex="0" data-so="U doorato qalab AI oo ku habboon hawl horumarineed oo gaar ah.">Select an appropriate AI tool for a specific
           development task.
+          </span>
         </li>
       </ul>
 
       <div class="important">
-        <strong>Central idea:</strong>
+        <strong><span class="sht" tabindex="0" data-so="Fikradda udub-dhexaadka ah:">Central idea:</span></strong>
+        <span class="sht" tabindex="0" data-so="Qalabka horumarinta AI dhammaantood isku shaqo ma qabtaan. Horumariye masuul ahi waa inuu fahmaa qaybta qalab ee hawl kasta ku habboon.">
         AI development tools do not all perform the same job.
         A responsible developer must understand which tool
         category is suitable for each task.
+        </span>
       </div>
     </section>
 
     <section id="english">
-      <h2>English Technical Section</h2>
+      <h2><span class="sht" tabindex="0" data-so="Qaybta Farsamada ee Ingiriisiga">English Technical Section</span></h2>
 
       <p>
-        Developers now have access to several types of
+        <span class="sht" tabindex="0" data-so="Horumariyeyaashu hadda waxay heli karaan noocyo kala duwan oo qalab AI ah. Inkastoo qalab badani adeegsadaan tignoolajiyad AI oo isu eg, siyaabo kala duwan ayay ula falgalaan horumariyeyaasha iyo mashaariicda software-ka.">Developers now have access to several types of
         AI-powered tools. Although many of these tools use
         similar AI technology, they interact with developers
         and software projects in different ways.
+        </span>
       </p>
 
       <p>
-        The four important categories covered in this lesson are:
+        <span class="sht" tabindex="0" data-so="Afarta qaybood ee muhiimka ah ee casharkan lagu baranayo waa:">The four important categories covered in this lesson are:</span>
       </p>
 
       <div class="tool-grid">
         <article class="tool-card">
           <div class="tool-number">1</div>
 
-          <h3>External AI Chatbots</h3>
+          <h3><span class="sht" tabindex="0" data-so="Chatbot-yada AI ee Dibadda">External AI Chatbots</span></h3>
 
           <p>
-            External AI chatbots are general conversation tools.
+            <span class="sht" tabindex="0" data-so="Chatbot-yada AI ee dibaddu waa qalab wada-sheekaysi guud. Horumariyeyaashu waxay u adeegsan karaan su'aalo, barashada fikradaha barnaamij-samaynta, qorshaynta mashruucyo, falanqaynta tusaalooyin koodh gaagaaban, iyo ka doodista xalal suuragal ah.">External AI chatbots are general conversation tools.
             Developers can use them to ask questions, learn
             programming concepts, plan projects, analyze short
             code examples, and discuss possible solutions.
+            </span>
           </p>
 
           <p>
-            Examples mentioned in this course include:
+            <span class="sht" tabindex="0" data-so="Tusaalooyinka casharkan lagu xusay waxaa ka mid ah:">Examples mentioned in this course include:</span>
           </p>
 
           <span class="tag">ChatGPT</span>
           <span class="tag">Gemini</span>
 
-          <h4>Good uses</h4>
+          <h4><span class="sht" tabindex="0" data-so="Adeegsiyo Wanaagsan">Good uses</span></h4>
 
           <ul>
-            <li>Learning a programming concept.</li>
-            <li>Planning a new project.</li>
-            <li>Explaining an error message.</li>
-            <li>Discussing different solution ideas.</li>
-            <li>Generating a small example.</li>
+            <li><span class="sht" tabindex="0" data-so="Barashada fikrad barnaamij-samayn.">Learning a programming concept.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Qorshaynta mashruuc cusub.">Planning a new project.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Sharaxaadda farriin khalad.">Explaining an error message.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Ka doodista fikrado xal oo kala duwan.">Discussing different solution ideas.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Soo saarista tusaale yar.">Generating a small example.</span></li>
           </ul>
 
-          <h4>Main limitation</h4>
+          <h4><span class="sht" tabindex="0" data-so="Xaddidaadda Ugu weyn">Main limitation</span></h4>
 
           <p>
-            A normal external chatbot does not automatically
+            <span class="sht" tabindex="0" data-so="Chatbot dibadeed oo caadi ahi si otomaatig ah uma oga wax kasta oo ku jira mashruucaaga gudaha.">A normal external chatbot does not automatically
             know everything inside your local project.
+            </span>
           </p>
 
           <p>
-            It can only work with project information that you
+            <span class="sht" tabindex="0" data-so="Wuxuu la shaqayn karaa oo keliya xogta mashruuca ee aad ku bixiso farriintaada, faylal aad geliso, adeegyo ku xidhan, ama hab kale oo la taageero.">It can only work with project information that you
             provide through your message, uploaded files,
             connected services, or another supported method.
+            </span>
           </p>
         </article>
 
         <article class="tool-card">
           <div class="tool-number">2</div>
 
-          <h3>AI Code-Completion Tools</h3>
+          <h3><span class="sht" tabindex="0" data-so="Qalabka Dhammaystirka Koodhka AI">AI Code-Completion Tools</span></h3>
 
           <p>
-            Code-completion tools work inside or alongside a
+            <span class="sht" tabindex="0" data-so="Qalabka dhammaystirka koodhku wuxuu ka shaqeeyaa gudaha ama agagaarka tafatiraha koodhka. Wuxuu baaraa faylka hadda jira, koodhka ku dhow, iyo macnaha kale ee la heli karo si uu u saadaaliyo waxa horumariyuhu doonayo inuu xiga qoro.">Code-completion tools work inside or alongside a
             code editor. They examine the current file,
             nearby code, and other available context to predict
             what the developer may want to type next.
+            </span>
           </p>
 
           <p>
-            Examples covered in this course include:
+            <span class="sht" tabindex="0" data-so="Tusaalooyinka koorsadan lagu baranayo waxaa ka mid ah:">Examples covered in this course include:</span>
           </p>
 
           <span class="tag">GitHub Copilot</span>
           <span class="tag">Cursor</span>
 
-          <h4>What makes the completion intelligent?</h4>
+          <h4><span class="sht" tabindex="0" data-so="Maxaa dhammaystirka ka dhigaya mid caqli leh?">What makes the completion intelligent?</span></h4>
 
           <p>
-            Traditional autocomplete may suggest a variable,
+            <span class="sht" tabindex="0" data-so="Dhammaystirka otomaatiga ah ee dhaqameed wuxuu soo jeedin karaa doorsoome, hab, ama hanti ku jirta liis la yaqaan.">Traditional autocomplete may suggest a variable,
             method, or property from a known list.
+            </span>
           </p>
 
           <p>
-            AI-powered completion can often suggest:
+            <span class="sht" tabindex="0" data-so="Dhammaystirka ku shaqeeya AI badanaa wuxuu soo jeedin karaa:">AI-powered completion can often suggest:</span>
           </p>
 
           <ul>
-            <li>A complete line of code.</li>
-            <li>A group of related lines.</li>
-            <li>An HTML structure.</li>
-            <li>A function based on its name or comment.</li>
-            <li>Code that matches the surrounding pattern.</li>
+            <li><span class="sht" tabindex="0" data-so="Sadar koodh oo dhammaystiran.">A complete line of code.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Koox sadar oo xiriir leh.">A group of related lines.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Qaab-dhismeed HTML ah.">An HTML structure.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Hawl ku salaysan magaceeda ama faallo.">A function based on its name or comment.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Koodh waafaqsan qaabka ku xeeran.">Code that matches the surrounding pattern.</span></li>
           </ul>
 
           <p>
-            The developer remains in control and decides
+            <span class="sht" tabindex="0" data-so="Horumariyuhu isagaa xakamaynta haya oo go'aansada inuu aqbalo, wax ka beddelo, ama diido soo-jeedin kasta.">The developer remains in control and decides
             whether to accept, modify, or reject each suggestion.
+            </span>
           </p>
         </article>
 
         <article class="tool-card">
           <div class="tool-number">3</div>
 
-          <h3>AI Coding Agents</h3>
+          <h3><span class="sht" tabindex="0" data-so="Wakiillada Koodh-qorista AI">AI Coding Agents</span></h3>
 
           <p>
-            A coding agent can perform work that is larger than
+            <span class="sht" tabindex="0" data-so="Wakiilka koodh-qoristu wuxuu qaban karaa shaqo ka ballaadhan soo-jeedinta caadiga ah ee dhammaystirka koodhka.">A coding agent can perform work that is larger than
             a normal autocomplete suggestion.
+            </span>
           </p>
 
           <p>
-            Depending on its permissions and instructions,
+            <span class="sht" tabindex="0" data-so="Iyadoo ku xidhan oggolaanshihiisa iyo tilmaamihiisa, wakiilku wuxuu baari karaa mashruuca, abuuri karaa faylal, cusboonaysiin karaa faylal jira, raadin karaa koodh xiriir leh, fulin karaa amarro, iskuna dayi karaa inuu dhammaystiro hawl horumarineed oo tallaabooyin badan leh.">Depending on its permissions and instructions,
             an agent may inspect the project, create files,
             update existing files, search for related code,
             run commands, and attempt to complete a multi-step
             development task.
+            </span>
           </p>
 
           <p>
-            Examples mentioned in the lesson include:
+            <span class="sht" tabindex="0" data-so="Tusaalooyinka casharkan lagu xusay waxaa ka mid ah:">Examples mentioned in the lesson include:</span>
           </p>
 
           <span class="tag">GitHub Copilot</span>
           <span class="tag">Cursor</span>
           <span class="tag">Claude Code</span>
 
-          <h4>Possible agent tasks</h4>
+          <h4><span class="sht" tabindex="0" data-so="Hawlaha Suurtagalka ah ee Wakiilka">Possible agent tasks</span></h4>
 
           <ul>
-            <li>Create a complete webpage.</li>
-            <li>Update several related files.</li>
-            <li>Find where a feature is implemented.</li>
-            <li>Repair a bug across a project.</li>
-            <li>Add a new component or route.</li>
-            <li>Run tests and react to test results.</li>
+            <li><span class="sht" tabindex="0" data-so="Abuur bog internet oo dhammaystiran.">Create a complete webpage.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Cusboonaysii dhowr fayl oo xiriir leh.">Update several related files.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Raadi meesha sifo laga hirgeliyay.">Find where a feature is implemented.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Mashruuca oo dhan kaga hagaaji cilad.">Repair a bug across a project.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Ku dar qayb ama marin cusub.">Add a new component or route.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Orod tijaabooyinka oo ka jawaab natiijooyinkooda.">Run tests and react to test results.</span></li>
           </ul>
 
           <div class="warning">
-            <strong>Important:</strong>
+            <strong><span class="sht" tabindex="0" data-so="Muhiim:">Important:</span></strong>
+            <span class="sht" tabindex="0" data-so="Wakiilku si dhakhso leh ayuu isbeddello u samayn karaa, laakiin xawaaruhu saxnaan ma dammaanad qaado. Horumariyuhu waa inuu bixiyo tilmaamo cad oo dib u eego isbeddel kasta oo muhiim ah.">
             An agent can make changes quickly, but speed does
             not guarantee correctness. The developer must
             provide clear instructions and review every
             important change.
+            </span>
           </div>
         </article>
 
         <article class="tool-card">
           <div class="tool-number">4</div>
 
-          <h3>AI Code-Review Tools</h3>
+          <h3><span class="sht" tabindex="0" data-so="Qalabka Dib-u-eegista Koodhka AI">AI Code-Review Tools</span></h3>
 
           <p>
-            AI code-review tools examine code changes and
+            <span class="sht" tabindex="0" data-so="Qalabka dib-u-eegista koodhka AI wuxuu baaraa isbeddellada koodhka oo bixiyaa jawaab-celin ka hor inta aan isbeddelladaas lagu darin mashruuca weyn.">AI code-review tools examine code changes and
             provide feedback before those changes are accepted
             into the main project.
+            </span>
           </p>
 
           <p>
-            They are commonly used with pull requests on
+            <span class="sht" tabindex="0" data-so="Badanaa waxaa lala isticmaalaa codsiyada pull request ee madallo sida GitHub.">They are commonly used with pull requests on
             platforms such as GitHub.
+            </span>
           </p>
 
           <p>
-            Examples mentioned in this lesson include:
+            <span class="sht" tabindex="0" data-so="Tusaalooyinka casharkan lagu xusay waxaa ka mid ah:">Examples mentioned in this lesson include:</span>
           </p>
 
           <span class="tag">BugBot</span>
           <span class="tag">CodeRabbit</span>
 
-          <h4>What might they detect?</h4>
+          <h4><span class="sht" tabindex="0" data-so="Maxay ogaan karaan?">What might they detect?</span></h4>
 
           <ul>
-            <li>Possible bugs.</li>
-            <li>Missing error handling.</li>
-            <li>Security concerns.</li>
-            <li>Repeated code.</li>
-            <li>Unclear logic.</li>
-            <li>Possible performance problems.</li>
+            <li><span class="sht" tabindex="0" data-so="Cillado suuragal ah.">Possible bugs.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Maaraynta khaladaadka oo maqan.">Missing error handling.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Arrimo amni.">Security concerns.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Koodh soo noqnoqda.">Repeated code.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Macquul aan caddayn.">Unclear logic.</span></li>
+            <li><span class="sht" tabindex="0" data-so="Dhibaatooyin waxqabad oo suuragal ah.">Possible performance problems.</span></li>
           </ul>
 
           <p>
-            Their feedback can give a human reviewer a useful
+            <span class="sht" tabindex="0" data-so="Jawaab-celintoodu waxay dib-u-eegaha bini'aadamka siin kartaa meel waxtar leh oo uu ka bilaabo, balse si toos ah uma beddeli karto go'aanka bini'aadamka.">Their feedback can give a human reviewer a useful
             starting point, but it should not automatically
             replace human judgment.
+            </span>
           </p>
         </article>
       </div>
 
-      <h3>Example: Asking an External Chatbot</h3>
+      <h3><span class="sht" tabindex="0" data-so="Tusaale: Weydiinta Chatbot Dibadeed">Example: Asking an External Chatbot</span></h3>
 
       <p>
-        A developer could ask a general chatbot:
+        <span class="sht" tabindex="0" data-so="Horumariye ayaa chatbot guud weydiin kara:">A developer could ask a general chatbot:</span>
       </p>
 
       <pre><code>Explain the difference between an HTML class and an HTML id.
 Give me one simple example of each.</code></pre>
 
       <p>
-        This question does not require the chatbot to understand
+        <span class="sht" tabindex="0" data-so="Su'aashani uma baahna in chatbot-ku fahmo mashruuc gaar ah oo dhan. Waa su'aal guud oo ku saabsan barnaamij-samaynta.">This question does not require the chatbot to understand
         an entire private project. It is a general programming
         question.
+        </span>
       </p>
 
-      <h3>Example: Giving a Coding Agent Instructions</h3>
+      <h3><span class="sht" tabindex="0" data-so="Tusaale: Siinta Tilmaamo Wakiilka Koodh-qorista">Example: Giving a Coding Agent Instructions</span></h3>
 
       <p>
-        A developer could instruct a project-aware coding agent:
+        <span class="sht" tabindex="0" data-so="Horumariye wuxuu siin karaa wakiil koodh-qoris oo mashruuca garanaya tilmaamahan:">A developer could instruct a project-aware coding agent:</span>
       </p>
 
       <pre><code>Inspect the existing registration page.
@@ -965,15 +994,18 @@ Do not change the payment logic.
 Show me the files you changed.</code></pre>
 
       <p>
-        This request relates to a specific project. The agent
+        <span class="sht" tabindex="0" data-so="Codsigani wuxuu la xidhiidhaa mashruuc gaar ah. Wakiilku wuxuu u baahan yahay inuu helo faylasha mashruuca ku habboon oo fahmo sida ay u wada shaqeeyaan.">This request relates to a specific project. The agent
         needs access to the relevant project files and must
         understand how they work together.
+        </span>
       </p>
 
       <div class="success">
-        <strong>Professional habit:</strong>
+        <strong><span class="sht" tabindex="0" data-so="Caado Xirfadeed:">Professional habit:</span></strong>
+        <span class="sht" tabindex="0" data-so="Wakiillada koodh-qorista sii tilmaamo kooban, cad, oo la tijaabin karo. Dib u eeg natiijada ka hor intaadan hawsha xigta u gudbin.">
         Give coding agents narrow, clear, testable instructions.
         Review the result before moving to the next task.
+        </span>
       </div>
     </section>
 
@@ -1106,151 +1138,156 @@ Show me the files you changed.</code></pre>
 
     <section id="comparison">
       <h2 class="comparison-title">
-        Tool Category Comparison
+        <span class="sht" tabindex="0" data-so="Isbarbardhigga Qaybaha Qalabka">Tool Category Comparison</span>
       </h2>
 
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Main Purpose</th>
-              <th>Project Awareness</th>
-              <th>Typical Output</th>
-              <th>Developer Responsibility</th>
+              <th><span class="sht" tabindex="0" data-so="Qayb">Category</span></th>
+              <th><span class="sht" tabindex="0" data-so="Ujeeddada Ugu weyn">Main Purpose</span></th>
+              <th><span class="sht" tabindex="0" data-so="Ogaanshaha Mashruuca">Project Awareness</span></th>
+              <th><span class="sht" tabindex="0" data-so="Natiijada Caadiga ah">Typical Output</span></th>
+              <th><span class="sht" tabindex="0" data-so="Masuuliyadda Horumariyaha">Developer Responsibility</span></th>
             </tr>
           </thead>
 
           <tbody>
             <tr>
               <td>
-                External AI Chatbot
+                <span class="sht" tabindex="0" data-so="Chatbot AI oo Dibadeed">External AI Chatbot</span>
               </td>
 
               <td>
-                Answer questions, explain concepts,
+                <span class="sht" tabindex="0" data-so="Ka jawaabista su'aalaha, sharaxaadda fikradaha, iyo taageeridda qorshaynta.">Answer questions, explain concepts,
                 and support planning.
+                </span>
               </td>
 
               <td>
-                Usually limited to information supplied
+                <span class="sht" tabindex="0" data-so="Badanaa wuxuu ku kooban yahay xogta uu isticmaaluhu bixiyo ama heli karo.">Usually limited to information supplied
                 or made available by the user.
+                </span>
               </td>
 
               <td>
-                Explanations, suggestions, plans,
+                <span class="sht" tabindex="0" data-so="Sharaxaad, soo-jeedinno, qorshayaal, iyo tusaalooyin koodh.">Explanations, suggestions, plans,
                 and code examples.
+                </span>
               </td>
 
               <td>
-                Provide enough context and verify the answer.
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                AI Code Completion
-              </td>
-
-              <td>
-                Suggest what the developer may type next.
-              </td>
-
-              <td>
-                Understands the current file and available
-                surrounding context.
-              </td>
-
-              <td>
-                A word, line, block, function,
-                or repeated code pattern.
-              </td>
-
-              <td>
-                Accept, modify, or reject each suggestion.
+                <span class="sht" tabindex="0" data-so="Bixi macne guud oo ku filan oo xaqiiji jawaabta.">Provide enough context and verify the answer.</span>
               </td>
             </tr>
 
             <tr>
               <td>
-                AI Coding Agent
+                <span class="sht" tabindex="0" data-so="Dhammaystirka Koodhka AI">AI Code Completion</span>
               </td>
 
               <td>
-                Perform larger, multi-step development work.
+                <span class="sht" tabindex="0" data-so="Soo jeedi waxa horumariyuhu xiga qori karo.">Suggest what the developer may type next.</span>
               </td>
 
               <td>
-                Can inspect and operate across project files
-                when access is provided.
+                <span class="sht" tabindex="0" data-so="Wuxuu fahmaa faylka hadda jira iyo macnaha guud ee ku xeeran ee la heli karo.">Understands the current file and available
+                surrounding context.</span>
               </td>
 
               <td>
-                New files, edited files, commands,
-                tests, and completed features.
+                <span class="sht" tabindex="0" data-so="Eray, sadar, qayb koodh, function, ama qaab koodh oo soo noqnoqda.">A word, line, block, function,
+                or repeated code pattern.</span>
               </td>
 
               <td>
-                Give clear limits, inspect changes,
+                <span class="sht" tabindex="0" data-so="Aqbal, wax ka beddel, ama diid soo-jeedin kasta.">Accept, modify, or reject each suggestion.</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span class="sht" tabindex="0" data-so="Wakiilka Koodh-qorista AI">AI Coding Agent</span>
+              </td>
+
+              <td>
+                <span class="sht" tabindex="0" data-so="Qabo shaqo horumarineed oo weyn oo tallaabooyin badan leh.">Perform larger, multi-step development work.</span>
+              </td>
+
+              <td>
+                <span class="sht" tabindex="0" data-so="Wuxuu baari karaa kuna shaqayn karaa faylalka mashruuca marka helitaan la siiyo.">Can inspect and operate across project files
+                when access is provided.</span>
+              </td>
+
+              <td>
+                <span class="sht" tabindex="0" data-so="Faylal cusub, faylal la beddelay, amarro, tijaabooyin, iyo sifooyin la dhammeeyay.">New files, edited files, commands,
+                tests, and completed features.</span>
+              </td>
+
+              <td>
+                <span class="sht" tabindex="0" data-so="Bixi xuduudo cad, baadh isbeddellada, oo tijaabi natiijada.">Give clear limits, inspect changes,
                 and test the result.
+                </span>
               </td>
             </tr>
 
             <tr>
               <td>
-                AI Code Review
+                <span class="sht" tabindex="0" data-so="Dib-u-eegista Koodhka AI">AI Code Review</span>
               </td>
 
               <td>
-                Analyze code changes and suggest improvements.
+                <span class="sht" tabindex="0" data-so="Falanqee isbeddellada koodhka oo soo jeedi hagaajin.">Analyze code changes and suggest improvements.</span>
               </td>
 
               <td>
-                Focuses on the changed code and related context.
+                <span class="sht" tabindex="0" data-so="Wuxuu diiradda saaraa koodhka la beddelay iyo macnaha guud ee la xiriira.">Focuses on the changed code and related context.</span>
               </td>
 
               <td>
-                Review comments, warnings,
-                and suggested corrections.
+                <span class="sht" tabindex="0" data-so="Faallooyin dib-u-eegis, digniino, iyo sixitaanno la soo jeediyay.">Review comments, warnings,
+                and suggested corrections.</span>
               </td>
 
               <td>
-                Decide which findings are correct and important.
+                <span class="sht" tabindex="0" data-so="Go'aami natiijooyinka saxda ah ee muhiimka ah.">Decide which findings are correct and important.</span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Quick Decision Guide</h3>
+      <h3><span class="sht" tabindex="0" data-so="Hagaha Go'aan-qaadashada Degdegga ah">Quick Decision Guide</span></h3>
 
       <div class="tool-grid">
         <article class="example-card">
-          <h4>I need a concept explained.</h4>
+          <h4><span class="sht" tabindex="0" data-so="Waxaan u baahanahay in fikrad la ii sharxo.">I need a concept explained.</span></h4>
           <p>
-            Start with an external AI chatbot.
+            <span class="sht" tabindex="0" data-so="Ku bilow chatbot AI oo dibadeed.">Start with an external AI chatbot.</span>
           </p>
         </article>
 
         <article class="example-card">
-          <h4>I am typing code and want suggestions.</h4>
+          <h4><span class="sht" tabindex="0" data-so="Waxaan qorayaa koodh oo waxaan rabaa soo-jeedinno.">I am typing code and want suggestions.</span></h4>
           <p>
-            Use an AI code-completion tool.
+            <span class="sht" tabindex="0" data-so="Isticmaal qalabka dhammaystirka koodhka AI.">Use an AI code-completion tool.</span>
           </p>
         </article>
 
         <article class="example-card">
-          <h4>I need several project files updated.</h4>
+          <h4><span class="sht" tabindex="0" data-so="Waxaan u baahanahay in dhowr fayl oo mashruuca ah la cusboonaysiiyo.">I need several project files updated.</span></h4>
           <p>
-            Use a coding agent with clear instructions.
+            <span class="sht" tabindex="0" data-so="Isticmaal wakiil koodh-qoris oo sii tilmaamo cad.">Use a coding agent with clear instructions.</span>
           </p>
         </article>
 
         <article class="example-card">
-          <h4>I want feedback on a pull request.</h4>
+          <h4><span class="sht" tabindex="0" data-so="Waxaan rabaa jawaab-celin ku saabsan pull request.">I want feedback on a pull request.</span></h4>
           <p>
-            Use an AI code-review tool together with
+            <span class="sht" tabindex="0" data-so="Isticmaal qalabka dib-u-eegista koodhka AI adigoo la kaashanaya dib-u-eegis bini'aadam.">Use an AI code-review tool together with
             human review.
+            </span>
           </p>
         </article>
       </div>
@@ -1559,112 +1596,121 @@ Show me the files you changed.</code></pre>
     </section>
 
     <section id="practice">
-      <h2>Practical Activity</h2>
+      <h2><span class="sht" tabindex="0" data-so="Hawlgal Wax-ku-ool ah">Practical Activity</span></h2>
 
       <p>
-        Read each situation and decide which AI-tool category
+        <span class="sht" tabindex="0" data-so="Akhri xaalad kasta oo go'aami qaybta qalabka AI ee ugu habboon.">Read each situation and decide which AI-tool category
         is most appropriate.
+        </span>
       </p>
 
       <div class="activity-card">
-        <h3>Situation 1</h3>
+        <h3><span class="sht" tabindex="0" data-so="Xaaladda 1">Situation 1</span></h3>
 
         <p>
-          A beginner wants to understand what an HTML form is
+          <span class="sht" tabindex="0" data-so="Bilowgu wuxuu rabaa inuu fahmo waxa foom HTML ahi yahay oo uu arko tusaale yar.">A beginner wants to understand what an HTML form is
           and see one small example.
+          </span>
         </p>
 
         <details>
-          <summary>Show suggested answer</summary>
+          <summary><span class="sht" tabindex="0" data-so="Muuji jawaabta la soo jeediyay">Show suggested answer</span></summary>
 
           <p class="answer">
             External AI chatbot.
           </p>
 
           <p>
-            This is a general learning question and does not
+            <span class="sht" tabindex="0" data-so="Tani waa su'aal waxbarasho oo guud mana u baahna helitaanka mashruuc dhammaystiran.">This is a general learning question and does not
             require access to a complete project.
+            </span>
           </p>
         </details>
       </div>
 
       <div class="activity-card">
-        <h3>Situation 2</h3>
+        <h3><span class="sht" tabindex="0" data-so="Xaaladda 2">Situation 2</span></h3>
 
         <p>
-          A developer is writing a function, and the editor
+          <span class="sht" tabindex="0" data-so="Horumariye ayaa qoraya hawl, tafatiruhuna wuxuu saadaalinayaa dhowrka sadar ee xiga.">A developer is writing a function, and the editor
           predicts the next several lines.
+          </span>
         </p>
 
         <details>
-          <summary>Show suggested answer</summary>
+          <summary><span class="sht" tabindex="0" data-so="Muuji jawaabta la soo jeediyay">Show suggested answer</span></summary>
 
           <p class="answer">
             AI code-completion tool.
           </p>
 
           <p>
-            The tool is predicting code from the current file
+            <span class="sht" tabindex="0" data-so="Qalabku wuxuu koodhka ka saadaalinayaa faylka hadda jira iyo macnaha guud ee ku xeeran.">The tool is predicting code from the current file
             and surrounding context.
+            </span>
           </p>
         </details>
       </div>
 
       <div class="activity-card">
-        <h3>Situation 3</h3>
+        <h3><span class="sht" tabindex="0" data-so="Xaaladda 3">Situation 3</span></h3>
 
         <p>
-          A developer wants a tool to inspect the project,
+          <span class="sht" tabindex="0" data-so="Horumariye wuxuu rabaa qalab baara mashruuca, abuura bog cusub, ku dara hagitaan, oo cusboonaysiiya dhowr fayl oo xiriir leh.">A developer wants a tool to inspect the project,
           create a new page, add navigation, and update several
           related files.
+          </span>
         </p>
 
         <details>
-          <summary>Show suggested answer</summary>
+          <summary><span class="sht" tabindex="0" data-so="Muuji jawaabta la soo jeediyay">Show suggested answer</span></summary>
 
           <p class="answer">
             AI coding agent.
           </p>
 
           <p>
-            The task requires project awareness and changes
+            <span class="sht" tabindex="0" data-so="Hawshu waxay u baahan tahay fahamka mashruuca iyo isbeddello ku baahsan faylal badan.">The task requires project awareness and changes
             across multiple files.
+            </span>
           </p>
         </details>
       </div>
 
       <div class="activity-card">
-        <h3>Situation 4</h3>
+        <h3><span class="sht" tabindex="0" data-so="Xaaladda 4">Situation 4</span></h3>
 
         <p>
-          A team opens a pull request and wants automatic
+          <span class="sht" tabindex="0" data-so="Koox ayaa furaysa pull request waxayna rabtaa jawaab-celin otomaatig ah oo ku saabsan cilladaha suuragalka ah ka hor dib-u-eegista qofka.">A team opens a pull request and wants automatic
           feedback about possible bugs before a human review.
+          </span>
         </p>
 
         <details>
-          <summary>Show suggested answer</summary>
+          <summary><span class="sht" tabindex="0" data-so="Muuji jawaabta la soo jeediyay">Show suggested answer</span></summary>
 
           <p class="answer">
             AI code-review tool.
           </p>
 
           <p>
-            The tool examines proposed code changes and adds
+            <span class="sht" tabindex="0" data-so="Qalabku wuxuu baaraa isbeddellada koodhka la soo jeediyay oo ku daraa faallooyin dib-u-eegis.">The tool examines proposed code changes and adds
             review comments.
+            </span>
           </p>
         </details>
       </div>
 
-      <h3>Instruction-Writing Practice</h3>
+      <h3><span class="sht" tabindex="0" data-so="Tababarka Qorista Tilmaamaha">Instruction-Writing Practice</span></h3>
 
       <p>
-        Improve the following unclear instruction:
+        <span class="sht" tabindex="0" data-so="Hagaaji tilmaantan aan caddayn:">Improve the following unclear instruction:</span>
       </p>
 
       <pre><code>Fix my website.</code></pre>
 
       <p>
-        A clearer instruction could be:
+        <span class="sht" tabindex="0" data-so="Tilmaan ka sii cad waxay noqon kartaa:">A clearer instruction could be:</span>
       </p>
 
       <pre><code>Inspect the home page and find why the Register button
@@ -1676,28 +1722,31 @@ Explain the cause before making changes.
 After the change, tell me which file was updated.</code></pre>
 
       <div class="success">
+        <span class="sht" tabindex="0" data-so="Tilmaamo cad waxay yareeyaan isbeddellada aan loo baahnayn waxayna fududeeyaan dib-u-eegista shaqada wakiilka AI.">
         Clear instructions reduce unnecessary changes and make
         AI-agent work easier to review.
+        </span>
       </div>
     </section>
 
     <section id="quiz">
-      <h2>Multiple-Choice Quiz</h2>
+      <h2><span class="sht" tabindex="0" data-so="Imtixaan Doorashooyin Badan leh">Multiple-Choice Quiz</span></h2>
 
       <div class="question">
         <p>
-          1. Which tool category is usually best for explaining
+          <span class="sht" tabindex="0" data-so="1. Qaybtee qalab ayaa badanaa ugu habboon sharaxaadda fikrad guud oo barnaamij-samayn ah?">1. Which tool category is usually best for explaining
           a general programming concept?
+          </span>
         </p>
 
         <label>
           <input type="radio" name="q1" />
-          A. External AI chatbot
+          <span class="sht" tabindex="0" data-so="A. Chatbot AI oo dibadeed">A. External AI chatbot</span>
         </label>
 
         <label>
           <input type="radio" name="q1" />
-          B. AI code-review tool
+          <span class="sht" tabindex="0" data-so="B. Qalabka dib-u-eegista koodhka AI">B. AI code-review tool</span>
         </label>
 
         <label>
@@ -1713,7 +1762,7 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          2. What does an AI code-completion tool mainly do?
+          <span class="sht" tabindex="0" data-so="2. Maxay inta badan qabataa qalabka dhammaystirka koodhka AI?">2. What does an AI code-completion tool mainly do?</span>
         </p>
 
         <label>
@@ -1723,7 +1772,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q2" />
-          B. Predicts and suggests code while the developer works
+          <span class="sht" tabindex="0" data-so="B. Wuxuu saadaaliyaa oo soo jeediyaa koodh inta horumariyuhu shaqaynayo">B. Predicts and suggests code while the developer works</span>
         </label>
 
         <label>
@@ -1739,7 +1788,7 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          3. Which task is more suitable for a coding agent?
+          <span class="sht" tabindex="0" data-so="3. Hawshee ayaa ku habboon wakiilka koodh-qorista?">3. Which task is more suitable for a coding agent?</span>
         </p>
 
         <label>
@@ -1749,7 +1798,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q3" />
-          B. Updating several connected project files
+          <span class="sht" tabindex="0" data-so="B. Cusboonaysiinta dhowr fayl oo mashruuc oo isku xidhan">B. Updating several connected project files</span>
         </label>
 
         <label>
@@ -1765,12 +1814,12 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          4. What is a common purpose of an AI code-review tool?
+          <span class="sht" tabindex="0" data-so="4. Waa maxay ujeeddo caadi ah oo qalabka dib-u-eegista koodhka AI leeyahay?">4. What is a common purpose of an AI code-review tool?</span>
         </p>
 
         <label>
           <input type="radio" name="q4" />
-          A. Review code changes and identify possible issues
+          <span class="sht" tabindex="0" data-so="A. Dib-u-eegista isbeddellada koodhka iyo aqoonsiga dhibaatooyinka suuragalka ah">A. Review code changes and identify possible issues</span>
         </label>
 
         <label>
@@ -1791,8 +1840,9 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          5. Why might an external chatbot lack full knowledge
+          <span class="sht" tabindex="0" data-so="5. Maxaa chatbot dibadeed uga maqnaan kara aqoon buuxda oo ku saabsan mashruuca horumariyaha?">5. Why might an external chatbot lack full knowledge
           of a developer's project?
+          </span>
         </p>
 
         <label>
@@ -1802,7 +1852,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q5" />
-          B. It may not have access to the project files
+          <span class="sht" tabindex="0" data-so="B. Waxaa laga yaabaa inuusan heli karin faylasha mashruuca">B. It may not have access to the project files</span>
         </label>
 
         <label>
@@ -1818,7 +1868,7 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          6. Who is responsible for checking AI-generated code?
+          <span class="sht" tabindex="0" data-so="6. Yaa masuul ka ah hubinta koodhka AI soo saartay?">6. Who is responsible for checking AI-generated code?</span>
         </p>
 
         <label>
@@ -1833,7 +1883,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q6" />
-          C. The developer or responsible project team
+          <span class="sht" tabindex="0" data-so="C. Horumariyaha ama kooxda mashruuca masuulka ka ah">C. The developer or responsible project team</span>
         </label>
 
         <label>
@@ -1844,7 +1894,7 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          7. Which statement about coding agents is correct?
+          <span class="sht" tabindex="0" data-so="7. Weedhee ku saabsan wakiillada koodh-qorista ayaa sax ah?">7. Which statement about coding agents is correct?</span>
         </p>
 
         <label>
@@ -1854,7 +1904,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q7" />
-          B. They may perform multi-step tasks across a project
+          <span class="sht" tabindex="0" data-so="B. Waxay ka qaban karaan hawlo tallaabooyin badan leh oo mashruuca ku baahsan">B. They may perform multi-step tasks across a project</span>
         </label>
 
         <label>
@@ -1870,7 +1920,7 @@ After the change, tell me which file was updated.</code></pre>
 
       <div class="question">
         <p>
-          8. What is the best way to work with a coding agent?
+          <span class="sht" tabindex="0" data-so="8. Waa maxay habka ugu wanaagsan ee loola shaqeeyo wakiilka koodh-qorista?">8. What is the best way to work with a coding agent?</span>
         </p>
 
         <label>
@@ -1880,7 +1930,7 @@ After the change, tell me which file was updated.</code></pre>
 
         <label>
           <input type="radio" name="q8" />
-          B. Provide clear instructions and review the changes
+          <span class="sht" tabindex="0" data-so="B. Bixi tilmaamo cad oo dib u eeg isbeddellada">B. Provide clear instructions and review the changes</span>
         </label>
 
         <label>
@@ -1895,7 +1945,7 @@ After the change, tell me which file was updated.</code></pre>
       </div>
 
       <details>
-        <summary>Open Answer Key</summary>
+        <summary><span class="sht" tabindex="0" data-so="Fur Jawaabaha Saxda ah">Open Answer Key</span></summary>
 
         <ol>
           <li>
@@ -1934,40 +1984,45 @@ After the change, tell me which file was updated.</code></pre>
     </section>
 
     <section id="remember" class="remember">
-      <h2>Remember</h2>
+      <h2><span class="sht" tabindex="0" data-so="Xusuusnow">Remember</span></h2>
 
       <ul class="remember-list">
         <li>
-          External AI chatbots are useful for general questions,
+          <span class="sht" tabindex="0" data-so="Chatbot-yada AI ee dibaddu waxay waxtar u leeyihiin su'aalaha guud, sharaxaadaha, qorshaynta, iyo tusaalooyinka yaryar.">External AI chatbots are useful for general questions,
           explanations, planning, and small examples.
+          </span>
         </li>
 
         <li>
-          Code-completion tools suggest code while you work
+          <span class="sht" tabindex="0" data-so="Qalabka dhammaystirka koodhku wuxuu soo jeediyaa koodh inta aad tafatiraha dhexdiisa ka shaqaynayso.">Code-completion tools suggest code while you work
           inside the editor.
+          </span>
         </li>
 
         <li>
-          Coding agents can perform larger tasks and may change
+          <span class="sht" tabindex="0" data-so="Wakiillada koodh-qoristu waxay qaban karaan hawlo waaweyn waxayna beddeli karaan faylal badan oo mashruuca ah.">Coding agents can perform larger tasks and may change
           multiple project files.
+          </span>
         </li>
 
         <li>
-          Code-review tools inspect proposed changes and identify
+          <span class="sht" tabindex="0" data-so="Qalabka dib-u-eegista koodhku wuxuu baaraa isbeddellada la soo jeediyay oo aqoonsadaa dhibaatooyin suuragal ah.">Code-review tools inspect proposed changes and identify
           possible problems.
+          </span>
         </li>
 
         <li>
-          AI suggestions can be incorrect, incomplete, or unsafe.
+          <span class="sht" tabindex="0" data-so="Soo-jeedinnada AI waxay noqon karaan kuwo khaldan, aan dhammaystirnayn, ama aan ammaan ahayn.">AI suggestions can be incorrect, incomplete, or unsafe.</span>
         </li>
 
         <li>
-          The developer must provide context, set limits,
+          <span class="sht" tabindex="0" data-so="Horumariyuhu waa inuu bixiyaa macne guud, dejiyaa xuduudo, baadhaa isbeddellada, oo tijaabiyaa natiijada.">The developer must provide context, set limits,
           inspect changes, and test the result.
+          </span>
         </li>
 
         <li>
-          Use the right AI-tool category for the right task.
+          <span class="sht" tabindex="0" data-so="Hawsha saxda ah u isticmaal qaybta qalabka AI ee ku habboon.">Use the right AI-tool category for the right task.</span>
         </li>
       </ul>
 

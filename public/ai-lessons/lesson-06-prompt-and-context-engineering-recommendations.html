@@ -575,6 +575,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<link rel="stylesheet" href="/ai-lessons/ega-lesson-layout.css">
+<script defer src="/ai-lessons/ega-lesson-layout.js"></script>
+<link rel="stylesheet" href="/ai-lessons/somali-help-translation.css">
+<script defer src="/ai-lessons/somali-help-translation.js"></script>
+
+
 </head>
 
 <body>
@@ -709,9 +715,10 @@ document.addEventListener("DOMContentLoaded", function () {
   </nav>
 
   <main>
+    <aside role="note" style="margin: 18px 0; padding: 16px; background: #fff8e1; border-left: 5px solid #d6a527; border-radius: 8px;"><strong>Important Note (IN):</strong> Study this lesson carefully before moving to the activity or quiz. Focus on the main ideas, practice the steps, and ask for support if anything is unclear.</aside>
     <section id="listen" class="ega-audio-reader"><h2>Lesson Audio</h2><p>Listen to Lesson 6 in English. Click any transcript line to continue from that point.</p><div class="ega-sticky-player"><audio controls preload="metadata" data-transcript="EGA-AI-Lesson-06-English.vtt"><source src="EGA-AI-Lesson-06-English.mp3" type="audio/mpeg">Your browser does not support the audio player.</audio></div><div class="ega-transcript" aria-label="Synchronized Lesson 6 transcript"><p class="ega-transcript-status">Loading synchronized transcript…</p></div><script defer src="/ai-lessons/audio-transcript.js"></script></section>
     <section id="overview">
-      <h2>Lesson Overview</h2>
+      <h2><span class="sht" tabindex="0" data-so="Dulmarka Casharka">Lesson Overview</span></h2>
 
       <div class="lesson-info">
         <article class="info-card">
@@ -735,87 +742,94 @@ document.addEventListener("DOMContentLoaded", function () {
         </article>
       </div>
 
-      <h3>Learning Objectives</h3>
+      <h3><span class="sht" tabindex="0" data-so="Ujeeddooyinka Waxbarashada">Learning Objectives</span></h3>
 
       <p>
-        By the end of this lesson, you should be able to:
+        <span class="sht" tabindex="0" data-so="Dhammaadka casharkan, waa inaad awoodi doontaa inaad:">By the end of this lesson, you should be able to:</span>
       </p>
 
       <ul>
         <li>
-          Write prompts that are clear, concise, and precise.
+          <span class="sht" tabindex="0" data-so="Qorto codsiyo cad, kooban, oo sax ah.">Write prompts that are clear, concise, and precise.</span>
         </li>
 
         <li>
-          Separate useful context from unnecessary information.
+          <span class="sht" tabindex="0" data-so="Kala saarto macnaha guud ee waxtarka leh iyo xogta aan loo baahnayn.">Separate useful context from unnecessary information.</span>
         </li>
 
         <li>
-          Think and plan before sending a prompt.
+          <span class="sht" tabindex="0" data-so="Fikirto oo qorshayso ka hor dirista codsi.">Think and plan before sending a prompt.</span>
         </li>
 
         <li>
-          Warn the AI about known difficulties and common mistakes.
+          <span class="sht" tabindex="0" data-so="AI uga digto dhibaatooyinka la yaqaan iyo khaladaadka caanka ah.">Warn the AI about known difficulties and common mistakes.</span>
         </li>
 
         <li>
-          Tell an AI agent which tools or features it should use.
+          <span class="sht" tabindex="0" data-so="Wakiilka AI u sheegto qalabka ama astaamaha uu adeegsanayo.">Tell an AI agent which tools or features it should use.</span>
         </li>
 
         <li>
-          Understand that the developer remains responsible
+          <span class="sht" tabindex="0" data-so="Fahanto in horumariyuhu weli masuul ka yahay hagidda iyo dib-u-eegista AI.">Understand that the developer remains responsible
           for directing and reviewing the AI.
+          </span>
         </li>
       </ul>
 
       <div class="important">
-        <strong>Main principle:</strong>
+        <strong><span class="sht" tabindex="0" data-so="Mabda'a Ugu Muhiimsan:">Main principle:</span></strong>
+        <span class="sht" tabindex="0" data-so="AI kama saarayo horumariyaha habka shaqada. Horumariyuhu wuxuu qeexaa yoolka, bixiyaa macnaha guud ee saxda ah, dejiyaa xuduudaha, wuxuuna hubiyaa natiijada.">
         AI does not remove the developer from the process.
         The developer defines the goal, supplies the right context,
         sets the limits, and checks the result.
+        </span>
       </div>
     </section>
 
     <section id="english">
-      <h2>English Technical Section</h2>
+      <h2><span class="sht" tabindex="0" data-so="Qaybta Farsamada ee Ingiriisiga">English Technical Section</span></h2>
 
       <p>
-        Prompt engineering is the practice of writing instructions
+        <span class="sht" tabindex="0" data-so="Prompt engineering waa habka qorista tilmaamo si cad u sharxaya waxa nidaamka AI laga rabo inuu sameeyo.">Prompt engineering is the practice of writing instructions
         that clearly describe what an AI system should do.
+        </span>
       </p>
 
       <p>
-        Context engineering is the practice of supplying the
+        <span class="sht" tabindex="0" data-so="Context engineering waa habka bixinta xogta, faylasha, xeerarka, tusaalooyinka, iyo xaddidaadaha uu AI-gu ugu baahan yahay inuu hawsha si sax ah u qabto.">Context engineering is the practice of supplying the
         information, files, rules, examples, and constraints that
         the AI needs to perform the task correctly.
+        </span>
       </p>
 
       <p>
-        A strong result normally requires both:
+        <span class="sht" tabindex="0" data-so="Natiijo wanaagsan badanaa waxay u baahan tahay labadaba:">A strong result normally requires both:</span>
       </p>
 
       <ul>
-        <li>A clear instruction.</li>
-        <li>Relevant supporting information.</li>
+        <li><span class="sht" tabindex="0" data-so="Tilmaan cad.">A clear instruction.</span></li>
+        <li><span class="sht" tabindex="0" data-so="Macluumaad taageero oo khuseeya.">Relevant supporting information.</span></li>
       </ul>
 
       <div class="recommendation-grid">
         <article class="recommendation-card">
           <div class="number">1</div>
 
-          <h3>Be Concise and Precise</h3>
+          <h3><span class="sht" tabindex="0" data-so="Noqo Kooban oo Sax ah">Be Concise and Precise</span></h3>
 
           <p>
-            A prompt should contain enough detail to define the task,
+            <span class="sht" tabindex="0" data-so="Codsigu waa inuu lahaadaa faahfaahin ku filan oo hawsha qeexaysa, balse yuusan ku buuxsamin sharaxaad aan xidhiidh la lahayn.">A prompt should contain enough detail to define the task,
             but it should not be filled with unrelated explanations.
+            </span>
           </p>
 
           <p>
-            Concise does not mean incomplete. It means that every
+            <span class="sht" tabindex="0" data-so="Kooban macnaheedu ma aha aan dhammaystirnayn. Waxay ka dhigan tahay in jumlad kastaa ka caawiso AI-ga inuu fahmo yoolka.">Concise does not mean incomplete. It means that every
             sentence should help the AI understand the goal.
+            </span>
           </p>
 
-          <h4>A precise prompt usually identifies:</h4>
+          <h4><span class="sht" tabindex="0" data-so="Codsi sax ahi badanaa wuxuu qeexaa:">A precise prompt usually identifies:</span></h4>
 
           <ul>
             <li>The exact task.</li>
@@ -834,11 +848,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <article class="recommendation-card">
           <div class="number">2</div>
 
-          <h3>Avoid Unnecessary Context</h3>
+          <h3><span class="sht" tabindex="0" data-so="Ka Fogow Macnaha Guud ee Aan Loo Baahnayn">Avoid Unnecessary Context</span></h3>
 
           <p>
-            Context is useful only when it helps the AI complete
+            <span class="sht" tabindex="0" data-so="Macnaha guud wuxuu waxtar leeyahay oo keliya marka uu AI-ga ka caawiyo dhammaystirka hawsha hadda taagan.">Context is useful only when it helps the AI complete
             the current task.
+            </span>
           </p>
 
           <p>
@@ -871,7 +886,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <article class="recommendation-card">
           <div class="number">3</div>
 
-          <h3>Think, Plan, Then Prompt</h3>
+          <h3><span class="sht" tabindex="0" data-so="Fikir, Qorshee, Kadib Codso">Think, Plan, Then Prompt</span></h3>
 
           <p>
             Before sending a request to an AI tool, pause and identify
@@ -916,7 +931,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <article class="recommendation-card">
           <div class="number">4</div>
 
-          <h3>Do Not Hide Known Challenges</h3>
+          <h3><span class="sht" tabindex="0" data-so="Ha Qarin Caqabadaha La Yaqaan">Do Not Hide Known Challenges</span></h3>
 
           <p>
             Do not deliberately withhold information just to see
@@ -945,7 +960,7 @@ Do not remove or bypass it when adding the new language field.</code></pre>
         <article class="recommendation-card">
           <div class="number">5</div>
 
-          <h3>Name the Tools the AI Should Use</h3>
+          <h3><span class="sht" tabindex="0" data-so="Magacaw Qalabka AI-ga Laga Rabo Inuu Adeegsado">Name the Tools the AI Should Use</span></h3>
 
           <p>
             AI coding agents may have access to several tools and
@@ -976,12 +991,13 @@ If a test fails, report the exact error before editing another file.</code></pre
         <article class="recommendation-card">
           <div class="number">6</div>
 
-          <h3>You Remain in Control</h3>
+          <h3><span class="sht" tabindex="0" data-so="Adiga Ayaa Xakamaynta Haya">You Remain in Control</span></h3>
 
           <p>
-            The AI may suggest code, edit files, run commands,
+            <span class="sht" tabindex="0" data-so="AI-gu wuxuu soo jeedin karaa koodh, tafatiri karaa faylal, fulin karaa amarro, falanqayn karaa khaladaad, ama dib u eegi karaa isbeddello. Hase yeeshee, horumariyaha ayaa masuul ka ah jihada shaqada.">The AI may suggest code, edit files, run commands,
             analyze errors, or review changes. However, the developer
             remains responsible for the direction of the work.
+            </span>
           </p>
 
           <p>
@@ -1002,10 +1018,10 @@ If a test fails, report the exact error before editing another file.</code></pre
         </article>
       </div>
 
-      <h3>Recommended Prompt Structure</h3>
+      <h3><span class="sht" tabindex="0" data-so="Qaab-dhismeedka Codsiga ee Lagu Taliyay">Recommended Prompt Structure</span></h3>
 
       <p>
-        A practical developer prompt can use the following structure:
+        <span class="sht" tabindex="0" data-so="Codsi wax-ku-ool ah oo horumariye qoro wuxuu adeegsan karaa qaabkan:">A practical developer prompt can use the following structure:</span>
       </p>
 
       <pre><code>Task:
@@ -1026,7 +1042,7 @@ Explain how the result should be checked.
 Output:
 State what the AI should return after completing the work.</code></pre>
 
-      <h3>Complete Example</h3>
+      <h3><span class="sht" tabindex="0" data-so="Tusaale Dhammaystiran">Complete Example</span></h3>
 
       <pre><code>Task:
 Add a required preferred-language field to the student registration page.
@@ -1054,8 +1070,9 @@ Output:
 Return the complete replacement register.tsx file and list the checks performed.</code></pre>
 
       <p>
-        This prompt is detailed, but every part supports the task.
+        <span class="sht" tabindex="0" data-so="Codsigani waa faahfaahsan yahay, laakiin qayb kasta waxay taageeraysaa hawsha. Kuma jiraan xog asal ah oo aan khusayn.">This prompt is detailed, but every part supports the task.
         It does not include unrelated background information.
+        </span>
       </p>
     </section>
 
@@ -1069,8 +1086,7 @@ Return the complete replacement register.tsx file and list the checks performed.
 
       <p>
         Context engineering waa habka AI-ga loo siiyo macluumaadka,
-        faylasha, xeerarka, tusaalooyinka, iyo xuduudaha muhiimka u ah
-        hawsha.
+        faylasha, xeerarka, tusaale muhiimka u ah hawsha.
       </p>
 
       <h3>1. Prompt-ka Ka Dhig Mid Kooban oo Sax ah</h3>
@@ -1178,7 +1194,7 @@ Haddii test-ku fashilmo, marka hore ii sheeg error-ka saxda ah.</code></pre>
       <h3>6. Adiga Ayaa Maamula AI-ga</h3>
 
       <p>
-        AI-gu wuu soo jeedin karaa code, wax buu beddeli karaa,
+        AI-gu wuxuu soo jeedin karaa code, wax buu beddeli karaa,
         commands ayuu orodsiin karaa, ama errors ayuu baari karaa.
         Laakiin developer-ka ayaa masuul ka ah jihada hawsha.
       </p>
@@ -1297,7 +1313,7 @@ Keep all existing learner data and login logic unchanged.</code></pre>
         </article>
       </div>
 
-      <h3>Prompt Quality Checklist</h3>
+      <h3><span class="sht" tabindex="0" data-so="Liiska Hubinta Tayada Codsiga">Prompt Quality Checklist</span></h3>
 
       <div class="table-wrapper">
         <table>
@@ -1311,21 +1327,21 @@ Keep all existing learner data and login logic unchanged.</code></pre>
           <tbody>
             <tr>
               <td>
-                Did I clearly state the task?
+                <span class="sht" tabindex="0" data-so="Hawsha si cad ma u sheegay?">Did I clearly state the task?</span>
               </td>
 
               <td>
-                The AI needs a specific objective.
+                <span class="sht" tabindex="0" data-so="AI-gu wuxuu u baahan yahay yool gaar ah.">The AI needs a specific objective.</span>
               </td>
             </tr>
 
             <tr>
               <td>
-                Did I include only relevant context?
+                <span class="sht" tabindex="0" data-so="Ma ku daray oo keliya macnaha guud ee khuseeya?">Did I include only relevant context?</span>
               </td>
 
               <td>
-                Unrelated information may distract the AI.
+                <span class="sht" tabindex="0" data-so="Xog aan xidhiidh lahayn waxay mashquulin kartaa AI-ga.">Unrelated information may distract the AI.</span>
               </td>
             </tr>
 
@@ -1341,27 +1357,27 @@ Keep all existing learner data and login logic unchanged.</code></pre>
 
             <tr>
               <td>
-                Did I state what must not change?
+                <span class="sht" tabindex="0" data-so="Ma sheegay waxa aan la beddeli karin?">Did I state what must not change?</span>
               </td>
 
               <td>
-                Clear limits protect working features.
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                Did I mention known risks?
-              </td>
-
-              <td>
-                The AI can avoid repeating known mistakes.
+                <span class="sht" tabindex="0" data-so="Xuduudo cad waxay ilaaliyaan sifooyinka shaqaynaya.">Clear limits protect working features.</span>
               </td>
             </tr>
 
             <tr>
               <td>
-                Did I name required tools?
+                <span class="sht" tabindex="0" data-so="Ma sheegay khataraha la yaqaan?">Did I mention known risks?</span>
+              </td>
+
+              <td>
+                <span class="sht" tabindex="0" data-so="AI-gu wuxuu ka fogaan karaa ku celinta khaladaadka la yaqaan.">The AI can avoid repeating known mistakes.</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span class="sht" tabindex="0" data-so="Ma magacaabay qalabka loo baahan yahay?">Did I name required tools?</span>
               </td>
 
               <td>
@@ -1371,7 +1387,7 @@ Keep all existing learner data and login logic unchanged.</code></pre>
 
             <tr>
               <td>
-                Did I define verification?
+                <span class="sht" tabindex="0" data-so="Ma qeexay sida loo xaqiijinayo?">Did I define verification?</span>
               </td>
 
               <td>
@@ -1649,9 +1665,9 @@ Haddii xafiisku xiran yahay, i soo wac.</code></pre>
     </section>
 
     <section id="practice">
-      <h2>Practical Activity</h2>
+      <h2><span class="sht" tabindex="0" data-so="Hawlgal Wax-ku-ool ah">Practical Activity</span></h2>
 
-      <h3>Activity 1: Remove Unnecessary Context</h3>
+      <h3><span class="sht" tabindex="0" data-so="Hawlgalka 1: Ka Saar Macnaha Guud ee Aan Loo Baahnayn">Activity 1: Remove Unnecessary Context</span></h3>
 
       <div class="activity-card">
         <p>
@@ -1667,7 +1683,7 @@ It should open /register.
 Do not redesign the page.</code></pre>
 
         <p>
-          Which sentences are important to the task?
+          <span class="sht" tabindex="0" data-so="Jumladee ayaa hawsha muhiim u ah?">Which sentences are important to the task?</span>
         </p>
 
         <details>
@@ -1685,7 +1701,7 @@ Do not redesign the page.</code></pre>
         </details>
       </div>
 
-      <h3>Activity 2: Improve a Weak Prompt</h3>
+      <h3><span class="sht" tabindex="0" data-so="Hawlgalka 2: Hagaaji Codsi Daciif ah">Activity 2: Improve a Weak Prompt</span></h3>
 
       <div class="activity-card">
         <p>
@@ -1720,7 +1736,7 @@ Return the complete replacement register.tsx file.</code></pre>
         </details>
       </div>
 
-      <h3>Activity 3: Identify the Missing Information</h3>
+      <h3><span class="sht" tabindex="0" data-so="Hawlgalka 3: Aqoonso Xogta Maqan">Activity 3: Identify the Missing Information</span></h3>
 
       <div class="activity-card">
         <p>
@@ -1746,12 +1762,13 @@ Return the complete replacement register.tsx file.</code></pre>
         </details>
       </div>
 
-      <h3>Activity 4: Think, Plan, Prompt</h3>
+      <h3><span class="sht" tabindex="0" data-so="Hawlgalka 4: Fikir, Qorshee, Codso">Activity 4: Think, Plan, Prompt</span></h3>
 
       <div class="activity-card">
         <p>
-          Before asking an AI agent to add a new certificate page,
+          <span class="sht" tabindex="0" data-so="Ka hor intaadan wakiilka AI weydiisan inuu ku daro bog shahaado cusub, buuxi foomkan qorshaynta:">Before asking an AI agent to add a new certificate page,
           complete this planning form:
+          </span>
         </p>
 
         <ol>
@@ -1777,17 +1794,17 @@ Return the complete replacement register.tsx file.</code></pre>
         </ol>
 
         <div class="important">
-          Do not send the prompt until these questions have clear answers.
+          <span class="sht" tabindex="0" data-so="Ha dirin codsiga ilaa su'aalahan jawaabo cad loo helo.">Do not send the prompt until these questions have clear answers.</span>
         </div>
       </div>
     </section>
 
     <section id="quiz">
-      <h2>Multiple-Choice Quiz</h2>
+      <h2><span class="sht" tabindex="0" data-so="Imtixaan Doorashooyin Badan leh">Multiple-Choice Quiz</span></h2>
 
       <div class="question">
         <p>
-          1. What is the main goal of prompt engineering?
+          <span class="sht" tabindex="0" data-so="1. Waa maxay ujeeddada ugu weyn ee prompt engineering?">1. What is the main goal of prompt engineering?</span>
         </p>
 
         <label>
@@ -1797,7 +1814,7 @@ Return the complete replacement register.tsx file.</code></pre>
 
         <label>
           <input type="radio" name="q1" />
-          B. To give the AI clear and useful instructions
+          <span class="sht" tabindex="0" data-so="B. In AI-ga la siiyo tilmaamo cad oo waxtar leh">B. To give the AI clear and useful instructions</span>
         </label>
 
         <label>
@@ -1813,7 +1830,7 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          2. What is useful context?
+          <span class="sht" tabindex="0" data-so="2. Waa maxay macne guud oo waxtar leh?">2. What is useful context?</span>
         </p>
 
         <label>
@@ -1823,7 +1840,7 @@ Return the complete replacement register.tsx file.</code></pre>
 
         <label>
           <input type="radio" name="q2" />
-          B. Information that directly helps with the task
+          <span class="sht" tabindex="0" data-so="B. Xog si toos ah uga caawisa hawsha">B. Information that directly helps with the task</span>
         </label>
 
         <label>
@@ -1839,13 +1856,14 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          3. What should you do before writing a prompt for
+          <span class="sht" tabindex="0" data-so="3. Maxaad samaynaysaa ka hor qorista codsi hawl adag?">3. What should you do before writing a prompt for
           a complex task?
+          </span>
         </p>
 
         <label>
           <input type="radio" name="q3" />
-          A. Think about the problem and make a plan
+          <span class="sht" tabindex="0" data-so="A. Ka fikir dhibaatada oo samee qorshe">A. Think about the problem and make a plan</span>
         </label>
 
         <label>
@@ -1866,7 +1884,7 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          4. If you know about a common mistake, what should you do?
+          <span class="sht" tabindex="0" data-so="4. Haddii aad ogtahay khalad caadi ah, maxaad samaynaysaa?">4. If you know about a common mistake, what should you do?</span>
         </p>
 
         <label>
@@ -1876,7 +1894,7 @@ Return the complete replacement register.tsx file.</code></pre>
 
         <label>
           <input type="radio" name="q4" />
-          B. Include it in the prompt with guidance
+          <span class="sht" tabindex="0" data-so="B. Ku dar codsiga adigoo raacinaya hagitaan">B. Include it in the prompt with guidance</span>
         </label>
 
         <label>
@@ -1892,12 +1910,12 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          5. Why should you name a required tool in the prompt?
+          <span class="sht" tabindex="0" data-so="5. Maxaad ugu magacaabaysaa qalab loo baahan yahay gudaha codsiga?">5. Why should you name a required tool in the prompt?</span>
         </p>
 
         <label>
           <input type="radio" name="q5" />
-          A. So the AI does not have to guess which tool to use
+          <span class="sht" tabindex="0" data-so="A. Si aanu AI-gu u qiyaasin qalabka uu adeegsanayo">A. So the AI does not have to guess which tool to use</span>
         </label>
 
         <label>
@@ -1944,12 +1962,12 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          7. Who controls the direction of AI-assisted development?
+          <span class="sht" tabindex="0" data-so="7. Yaa xukuma jihada horumarinta AI-caawiso?">7. Who controls the direction of AI-assisted development?</span>
         </p>
 
         <label>
           <input type="radio" name="q7" />
-          A. The responsible developer
+          <span class="sht" tabindex="0" data-so="A. Horumariyaha masuulka ah">A. The responsible developer</span>
         </label>
 
         <label>
@@ -1970,12 +1988,12 @@ Return the complete replacement register.tsx file.</code></pre>
 
       <div class="question">
         <p>
-          8. What should a verification instruction explain?
+          <span class="sht" tabindex="0" data-so="8. Maxay tahay in tilmaanta xaqiijintu sharaxdo?">8. What should a verification instruction explain?</span>
         </p>
 
         <label>
           <input type="radio" name="q8" />
-          A. How to confirm that the result works
+          <span class="sht" tabindex="0" data-so="A. Sida loo xaqiijiyo in natiijadu shaqaynayso">A. How to confirm that the result works</span>
         </label>
 
         <label>
@@ -1995,7 +2013,7 @@ Return the complete replacement register.tsx file.</code></pre>
       </div>
 
       <details>
-        <summary>Open Answer Key</summary>
+        <summary><span class="sht" tabindex="0" data-so="Fur Jawaabaha Saxda ah">Open Answer Key</span></summary>
 
         <ol>
           <li>
@@ -2034,11 +2052,11 @@ Return the complete replacement register.tsx file.</code></pre>
     </section>
 
     <section id="remember" class="remember">
-      <h2>Remember</h2>
+      <h2><span class="sht" tabindex="0" data-so="Xusuusnow">Remember</span></h2>
 
       <ul>
         <li>
-          A good prompt is clear, focused, and specific.
+          <span class="sht" tabindex="0" data-so="Codsi wanaagsan waa mid cad, diiradda saaraya, oo gaar ah.">A good prompt is clear, focused, and specific.</span>
         </li>
 
         <li>
@@ -2051,12 +2069,13 @@ Return the complete replacement register.tsx file.</code></pre>
         </li>
 
         <li>
-          Think first, make a plan, and then write the prompt.
+          <span class="sht" tabindex="0" data-so="Marka hore fikir, qorshe samee, dabadeed qor codsiga.">Think first, make a plan, and then write the prompt.</span>
         </li>
 
         <li>
-          Tell the AI about known risks, previous failures,
+          <span class="sht" tabindex="0" data-so="AI-ga uga warran khataraha la yaqaan, fashilaadihii hore, iyo khaladaadka caanka ah.">Tell the AI about known risks, previous failures,
           and common mistakes.
+          </span>
         </li>
 
         <li>
@@ -2072,7 +2091,7 @@ Return the complete replacement register.tsx file.</code></pre>
         </li>
 
         <li>
-          The AI assists, but the developer remains responsible.
+          <span class="sht" tabindex="0" data-so="AI-gu wuu caawiyaa, laakiin horumariyaha ayaa weli masuul ah.">The AI assists, but the developer remains responsible.</span>
         </li>
       </ul>
 

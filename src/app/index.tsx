@@ -14,7 +14,7 @@ import {
 
 type Language = "en" | "so";
 
-const EGA_WEBSITE = "https://ega-technologies.vercel.app";
+const EGA_WEBSITE = "https://ega-2026.vercel.app";
 
 const translations = {
   en: {
